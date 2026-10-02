@@ -1,76 +1,85 @@
 # Smart Complaint Management System (SCMS)
-
-A web-based campus and hostel complaint registration, routing, resolution, and tracking system for PES University.
-
-## What We Are Building
-
-SCMS is planned to replace the current informal complaint process with a single portal where complaints can be submitted and tracked from start to finish.
-
-### Main Workflow
-
-**Submit Complaint → Automatic Routing → Resolver Assignment → Work → Resolution → Feedback → Close**
-
-The system will also support:
-
-- Anonymous complaint submission and tracking
-- Automatic routing based on category and location
-- SLA due dates and automatic escalation
-- Complaint status and history tracking
-- In-app and email notifications
-- Reopening of unresolved complaints
-- Dashboards and reports
-
-## What We Have Planned
-
-### Functional Areas
-
-1. **Foundation & Access**
-   - Registration and login
-   - Roles and permissions
-   - Department and user management
-
-2. **Complaint Intake & Evidence**
-   - Complaint submission and validation
-   - Complaint ID generation
-   - Evidence attachments
-   - Anonymous complaints and tracking
-
-3. **Routing, Assignment & Escalation**
-   - Automatic department routing
-   - Department queues
-   - Resolver assignment and reassignment
-   - Due dates and automatic escalation
-
-4. **Resolution, Notifications & Tracking**
-   - Complaint status lifecycle
-   - Resolution and history
-   - Feedback and reopening
-   - Notifications and dashboards
-
-## Planned Technology
-
-- **Backend:** Python + Django
-- **Frontend:** Django Templates, HTML, CSS, JavaScript
-- **Database:** PostgreSQL / SQLite
-- **Version Control:** Git + GitHub
-- **Agile Planning:** GitHub Projects
-- **Testing:** pytest
-- **CI:** Jenkins
-- **Containerization:** Docker
-
-## Development Plan
-
-We plan to develop the system incrementally across **6 Agile sprints**, starting with authentication and project setup, then complaint submission, routing and assignment, lifecycle management, escalation and notifications, and finally dashboards, reporting, security validation, testing, and the final demonstration.
-
-## Team
-
-**Team 6 — PES University**  
+​
+A planned web-based system for registering, routing, resolving, and tracking campus and hostel complaints at PES University, Bangalore.
+​
+**Team:** Team 6  
 **Course:** UE24CS341A — Software Engineering
-
-Members:
-- Anushka K Kishore
-- Atul Suresh
-- Chaitanya Krishna Makkena
-- Tanmay Sridhar
-
-**Status:** In Development
+​
+## Repository Contents
+​
+The current folder contains this README and four project documents.
+​
+```text
+smart-complaint-management-system/
+├── README.md
+└── docs/
+    ├── Team6_Synopsis.pdf
+    ├── Team6_SRS.pdf
+    ├── Team6_SAD.pdf
+    └── Team6_STP.pdf
+```
+​
+## Documentation
+​
+| Document | Description |
+| --- | --- |
+| [Synopsis / Project Proposal](docs/Team6_Synopsis.pdf) | Project overview, objectives, team responsibilities, and development plan |
+| [Software Requirements Specification](docs/Team6_SRS.pdf) | System features, use cases, security requirements, and requirement traceability |
+| [Software Architecture and Design](docs/Team6_SAD.pdf) | Planned architecture, components, data design, diagrams, and web interfaces |
+| [Software Test Plan](docs/Team6_STP.pdf) | Testing approach, responsibilities, and representative test cases |
+​
+## Planned Features
+​
+- Complaint submission with optional evidence attachments
+- Anonymous complaint submission and reference-based tracking
+- Automatic routing by category and location
+- Department queues and resolver assignment
+- Due dates and escalation of overdue complaints
+- Status tracking and complaint history
+- Resolution confirmation, feedback, and reopening
+- In-app and email notifications
+- Role-based access, dashboards, reports, and CSV export
+​
+### Main Workflow
+​
+**Submit → Route to Department → Assign Resolver → Work in Progress → Resolve → Confirm / Give Feedback → Close**
+​
+The documents also cover reopening and automatic closure. Escalation increases visibility of overdue work; it does not automatically reassign a complaint.
+​
+## Team and Functional Areas
+​
+| Member | Area | Responsibilities |
+| --- | --- | --- |
+| Anushka K Kishore | F1 — Foundation and Access | Authentication, roles and permissions, user/department management, administrator reports, and CSV export |
+| Atul Suresh | F2 — Complaint Intake and Evidence | Complaint submission, validation, IDs, attachments, and anonymous submission/tracking |
+| Chaitanya Krishna Makkena | F3 — Routing, Assignment and Escalation | Routing rules, queues, assignment/reassignment, due dates, and escalation |
+| Tanmay Sridhar | F4 — Resolution, Notifications and Tracking | Complaint lifecycle/history, resolution, feedback/reopening, notifications, and Complainant/Head dashboards |
+​
+## Planned Technology
+​
+The SAD describes a single layered Django application with F1–F4 functional modules.
+​
+- **Application:** Python and Django
+- **Frontend:** Django templates, HTML, CSS, and JavaScript
+- **Database:** PostgreSQL for deployment and SQLite for local development
+- **Files and email:** Django file storage and email backend with SMTP
+- **Scheduled tasks:** Django management commands
+- **Version control and planning:** Git, GitHub, and GitHub Projects
+- **Testing:** pytest, Django test client, and coverage reporting
+- **Delivery and quality:** Jenkins, Docker, code review, security validation, and static analysis
+​
+## Development Plan
+​
+The Synopsis outlines six Agile sprints: setup and access, complaint intake, routing and assignment, lifecycle management, escalation and notifications, then reporting, validation, and the final demonstration.
+​
+## Testing
+​
+The Test Plan includes 15 representative cases for functional behaviour, security, and nonfunctional requirements. Their recorded status is **Not Executed**. It also describes reliability checks, usability walkthroughs, and code/build reviews. Refer to the STP for the detailed testing approach and expected results.
+​
+## Scope
+​
+The documents describe Release 1.0 as a single-campus, English-language, online browser application. SCMS manages the complaint workflow; physical repairs and emergency response are outside its scope. Other exclusions and items requiring clarification are listed in the SRS and SAD.
+​
+## Getting Started
+​
+Start with the Synopsis, then review the SRS, SAD, and Test Plan in `docs/`. The supplied folder does not contain application source code or setup files, so this README does not include installation or run commands.
