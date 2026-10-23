@@ -29,5 +29,5 @@ Generate a secret key with:
 - Business logic goes in each app's `services.py`, not in templates or views.
 - Server-rendered Django templates and forms only: no REST API, no microservices.
 - Secrets come from environment variables (`.env`, never committed). `.env.example` lists the names.
-- Shared services to be agreed by F1-F4 in follow-up issues: permission checks (B04), history/event recording (B29, Q03), routing hook called by intake (F2 -> F3).
+- Shared services to be agreed by F1-F4 in follow-up issues: permission checks (B04, see docs/AUTHORIZATION.md), history/event recording (B29, Q03), routing hook called by intake (F2 -> F3).
 - Tests: pytest with `pytest.ini`; each app keeps `test_*.py` beside its code.
