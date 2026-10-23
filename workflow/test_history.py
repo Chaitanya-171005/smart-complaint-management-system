@@ -105,3 +105,24 @@ class ComplaintHistoryTests(TestCase):
         self.assertTrue(
             ComplaintHistory.objects.filter(pk=event.pk).exists()
         )
+    def test_history_is_returned_chronologically(self):
+        first = record_history(
+            complaint_ref="TEST-009",
+            event_type=ComplaintHistory.EventType.SUBMITTED,
+            actor_kind=ComplaintHistory.ActorKind.SYSTEM,
+            new_state="SUBMITTED",
+        )
+        second = record_history(
+            complaint_ref="TEST-009",
+            event_type=ComplaintHistory.EventType.STATUS_CHANGED,
+            actor_kind=ComplaintHistory.ActorKind.STAFF,
+            previous_state="SUBMITTED",
+            new_state="IN_PROGRESS",
+        )
+
+        history = list(get_complaint_history("TEST-009"))
+
+        self.assertEqual(
+            [event.pk for event in history],
+            [first.pk, second.pk],
+        )
