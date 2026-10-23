@@ -1,6 +1,7 @@
+from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import LoginForm, RegistrationForm
 from .models import User
@@ -65,6 +66,13 @@ def login_view(request):
         form = LoginForm()
     # The password field is never re-rendered with a value (PasswordInput).
     return render(request, "accounts/login.html", {"form": form, "error": error})
+
+
+@require_POST
+def logout_view(request):
+    """End the session on the server. POST only (no state change on GET); CSRF applies."""
+    logout(request)
+    return redirect("accounts:login")
 
 
 @login_required

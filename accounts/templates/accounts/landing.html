@@ -8,6 +8,10 @@
 <body>
   <header>
     <p>Signed in as {{ user.full_name }} ({{ role_label }})</p>
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button type="submit">Log out</button>
+    </form>
   </header>
   <h1>{{ role_label }} home</h1>
   <p>Your SCMS functions will appear here as they are built.</p>
