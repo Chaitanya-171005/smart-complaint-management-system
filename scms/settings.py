@@ -29,7 +29,14 @@ SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = [h for h in os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h]
+
+
+def parse_hosts(value):
+    """Comma-separated hosts: trim whitespace and ignore empty entries."""
+    return [h.strip() for h in value.split(",") if h.strip()]
+
+
+ALLOWED_HOSTS = parse_hosts(os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1"))
 
 
 # Application definition
@@ -83,7 +90,7 @@ WSGI_APPLICATION = "scms.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
     }
 }
 
@@ -128,6 +135,8 @@ STATIC_URL = "static/"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
+# MAILERS exists only on Django 6.1+, which is why requirements.txt pins 6.1.x.
+# Do not add the old EMAIL_* settings: Django 6.1 refuses them next to MAILERS.
 MAILERS = {
     "default": {
         "BACKEND": "django.core.mail.backends.console.EmailBackend",
@@ -135,3 +144,8 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = "accounts.User"
+
+
+# Primary keys: explicit so the setting matches the committed migrations on every
+# supported Django version (5.2 defaults to AutoField, 6.x to BigAutoField).
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
