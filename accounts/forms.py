@@ -11,13 +11,13 @@ class RegistrationForm(forms.Form):
     and any role value sent in a modified request is ignored (BR-04).
     """
 
-    full_name = forms.CharField(max_length=150)
-    email = forms.EmailField(max_length=254)
+    full_name = forms.CharField(max_length=100)
+    email = forms.EmailField(max_length=120)
     password = forms.CharField(widget=forms.PasswordInput, strip=False)
     user_type = forms.ChoiceField(choices=User.UserType.choices)
     hostel_resident = forms.BooleanField(required=False, label="I live in a hostel")
     hostel_block = forms.CharField(max_length=20, required=False)
-    hostel_room = forms.CharField(max_length=20, required=False)
+    hostel_room = forms.CharField(max_length=10, required=False)
 
     def clean_full_name(self):
         name = self.cleaned_data["full_name"].strip()

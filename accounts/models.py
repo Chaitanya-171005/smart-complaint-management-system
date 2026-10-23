@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+from django.db.models.functions import Lower
 
 
 class Department(models.Model):
@@ -52,13 +53,13 @@ class User(AbstractUser):
         STAFF = "STAFF", "Non-teaching staff"
 
     username = None
-    email = models.EmailField(unique=True)
-    full_name = models.CharField(max_length=150)
+    email = models.EmailField(max_length=120, unique=True)
+    full_name = models.CharField(max_length=100)
     user_type = models.CharField(
-        max_length=10, choices=UserType.choices, default=UserType.STUDENT
+        max_length=20, choices=UserType.choices, default=UserType.STUDENT
     )
     hostel_block = models.CharField(max_length=20, blank=True)
-    hostel_room = models.CharField(max_length=20, blank=True)
+    hostel_room = models.CharField(max_length=10, blank=True)
     role = models.CharField(
         max_length=20, choices=Role.choices, default=Role.COMPLAINANT
     )
@@ -69,6 +70,13 @@ class User(AbstractUser):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["full_name"]
     objects = UserManager()
+
+    class Meta(AbstractUser.Meta):
+        constraints = [
+            # Email is unique in the database, ignoring case, so an account created
+            # outside the registration form (admin, shell) cannot duplicate one either.
+            models.UniqueConstraint(Lower("email"), name="accounts_user_email_ci_unique"),
+        ]
 
     def __str__(self):
         return self.email
