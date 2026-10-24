@@ -5,6 +5,7 @@ from django.views.decorators.http import require_http_methods, require_POST
 
 from .forms import LoginForm, RegistrationForm
 from .models import User
+from .permissions import has_role
 from .services import RegistrationError, attempt_login, landing_url_name, register_complainant
 
 GENERIC_LOGIN_ERROR = "Invalid email or password."
@@ -82,10 +83,10 @@ def landing(request):
 
 
 def _role_landing(role):
-    # B04 replaces this simple check with the shared permission helpers.
+    # Role is read from the database on every request (see permissions.py).
     @login_required
     def view(request):
-        if request.user.role != role:
+        if not has_role(request.user, role):
             return redirect(landing_url_name(request.user.role))
         return render(
             request,
