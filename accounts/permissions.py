@@ -8,9 +8,10 @@ the UI shows: call the checks in the view/service before reading or changing dat
 Who may act is decided here. Whether a state transition is valid (SRS state model) is
 the lifecycle's job (F4); call both.
 
-Complaint-like objects: the checks read ``owner`` (User or None for anonymous
+Complaint-like objects: the checks read ``submitted_by`` (User, or None for anonymous
 complaints), ``department`` and ``assignee`` (User or None). Either the related object
-or the ``<name>_id`` value may be present. See docs/AUTHORIZATION.md.
+or the ``<name>_id`` value may be present. The field names are the shared contract in
+docs/AUTHORIZATION.md and are set once below.
 """
 
 from functools import wraps
@@ -23,6 +24,11 @@ from .models import SecurityEvent, User
 from .security_log import record_event
 
 Role = User.Role
+
+# Shared Complaint field contract (F1 reads it, F2 owns the model). One place to change.
+OWNER_FIELD = "submitted_by"
+DEPARTMENT_FIELD = "department"
+ASSIGNEE_FIELD = "assignee"
 
 
 # --- helpers -------------------------------------------------------------------
@@ -52,16 +58,16 @@ def _fk_id(obj, name):
 
 def _in_own_department(user, obj):
     dept = user.department_id
-    return dept is not None and dept == _fk_id(obj, "department")
+    return dept is not None and dept == _fk_id(obj, DEPARTMENT_FIELD)
 
 
 def _is_assignee(user, obj):
-    assignee = _fk_id(obj, "assignee")
+    assignee = _fk_id(obj, ASSIGNEE_FIELD)
     return assignee is not None and assignee == user.pk
 
 
 def _is_owner(user, obj):
-    owner = _fk_id(obj, "owner")
+    owner = _fk_id(obj, OWNER_FIELD)
     return owner is not None and owner == user.pk
 
 
@@ -69,12 +75,15 @@ def _is_owner(user, obj):
 
 
 def can_view_complaint(user, complaint):
-    """Read a complaint: detail, history or evidence (REQ-ACC-01, REQ-SEC-05)."""
+    """Read a complaint: detail, history or evidence (REQ-ACC-01, REQ-SEC-05).
+
+    Administrator is deliberately not allowed (decision recorded in docs/AUTHORIZATION.md):
+    SRS 2.2 (User classes) lists the Administrator's powers as users/roles/membership, master data,
+    routing/SLA, campus reports and state-model rejection; REQ-ACC-01 names only the
+    owner, department Staff/Head and "other-department access is refused".
+    """
     if not _active(user):
         return False
-    if user.role == Role.ADMIN:
-        # Read-only campus view. Open decision: confirm Admin may read complaint details.
-        return True
     if user.role == Role.COMPLAINANT:
         return _is_owner(user, complaint)
     if user.role in (Role.STAFF, Role.HEAD):
@@ -106,7 +115,11 @@ def can_resolve_complaint(user, complaint):
 
 
 def can_reject_complaint(user, complaint):
-    """Reject: Admin, the department Head, or the assigned Staff (SRS 4.3)."""
+    """Reject: Admin, the department Head, or the assigned Staff (SRS 4.3).
+
+    Which of them may reject from which state (Admin or Head from SUBMITTED, assigned
+    Staff or Head from ASSIGNED) is the lifecycle's check (F4), made after this one.
+    """
     if has_role(user, Role.ADMIN):
         return True
     if has_role(user, Role.HEAD):
@@ -145,10 +158,9 @@ def can_confirm_resolution(user, complaint):
 
 
 def can_view_department_queue(user, department):
+    """A queue shows complaint content, so it follows the same rule as the complaint."""
     if not _active(user):
         return False
-    if user.role == Role.ADMIN:
-        return True
     if user.role in (Role.STAFF, Role.HEAD):
         dept = _as_id(department)
         return user.department_id is not None and user.department_id == dept
@@ -176,12 +188,16 @@ def can_manage_users(user):
 # --- list scoping ----------------------------------------------------------------
 
 
-def scope_complaints(user, queryset, *, owner_field="owner", department_field="department"):
-    """Limit a complaint queryset to what ``user`` may see (lists, queues, filters)."""
+def scope_complaints(
+    user, queryset, *, owner_field=OWNER_FIELD, department_field=DEPARTMENT_FIELD
+):
+    """Limit a complaint queryset to what ``user`` may see (lists, queues, filters).
+
+    Administrator gets nothing here: campus-wide numbers come from report aggregates (B30),
+    not from reading individual complaints.
+    """
     if not _active(user):
         return queryset.none()
-    if user.role == Role.ADMIN:
-        return queryset
     if user.role == Role.COMPLAINANT:
         return queryset.filter(**{owner_field: user.pk})
     if user.role in (Role.STAFF, Role.HEAD) and user.department_id is not None:

@@ -47,10 +47,10 @@ def world(depts):
         admin=make("admin@pes.edu", "ADMIN"),
     )
     w.c = SimpleNamespace(
-        pk=1, owner=w.owner, department=hostel, assignee=w.staff
+        pk=1, submitted_by=w.owner, department=hostel, assignee=w.staff
     )
-    w.unassigned = SimpleNamespace(pk=2, owner=w.owner, department=hostel, assignee=None)
-    w.anon = SimpleNamespace(pk=3, owner=None, department=hostel, assignee=w.staff)
+    w.unassigned = SimpleNamespace(pk=2, submitted_by=w.owner, department=hostel, assignee=None)
+    w.anon = SimpleNamespace(pk=3, submitted_by=None, department=hostel, assignee=w.staff)
     return w
 
 
@@ -76,6 +76,17 @@ def test_unassigned_staff_in_same_department_can_view_queue_item(world):
 def test_anonymous_complaint_has_no_owner_access(world):
     assert not perm.can_view_complaint(world.owner, world.anon)
     assert not perm.can_view_complaint(world.other, world.anon)
+
+
+@pytest.mark.parametrize("who", ["admin"])
+def test_admin_cannot_read_complaint_details_evidence_or_queue(world, who):
+    # SRS 2.2 / REQ-ACC-01: Administrator reads campus reports, not individual complaints.
+    admin = getattr(world, who)
+    for c in (world.c, world.unassigned, world.anon):
+        assert not perm.can_view_complaint(admin, c)
+        assert not perm.can_view_evidence(admin, c)
+    assert not perm.can_view_department_queue(admin, world.hostel)
+    assert not perm.can_view_department_queue(admin, world.it)
 
 
 def test_unauthenticated_and_inactive_are_refused(world):
@@ -151,7 +162,7 @@ def test_department_queue_access(world):
     assert perm.can_view_department_queue(world.staff, world.hostel)
     assert perm.can_view_department_queue(world.head, world.hostel.pk)
     assert not perm.can_view_department_queue(world.staff, world.it)
-    assert perm.can_view_department_queue(world.admin, world.it)
+    assert not perm.can_view_department_queue(world.admin, world.it)
     assert not perm.can_view_department_queue(world.owner, world.hostel)
 
 
@@ -175,7 +186,7 @@ def test_scope_queryset_by_role(world):
     # User rows stand in for complaints: "pk" plays owner, "department" is the same.
     qs = User.objects.all()
     kw = {"owner_field": "pk", "department_field": "department"}
-    assert set(perm.scope_complaints(world.admin, qs, **kw)) == set(qs)
+    assert not perm.scope_complaints(world.admin, qs, **kw).exists()
     assert list(perm.scope_complaints(world.owner, qs, **kw)) == [world.owner]
     staff_rows = set(perm.scope_complaints(world.staff, qs, **kw))
     assert staff_rows == {world.staff, world.staff2, world.head}
