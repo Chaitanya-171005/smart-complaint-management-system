@@ -126,3 +126,48 @@ class ComplaintHistoryTests(TestCase):
             [event.pk for event in history],
             [first.pk, second.pk],
         )
+
+    def test_bulk_create_with_update_conflicts_is_blocked(self):
+        event = record_history(
+            complaint_ref="TEST-010",
+            event_type=ComplaintHistory.EventType.SUBMITTED,
+            actor_kind=ComplaintHistory.ActorKind.SYSTEM,
+            remarks="Original history",
+        )
+
+        replacement = ComplaintHistory(
+            complaint_ref="TEST-010",
+            event_type=ComplaintHistory.EventType.RESOLVED,
+            actor_kind=ComplaintHistory.ActorKind.SYSTEM,
+            remarks="Tampered history",
+        )
+
+        with self.assertRaises(ValidationError):
+            ComplaintHistory.objects.bulk_create(
+                [replacement],
+                update_conflicts=True,
+                update_fields=["remarks"],
+                unique_fields=["complaint_ref"],
+            )
+
+        event.refresh_from_db()
+        self.assertEqual(event.remarks, "Original history")
+
+    def test_invalid_event_type_is_rejected(self):
+        with self.assertRaises(ValidationError):
+            record_history(
+                complaint_ref="TEST-011",
+                event_type="INVALID_EVENT",
+                actor_kind=ComplaintHistory.ActorKind.SYSTEM,
+            )
+
+    def test_invalid_actor_kind_is_rejected(self):
+        with self.assertRaises(ValidationError):
+            record_history(
+                complaint_ref="TEST-012",
+                event_type=ComplaintHistory.EventType.SUBMITTED,
+                actor_kind="INVALID_ACTOR",
+            )
+
+    def test_department_head_actor_kind_exists(self):
+        self.assertIn("HEAD", ComplaintHistory.ActorKind.values)

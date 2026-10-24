@@ -1,3 +1,4 @@
+
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -9,12 +10,32 @@ class ComplaintHistoryQuerySet(models.QuerySet):
     def delete(self):
         raise ValidationError("Complaint history entries cannot be deleted.")
 
+    def bulk_create(
+        self,
+        objs,
+        batch_size=None,
+        ignore_conflicts=False,
+        update_conflicts=False,
+        update_fields=None,
+        unique_fields=None,
+    ):
+        if update_conflicts:
+            raise ValidationError(
+                "Complaint history entries cannot be overwritten."
+            )
+
+        raise ValidationError(
+            "Bulk creation of complaint history entries is not allowed. "
+            "Use record_history() instead."
+        )
+
 
 class ComplaintHistory(models.Model):
     class ActorKind(models.TextChoices):
         COMPLAINANT = "COMPLAINANT", "Complainant"
         STAFF = "STAFF", "Staff"
         ADMIN = "ADMIN", "Admin"
+        HEAD = "HEAD", "Department Head"
         SYSTEM = "SYSTEM", "System"
         ANONYMOUS = "ANONYMOUS", "Anonymous"
 
@@ -44,6 +65,12 @@ class ComplaintHistory(models.Model):
     def save(self, *args, **kwargs):
         if self.pk:
             raise ValidationError("Complaint history entries cannot be edited.")
+
+        if self.event_type not in self.EventType.values:
+            raise ValidationError("Invalid complaint history event type.")
+
+        if self.actor_kind not in self.ActorKind.values:
+            raise ValidationError("Invalid complaint history actor kind.")
 
         if self.actor_kind == self.ActorKind.ANONYMOUS:
             self.remarks = ""
