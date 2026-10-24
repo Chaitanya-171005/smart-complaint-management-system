@@ -15,7 +15,8 @@ LOGIN = "/accounts/login/"
 PASSWORD = "Campus123"
 GENERIC = "Invalid email or password."
 LOCKED = "Too many failed sign-in attempts"
-T0 = datetime(2026, 10, 23, 12, 0, 0, tzinfo=UTC)
+# Based on the real clock: sessions are also checked against real time outside at().
+T0 = datetime.now(UTC).replace(microsecond=0)
 
 
 @pytest.fixture(autouse=True)
