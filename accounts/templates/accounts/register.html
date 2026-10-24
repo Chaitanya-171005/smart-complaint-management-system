@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register - SCMS</title>
+</head>
+<body>
+  <h1>Create your SCMS account</h1>
+  <p>Not an emergency channel: for fire, electrical, medical or structural danger, contact the campus emergency numbers.</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      <p>
+        {{ field.label_tag }} {{ field }}
+        {% for error in field.errors %}<br><span class="error">{{ error }}</span>{% endfor %}
+      </p>
+    {% endfor %}
+    <p>Password: at least 8 characters, with a letter and a digit.</p>
+    <button type="submit">Register</button>
+  </form>
+</body>
+</html>
