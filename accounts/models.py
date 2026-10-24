@@ -80,3 +80,48 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class LoginThrottle(models.Model):
+    """Failed-login counter and lockout state per login identifier (REQ-AUTH-02).
+
+    Keyed by the lower-cased email that was typed, whether or not an account
+    exists, so a lockout looks identical for known and unknown emails and does
+    not reveal which accounts exist (REQ-SEC-06).
+    """
+
+    email = models.CharField(max_length=254, unique=True)
+    failure_count = models.PositiveIntegerField(default=0)
+    window_start = models.DateTimeField(null=True, blank=True)
+    locked_until = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f"throttle:{self.email}"
+
+
+class SecurityEvent(models.Model):
+    """Append-only security event record (REQ-SEC-08).
+
+    Never stores passwords, session tokens or anonymous-report references.
+    The final event policy is owned by Q03; this covers authentication events.
+    """
+
+    class EventType(models.TextChoices):
+        LOGIN_SUCCESS = "LOGIN_SUCCESS", "Login success"
+        LOGIN_FAILURE = "LOGIN_FAILURE", "Login failure"
+        LOGIN_LOCKOUT = "LOGIN_LOCKOUT", "Lockout started"
+        LOGIN_BLOCKED = "LOGIN_BLOCKED", "Login refused during lockout"
+
+    event_type = models.CharField(max_length=30, choices=EventType.choices)
+    user = models.ForeignKey(
+        User, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
+    )
+    identifier = models.CharField(max_length=254, blank=True)
+    detail = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at", "-id"]
+
+    def __str__(self):
+        return f"{self.event_type} {self.identifier}"

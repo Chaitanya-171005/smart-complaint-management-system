@@ -147,3 +147,9 @@ AUTH_USER_MODEL = "accounts.User"
 # Primary keys: explicit so the setting matches the committed migrations on every
 # supported Django version (5.2 defaults to AutoField, 6.x to BigAutoField).
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Login and temporary lockout (REQ-AUTH-02). Defaults from the SRS; configurable via environment.
+LOGIN_URL = "accounts:login"
+LOGIN_MAX_FAILURES = int(os.environ.get("LOGIN_MAX_FAILURES", "5"))
+LOGIN_FAILURE_WINDOW_MINUTES = int(os.environ.get("LOGIN_FAILURE_WINDOW_MINUTES", "15"))
+LOGIN_LOCKOUT_MINUTES = int(os.environ.get("LOGIN_LOCKOUT_MINUTES", "15"))

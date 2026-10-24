@@ -43,3 +43,10 @@ class RegistrationForm(forms.Form):
             cleaned["hostel_block"] = ""
             cleaned["hostel_room"] = ""
         return cleaned
+
+
+class LoginForm(forms.Form):
+    """Login form. Plain fields only, so failures never hint at what was wrong."""
+
+    email = forms.CharField(max_length=254)
+    password = forms.CharField(widget=forms.PasswordInput, strip=False)
