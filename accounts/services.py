@@ -97,6 +97,9 @@ def register_failure(email, now):
     lockout = timedelta(minutes=settings.LOGIN_LOCKOUT_MINUTES)
     with transaction.atomic():
         throttle, _ = LoginThrottle.objects.select_for_update().get_or_create(email=email)
+        if throttle.locked_until and throttle.locked_until > now:
+            # Another request already started the lockout: leave it exactly as it is.
+            return False
         if throttle.window_start is None or now - throttle.window_start > window:
             throttle.failure_count = 0
             throttle.window_start = now
@@ -110,8 +113,17 @@ def register_failure(email, now):
     return started
 
 
-def clear_failures(email):
-    LoginThrottle.objects.filter(email=email).delete()
+def clear_failures(email, now=None):
+    """Forget earlier failures after a successful login, but never an active lockout.
+
+    The delete is one conditional statement, so a lockout that another request
+    activated after our first is_locked() check cannot be erased by a request that
+    was already past that check. Returns True if no lockout is active (the caller may
+    complete the login) and False if one is (the caller must refuse).
+    """
+    now = now or timezone.now()
+    LoginThrottle.objects.filter(email=email).exclude(locked_until__gt=now).delete()
+    return not is_locked(email, now)
 
 
 def attempt_login(request, email, password):
@@ -141,7 +153,11 @@ def attempt_login(request, email, password):
             return LoginResult("locked")
         return LoginResult("invalid")
 
-    clear_failures(email)
+    if not clear_failures(email):
+        # A lockout started after the check above (a concurrent request). It stays in
+        # force and this otherwise-correct login is refused.
+        record_event(SecurityEvent.EventType.LOGIN_BLOCKED, identifier=email)
+        return LoginResult("locked")
     login(request, user)
     record_event(SecurityEvent.EventType.LOGIN_SUCCESS, user=user, identifier=email)
     return LoginResult("ok", user)

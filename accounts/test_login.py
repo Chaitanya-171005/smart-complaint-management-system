@@ -301,3 +301,67 @@ def test_no_password_or_session_secret_in_events_responses_or_logs(client, user,
     for text in (dump, caplog.text):
         assert "Secret99x" not in text and PASSWORD not in text
         assert session_key not in text
+
+
+# --- concurrent login vs lockout (race fix) -------------------------------------
+
+
+@pytest.mark.django_db
+def test_lockout_started_after_the_check_is_not_erased_by_a_successful_login(client, user):
+    """Request A passes the is_locked() check, then request B's failures lock the
+    account, then A's correct password succeeds. A must not erase B's lockout."""
+    from accounts import services
+
+    real_authenticate = services.authenticate
+
+    def authenticate_while_other_request_locks(*args, **kwargs):
+        # Interleaving: after A's is_locked() check and before A's success path,
+        # another request records enough failures to start the lockout.
+        for _ in range(5):
+            services.register_failure("asha@pes.edu", services.timezone.now())
+        return real_authenticate(*args, **kwargs)
+
+    with at(T0):
+        with mock.patch.object(services, "authenticate", authenticate_while_other_request_locks):
+            r = post(client)  # correct password
+        assert LOCKED in r.content.decode()
+        assert not logged_in(client)
+        assert LoginThrottle.objects.get(email="asha@pes.edu").locked_until > T0
+        # The lockout still holds on the next request, even with the right password.
+        r2 = post(client)
+        assert LOCKED in r2.content.decode() and not logged_in(client)
+    assert not SecurityEvent.objects.filter(event_type=SecurityEvent.EventType.LOGIN_SUCCESS).exists()
+    assert SecurityEvent.objects.filter(event_type=SecurityEvent.EventType.LOGIN_BLOCKED).exists()
+
+
+@pytest.mark.django_db
+def test_successful_login_still_clears_earlier_failures(client, user):
+    with at(T0):
+        fail(client, 3)
+        assert LoginThrottle.objects.get(email="asha@pes.edu").failure_count == 3
+        assert post(client).status_code == 302 and logged_in(client)
+        assert not LoginThrottle.objects.filter(email="asha@pes.edu").exists()
+
+
+@pytest.mark.django_db
+def test_clear_failures_keeps_an_active_lockout_and_removes_an_expired_one(user):
+    from accounts import services
+
+    LoginThrottle.objects.create(
+        email="asha@pes.edu", locked_until=T0 + timedelta(minutes=5)
+    )
+    assert services.clear_failures("asha@pes.edu", T0) is False
+    assert LoginThrottle.objects.filter(email="asha@pes.edu").exists()
+    assert services.clear_failures("asha@pes.edu", T0 + timedelta(minutes=6)) is True
+    assert not LoginThrottle.objects.filter(email="asha@pes.edu").exists()
+
+
+@pytest.mark.django_db
+def test_failure_during_an_active_lockout_does_not_change_it(user):
+    from accounts import services
+
+    until = T0 + timedelta(minutes=10)
+    LoginThrottle.objects.create(email="asha@pes.edu", locked_until=until, failure_count=0)
+    assert services.register_failure("asha@pes.edu", T0) is False
+    t = LoginThrottle.objects.get(email="asha@pes.edu")
+    assert t.locked_until == until and t.failure_count == 0
