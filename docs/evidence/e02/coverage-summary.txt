@@ -1,0 +1,8 @@
+Module            Line coverage    Branch coverage
+accounts                 97.76%             97.06%
+complaints               83.33%  N/A (no branches)
+routing                  83.33%  N/A (no branches)
+workflow                 92.16%             95.00%
+
+Targets per implemented module: line >= 70%; branch >= 60%.
+Placeholder code and absent branches do not establish feature completion.
