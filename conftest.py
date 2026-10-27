@@ -4,6 +4,8 @@ from uuid import uuid4
 
 import pytest
 
+from accounts.models import User
+
 
 @pytest.fixture
 def department_factory(db):
@@ -26,13 +28,19 @@ def department(department_factory):
 
 
 @pytest.fixture
-def user_factory(db, django_user_model):
+def fixture_password_hasher(settings):
+    """Use a cheap salted hasher only in tests requesting shared user fixtures."""
+    settings.PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
+
+
+@pytest.fixture
+def user_factory(db, django_user_model, fixture_password_hasher):
     def create_user(**overrides):
         password = overrides.pop("password", "SyntheticTest123!")
         values = {
             "email": f"synthetic-{uuid4().hex}@example.test",
             "full_name": "Synthetic Test User",
-            "role": "COMPLAINANT",
+            "role": User.Role.COMPLAINANT,
         }
         values.update(overrides)
         return django_user_model.objects.create_user(
@@ -49,14 +57,14 @@ def complainant_user(user_factory):
 
 @pytest.fixture
 def staff_user(user_factory, department):
-    return user_factory(role="STAFF", department=department)
+    return user_factory(role=User.Role.STAFF, department=department)
 
 
 @pytest.fixture
 def head_user(user_factory, department):
-    return user_factory(role="HEAD", department=department)
+    return user_factory(role=User.Role.HEAD, department=department)
 
 
 @pytest.fixture
 def scms_admin_user(user_factory):
-    return user_factory(role="ADMIN")
+    return user_factory(role=User.Role.ADMIN)
