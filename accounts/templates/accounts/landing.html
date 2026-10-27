@@ -14,6 +14,9 @@
     </form>
   </header>
   <h1>{{ role_label }} home</h1>
+  {% if user.role == "ADMIN" %}
+    <p><a href="{% url 'routing:configuration' %}">Manage routing, SLA and escalation configuration</a></p>
+  {% endif %}
   <p>Your SCMS functions will appear here as they are built.</p>
 </body>
 </html>

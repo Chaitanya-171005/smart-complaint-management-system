@@ -1,5 +1,26 @@
 # Open decisions and recorded decisions
 
+## D01 - Initial routing, SLA and escalation configuration (REQ-ADM-03)
+
+**Status: initial implementation configuration.** Categories and base SLAs seed with B17;
+departments, initial routes and the default-department escalation policy are configured only
+after F1 supplies its Department master data. All values remain Administrator-editable and are
+stored as configuration, not hard-coded into routing, due-date or escalation logic.
+
+| Configuration | Initial value |
+| --- | --- |
+| Categories | Electrical, Plumbing, Wi-Fi/Network, Cleanliness, Security, Other |
+| Departments | F1-owned master data: Maintenance, IT Support, Housekeeping, Security, Administration |
+| Default department | Administration, configured after F1's data is present |
+| Category minimum priority | Electrical: Medium; Security: High; all other categories: Low |
+| SLA duration | Low: 7 days; Medium: 3 days; High: 1 day; Critical: 4 hours |
+| Initial category routes | Configure after F1 data: Electrical/Plumbing -> Maintenance; Wi-Fi/Network -> IT Support; Cleanliness -> Housekeeping; Security -> Security |
+| Escalation | Every 24 hours after due time; maximum level 3 |
+
+Location-specific routes are intentionally not seeded because the team has not agreed
+campus location codes. They can be added by an Administrator once F1's canonical location
+reference data is available.
+
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
 
 **Source.** REQ-AUTH-01: a duplicate email creates no account and gets the same generic
