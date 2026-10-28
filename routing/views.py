@@ -18,6 +18,7 @@ from .services import (
     deactivate_category,
     deactivate_routing_rule,
     deactivate_sla_configuration,
+    reactivate_category,
     set_sla_configuration,
     update_category,
     update_escalation_policy,
@@ -69,6 +70,10 @@ def configuration(request):
                 )
             elif action == "deactivate_category":
                 deactivate_category(
+                    request.user, _object(Category, request.POST.get("category_id"), "category")
+                )
+            elif action == "reactivate_category":
+                reactivate_category(
                     request.user, _object(Category, request.POST.get("category_id"), "category")
                 )
             elif action == "create_rule":

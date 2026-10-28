@@ -19,6 +19,9 @@ from .services import (
     create_escalation_policy,
     create_routing_rule,
     deactivate_category,
+    deactivate_routing_rule,
+    deactivate_sla_configuration,
+    reactivate_category,
     set_sla_configuration,
     update_category,
     update_escalation_policy,
@@ -78,6 +81,37 @@ class RoutingConfigurationTests(TestCase):
         self.assertFalse(category.active)
         self.assertTrue(Category.objects.filter(pk=category.pk).exists())
 
+        reactivate_category(self.admin, category)
+        category.refresh_from_db()
+        self.assertTrue(category.active)
+        self.assertTrue(
+            ConfigurationAuditEvent.objects.filter(
+                entity_type="Category",
+                entity_id=category.pk,
+                action=ConfigurationAuditEvent.Action.REACTIVATED,
+            ).exists()
+        )
+
+    def test_category_deactivation_requires_active_dependents_to_be_disabled_first(self):
+        category = Category.objects.get(name="Electrical")
+        rule = create_routing_rule(
+            self.admin, category=category, department=self.maintenance
+        )
+        with self.assertRaises(ConfigurationError):
+            deactivate_category(self.admin, category)
+
+        deactivate_routing_rule(self.admin, rule)
+        override = set_sla_configuration(
+            self.admin, category=category, priority=Priority.HIGH, duration_minutes=60
+        )
+        with self.assertRaises(ConfigurationError):
+            deactivate_category(self.admin, category)
+
+        deactivate_sla_configuration(self.admin, override)
+        deactivate_category(self.admin, category)
+        category.refresh_from_db()
+        self.assertFalse(category.active)
+
     def test_active_duplicate_routing_rule_is_rejected_and_location_is_normalized(self):
         category = Category.objects.get(name="Electrical")
         create_routing_rule(
@@ -135,6 +169,27 @@ class RoutingConfigurationTests(TestCase):
         policy.refresh_from_db()
         self.assertEqual(policy.maximum_level, 4)
 
+    def test_sla_rejects_inactive_categories_and_durations_over_one_year(self):
+        category = create_category(self.admin, name="Lift")
+        deactivate_category(self.admin, category)
+        with self.assertRaises(ConfigurationError):
+            set_sla_configuration(
+                self.admin, category=category, priority=Priority.LOW, duration_minutes=60
+            )
+        with self.assertRaises(ConfigurationError):
+            set_sla_configuration(
+                self.admin,
+                priority=Priority.LOW,
+                duration_minutes=365 * 24 * 60 + 1,
+            )
+
+    def test_last_active_default_sla_for_a_priority_cannot_be_deactivated(self):
+        default = SLAConfiguration.objects.get(category=None, priority=Priority.LOW)
+        with self.assertRaises(ConfigurationError):
+            deactivate_sla_configuration(self.admin, default)
+        default.refresh_from_db()
+        self.assertTrue(default.active)
+
     def test_database_checks_prevent_nonpositive_configuration(self):
         with self.assertRaises(IntegrityError), transaction.atomic():
             SLAConfiguration.objects.create(priority=Priority.LOW, duration_minutes=0)
@@ -162,6 +217,19 @@ class RoutingConfigurationTests(TestCase):
             category=category, location_code="hostel-a", department=self.maintenance
         )
         self.assertTrue(replacement.active)
+
+    def test_database_constraints_protect_case_insensitive_category_and_sla_scope(self):
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            Category.objects.create(name="electrical")
+
+        category = Category.objects.get(name="Electrical")
+        SLAConfiguration.objects.create(
+            category=category, priority=Priority.LOW, duration_minutes=60
+        )
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            SLAConfiguration.objects.create(
+                category=category, priority=Priority.LOW, duration_minutes=120
+            )
 
     def test_audit_records_are_append_only(self):
         category = create_category(self.admin, name="Transport")
@@ -206,7 +274,9 @@ class RoutingConfigurationTests(TestCase):
         rule = create_routing_rule(
             self.admin, category=category, department=self.maintenance, precedence=20
         )
-        sla = SLAConfiguration.objects.get(category=None, priority=Priority.LOW)
+        sla = set_sla_configuration(
+            self.admin, category=category, priority=Priority.LOW, duration_minutes=60
+        )
         self.client.force_login(self.admin)
 
         response = self.client.post(

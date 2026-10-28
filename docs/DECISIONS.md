@@ -21,6 +21,12 @@ Location-specific routes are intentionally not seeded because the team has not a
 campus location codes. They can be added by an Administrator once F1's canonical location
 reference data is available.
 
+**Department deactivation integration contract (F1).** A Department cannot be deactivated
+while it is referenced by an active routing rule or as the default department of an
+escalation policy. F1's Department-deactivation service must enforce this guard (or require
+an Administrator to first replace/deactivate those B17 configurations); B17 does not own
+Department lifecycle operations.
+
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
 
 **Source.** REQ-AUTH-01: a duplicate email creates no account and gets the same generic

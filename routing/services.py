@@ -16,6 +16,7 @@ from .models import (
     Priority,
     RoutingRule,
     SLAConfiguration,
+    MAX_SLA_DURATION_MINUTES,
 )
 
 
@@ -69,6 +70,15 @@ def _positive_int(value, field_name):
         ) from exc
     if value < 1:
         raise ConfigurationError({field_name: "Enter a positive whole number."})
+    return value
+
+
+def _sla_duration(value):
+    value = _positive_int(value, "duration_minutes")
+    if value > MAX_SLA_DURATION_MINUTES:
+        raise ConfigurationError(
+            {"duration_minutes": "SLA duration cannot exceed one year."}
+        )
     return value
 
 
@@ -133,6 +143,14 @@ def update_category(actor, category, *, name=None, minimum_priority=None):
 def deactivate_category(actor, category):
     _require_admin(actor)
     if category.active:
+        if category.routing_rules.filter(active=True).exists():
+            raise ConfigurationError(
+                "Deactivate this category's active routing rules before deactivating it."
+            )
+        if category.sla_configurations.filter(active=True).exists():
+            raise ConfigurationError(
+                "Deactivate this category's active SLA overrides before deactivating it."
+            )
         old = _snapshot(category, ("name", "minimum_priority", "active"))
         category.active = False
         category.save(update_fields=["active"])
@@ -140,6 +158,23 @@ def deactivate_category(actor, category):
             actor,
             category,
             ConfigurationAuditEvent.Action.DEACTIVATED,
+            old,
+            _snapshot(category, ("name", "minimum_priority", "active")),
+        )
+    return category
+
+
+@transaction.atomic
+def reactivate_category(actor, category):
+    _require_admin(actor)
+    if not category.active:
+        old = _snapshot(category, ("name", "minimum_priority", "active"))
+        category.active = True
+        category.save(update_fields=["active"])
+        _audit(
+            actor,
+            category,
+            ConfigurationAuditEvent.Action.REACTIVATED,
             old,
             _snapshot(category, ("name", "minimum_priority", "active")),
         )
@@ -240,9 +275,11 @@ def deactivate_routing_rule(actor, rule):
 @transaction.atomic
 def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
     _require_admin(actor)
-    duration_minutes = _positive_int(duration_minutes, "duration_minutes")
+    duration_minutes = _sla_duration(duration_minutes)
     if priority not in Priority.values:
         raise ConfigurationError({"priority": "Choose a supported priority."})
+    if category is not None and not category.active:
+        raise ConfigurationError({"category": "An inactive category cannot have an SLA override."})
     config = SLAConfiguration.objects.filter(
         active=True, category=category, priority=priority
     ).first()
@@ -251,7 +288,13 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
             category=category, priority=priority, duration_minutes=duration_minutes
         )
         _validate(config)
-        config.save()
+        try:
+            with transaction.atomic():
+                config.save()
+        except IntegrityError as exc:
+            raise ConfigurationError(
+                "An active SLA configuration already exists for this category and priority."
+            ) from exc
         _audit(
             actor,
             config,
@@ -279,6 +322,16 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
 def deactivate_sla_configuration(actor, config):
     _require_admin(actor)
     if config.active:
+        if (
+            config.category_id is None
+            and SLAConfiguration.objects.filter(
+                active=True, category=None, priority=config.priority
+            ).count()
+            <= 1
+        ):
+            raise ConfigurationError(
+                "Each priority must retain one active default SLA configuration."
+            )
         old = _snapshot(config, ("category", "priority", "duration_minutes", "active"))
         config.active = False
         config.save(update_fields=["active"])

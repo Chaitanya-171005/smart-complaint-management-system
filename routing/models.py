@@ -1,8 +1,13 @@
 """Routing, SLA and escalation configuration (B17 / REQ-ADM-03)."""
 
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Lower
+
+
+MAX_SLA_DURATION_MINUTES = 365 * 24 * 60
 
 
 class Priority(models.TextChoices):
@@ -24,6 +29,9 @@ class Category(models.Model):
     class Meta:
         ordering = ["name", "pk"]
         verbose_name_plural = "categories"
+        constraints = [
+            models.UniqueConstraint(Lower("name"), name="category_name_ci_unique"),
+        ]
 
     def __str__(self):
         return self.name
@@ -95,7 +103,13 @@ class SLAConfiguration(models.Model):
         related_name="sla_configurations",
     )
     priority = models.CharField(max_length=10, choices=Priority.choices)
-    duration_minutes = models.PositiveIntegerField()
+    # This bound keeps later due-date calculation within a predictable business range.
+    duration_minutes = models.PositiveIntegerField(
+        validators=[MaxValueValidator(MAX_SLA_DURATION_MINUTES)]
+    )
+    # A non-null scope key makes the active-row uniqueness constraint portable to
+    # SQLite, which otherwise treats NULL values as distinct in unique indexes.
+    scope_key = models.CharField(max_length=120, editable=False)
     active = models.BooleanField(default=True)
 
     class Meta:
@@ -103,12 +117,30 @@ class SLAConfiguration(models.Model):
         constraints = [
             models.CheckConstraint(
                 condition=Q(duration_minutes__gt=0), name="sla_duration_must_be_positive"
-            )
+            ),
+            models.CheckConstraint(
+                condition=Q(duration_minutes__lte=MAX_SLA_DURATION_MINUTES),
+                name="sla_duration_within_one_year",
+            ),
+            models.UniqueConstraint(
+                fields=["scope_key"],
+                condition=Q(active=True),
+                name="sla_unique_active_scope",
+            ),
         ]
 
     def clean(self):
+        errors = {}
         if self.duration_minutes < 1:
-            raise ValidationError({"duration_minutes": "SLA duration must be positive."})
+            errors["duration_minutes"] = "SLA duration must be positive."
+        if self.duration_minutes > MAX_SLA_DURATION_MINUTES:
+            errors["duration_minutes"] = "SLA duration cannot exceed one year."
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.scope_key = f"{self.category_id or 0}:{self.priority}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         scope = self.category.name if self.category_id else "Default"
@@ -166,6 +198,7 @@ class ConfigurationAuditEvent(models.Model):
         CREATED = "CREATED", "Created"
         UPDATED = "UPDATED", "Updated"
         DEACTIVATED = "DEACTIVATED", "Deactivated"
+        REACTIVATED = "REACTIVATED", "Reactivated"
 
     actor = models.ForeignKey(
         "accounts.User",
