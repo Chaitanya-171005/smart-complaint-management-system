@@ -1,5 +1,6 @@
 """Run tests, enforce module coverage, and record sanitized E02 evidence."""
 
+import argparse
 import json
 import subprocess
 import sys
@@ -30,14 +31,20 @@ def run(command):
 
 
 def main():
-    EVIDENCE.mkdir(parents=True, exist_ok=True)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--evidence-dir", type=Path, default=EVIDENCE)
+    args = parser.parse_args()
+    evidence = args.evidence_dir
+    if not evidence.is_absolute():
+        evidence = ROOT / evidence
+    evidence.mkdir(parents=True, exist_ok=True)
     # Never reuse stale coverage from an earlier successful test execution.
     (ROOT / "coverage.json").unlink(missing_ok=True)
     test_code, test_output = run([sys.executable, "-m", "pytest"])
-    (EVIDENCE / "pytest.txt").write_text(test_output, encoding="utf-8")
+    (evidence / "pytest.txt").write_text(test_output, encoding="utf-8")
     print(test_output, end="")
     gate_code, gate_output = run([sys.executable, "scripts/coverage_summary.py"])
-    (EVIDENCE / "coverage-summary.txt").write_text(gate_output, encoding="utf-8")
+    (evidence / "coverage-summary.txt").write_text(gate_output, encoding="utf-8")
     print(gate_output, end="")
     revision_code, revision = run(["git", "rev-parse", "HEAD"])
     metadata = {
@@ -47,7 +54,7 @@ def main():
         "pytest_exit_code": test_code,
         "coverage_gate_exit_code": gate_code,
     }
-    (EVIDENCE / "run.json").write_text(
+    (evidence / "run.json").write_text(
         json.dumps(metadata, indent=2) + "\n", encoding="utf-8"
     )
     # Test failures and gate failures stay failures; recording evidence never hides them.
