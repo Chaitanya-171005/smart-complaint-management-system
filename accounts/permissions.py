@@ -74,6 +74,11 @@ def _is_owner(user, obj):
 # --- checks: complaints --------------------------------------------------------
 
 
+def can_submit_complaint(user):
+    """Authenticated intake: active Complainants only (B07)."""
+    return has_role(user, Role.COMPLAINANT)
+
+
 def can_view_complaint(user, complaint):
     """Read a complaint: detail, history or evidence (REQ-ACC-01, REQ-SEC-05).
 

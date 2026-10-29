@@ -15,11 +15,14 @@ The checks read three fields of a complaint. Their names are set once, in
 | `department` | FK to `accounts.Department` | Department the complaint was routed to. |
 | `assignee` | FK to `accounts.User`, null | Staff member the work is assigned to. |
 
-`submitted_by` is the proposed name, because Tanmay's tracking service and tests already use
-it and SRS B-2 calls the field "submitter". The first version of these helpers said `owner`.
-**Status: proposed, to be confirmed by Atul (owns the `Complaint` model) and Tanmay.** If the
-team picks another name, change the three constants and the tests follow. Either the related
-object or the `<name>_id` value works. `test_real_complaint_model_follows_contract` skips
+**F2 implementation contract: the ownership field is `submitted_by`.** The future
+Complaint model will use a nullable FK to accounts.User: authenticated intake
+sets it from the authorized request.user, while anonymous intake leaves it null.
+It is never accepted from POST. This matches Tanmay's existing tracking service
+and tests and the SRS B-2 "submitter" field; no `owner` alias is planned.
+F4 model integration remains to be verified when the model is implemented.
+Either the related object or the `<name>_id` value works.
+`test_real_complaint_model_follows_contract` skips
 until `complaints.Complaint` exists, then checks the model against this table.
 
 ## Administrator and complaint content (decision against the SRS)
@@ -36,6 +39,7 @@ Administrator must see a complaint in order to reject it, that needs an explicit
 ## Rules
 | Check | Allowed |
 |---|---|
+| `can_submit_complaint` | active authenticated Complainant; checked before constructing B07 intake options |
 | `can_view_complaint` / `can_view_evidence` | submitter; Staff and Head of the complaint's department. Not Admin. |
 | `can_progress_complaint` | assigned Staff of that department; Head of that department |
 | `can_resolve_complaint` | assigned Staff only (BR-01) |
