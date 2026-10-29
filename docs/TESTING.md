@@ -13,9 +13,18 @@ pytest, pytest-django and pytest-cov are pinned in requirements-dev.txt.
 The shared .coveragerc supplies source modules and branch measurement;
 pytest.ini supplies the reporting options.
 
-One command runs tests, checks coverage, and records sanitized evidence:
+One command runs tests, checks coverage, and records sanitized evidence in ignored
+build/evidence/, preserving committed evidence:
 
     python scripts/run_tests.py
+
+To deliberately refresh committed evidence, select its directory explicitly:
+
+    python scripts/run_tests.py --evidence-dir docs/evidence/e02
+    python scripts/run_tests.py --evidence-dir docs/evidence/b07
+
+Run only the command for the contribution you are recording. The runner directs
+all three output files to that directory; it has no legacy EVIDENCE writes.
 
 To run only the tests without the module gate:
 
@@ -60,17 +69,28 @@ error (exit 2). Only all-module success returns 0.
 test_coverage_summary.py exercises threshold boundaries, failure codes,
 placeholders, missing/invalid reports, missing branch data and safe import.
 
-complaints and routing are currently placeholders. The strict coverage gate
-therefore remains FAIL even when all executed tests pass. Do not lower the
-thresholds, add dummy branches, or call the final E02 acceptance complete.
+B07 adds real complaint form validation; routing remains a placeholder on this
+branch until B17 integrates. The gate therefore remains FAIL despite passing
+tests. Even when all modules pass later, coverage is not feature acceptance:
+the Complaint model, HTTP view and full intake flow still need implementation
+and acceptance tests. Do not lower thresholds or add dummy branches.
 
 ## Evidence
 
-scripts/run_tests.py regenerates docs/evidence/e02/pytest.txt,
-coverage-summary.txt and run.json. Repository, virtual environment and home
+scripts/run_tests.py writes pytest.txt, coverage-summary.txt and run.json under
+build/evidence/ by default, or --evidence-dir when explicitly supplied.
+Repository, virtual environment and home
 paths are replaced with explicit placeholders; test results are preserved.
-run.json records execution time, source revision and actual exit codes.
+run.json records execution time, source revision, pre-run working_tree_dirty,
+working_tree_status and actual exit codes. source_revision is HEAD before the
+run; when the tree is dirty, the additional local changes listed were tested too.
+The flag is captured before generated output is written. Original E02 execution
+evidence is retained; its results describe that earlier source state.
 coverage.json and .coverage are generated files excluded by .gitignore.
+
+test_run_tests.py verifies output-directory isolation, stale-report removal,
+failure exit codes, dirty/unknown source metadata, ignored default output and
+actual subprocess path sanitization.
 
 base-commit.txt records this PR's verified merge base, not the current branch head.
 The initial base was confirmed as 8766bf27d4744a0f0221c97742305dc9b59455ea.

@@ -1,5 +1,14 @@
 # Open decisions and recorded decisions
 
+## D01 - Campus configuration and emergency channels
+
+**Status: provisional, pending campus confirmation.** B17's initial routing/SLA
+configuration is an implementation baseline, not confirmed campus policy.
+F1/F3 must confirm categories, canonical location codes and emergency channels
+before final intake acceptance. B07 tests use synthetic data and do not invent
+campus emergency numbers. B07's adapter contract and the category-name limit
+discrepancy with B17 are documented in B07.md for owner confirmation.
+
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
 
 **Source.** REQ-AUTH-01: a duplicate email creates no account and gets the same generic

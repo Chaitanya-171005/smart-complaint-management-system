@@ -36,6 +36,7 @@ Administrator must see a complaint in order to reject it, that needs an explicit
 ## Rules
 | Check | Allowed |
 |---|---|
+| `can_submit_complaint` | active authenticated Complainant; checked before constructing B07 intake options |
 | `can_view_complaint` / `can_view_evidence` | submitter; Staff and Head of the complaint's department. Not Admin. |
 | `can_progress_complaint` | assigned Staff of that department; Head of that department |
 | `can_resolve_complaint` | assigned Staff only (BR-01) |

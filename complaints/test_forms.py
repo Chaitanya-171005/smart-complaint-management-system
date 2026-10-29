@@ -186,18 +186,19 @@ def test_reference_deactivation_is_rechecked_for_new_bound_form(options, payload
 
 
 @pytest.mark.parametrize(
-    "records,error",
+    "records",
     [
-        ((object(),), TypeError),
-        ((CategoryOption("", "Synthetic"),), ValueError),
-        ((CategoryOption(" ", "Synthetic"),), ValueError),
-        ((CategoryOption("same", "One"), CategoryOption("same", "Two")), ValueError),
+        (object(),),
+        (CategoryOption("", "Synthetic"),),
+        (CategoryOption(" ", "Synthetic"),),
+        (CategoryOption("same", "One"), CategoryOption("same", "Two")),
     ],
 )
-def test_reference_contract_rejects_ambiguous_configuration(options, records, error):
+def test_reference_contract_drops_bad_or_ambiguous_configuration(options, records, caplog):
     options["categories"] = records
-    with pytest.raises(error):
-        ComplaintForm(**options)
+    form = ComplaintForm(**options)
+    assert list(form.fields["category"].choices) == [("", "Select category")]
+    assert "Ignoring" in caplog.text
 
 
 def test_authorized_form_construction(complainant_user, options, payload):
@@ -229,3 +230,100 @@ def test_refreshed_user_role_change_is_respected(complainant_user, options, payl
     complainant_user.refresh_from_db()
     with pytest.raises(PermissionDenied):
         build_complaint_form(complainant_user, payload, **options)
+
+
+@pytest.mark.parametrize("field", ["title", "sub_category"])
+@pytest.mark.parametrize("character", ["\n", "\r", "\t", "\x01", "\x7f", "\u200b", "\u202e", "\u2028", "\u2029"])
+def test_single_line_fields_reject_control_and_format_characters(options, payload, field, character):
+    # Include at an edge, where default CharField stripping could hide it.
+    payload[field] = character + "Synthetic value"
+    form = bind(options, payload)
+    assert not form.is_valid()
+    assert form.has_error(field, "invalid_single_line")
+
+
+@pytest.mark.parametrize("value", ["\u200b" * 20, "\u202e" * 20, "\u0301" * 20,
+                                  "x" * 19 + "\u200b" * 20, "x" * 19 + " " * 20])
+def test_description_requires_twenty_visible_characters(options, payload, value):
+    payload["description"] = value
+    form = bind(options, payload)
+    assert not form.is_valid()
+    assert form.has_error("description", "min_visible_length")
+
+
+def test_multiline_unicode_description_with_twenty_visible_characters(options, payload):
+    payload["description"] = "\u0905" * 10 + "\n" + "\u0905" * 10
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+    assert form.cleaned_data["description"] == payload["description"]
+
+
+def test_malformed_inactive_records_do_not_break_active_choices(options, payload, caplog):
+    options["categories"] += (CategoryOption("", 12345, active=False),)
+    options["locations"] += (LocationOption("", None, None, active=False),)
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+    assert "Ignoring" not in caplog.text
+
+
+@pytest.mark.parametrize("name", [12345, None, "x" * 60, "\u200b", "Bad\nname"])
+def test_bad_category_is_logged_and_removed_before_rendering(options, payload, name, caplog):
+    options["categories"] += (CategoryOption("bad", name),)
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+    assert "bad" not in dict(form.fields["category"].choices)
+    assert 'value="bad"' not in str(form["category"])
+    assert "Ignoring invalid intake reference record (CategoryOption)" in caplog.text
+    payload["category"] = "bad"
+    assert bind(options, payload).has_error("category", "invalid_choice")
+
+
+@pytest.mark.parametrize("block,floor,room", [(123, "1", "Room"), ("Block", None, "Room"),
+                                              ("Block", "1", 123), ("Block", "1", "\u200b")])
+def test_bad_location_is_removed_without_breaking_other_choices(options, payload, block, floor, room, caplog):
+    options["locations"] += (LocationOption("bad", block, room, floor),)
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+    assert "bad" not in dict(form.fields["location"].choices)
+    assert "Ignoring invalid intake reference record (LocationOption)" in caplog.text
+
+
+def test_duplicate_active_keys_are_all_unselectable(options, payload):
+    options["categories"] += (CategoryOption("same", "One"), CategoryOption("same", "Two"),
+                              CategoryOption("same", "Three"))
+    form = bind(options, payload)
+    assert form.is_valid()
+    assert "same" not in dict(form.fields["category"].choices)
+
+
+def test_non_boolean_active_flag_is_not_accepted(options, payload):
+    options["categories"] += (CategoryOption("bad", "Synthetic", active="False"),)
+    form = bind(options, payload)
+    assert form.is_valid()
+    assert "bad" not in dict(form.fields["category"].choices)
+
+
+@pytest.mark.parametrize("role", [User.Role.STAFF, User.Role.HEAD, User.Role.ADMIN])
+def test_authorization_happens_before_invalid_options_are_read(user_factory, payload, role):
+    def invalid_options():
+        raise AssertionError("Unauthorized request must not iterate reference options.")
+        yield  # Make this a lazy collection, as a future ORM adapter may be.
+
+    with pytest.raises(PermissionDenied):
+        build_complaint_form(user_factory(role=role), payload,
+                             categories=invalid_options(), locations=invalid_options())
+
+
+def test_submission_permission_is_the_shared_b04_predicate():
+    from accounts.permissions import can_submit_complaint
+    from complaints import services
+
+    assert services.can_submit_complaint is can_submit_complaint
+
+
+def test_indicated_priority_matches_b17_when_available():
+    from routing import models
+
+    if not hasattr(models, "Priority"):
+        pytest.skip("B17 PR #53 is not merged; run this contract test again after integration.")
+    assert ComplaintForm.Priority.CHOICES == tuple(models.Priority.choices)

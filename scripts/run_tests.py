@@ -1,4 +1,7 @@
-"""Run tests, enforce module coverage, and record sanitized E02 evidence."""
+"""Run tests and the coverage gate; write sanitized evidence to build/evidence.
+
+Use --evidence-dir explicitly to refresh a committed evidence directory.
+"""
 
 import argparse
 import json
@@ -8,7 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-EVIDENCE = ROOT / "docs" / "evidence" / "e02"
+DEFAULT_EVIDENCE = Path("build/evidence")
 
 
 def sanitize(text):
@@ -30,13 +33,19 @@ def run(command):
     return result.returncode, sanitize(result.stdout)
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--evidence-dir", type=Path, default=EVIDENCE)
-    args = parser.parse_args()
+    parser.add_argument(
+        "--evidence-dir", type=Path, default=DEFAULT_EVIDENCE,
+        help="Output directory (default: ignored build/evidence); pass docs/evidence/<task> to refresh committed evidence.",
+    )
+    args = parser.parse_args(argv)
     evidence = args.evidence_dir
     if not evidence.is_absolute():
         evidence = ROOT / evidence
+    # Capture source state before generated evidence changes the working tree.
+    revision_code, revision = run(["git", "rev-parse", "HEAD"])
+    status_code, status = run(["git", "status", "--porcelain", "--untracked-files=all"])
     evidence.mkdir(parents=True, exist_ok=True)
     # Never reuse stale coverage from an earlier successful test execution.
     (ROOT / "coverage.json").unlink(missing_ok=True)
@@ -46,11 +55,12 @@ def main():
     gate_code, gate_output = run([sys.executable, "scripts/coverage_summary.py"])
     (evidence / "coverage-summary.txt").write_text(gate_output, encoding="utf-8")
     print(gate_output, end="")
-    revision_code, revision = run(["git", "rev-parse", "HEAD"])
     metadata = {
         "executed_at_utc": datetime.now(timezone.utc).isoformat(),
         "source_revision": revision.strip() if revision_code == 0 else "unavailable",
-        "source_note": "Includes the working-tree corrections committed with this evidence.",
+        "working_tree_dirty": bool(status.strip()) if status_code == 0 else None,
+        "working_tree_status": status.splitlines() if status_code == 0 else None,
+        "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
         "pytest_exit_code": test_code,
         "coverage_gate_exit_code": gate_code,
     }

@@ -1,13 +1,8 @@
 """B07 form construction; persistence is handled by the later intake transaction."""
 
-from accounts.models import User
-from accounts.permissions import has_role, require_permission
+from accounts.permissions import can_submit_complaint, require_permission
 
 from .forms import ComplaintForm
-
-
-def can_submit_complaint(user):
-    return has_role(user, User.Role.COMPLAINANT)
 
 
 def build_complaint_form(user, data=None, *, categories, locations):
