@@ -1,6 +1,6 @@
 Module         Statements       Line     Branch  Status
 accounts              404     97.77%     97.06%  PASS
-complaints            108     99.07%    100.00%  PASS
+complaints            125     99.20%    100.00%  PASS
 routing                 6     83.33%        N/A  PLACEHOLDER
 workflow              102     92.16%     95.00%  PASS
 

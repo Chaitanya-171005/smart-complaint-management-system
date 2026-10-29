@@ -1,24 +1,8 @@
 {
-  "executed_at_utc": "2026-10-29T05:23:30.115171+00:00",
-  "source_revision": "50d92af52ee1fd429d08740b3508fe7950860251",
-  "working_tree_dirty": true,
-  "working_tree_status": [
-    "M  .gitignore",
-    "M  accounts/permissions.py",
-    "M  complaints/forms.py",
-    "M  complaints/services.py",
-    "M  complaints/test_forms.py",
-    "A  complaints/validators.py",
-    "M  docs/AUTHORIZATION.md",
-    "M  docs/B07.md",
-    "M  docs/DECISIONS.md",
-    "M  docs/TESTING.md",
-    "A  docs/evidence/b07/priority-compatibility.txt",
-    " M docs/evidence/b07/pytest.txt",
-    " M docs/evidence/b07/run.json",
-    "M  scripts/run_tests.py",
-    "A  test_run_tests.py"
-  ],
+  "executed_at_utc": "2026-10-29T05:56:04.004366+00:00",
+  "source_revision": "32682020e4ec950aa1b0d85b77a4370e3e9ea1d6",
+  "working_tree_dirty": false,
+  "working_tree_status": [],
   "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
   "pytest_exit_code": 0,
   "coverage_gate_exit_code": 1
