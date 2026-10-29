@@ -242,9 +242,9 @@ def test_single_line_fields_reject_control_and_format_characters(options, payloa
     assert form.has_error(field, "invalid_single_line")
 
 
-@pytest.mark.parametrize("value", ["\u200b" * 20, "\u202e" * 20, "\u0301" * 20,
+@pytest.mark.parametrize("value", ["\u200b" * 20, "\u0301" * 20,
                                   "x" * 19 + "\u200b" * 20, "x" * 19 + " " * 20])
-def test_description_requires_twenty_visible_characters(options, payload, value):
+def test_description_cannot_use_invisible_padding_for_minimum(options, payload, value):
     payload["description"] = value
     form = bind(options, payload)
     assert not form.is_valid()
@@ -270,7 +270,8 @@ def test_malformed_inactive_records_do_not_break_active_choices(options, payload
 def test_bad_category_is_logged_and_removed_before_rendering(options, payload, name, caplog):
     options["categories"] += (CategoryOption("bad", name),)
     form = bind(options, payload)
-    assert form.is_valid(), form.errors
+    assert not form.is_valid()
+    assert form.has_error("__all__", "configuration_unavailable")
     assert "bad" not in dict(form.fields["category"].choices)
     assert 'value="bad"' not in str(form["category"])
     assert "Ignoring invalid intake reference record (CategoryOption)" in caplog.text
@@ -280,10 +281,11 @@ def test_bad_category_is_logged_and_removed_before_rendering(options, payload, n
 
 @pytest.mark.parametrize("block,floor,room", [(123, "1", "Room"), ("Block", None, "Room"),
                                               ("Block", "1", 123), ("Block", "1", "\u200b")])
-def test_bad_location_is_removed_without_breaking_other_choices(options, payload, block, floor, room, caplog):
+def test_bad_location_is_removed_and_configuration_problem_is_visible(options, payload, block, floor, room, caplog):
     options["locations"] += (LocationOption("bad", block, room, floor),)
     form = bind(options, payload)
-    assert form.is_valid(), form.errors
+    assert not form.is_valid()
+    assert form.has_error("__all__", "configuration_unavailable")
     assert "bad" not in dict(form.fields["location"].choices)
     assert "Ignoring invalid intake reference record (LocationOption)" in caplog.text
 
@@ -292,14 +294,16 @@ def test_duplicate_active_keys_are_all_unselectable(options, payload):
     options["categories"] += (CategoryOption("same", "One"), CategoryOption("same", "Two"),
                               CategoryOption("same", "Three"))
     form = bind(options, payload)
-    assert form.is_valid()
+    assert not form.is_valid()
+    assert form.has_error("__all__", "configuration_unavailable")
     assert "same" not in dict(form.fields["category"].choices)
 
 
 def test_non_boolean_active_flag_is_not_accepted(options, payload):
     options["categories"] += (CategoryOption("bad", "Synthetic", active="False"),)
     form = bind(options, payload)
-    assert form.is_valid()
+    assert not form.is_valid()
+    assert form.has_error("__all__", "configuration_unavailable")
     assert "bad" not in dict(form.fields["category"].choices)
 
 
@@ -327,3 +331,58 @@ def test_indicated_priority_matches_b17_when_available():
     if not hasattr(models, "Priority"):
         pytest.skip("B17 PR #53 is not merged; run this contract test again after integration.")
     assert ComplaintForm.Priority.CHOICES == tuple(models.Priority.choices)
+
+
+@pytest.mark.parametrize("description,valid", [
+    ("Fan not working her", False),
+    ("Fan not working here", True),
+    ("  Fan not working here  ", True),
+    ("Fan\u00a0not\u00a0working\u00a0here", True),
+    ("x" * 19 + "\u200b" * 20, False),
+    ("x" * 19 + "\u0301" * 20, False),
+    ("\u200b" + " " * 20 + "\u200b", False),
+])
+def test_description_minimum_counts_interior_spaces(options, payload, description, valid):
+    payload["description"] = description
+    form = bind(options, payload)
+    assert form.is_valid() is valid, form.errors
+    if valid:
+        assert form.cleaned_data["description"] == description.strip()
+
+
+@pytest.mark.parametrize("control", [
+    "\u061c", "\u200e", "\u200f", "\u202a", "\u202b", "\u202c", "\u202d", "\u202e",
+    "\u2066", "\u2067", "\u2068", "\u2069", "\u206a", "\u206b", "\u206c", "\u206d", "\u206e", "\u206f",
+])
+def test_description_rejects_direction_controls_even_when_long_enough(options, payload, control):
+    payload["description"] = "Fan not " + control + "working here"
+    form = bind(options, payload)
+    assert not form.is_valid()
+    assert form.has_error("description", "invalid_bidi_control")
+
+
+def test_description_allows_normal_right_to_left_text(options, payload):
+    payload["description"] = "\u05d0" * 10 + " " + "\u05d1" * 10
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+
+
+@pytest.mark.parametrize("length", [51, 100])
+def test_oversized_category_fails_loudly_before_and_after_submission(options, payload, length):
+    options["categories"] += (CategoryOption("oversized", "x" * length),)
+    unbound = ComplaintForm(**options)
+    assert unbound.configuration_unavailable
+    assert "temporarily unavailable" in unbound.as_p()
+    assert 'value="oversized"' not in str(unbound["category"])
+    bound = bind(options, payload)
+    assert not bound.is_valid()
+    assert bound.has_error("__all__", "configuration_unavailable")
+    assert bound["title"].value() == payload["title"]
+    assert bound["description"].value() == payload["description"]
+
+
+def test_inactive_oversized_category_does_not_block_intake(options, payload):
+    options["categories"] += (CategoryOption("oversized", "x" * 100, active=False),)
+    form = bind(options, payload)
+    assert form.is_valid(), form.errors
+    assert not form.configuration_unavailable

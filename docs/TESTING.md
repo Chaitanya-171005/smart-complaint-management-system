@@ -86,6 +86,11 @@ working_tree_status and actual exit codes. source_revision is HEAD before the
 run; when the tree is dirty, the additional local changes listed were tested too.
 The flag is captured before generated output is written. Original E02 execution
 evidence is retained; its results describe that earlier source state.
+To publish reproducible final evidence, commit source changes first and verify
+git status --short is empty before invoking the runner with --evidence-dir.
+Then check working_tree_dirty is false in run.json and commit only the generated
+evidence. That evidence-only commit points back to the tested clean source commit;
+it does not claim its own output files existed at test start.
 coverage.json and .coverage are generated files excluded by .gitignore.
 
 test_run_tests.py verifies output-directory isolation, stale-report removal,

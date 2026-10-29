@@ -19,6 +19,11 @@ class SingleLineField(forms.CharField):
 
 
 class ComplaintForm(forms.Form):
+    CONFIGURATION_UNAVAILABLE = (
+        "Complaint intake is temporarily unavailable because category or location "
+        "configuration needs correction. Please contact an administrator."
+    )
+
     class Priority:
         LOW = "LOW"
         MEDIUM = "MEDIUM"
@@ -44,21 +49,29 @@ class ComplaintForm(forms.Form):
 
     def __init__(self, *args, categories, locations, **kwargs):
         super().__init__(*args, **kwargs)
-        self._categories = self._active_options(categories, CategoryOption)
-        self._locations = self._active_options(locations, LocationOption)
+        self._categories, bad_categories = self._active_options(categories, CategoryOption)
+        self._locations, bad_locations = self._active_options(locations, LocationOption)
+        self.configuration_unavailable = (
+            bad_categories or bad_locations or not self._categories or not self._locations
+        )
         self.fields["category"].choices = [("", "Select category")] + [
             (key, option.name) for key, option in self._categories.items()
         ]
         self.fields["location"].choices = [("", "Select location")] + [
             (key, option.label) for key, option in self._locations.items()
         ]
+        if self.configuration_unavailable:
+            # Visible even on an unbound form, before the user tries submitting.
+            self.fields["category"].help_text = self.CONFIGURATION_UNAVAILABLE
 
     @staticmethod
     def _active_options(options, expected_type):
         result = {}
         seen = set()
+        invalid = False
         for option in options:
             if not isinstance(option, expected_type):
+                invalid = True
                 logger.warning("Ignoring invalid intake reference record (%s).", expected_type.__name__)
                 continue
             # Inactive master data must never disrupt the active intake options.
@@ -75,17 +88,19 @@ class ComplaintForm(forms.Form):
                     ComplaintForm._reference_text(option.floor, max_length=10, required=False)
                     ComplaintForm._reference_text(option.room_area, max_length=30)
             except forms.ValidationError:
+                invalid = True
                 # Log the kind, never raw configuration text/control characters.
                 logger.warning("Ignoring invalid intake reference record (%s).", expected_type.__name__)
                 continue
             if option.key in seen:
+                invalid = True
                 # Neither of two ambiguous active records may be selected.
                 result.pop(option.key, None)
                 logger.warning("Ignoring duplicate intake reference key (%s).", expected_type.__name__)
                 continue
             seen.add(option.key)
             result[option.key] = option
-        return result
+        return result, invalid
 
     @staticmethod
     def _reference_text(value, max_length=None, required=True):
@@ -102,3 +117,11 @@ class ComplaintForm(forms.Form):
 
     def clean_location(self):
         return self._locations[self.cleaned_data["location"]]
+
+    def clean(self):
+        cleaned = super().clean()
+        if self.configuration_unavailable:
+            raise forms.ValidationError(
+                self.CONFIGURATION_UNAVAILABLE, code="configuration_unavailable"
+            )
+        return cleaned
