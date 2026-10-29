@@ -20,7 +20,7 @@ class Priority(models.TextChoices):
 class Category(models.Model):
     """Administrator-managed complaint category, retained by deactivation."""
 
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=50, unique=True)
     minimum_priority = models.CharField(
         max_length=10, choices=Priority.choices, default=Priority.LOW
     )

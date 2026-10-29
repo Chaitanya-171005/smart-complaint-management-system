@@ -18,12 +18,12 @@
     <h2>Categories</h2>
     <form method="post">
       {% csrf_token %}<input type="hidden" name="action" value="create_category">
-      <label>Name <input name="name" required maxlength="100"></label>
+      <label>Name <input name="name" required maxlength="50"></label>
       <label>Minimum priority <select name="minimum_priority">{% for value, label in priorities %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label>
       <button type="submit">Add category</button>
     </form>
     <ul>{% for category in categories %}<li>{{ category.name }} — minimum {{ category.get_minimum_priority_display }} — {% if category.active %}active{% else %}inactive{% endif %}
-      {% if category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="update_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><label> Name <input name="name" value="{{ category.name }}" required maxlength="100"></label><label> Priority <select name="minimum_priority">{% for value, label in priorities %}<option value="{{ value }}" {% if value == category.minimum_priority %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button type="submit">Save</button></form>{% endif %}
+      {% if category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="update_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><label> Name <input name="name" value="{{ category.name }}" required maxlength="50"></label><label> Priority <select name="minimum_priority">{% for value, label in priorities %}<option value="{{ value }}" {% if value == category.minimum_priority %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button type="submit">Save</button></form>{% endif %}
       {% if category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="deactivate_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><button type="submit">Deactivate</button></form>{% endif %}
       {% if not category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="reactivate_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><button type="submit">Reactivate</button></form>{% endif %}
     </li>{% endfor %}</ul>

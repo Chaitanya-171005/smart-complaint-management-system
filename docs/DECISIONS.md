@@ -17,6 +17,8 @@ stored as configuration, not hard-coded into routing, due-date or escalation log
 | Initial category routes | Configure after F1 data: Electrical/Plumbing -> Maintenance; Wi-Fi/Network -> IT Support; Cleanliness -> Housekeeping; Security -> Security |
 | Escalation | Every 24 hours after due time; maximum level 3 |
 
+Category names are limited to 50 characters (SRS Appendix B-2) so that B07 intake and B17 administration agree.
+
 Location-specific routes are intentionally not seeded because the team has not agreed
 campus location codes. They can be added by an Administrator once F1's canonical location
 reference data is available.

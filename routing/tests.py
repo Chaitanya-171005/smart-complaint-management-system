@@ -63,6 +63,17 @@ class RoutingConfigurationTests(TestCase):
             create_category(self.staff, name="Lift", minimum_priority=Priority.HIGH)
         self.assertFalse(Category.objects.filter(name="Lift").exists())
 
+    def test_category_name_is_limited_to_fifty_characters(self):
+        fifty_character_name = "C" * 50
+        category = create_category(self.admin, name=fifty_character_name)
+        self.assertEqual(category.name, fifty_character_name)
+
+        fifty_one_character_name = "C" * 51
+        with self.assertRaises(ConfigurationError):
+            create_category(self.admin, name=fifty_one_character_name)
+        with self.assertRaises(ConfigurationError):
+            update_category(self.admin, category, name=fifty_one_character_name)
+
     def test_category_change_is_audited_and_deactivation_preserves_the_row(self):
         category = create_category(self.admin, name="Lift", minimum_priority=Priority.MEDIUM)
         created = ConfigurationAuditEvent.objects.get(entity_type="Category", entity_id=category.pk)
