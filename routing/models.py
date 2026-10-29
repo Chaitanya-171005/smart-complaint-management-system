@@ -8,6 +8,8 @@ from django.db.models.functions import Lower
 
 
 MAX_SLA_DURATION_MINUTES = 365 * 24 * 60
+MAX_ESCALATION_INTERVAL_MINUTES = 30 * 24 * 60
+MAX_ESCALATION_LEVEL = 10
 
 
 class Priority(models.TextChoices):
@@ -154,8 +156,12 @@ class EscalationPolicy(models.Model):
     default_department = models.ForeignKey(
         "accounts.Department", on_delete=models.PROTECT, related_name="default_for_escalation"
     )
-    interval_minutes = models.PositiveIntegerField()
-    maximum_level = models.PositiveIntegerField()
+    interval_minutes = models.PositiveIntegerField(
+        validators=[MaxValueValidator(MAX_ESCALATION_INTERVAL_MINUTES)]
+    )
+    maximum_level = models.PositiveIntegerField(
+        validators=[MaxValueValidator(MAX_ESCALATION_LEVEL)]
+    )
 
     class Meta:
         verbose_name_plural = "escalation policies"
@@ -168,14 +174,32 @@ class EscalationPolicy(models.Model):
                 condition=Q(maximum_level__gt=0),
                 name="escalation_maximum_level_must_be_positive",
             ),
+            models.CheckConstraint(
+                condition=Q(interval_minutes__lte=MAX_ESCALATION_INTERVAL_MINUTES),
+                name="escalation_interval_within_thirty_days",
+            ),
+            models.CheckConstraint(
+                condition=Q(maximum_level__lte=MAX_ESCALATION_LEVEL),
+                name="escalation_maximum_level_within_ten",
+            ),
         ]
 
     def clean(self):
         errors = {}
         if self.interval_minutes < 1:
-            errors["interval_minutes"] = "Escalation interval must be positive."
+            errors["interval_minutes"] = (
+                f"Enter a whole number of minutes from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} "
+                "(30 days)."
+            )
+        if self.interval_minutes > MAX_ESCALATION_INTERVAL_MINUTES:
+            errors["interval_minutes"] = (
+                f"Enter a whole number of minutes from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} "
+                "(30 days)."
+            )
         if self.maximum_level < 1:
-            errors["maximum_level"] = "Maximum escalation level must be positive."
+            errors["maximum_level"] = f"Enter a whole number from 1 to {MAX_ESCALATION_LEVEL}."
+        if self.maximum_level > MAX_ESCALATION_LEVEL:
+            errors["maximum_level"] = f"Enter a whole number from 1 to {MAX_ESCALATION_LEVEL}."
         if errors:
             raise ValidationError(errors)
 

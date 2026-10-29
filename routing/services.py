@@ -4,6 +4,8 @@ Views and management commands must use these functions instead of writing models
 directly. That keeps authorization, validation and REQ-ADM-04 auditing together.
 """
 
+from functools import wraps
+
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
@@ -16,6 +18,8 @@ from .models import (
     Priority,
     RoutingRule,
     SLAConfiguration,
+    MAX_ESCALATION_INTERVAL_MINUTES,
+    MAX_ESCALATION_LEVEL,
     MAX_SLA_DURATION_MINUTES,
 )
 
@@ -29,6 +33,18 @@ UNSET = object()
 
 def _require_admin(actor):
     require_permission(can_manage_configuration, actor)
+
+
+def admin_operation(func):
+    """Authorize before beginning the atomic configuration change."""
+
+    @wraps(func)
+    def wrapper(actor, *args, **kwargs):
+        _require_admin(actor)
+        with transaction.atomic():
+            return func(actor, *args, **kwargs)
+
+    return wrapper
 
 
 def _snapshot(obj, fields):
@@ -61,25 +77,32 @@ def _normalise_location(location_code):
     return (location_code or "").strip().upper()
 
 
-def _positive_int(value, field_name):
+def _positive_int(value, field_name, minimum=1, maximum=None, message=None):
+    if message is None:
+        if maximum is None:
+            message = f"Enter a whole number from {minimum} or greater."
+        else:
+            message = f"Enter a whole number from {minimum} to {maximum}."
     try:
         value = int(value)
     except (TypeError, ValueError) as exc:
-        raise ConfigurationError(
-            {field_name: "Enter a positive whole number."}
-        ) from exc
-    if value < 1:
-        raise ConfigurationError({field_name: "Enter a positive whole number."})
+        raise ConfigurationError({field_name: message}) from exc
+    if value < minimum or (maximum is not None and value > maximum):
+        raise ConfigurationError({field_name: message})
     return value
 
 
 def _sla_duration(value):
-    value = _positive_int(value, "duration_minutes")
-    if value > MAX_SLA_DURATION_MINUTES:
-        raise ConfigurationError(
-            {"duration_minutes": "SLA duration cannot exceed one year."}
-        )
-    return value
+    return _positive_int(
+        value,
+        "duration_minutes",
+        minimum=1,
+        maximum=MAX_SLA_DURATION_MINUTES,
+        message=(
+            f"Enter a whole number of minutes from 1 to {MAX_SLA_DURATION_MINUTES} "
+            "(one year)."
+        ),
+    )
 
 
 def _active_rule_exists(*, category, location_code, excluding=None):
@@ -104,9 +127,8 @@ def _save_routing_rule(rule):
         ) from exc
 
 
-@transaction.atomic
+@admin_operation
 def create_category(actor, *, name, minimum_priority=Priority.LOW):
-    _require_admin(actor)
     category = Category(name=(name or "").strip(), minimum_priority=minimum_priority)
     _validate(category)
     category.save()
@@ -119,9 +141,8 @@ def create_category(actor, *, name, minimum_priority=Priority.LOW):
     return category
 
 
-@transaction.atomic
+@admin_operation
 def update_category(actor, category, *, name=None, minimum_priority=None):
-    _require_admin(actor)
     old = _snapshot(category, ("name", "minimum_priority", "active"))
     if name is not None:
         category.name = name.strip()
@@ -139,9 +160,8 @@ def update_category(actor, category, *, name=None, minimum_priority=None):
     return category
 
 
-@transaction.atomic
+@admin_operation
 def deactivate_category(actor, category):
-    _require_admin(actor)
     if category.active:
         if category.routing_rules.filter(active=True).exists():
             raise ConfigurationError(
@@ -164,9 +184,8 @@ def deactivate_category(actor, category):
     return category
 
 
-@transaction.atomic
+@admin_operation
 def reactivate_category(actor, category):
-    _require_admin(actor)
     if not category.active:
         old = _snapshot(category, ("name", "minimum_priority", "active"))
         category.active = True
@@ -181,9 +200,8 @@ def reactivate_category(actor, category):
     return category
 
 
-@transaction.atomic
+@admin_operation
 def create_routing_rule(actor, *, category=None, location_code="", department, precedence=100):
-    _require_admin(actor)
     location_code = _normalise_location(location_code)
     precedence = _positive_int(precedence, "precedence")
     if _active_rule_exists(category=category, location_code=location_code):
@@ -213,7 +231,7 @@ def create_routing_rule(actor, *, category=None, location_code="", department, p
     return rule
 
 
-@transaction.atomic
+@admin_operation
 def update_routing_rule(
     actor,
     rule,
@@ -223,7 +241,6 @@ def update_routing_rule(
     department=UNSET,
     precedence=UNSET,
 ):
-    _require_admin(actor)
     old = _snapshot(rule, ("category", "location_code", "department", "precedence", "active"))
     if category is not UNSET:
         rule.category = category
@@ -255,9 +272,8 @@ def update_routing_rule(
     return rule
 
 
-@transaction.atomic
+@admin_operation
 def deactivate_routing_rule(actor, rule):
-    _require_admin(actor)
     if rule.active:
         old = _snapshot(rule, ("category", "location_code", "department", "precedence", "active"))
         rule.active = False
@@ -272,9 +288,8 @@ def deactivate_routing_rule(actor, rule):
     return rule
 
 
-@transaction.atomic
+@admin_operation
 def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
-    _require_admin(actor)
     duration_minutes = _sla_duration(duration_minutes)
     if priority not in Priority.values:
         raise ConfigurationError({"priority": "Choose a supported priority."})
@@ -318,9 +333,8 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
     return config
 
 
-@transaction.atomic
+@admin_operation
 def deactivate_sla_configuration(actor, config):
-    _require_admin(actor)
     if config.active:
         if (
             config.category_id is None
@@ -345,18 +359,32 @@ def deactivate_sla_configuration(actor, config):
     return config
 
 
-@transaction.atomic
+@admin_operation
 def update_escalation_policy(
     actor, policy, *, default_department=None, interval_minutes=None, maximum_level=None
 ):
-    _require_admin(actor)
     old = _snapshot(policy, ("default_department", "interval_minutes", "maximum_level"))
     if default_department is not None:
         policy.default_department = default_department
     if interval_minutes is not None:
-        policy.interval_minutes = _positive_int(interval_minutes, "interval_minutes")
+        policy.interval_minutes = _positive_int(
+            interval_minutes,
+            "interval_minutes",
+            minimum=1,
+            maximum=MAX_ESCALATION_INTERVAL_MINUTES,
+            message=(
+                f"Enter a whole number of minutes from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} "
+                "(30 days)."
+            ),
+        )
     if maximum_level is not None:
-        policy.maximum_level = _positive_int(maximum_level, "maximum_level")
+        policy.maximum_level = _positive_int(
+            maximum_level,
+            "maximum_level",
+            minimum=1,
+            maximum=MAX_ESCALATION_LEVEL,
+            message=f"Enter a whole number from 1 to {MAX_ESCALATION_LEVEL}.",
+        )
     try:
         _validate(policy)
         if not policy.default_department.active:
@@ -379,19 +407,33 @@ def update_escalation_policy(
     return policy
 
 
-@transaction.atomic
+@admin_operation
 def create_escalation_policy(
     actor, *, default_department, interval_minutes, maximum_level
 ):
     """Create the singleton policy after F1's departments are available."""
-    _require_admin(actor)
     if EscalationPolicy.objects.filter(key="default").exists():
         raise ConfigurationError("The escalation policy already exists.")
     policy = EscalationPolicy(
         key="default",
         default_department=default_department,
-        interval_minutes=_positive_int(interval_minutes, "interval_minutes"),
-        maximum_level=_positive_int(maximum_level, "maximum_level"),
+        interval_minutes=_positive_int(
+            interval_minutes,
+            "interval_minutes",
+            minimum=1,
+            maximum=MAX_ESCALATION_INTERVAL_MINUTES,
+            message=(
+                f"Enter a whole number of minutes from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} "
+                "(30 days)."
+            ),
+        ),
+        maximum_level=_positive_int(
+            maximum_level,
+            "maximum_level",
+            minimum=1,
+            maximum=MAX_ESCALATION_LEVEL,
+            message=f"Enter a whole number from 1 to {MAX_ESCALATION_LEVEL}.",
+        ),
     )
     _validate(policy)
     if not default_department.active:
@@ -406,3 +448,11 @@ def create_escalation_policy(
         new_values=_snapshot(policy, ("default_department", "interval_minutes", "maximum_level")),
     )
     return policy
+
+
+def department_in_use(department):
+    """F1's department-deactivation service must refuse deactivation when this is true."""
+    return (
+        RoutingRule.objects.filter(department=department, active=True).exists()
+        or EscalationPolicy.objects.filter(default_department=department).exists()
+    )

@@ -21,6 +21,7 @@ def seed_initial_configuration(apps, schema_editor):
             name=name, defaults={"minimum_priority": minimum_priority}
         )[0]
 
+    # SLA and escalation values are provisional defaults pending campus confirmation.
     for priority, duration_minutes in (
         ("LOW", 7 * 24 * 60),
         ("MEDIUM", 3 * 24 * 60),

@@ -3,12 +3,15 @@ from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts.models import Department, User
+from accounts.models import Department, SecurityEvent, User
 
 from .models import (
     Category,
     ConfigurationAuditEvent,
     EscalationPolicy,
+    MAX_ESCALATION_INTERVAL_MINUTES,
+    MAX_ESCALATION_LEVEL,
+    MAX_SLA_DURATION_MINUTES,
     Priority,
     RoutingRule,
     SLAConfiguration,
@@ -21,6 +24,7 @@ from .services import (
     deactivate_category,
     deactivate_routing_rule,
     deactivate_sla_configuration,
+    department_in_use,
     reactivate_category,
     set_sla_configuration,
     update_category,
@@ -62,6 +66,24 @@ class RoutingConfigurationTests(TestCase):
         with self.assertRaises(PermissionDenied):
             create_category(self.staff, name="Lift", minimum_priority=Priority.HIGH)
         self.assertFalse(Category.objects.filter(name="Lift").exists())
+        self.assertEqual(
+            SecurityEvent.objects.filter(
+                user=self.staff,
+                event_type=SecurityEvent.EventType.AUTHORIZATION_REFUSED,
+            ).count(),
+            1,
+        )
+
+    def test_refused_sla_configuration_is_logged(self):
+        with self.assertRaises(PermissionDenied):
+            set_sla_configuration(self.staff, priority=Priority.LOW, duration_minutes=60)
+        self.assertEqual(
+            SecurityEvent.objects.filter(
+                user=self.staff,
+                event_type=SecurityEvent.EventType.AUTHORIZATION_REFUSED,
+            ).count(),
+            1,
+        )
 
     def test_category_name_is_limited_to_fifty_characters(self):
         fifty_character_name = "C" * 50
@@ -156,10 +178,50 @@ class RoutingConfigurationTests(TestCase):
                 department=self.maintenance,
             )
 
-    def test_sla_and_escalation_settings_must_be_positive_and_are_audited(self):
-        with self.assertRaises(ConfigurationError):
-            set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=0)
+    def test_sla_duration_enforces_its_permitted_range(self):
+        range_message = f"from 1 to {MAX_SLA_DURATION_MINUTES} (one year)"
+        for value in (0, MAX_SLA_DURATION_MINUTES + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=value)
+            self.assertIn(range_message, str(error.exception))
 
+        minimum = set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=1)
+        self.assertEqual(minimum.duration_minutes, 1)
+        maximum = set_sla_configuration(
+            self.admin, priority=Priority.LOW, duration_minutes=MAX_SLA_DURATION_MINUTES
+        )
+        self.assertEqual(maximum.duration_minutes, MAX_SLA_DURATION_MINUTES)
+
+    def test_escalation_interval_and_level_enforce_their_permitted_ranges(self):
+        policy = create_escalation_policy(
+            self.admin,
+            default_department=self.administration,
+            interval_minutes=1,
+            maximum_level=1,
+        )
+        self.assertEqual((policy.interval_minutes, policy.maximum_level), (1, 1))
+
+        interval_message = f"from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} (30 days)"
+        for value in (0, MAX_ESCALATION_INTERVAL_MINUTES + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                update_escalation_policy(self.admin, policy, interval_minutes=value)
+            self.assertIn(interval_message, str(error.exception))
+        update_escalation_policy(
+            self.admin, policy, interval_minutes=MAX_ESCALATION_INTERVAL_MINUTES
+        )
+        policy.refresh_from_db()
+        self.assertEqual(policy.interval_minutes, MAX_ESCALATION_INTERVAL_MINUTES)
+
+        level_message = f"from 1 to {MAX_ESCALATION_LEVEL}"
+        for value in (0, MAX_ESCALATION_LEVEL + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                update_escalation_policy(self.admin, policy, maximum_level=value)
+            self.assertIn(level_message, str(error.exception))
+        update_escalation_policy(self.admin, policy, maximum_level=MAX_ESCALATION_LEVEL)
+        policy.refresh_from_db()
+        self.assertEqual(policy.maximum_level, MAX_ESCALATION_LEVEL)
+
+    def test_sla_and_escalation_settings_are_audited(self):
         sla = set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=360)
         self.assertEqual(sla.duration_minutes, 360)
         self.assertTrue(
@@ -174,25 +236,38 @@ class RoutingConfigurationTests(TestCase):
             interval_minutes=1440,
             maximum_level=3,
         )
-        with self.assertRaises(ConfigurationError):
-            update_escalation_policy(self.admin, policy, interval_minutes=0)
         update_escalation_policy(self.admin, policy, maximum_level=4)
         policy.refresh_from_db()
         self.assertEqual(policy.maximum_level, 4)
 
-    def test_sla_rejects_inactive_categories_and_durations_over_one_year(self):
+    def test_sla_rejects_inactive_categories(self):
         category = create_category(self.admin, name="Lift")
         deactivate_category(self.admin, category)
         with self.assertRaises(ConfigurationError):
             set_sla_configuration(
                 self.admin, category=category, priority=Priority.LOW, duration_minutes=60
             )
-        with self.assertRaises(ConfigurationError):
-            set_sla_configuration(
-                self.admin,
-                priority=Priority.LOW,
-                duration_minutes=365 * 24 * 60 + 1,
-            )
+
+    def test_department_in_use_reports_active_routing_and_escalation_references(self):
+        unused = Department.objects.create(name="Unused")
+        self.assertFalse(department_in_use(unused))
+
+        rule = create_routing_rule(
+            self.admin,
+            category=Category.objects.get(name="Electrical"),
+            department=self.maintenance,
+        )
+        self.assertTrue(department_in_use(self.maintenance))
+        deactivate_routing_rule(self.admin, rule)
+        self.assertFalse(department_in_use(self.maintenance))
+
+        create_escalation_policy(
+            self.admin,
+            default_department=self.administration,
+            interval_minutes=1440,
+            maximum_level=3,
+        )
+        self.assertTrue(department_in_use(self.administration))
 
     def test_last_active_default_sla_for_a_priority_cannot_be_deactivated(self):
         default = SLAConfiguration.objects.get(category=None, priority=Priority.LOW)
@@ -263,6 +338,7 @@ class RoutingConfigurationTests(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Routing, SLA and escalation configuration")
+        self.assertContains(response, "provisional")
         response = self.client.post(
             url,
             {

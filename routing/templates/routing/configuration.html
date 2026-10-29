@@ -47,6 +47,7 @@
 
   <section>
     <h2>SLA durations</h2>
+    <p>Default SLA values are provisional until campus values are confirmed (D01).</p>
     <form method="post">
       {% csrf_token %}<input type="hidden" name="action" value="set_sla">
       <label>Category override <select name="category_id"><option value="">Default for all categories</option>{% for category in categories %}{% if category.active %}<option value="{{ category.pk }}">{{ category.name }}</option>{% endif %}{% endfor %}</select></label>
