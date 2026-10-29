@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Routing and SLA configuration - SCMS</title>
+</head>
+<body>
+  <header>
+    <p>Signed in as {{ user.full_name }} (Administrator)</p>
+    <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+  </header>
+  <h1>Routing, SLA and escalation configuration</h1>
+  <p>Changes affect new complaints only. Existing routes and due times are retained.</p>
+  {% if messages %}{% for message in messages %}<p role="alert">{{ message }}</p>{% endfor %}{% endif %}
+
+  <section>
+    <h2>Categories</h2>
+    <form method="post">
+      {% csrf_token %}<input type="hidden" name="action" value="create_category">
+      <label>Name <input name="name" required maxlength="50"></label>
+      <label>Minimum priority <select name="minimum_priority">{% for value, label in priorities %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label>
+      <button type="submit">Add category</button>
+    </form>
+    <ul>{% for category in categories %}<li>{{ category.name }} — minimum {{ category.get_minimum_priority_display }} — {% if category.active %}active{% else %}inactive{% endif %}
+      {% if category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="update_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><label> Name <input name="name" value="{{ category.name }}" required maxlength="50"></label><label> Priority <select name="minimum_priority">{% for value, label in priorities %}<option value="{{ value }}" {% if value == category.minimum_priority %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button type="submit">Save</button></form>{% endif %}
+      {% if category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="deactivate_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><button type="submit">Deactivate</button></form>{% endif %}
+      {% if not category.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="reactivate_category"><input type="hidden" name="category_id" value="{{ category.pk }}"><button type="submit">Reactivate</button></form>{% endif %}
+    </li>{% endfor %}</ul>
+  </section>
+
+  <section>
+    <h2>Routing rules</h2>
+    <form method="post">
+      {% csrf_token %}<input type="hidden" name="action" value="create_rule">
+      <label>Category <select name="category_id"><option value="">Any category</option>{% for category in categories %}{% if category.active %}<option value="{{ category.pk }}">{{ category.name }}</option>{% endif %}{% endfor %}</select></label>
+      <label>Location code <input name="location_code" maxlength="100"></label>
+      <label>Department <select name="department_id" required>{% for department in departments %}<option value="{{ department.pk }}">{{ department.name }}</option>{% endfor %}</select></label>
+      <label>Precedence <input type="number" name="precedence" min="1" value="100" required></label>
+      <button type="submit">Add route</button>
+    </form>
+    <ul>{% for rule in rules %}<li>{{ rule }} — precedence {{ rule.precedence }} — {% if rule.active %}active{% else %}inactive{% endif %}
+      {% if rule.active %}<form method="post">{% csrf_token %}<input type="hidden" name="action" value="update_rule"><input type="hidden" name="rule_id" value="{{ rule.pk }}"><label>Category <select name="category_id"><option value="">Any category</option>{% for category in categories %}{% if category.active or category.pk == rule.category_id %}<option value="{{ category.pk }}" {% if category.pk == rule.category_id %}selected{% endif %}>{{ category.name }}</option>{% endif %}{% endfor %}</select></label><label>Location <input name="location_code" value="{{ rule.location_code }}" maxlength="100"></label><label>Department <select name="department_id">{% for department in departments %}<option value="{{ department.pk }}" {% if department.pk == rule.department_id %}selected{% endif %}>{{ department.name }}</option>{% endfor %}</select></label><label>Precedence <input type="number" name="precedence" min="1" value="{{ rule.precedence }}" required></label><button type="submit">Save / reorder</button></form>{% endif %}
+      {% if rule.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="deactivate_rule"><input type="hidden" name="rule_id" value="{{ rule.pk }}"><button type="submit">Deactivate</button></form>{% endif %}
+    </li>{% endfor %}</ul>
+  </section>
+
+  <section>
+    <h2>SLA durations</h2>
+    <form method="post">
+      {% csrf_token %}<input type="hidden" name="action" value="set_sla">
+      <label>Category override <select name="category_id"><option value="">Default for all categories</option>{% for category in categories %}{% if category.active %}<option value="{{ category.pk }}">{{ category.name }}</option>{% endif %}{% endfor %}</select></label>
+      <label>Priority <select name="priority">{% for value, label in priorities %}<option value="{{ value }}">{{ label }}</option>{% endfor %}</select></label>
+      <label>Duration (minutes) <input type="number" name="duration_minutes" min="1" required></label>
+      <button type="submit">Save SLA</button>
+    </form>
+    <ul>{% for config in sla_configurations %}<li>{{ config }} — {% if config.active %}active{% else %}inactive{% endif %}{% if config.active %}<form method="post" style="display:inline">{% csrf_token %}<input type="hidden" name="action" value="deactivate_sla"><input type="hidden" name="sla_id" value="{{ config.pk }}"><button type="submit">Deactivate</button></form>{% endif %}</li>{% endfor %}</ul>
+  </section>
+
+  <section>
+    <h2>Escalation</h2>
+    {% if policy %}<form method="post">
+      {% csrf_token %}<input type="hidden" name="action" value="update_escalation"><input type="hidden" name="policy_id" value="{{ policy.pk }}">
+      <label>Default department <select name="default_department_id">{% for department in departments %}<option value="{{ department.pk }}" {% if department.pk == policy.default_department_id %}selected{% endif %}>{{ department.name }}</option>{% endfor %}</select></label>
+      <label>Interval (minutes) <input type="number" name="interval_minutes" min="1" value="{{ policy.interval_minutes }}" required></label>
+      <label>Maximum level <input type="number" name="maximum_level" min="1" value="{{ policy.maximum_level }}" required></label>
+      <button type="submit">Save escalation policy</button>
+    </form>{% else %}<p>No escalation policy is configured yet. Select a default department after F1's department data is available.</p><form method="post">{% csrf_token %}<input type="hidden" name="action" value="create_escalation"><label>Default department <select name="default_department_id" required>{% for department in departments %}<option value="{{ department.pk }}">{{ department.name }}</option>{% empty %}<option value="">No active departments available</option>{% endfor %}</select></label><label>Interval (minutes) <input type="number" name="interval_minutes" min="1" value="1440" required></label><label>Maximum level <input type="number" name="maximum_level" min="1" value="3" required></label><button type="submit" {% if not departments %}disabled{% endif %}>Create escalation policy</button></form>{% endif %}
+  </section>
+
+  <section>
+    <h2>Recent configuration audit</h2>
+    <ul>{% for event in audit_events %}<li>{{ event.created_at }} — {{ event.actor|default:"System" }} — {{ event.action }} {{ event.entity_type }} #{{ event.entity_id }}</li>{% empty %}<li>No administrator changes yet.</li>{% endfor %}</ul>
+  </section>
+</body>
+</html>
