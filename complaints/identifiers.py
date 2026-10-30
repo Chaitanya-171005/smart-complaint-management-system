@@ -19,8 +19,9 @@ class ComplaintIdExhausted(RuntimeError):
 def allocate_complaint_id(*, submitted_at, using=DEFAULT_DB_ALIAS):
     """Reserve a number inside an existing transaction using a trusted timestamp.
 
-    Call as the first database operation in the outer intake transaction on
-    SQLite. The caller must then create the complaint and all required operations
+    SQLite's IMMEDIATE transaction mode is configured in scms/settings.py, so
+    master-data reads may precede allocation. Keep the outer transaction short.
+    The caller must create the complaint and all required operations
     on the SAME database. A rollback undoes the reservation. The returned string
     is provisional until that entire transaction commits; never acknowledge it
     early. This helper does not implement complaint immutability or retry keys.
@@ -36,8 +37,8 @@ def allocate_complaint_id(*, submitted_at, using=DEFAULT_DB_ALIAS):
     year = timezone.localtime(submitted_at, timezone.get_default_timezone()).year
     sequence = ComplaintIdSequence.objects.using(using).filter(year=year)
 
-    # Write first: SQLite's select_for_update() does not acquire a row lock, and
-    # a read-then-write deferred transaction can fail during lock upgrading.
+    # Keep the increment atomic. SQLite reserves the writer at outer transaction
+    # entry (IMMEDIATE), so this need not be the transaction's first database query.
     if not sequence.filter(last_value__lt=MAX_YEARLY_SEQUENCE).update(last_value=F("last_value") + 1):
         try:
             # A new-year insert can race on databases with row-level locking.

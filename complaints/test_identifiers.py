@@ -11,6 +11,7 @@ from django.db import IntegrityError, close_old_connections, connection, connect
 from django.db.transaction import TransactionManagementError
 from django.utils import timezone
 
+from accounts.models import Department
 from complaints.identifiers import ComplaintIdExhausted, allocate_complaint_id
 from complaints.models import ComplaintIdSequence
 
@@ -157,3 +158,42 @@ def test_concurrent_connections_allocate_unique_numbers(starting_value):
     }
     assert len(identifiers) == len(set(identifiers))
     assert ComplaintIdSequence.objects.get(year=2026).last_value == base + workers
+
+
+@pytest.mark.parametrize("starting_value", [None, 41])
+def test_concurrent_read_then_allocate_has_no_lock_errors_or_duplicate_ids(starting_value):
+    """B10 may recheck master data before allocation inside its transaction."""
+    department = Department.objects.create(name="Synthetic B08 concurrency department", active=True)
+    if starting_value is not None:
+        ComplaintIdSequence.objects.create(year=2026, last_value=starting_value)
+    workers = 8
+    allocations_per_worker = 3
+    barrier = Barrier(workers)
+
+    def submit(_):
+        close_old_connections()
+        try:
+            # Synchronize before BEGIN: IMMEDIATE intentionally serializes outer
+            # transactions, so a barrier inside an atomic block would deadlock.
+            barrier.wait(timeout=10)
+            identifiers = []
+            for _ in range(allocations_per_worker):
+                with transaction.atomic():
+                    assert Department.objects.get(pk=department.pk).active
+                    identifiers.append(allocate_complaint_id(submitted_at=SUBMITTED_AT))
+            return identifiers
+        finally:
+            connections["default"].close()
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        # Exceptions (including OperationalError) propagate; no hidden retries.
+        batches = list(pool.map(submit, range(workers)))
+    identifiers = [identifier for batch in batches for identifier in batch]
+    count = workers * allocations_per_worker
+    base = starting_value or 0
+    assert len(identifiers) == count
+    assert len(set(identifiers)) == count
+    assert set(identifiers) == {
+        f"SCMS-2026-{number:06d}" for number in range(base + 1, base + count + 1)
+    }
+    assert ComplaintIdSequence.objects.get(year=2026).last_value == base + count
