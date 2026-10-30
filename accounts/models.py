@@ -177,6 +177,8 @@ class SecurityEvent(models.Model):
         LOGIN_LOCKOUT = "LOGIN_LOCKOUT", "Lockout started"
         LOGIN_BLOCKED = "LOGIN_BLOCKED", "Login refused during lockout"
         AUTHORIZATION_REFUSED = "AUTHORIZATION_REFUSED", "Authorization refused"
+        ROLE_CHANGED = "ROLE_CHANGED", "Role or department membership changed"
+        ROLE_CHANGE_REFUSED = "ROLE_CHANGE_REFUSED", "Role or membership change refused"
 
     event_type = models.CharField(max_length=30, choices=EventType.choices)
     user = models.ForeignKey(
