@@ -7,7 +7,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
 from . import reference_services as svc
-from .models import Department, Location
+from . import user_admin_services as user_svc
+from .models import Department, Location, User
 from .permissions import role_required
 
 admin_only = role_required("ADMIN")
@@ -120,3 +121,43 @@ def location_active(request, pk):
     location = get_object_or_404(Location, pk=pk)
     svc.set_location_active(request.user, location, _active_flag(request))
     return redirect("accounts:admin_locations")
+
+
+# --- users, roles and membership (B06) -------------------------------------------------------
+
+
+class UserRoleForm(forms.Form):
+    role = forms.ChoiceField(choices=User.Role.choices)
+    department = forms.ModelChoiceField(
+        queryset=Department.objects.none(), required=False, empty_label="No department"
+    )
+
+    def __init__(self, *args, target, **kwargs):
+        super().__init__(*args, **kwargs)
+        current = Department.objects.filter(pk=target.department_id)
+        # Active departments for new assignments, plus the user's current one so it is kept.
+        self.fields["department"].queryset = svc.active_departments() | current
+
+
+@admin_only
+def users(request):
+    listing = User.objects.select_related("department").order_by("email")
+    return render(request, "accounts/admin_users.html", {"people": listing})
+
+
+@admin_only
+@require_http_methods(["GET", "POST"])
+def user_edit(request, pk):
+    target = get_object_or_404(User, pk=pk)
+    form = UserRoleForm(
+        request.POST or None, target=target,
+        initial={"role": target.role, "department": target.department_id},
+    )
+    if request.method == "POST" and form.is_valid():
+        if _apply(form, lambda d: user_svc.set_role_and_membership(
+            request.user, target, role=d["role"], department=d["department"]
+        )):
+            return redirect("accounts:admin_users")
+    return render(request, "accounts/admin_edit.html",
+                  {"form": form, "title": f"Role and department: {target.email}",
+                   "back": "accounts:admin_users"}, status=400 if form.errors else 200)
