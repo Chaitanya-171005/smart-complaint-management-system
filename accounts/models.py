@@ -1,3 +1,5 @@
+import re
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -57,9 +59,16 @@ class Location(models.Model):
             ),
         ]
 
+    CODE_PATTERN = re.compile(r"^[A-Z0-9._-]+$")
+
     @staticmethod
     def normalize_code(value):
         return (value or "").strip().upper()
+
+    @classmethod
+    def is_valid_code(cls, code):
+        """Codes are letters, digits, '.', '_' and '-' only, so routing and intake keys stay clean."""
+        return bool(cls.CODE_PATTERN.match(code))
 
     def save(self, *args, **kwargs):
         self.code = self.normalize_code(self.code)

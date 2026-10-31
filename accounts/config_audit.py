@@ -14,14 +14,26 @@ SENSITIVE_FIELDS = frozenset(
 REDACTED = "[redacted]"
 
 
+def _is_sensitive(key):
+    return any(part in str(key).lower() for part in SENSITIVE_FIELDS)
+
+
+def _clean_value(value):
+    """Redact sensitive keys at every depth; leave only JSON-safe values."""
+    if isinstance(value, dict):
+        return {
+            str(key): REDACTED if _is_sensitive(key) else _clean_value(item)
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple, set, frozenset)):
+        return [_clean_value(item) for item in value]
+    if isinstance(value, (str, int, float, bool, type(None))):
+        return value
+    return str(value)
+
+
 def _clean(values):
-    cleaned = {}
-    for key, value in (values or {}).items():
-        if any(part in key.lower() for part in SENSITIVE_FIELDS):
-            cleaned[key] = REDACTED
-        else:
-            cleaned[key] = value if isinstance(value, (str, int, float, bool, type(None))) else str(value)
-    return cleaned
+    return _clean_value(values or {})
 
 
 def record_change(*, actor, entity_type, entity_id, action, old=None, new=None):

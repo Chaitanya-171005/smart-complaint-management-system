@@ -435,3 +435,63 @@ def test_edit_screens_show_errors_and_unknown_records_are_404(client_for, admin,
     assert r.status_code == 400
     r = c.get(f"/accounts/admin-config/departments/{dept.pk}/edit/")
     assert r.status_code == 200 and "Synthetic Edit Errors" in r.content.decode()
+
+
+# --- review fixes: nested redaction, location code characters, B07 adapter -----------------------
+
+
+def test_audit_redacts_sensitive_keys_at_any_depth(admin):
+    event = record_change(
+        actor=admin, entity_type="demo", entity_id=1, action="UPDATE",
+        old={"nested": {"password": "hunter2", "keep": "yes"}},
+        new={"items": [{"token": "abc", "name": "ok"}, ("x", {"secret": "s"})], "plain": 1},
+    )
+    event.refresh_from_db()
+    assert event.old_values == {"nested": {"password": REDACTED, "keep": "yes"}}
+    assert event.new_values == {"items": [{"token": REDACTED, "name": "ok"}, ["x", {"secret": REDACTED}]], "plain": 1}
+    stored = str(event.old_values) + str(event.new_values)
+    assert "hunter2" not in stored and "abc" not in stored
+
+
+def test_audit_still_redacts_top_level_keys_and_stringifies_odd_values(admin):
+    event = record_change(
+        actor=admin, entity_type="demo", entity_id=1, action="UPDATE",
+        new={"session_key": "k", "when": object, "n": None},
+    )
+    assert event.new_values["session_key"] == REDACTED
+    assert isinstance(event.new_values["when"], str) and event.new_values["n"] is None
+
+
+@pytest.mark.parametrize("code", ["my code", "a/b", "room#1", "ünï", "a,b", "x y-1", "!!"])
+def test_location_code_with_other_characters_is_refused(admin, code):
+    before = Location.objects.count()
+    with pytest.raises(ValidationError) as exc:
+        svc.create_location(admin, code=code, block="B", floor="1", room_area="R")
+    assert "code" in exc.value.message_dict
+    assert Location.objects.count() == before
+
+
+@pytest.mark.parametrize("code,stored", [(" syn.a_1-2 ", "SYN.A_1-2"), ("abc", "ABC"), ("A-1", "A-1")])
+def test_location_code_allows_letters_digits_dot_underscore_hyphen(admin, code, stored):
+    loc = svc.create_location(admin, code=code, block="B", floor="1", room_area="R")
+    assert loc.code == stored
+
+
+def test_location_options_supply_active_locations_keyed_by_code(admin, location):
+    from accounts.reference_adapters import location_options
+
+    closed = svc.create_location(admin, code="syn-closed", block="Block A", floor="1", room_area="Room 102")
+    svc.set_location_active(admin, closed, False)
+    options = location_options()
+    assert [o.key for o in options] == [location.code]
+    option = options[0]
+    assert (option.block, option.floor, option.room_area, option.active) == ("Block A", "1", "Room 101", True)
+    assert option.label == "Block A / 1 / Room 101"
+
+
+def test_location_option_key_survives_a_rename(admin, location):
+    from accounts.reference_adapters import location_options
+
+    svc.update_location(admin, location, block="Block Z", floor="2", room_area="Room 9")
+    (option,) = location_options()
+    assert option.key == location.code and option.block == "Block Z"

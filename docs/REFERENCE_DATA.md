@@ -38,3 +38,15 @@ The location **code is never edited** after creation: other modules store and ro
   confirmed values; tests use synthetic names only.
 - Deactivating a department that active routing rules or active Staff still use is allowed here
   (existing references must be preserved). Whether to warn or block is for the team to decide.
+
+## Review follow-ups (PR #56)
+
+- **Audit redaction is recursive.** `record_change` redacts sensitive keys at every depth of a
+  dict or list, so a nested `password` or `token` is never stored (B17 and B29 reuse this).
+- **Location codes** contain only letters, digits, `.`, `_` and `-` (stored upper-case). A code
+  with spaces or other characters is refused, so routing and intake keys stay clean.
+- **B07 adapter.** `accounts.reference_adapters.location_options()` returns the active
+  locations as `complaints.reference_data.LocationOption`, keyed by the canonical location
+  code. Pass it to the intake form; a renamed block or room keeps its key.
+- **Department deactivation guard** remains a tracked follow-up once B17 (#53) merges: B05 will
+  call `routing.services.department_in_use` before deactivating a department.

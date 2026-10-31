@@ -133,9 +133,18 @@ def set_department_active(actor, department, active):
 # --- locations -------------------------------------------------------------------------
 
 
+def _location_code(value):
+    code = Location.normalize_code(_text(value, "code", 100))
+    if not Location.is_valid_code(code):
+        raise ValidationError(
+            {"code": "Use only letters, digits, '.', '_' and '-' (no spaces) in a location code."}
+        )
+    return code
+
+
 def _location_fields(code, block, floor, room_area):
     return {
-        "code": Location.normalize_code(_text(code, "code", 100)),
+        "code": _location_code(code),
         "block": _text(block, "block", 20),
         "floor": _text(floor, "floor", 10, required=False),
         "room_area": _text(room_area, "room_area", 30),

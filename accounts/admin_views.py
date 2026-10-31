@@ -7,10 +7,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
 from . import reference_services as svc
-from .models import Department, Location
+from .models import Department, Location, User
 from .permissions import role_required
 
-admin_only = role_required("ADMIN")
+admin_only = role_required(User.Role.ADMIN)
 
 
 class DepartmentForm(forms.Form):
