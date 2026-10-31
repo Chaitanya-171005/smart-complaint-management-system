@@ -12,3 +12,4 @@ test_db.sqlite3
 coverage.json
 .pytest_cache/
 build/evidence/
+private-evidence/

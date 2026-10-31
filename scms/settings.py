@@ -162,3 +162,10 @@ SESSION_COOKIE_AGE = SESSION_IDLE_TIMEOUT_MINUTES * 60
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
+
+# B09: a separate private volume, never a MEDIA_URL/static web-server alias.
+PRIVATE_EVIDENCE_ROOT = Path(os.environ.get("PRIVATE_EVIDENCE_ROOT", BASE_DIR / "private-evidence"))
+# D02 is pending: conservative decimal default, not an agreed acceptance limit.
+EVIDENCE_MAX_BYTES = int(os.environ.get("EVIDENCE_MAX_BYTES", "5000000"))
+# Processing safeguard, separate from the SRS compressed-file byte limit.
+EVIDENCE_MAX_IMAGE_PIXELS = 25_000_000
