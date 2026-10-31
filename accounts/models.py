@@ -1,14 +1,88 @@
+import re
+
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Lower
 
+NEVER_DELETED = "Reference data is deactivated, never deleted (BR-05, REQ-ADM-01)."
+
+
+class ReferenceQuerySet(models.QuerySet):
+    def delete(self):
+        raise ValidationError(NEVER_DELETED)
+
 
 class Department(models.Model):
-    name = models.CharField(max_length=100, unique=True)
+    """Administrator-managed department, retained by deactivation (BR-05)."""
+
+    name = models.CharField(max_length=50, unique=True)
     active = models.BooleanField(default=True)
+
+    objects = ReferenceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["name"]
+        constraints = [
+            models.UniqueConstraint(Lower("name"), name="department_name_ci_unique"),
+        ]
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError(NEVER_DELETED)
 
     def __str__(self):
         return self.name
+
+
+class Location(models.Model):
+    """Administrator-managed campus location (SRS B-2: block 20, floor 10, room/area 30).
+
+    ``code`` is the stable canonical location code other modules store and route on
+    (B17 normalizes routing codes with strip().upper(); this does the same). A renamed
+    block or room keeps its code.
+    """
+
+    code = models.CharField(max_length=100, unique=True)
+    block = models.CharField(max_length=20)
+    floor = models.CharField(max_length=10, blank=True)
+    room_area = models.CharField(max_length=30)
+    active = models.BooleanField(default=True)
+
+    objects = ReferenceQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["block", "floor", "room_area", "pk"]
+        constraints = [
+            models.UniqueConstraint(
+                Lower("block"), Lower("floor"), Lower("room_area"),
+                name="location_place_ci_unique",
+            ),
+        ]
+
+    CODE_PATTERN = re.compile(r"^[A-Z0-9._-]+$")
+
+    @staticmethod
+    def normalize_code(value):
+        return (value or "").strip().upper()
+
+    @classmethod
+    def is_valid_code(cls, code):
+        """Codes are letters, digits, '.', '_' and '-' only, so routing and intake keys stay clean."""
+        return bool(cls.CODE_PATTERN.match(code))
+
+    def save(self, *args, **kwargs):
+        self.code = self.normalize_code(self.code)
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError(NEVER_DELETED)
+
+    @property
+    def label(self):
+        return " / ".join(v for v in (self.block, self.floor, self.room_area) if v)
+
+    def __str__(self):
+        return f"{self.code} ({self.label})"
 
 
 class UserManager(BaseUserManager):
@@ -126,3 +200,52 @@ class SecurityEvent(models.Model):
 
     def __str__(self):
         return f"{self.event_type} {self.identifier}"
+
+
+class ConfigAuditQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Configuration audit records cannot be edited.")
+
+    def delete(self):
+        raise ValidationError("Configuration audit records cannot be deleted.")
+
+
+class ConfigAuditEvent(models.Model):
+    """Append-only record of an administrative configuration change (REQ-ADM-04, B29).
+
+    Separate from complaint history (workflow.ComplaintHistory). Stores the acting
+    Administrator, the entity, old/new values and the time; never credentials.
+    """
+
+    class Action(models.TextChoices):
+        CREATE = "CREATE", "Created"
+        UPDATE = "UPDATE", "Edited"
+        DEACTIVATE = "DEACTIVATE", "Deactivated"
+        REACTIVATE = "REACTIVATE", "Reactivated"
+
+    actor = models.ForeignKey(
+        User, null=True, on_delete=models.SET_NULL, related_name="+"
+    )
+    actor_identifier = models.CharField(max_length=254)
+    entity_type = models.CharField(max_length=50, db_index=True)
+    entity_id = models.CharField(max_length=50)
+    action = models.CharField(max_length=12, choices=Action.choices)
+    old_values = models.JSONField(default=dict, blank=True)
+    new_values = models.JSONField(default=dict, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+
+    objects = ConfigAuditQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["-created_at", "-id"]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Configuration audit records cannot be edited.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Configuration audit records cannot be deleted.")
+
+    def __str__(self):
+        return f"{self.action} {self.entity_type}#{self.entity_id}"

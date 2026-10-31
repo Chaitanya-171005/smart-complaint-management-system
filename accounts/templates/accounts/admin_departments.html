@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Departments - SCMS</title>
+</head>
+<body>
+  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+  <h1>Departments</h1>
+  <p>Departments are deactivated, never deleted. Inactive departments keep their existing users and complaints but are not offered to new work.</p>
+  <table>
+    <tr><th>Name</th><th>Status</th><th>Actions</th></tr>
+    {% for d in departments %}
+    <tr>
+      <td>{{ d.name }}</td>
+      <td>{% if d.active %}Active{% else %}Inactive{% endif %}</td>
+      <td>
+        <a href="{% url 'accounts:admin_department_edit' d.pk %}">Edit</a>
+        <form method="post" action="{% url 'accounts:admin_department_active' d.pk %}" style="display:inline">
+          {% csrf_token %}
+          <input type="hidden" name="active" value="{% if d.active %}false{% else %}true{% endif %}">
+          <button type="submit">{% if d.active %}Deactivate{% else %}Reactivate{% endif %}</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No departments yet.</td></tr>
+    {% endfor %}
+  </table>
+  <h2>Add a department</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+  </form>
+</body>
+</html>
