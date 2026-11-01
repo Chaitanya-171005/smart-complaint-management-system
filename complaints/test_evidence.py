@@ -1,5 +1,6 @@
 """B09 primitives; HTTP tests use a test-only adapter, not a live intake view."""
 
+import os
 from io import BytesIO
 from types import SimpleNamespace
 
@@ -175,8 +176,10 @@ def test_generated_names_and_private_permissions(private_root):
             assert path.read_bytes() == image_bytes()
             assert item.size == len(image_bytes())
             assert len(item.sha256) == 64
-            assert path.stat().st_mode & 0o777 == 0o600
-    assert private_root.stat().st_mode & 0o777 == 0o700
+            if os.name != "nt":
+                assert path.stat().st_mode & 0o777 == 0o600
+    if os.name != "nt":
+        assert private_root.stat().st_mode & 0o777 == 0o700
     assert len(list(private_root.iterdir())) == 2
     with pytest.raises(NotImplementedError):
         evidence.PrivateEvidenceStorage().url(stored[0].storage_name)
@@ -187,6 +190,17 @@ def test_invalid_second_file_writes_nothing(private_root):
         with evidence.staged_evidence([upload(), upload(data=b"broken")]):
             pytest.fail("invalid batch yielded")
     assert not private_root.exists()
+
+
+@pytest.mark.parametrize("kind,extension", [("PNG", "png"), ("JPEG", "jpg")])
+def test_valid_image_with_trailing_bytes_is_retained_as_attachment(kind, extension, private_root):
+    raw = image_bytes(kind) + b"\n<script>synthetic trailing bytes</script>"
+    with evidence.staged_evidence([upload("synthetic." + extension, raw)]) as stored:
+        (item,) = stored
+        assert item.content_type == evidence.FORMATS["." + extension]
+        assert (private_root / item.storage_name).read_bytes() == raw
+    # The download-header/authorization tests apply to these unchanged bytes
+    # too: format verification is deliberately not document sanitization.
 
 
 def test_later_operation_failure_cleans_batch_only(private_root):

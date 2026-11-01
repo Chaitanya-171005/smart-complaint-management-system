@@ -25,6 +25,8 @@ from pypdf import PdfReader
 
 from accounts.permissions import authorize_or_404, can_view_evidence
 
+from .checks import valid_evidence_byte_limit
+
 MAX_FILES = 3
 FORMATS = {".jpg": "image/jpeg", ".jpeg": "image/jpeg",
            ".png": "image/png", ".pdf": "application/pdf"}
@@ -100,7 +102,7 @@ def validate_evidence(files):
     Both proposed D02 byte conventions are supported; neither is called agreed.
     """
     limit = settings.EVIDENCE_MAX_BYTES
-    if type(limit) is not int or limit not in (5_000_000, 5 * 1024 * 1024):
+    if not valid_evidence_byte_limit(limit):
         raise ImproperlyConfigured("EVIDENCE_MAX_BYTES must be 5000000 or 5242880 (D02).")
     files = list(islice(files, MAX_FILES + 1))
     if len(files) > MAX_FILES:
