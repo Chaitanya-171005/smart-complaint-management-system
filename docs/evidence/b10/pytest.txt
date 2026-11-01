@@ -1,0 +1,78 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.0, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.2, settings: scms.settings (from ini)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: cov-7.1.0, django-4.14.0
+collected 462 items
+
+accounts/test_foundation.py .........                                    [  1%]
+accounts/test_login.py ................................                  [  8%]
+accounts/test_permissions.py .................................           [ 16%]
+accounts/test_reference_data.py ........................................ [ 24%]
+............................                                             [ 30%]
+accounts/test_registration.py ......................................     [ 38%]
+accounts/test_session.py .................                               [ 42%]
+complaints/test_forms.py ..........                                      [ 44%]
+test_fixtures.py ......                                                  [ 46%]
+workflow/test_history.py ............                                    [ 48%]
+accounts/test_permissions_integration.py ............                    [ 51%]
+accounts/test_registration.py ..                                         [ 51%]
+complaints/test_identifiers.py .........................                 [ 57%]
+complaints/test_intake.py ...................................sss         [ 65%]
+accounts/test_foundation.py ....                                         [ 66%]
+accounts/test_permissions_integration.py s                               [ 66%]
+complaints/test_forms.py ............................................... [ 76%]
+.......................................s.............................    [ 91%]
+test_coverage_summary.py ..............                                  [ 94%]
+test_fixtures.py ....                                                    [ 95%]
+test_run_tests.py ...........                                            [ 97%]
+workflow/tests.py ..........                                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.0-final-0 _______________
+
+Name                             Stmts   Miss Branch BrPart   Cover   Missing
+-----------------------------------------------------------------------------
+accounts/admin.py                    1      0      0      0 100.00%
+accounts/admin_views.py             80      0     22      2  98.04%   72->74, 95->97
+accounts/apps.py                     3      0      0      0 100.00%
+accounts/config_audit.py            17      0      6      0 100.00%
+accounts/forms.py                   34      1      8      1  95.24%   25
+accounts/models.py                 147      7      8      1  94.84%   34, 85, 93, 156, 173, 202, 251
+accounts/permissions.py            137      1     54      1  98.95%   168
+accounts/reference_adapters.py       4      0      0      0 100.00%
+accounts/reference_services.py     118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py             3      0      0      0 100.00%
+accounts/services.py                78      0     18      0 100.00%
+accounts/urls.py                     4      0      0      0 100.00%
+accounts/validators.py               7      1      2      0  88.89%   15
+accounts/views.py                   59      1     14      0  98.63%   82
+complaints/admin.py                  1      0      0      0 100.00%
+complaints/apps.py                   3      0      0      0 100.00%
+complaints/forms.py                 84      0     24      0 100.00%
+complaints/identifiers.py           26      0     10      1  97.22%   49->56
+complaints/intake.py                80      0     22      0 100.00%
+complaints/models.py                18      0      0      0 100.00%
+complaints/reference_data.py        16      0      0      0 100.00%
+complaints/services.py               5      0      0      0 100.00%
+complaints/validators.py            14      0      6      0 100.00%
+complaints/views.py                  1      1      0      0   0.00%   1
+routing/admin.py                     1      0      0      0 100.00%
+routing/apps.py                      3      0      0      0 100.00%
+routing/models.py                    1      0      0      0 100.00%
+routing/views.py                     1      1      0      0   0.00%   1
+workflow/admin.py                   14      3      0      0  78.57%   21, 24, 27
+workflow/apps.py                     3      0      0      0 100.00%
+workflow/history_service.py          9      0      2      0 100.00%
+workflow/models.py                  52      2     10      1  95.16%   27, 84
+workflow/services.py                23      2      8      0  93.55%   55-56
+workflow/views.py                    1      1      0      0   0.00%   1
+-----------------------------------------------------------------------------
+TOTAL                             1048     25    242      9  97.36%
+Coverage JSON written to file coverage.json
+=========================== short test summary info ============================
+SKIPPED [3] complaints/test_intake.py:272: B09 PR #58 is not merged; storage integration pending.
+SKIPPED [1] accounts/test_permissions_integration.py:228: complaints.Complaint is not merged yet; contract: docs/AUTHORIZATION.md
+SKIPPED [1] complaints/test_forms.py:332: B17 PR #53 is not merged; run this contract test again after integration.
+======================= 457 passed, 5 skipped in 30.86s ========================
