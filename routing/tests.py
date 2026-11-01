@@ -3,11 +3,10 @@ from django.db import IntegrityError, transaction
 from django.test import TestCase
 from django.urls import reverse
 
-from accounts.models import Department, SecurityEvent, User
+from accounts.models import ConfigAuditEvent, Department, Location, SecurityEvent, User
 
 from .models import (
     Category,
-    ConfigurationAuditEvent,
     EscalationPolicy,
     MAX_ESCALATION_INTERVAL_MINUTES,
     MAX_ESCALATION_LEVEL,
@@ -25,6 +24,8 @@ from .services import (
     deactivate_routing_rule,
     deactivate_sla_configuration,
     department_in_use,
+    location_in_use,
+    update_routing_rule,
     reactivate_category,
     set_sla_configuration,
     update_category,
@@ -50,6 +51,8 @@ class RoutingConfigurationTests(TestCase):
         )
         self.maintenance = Department.objects.create(name="Maintenance")
         self.administration = Department.objects.create(name="Administration")
+        Location.objects.create(code="HOSTEL-A", block="Hostel", room_area="Room A")
+        Location.objects.create(code="CAMPUS-A", block="Campus", room_area="Room A")
 
     def test_initial_configuration_is_seeded_from_agreed_d01_values(self):
         self.assertSetEqual(
@@ -98,14 +101,14 @@ class RoutingConfigurationTests(TestCase):
 
     def test_category_change_is_audited_and_deactivation_preserves_the_row(self):
         category = create_category(self.admin, name="Lift", minimum_priority=Priority.MEDIUM)
-        created = ConfigurationAuditEvent.objects.get(entity_type="Category", entity_id=category.pk)
+        created = ConfigAuditEvent.objects.get(entity_type="Category", entity_id=category.pk)
         self.assertEqual(created.actor, self.admin)
-        self.assertEqual(created.action, ConfigurationAuditEvent.Action.CREATED)
+        self.assertEqual(created.action, ConfigAuditEvent.Action.CREATE)
         self.assertEqual(created.new_values["minimum_priority"], Priority.MEDIUM)
 
         update_category(self.admin, category, minimum_priority=Priority.HIGH)
-        updated = ConfigurationAuditEvent.objects.filter(entity_id=category.pk).first()
-        self.assertEqual(updated.action, ConfigurationAuditEvent.Action.UPDATED)
+        updated = ConfigAuditEvent.objects.filter(entity_id=category.pk).first()
+        self.assertEqual(updated.action, ConfigAuditEvent.Action.UPDATE)
         self.assertEqual(updated.old_values["minimum_priority"], Priority.MEDIUM)
         self.assertEqual(updated.new_values["minimum_priority"], Priority.HIGH)
 
@@ -118,10 +121,10 @@ class RoutingConfigurationTests(TestCase):
         category.refresh_from_db()
         self.assertTrue(category.active)
         self.assertTrue(
-            ConfigurationAuditEvent.objects.filter(
+            ConfigAuditEvent.objects.filter(
                 entity_type="Category",
                 entity_id=category.pk,
-                action=ConfigurationAuditEvent.Action.REACTIVATED,
+                action=ConfigAuditEvent.Action.REACTIVATE,
             ).exists()
         )
 
@@ -225,8 +228,8 @@ class RoutingConfigurationTests(TestCase):
         sla = set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=360)
         self.assertEqual(sla.duration_minutes, 360)
         self.assertTrue(
-            ConfigurationAuditEvent.objects.filter(
-                entity_type="SLAConfiguration", entity_id=sla.pk, action="UPDATED"
+            ConfigAuditEvent.objects.filter(
+                entity_type="SLAConfiguration", entity_id=sla.pk, action="UPDATE"
             ).exists()
         )
 
@@ -239,6 +242,10 @@ class RoutingConfigurationTests(TestCase):
         update_escalation_policy(self.admin, policy, maximum_level=4)
         policy.refresh_from_db()
         self.assertEqual(policy.maximum_level, 4)
+        self.assertTrue(ConfigAuditEvent.objects.filter(
+            entity_type="EscalationPolicy", entity_id=str(policy.pk),
+            action=ConfigAuditEvent.Action.UPDATE,
+        ).exists())
 
     def test_sla_rejects_inactive_categories(self):
         category = create_category(self.admin, name="Lift")
@@ -319,11 +326,11 @@ class RoutingConfigurationTests(TestCase):
 
     def test_audit_records_are_append_only(self):
         category = create_category(self.admin, name="Transport")
-        audit = ConfigurationAuditEvent.objects.get(entity_id=category.pk)
+        audit = ConfigAuditEvent.objects.get(entity_id=category.pk)
         with self.assertRaises(ValidationError):
             audit.save()
         with self.assertRaises(ValidationError):
-            ConfigurationAuditEvent.objects.filter(pk=audit.pk).delete()
+            ConfigAuditEvent.objects.filter(pk=audit.pk).delete()
 
     def test_configuration_screen_allows_only_admin_and_uses_services(self):
         url = reverse("routing:configuration")
@@ -350,7 +357,7 @@ class RoutingConfigurationTests(TestCase):
         self.assertRedirects(response, url)
         category = Category.objects.get(name="Transport")
         self.assertTrue(
-            ConfigurationAuditEvent.objects.filter(
+            ConfigAuditEvent.objects.filter(
                 entity_type="Category", entity_id=category.pk, actor=self.admin
             ).exists()
         )
@@ -410,3 +417,75 @@ class RoutingConfigurationTests(TestCase):
         )
         self.assertRedirects(response, url)
         self.assertTrue(EscalationPolicy.objects.filter(key="default").exists())
+
+    def test_location_validation_and_usage(self):
+        category = Category.objects.get(name="Other")
+        for code in ("UNKNOWN", "CLOSED"):
+            if code == "CLOSED":
+                Location.objects.create(code=code, block="Closed", active=False)
+            with self.assertRaises(ConfigurationError) as error:
+                create_routing_rule(self.admin, category=category, location_code=code, department=self.maintenance)
+            self.assertIn("location_code", error.exception.message_dict)
+        rule = create_routing_rule(self.admin, category=category, location_code=" hostel-a ", department=self.maintenance)
+        self.assertEqual(rule.location_code, "HOSTEL-A")
+        self.assertTrue(location_in_use(" hostel-a "))
+        self.assertFalse(location_in_use("unused"))
+        location = Location.objects.get(code="HOSTEL-A")
+        location.active = False
+        location.save(update_fields=["active"])
+        update_routing_rule(self.admin, rule, location_code="hostel-a", precedence=2)
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse("routing:configuration"))
+        self.assertContains(response, 'value="HOSTEL-A" selected')
+        deactivate_routing_rule(self.admin, rule)
+        self.assertFalse(location_in_use("HOSTEL-A"))
+        blank = create_routing_rule(self.admin, category=category, location_code="", department=self.maintenance)
+        self.assertEqual(blank.location_code, "")
+
+    def test_updating_location_to_unknown_or_inactive_code_is_refused(self):
+        Location.objects.create(code="LAB-1", block="Lab A")
+        Location.objects.create(code="OLD-LAB", block="Lab B", active=False)
+        rule = create_routing_rule(
+            self.admin,
+            category=Category.objects.get(name="Other"),
+            location_code="LAB-1",
+            department=self.maintenance,
+        )
+        updates = ConfigAuditEvent.objects.filter(
+            entity_type="RoutingRule", entity_id=str(rule.pk),
+            action=ConfigAuditEvent.Action.UPDATE,
+        )
+        count_before = updates.count()
+        for code in ("OLD-LAB", "NO-SUCH-PLACE"):
+            with self.subTest(code=code):
+                with self.assertRaises(ConfigurationError) as error:
+                    update_routing_rule(
+                        self.admin, rule, location_code=code, precedence=rule.precedence
+                    )
+                self.assertIn("location_code", error.exception.message_dict)
+
+        rule.refresh_from_db()
+        self.assertEqual(rule.location_code, "LAB-1")
+        self.assertEqual(updates.count(), count_before)
+        update_routing_rule(self.admin, rule, location_code="lab-1", precedence=5)
+        self.assertEqual(rule.location_code, "LAB-1")
+        self.assertEqual(rule.precedence, 5)
+
+    def test_category_adapter_and_intake_form(self):
+        from accounts.reference_adapters import location_options
+        from complaints.forms import ComplaintForm
+        from .adapters import category_options
+
+        category = Category.objects.get(name="Other")
+        inactive = Category.objects.get(name="Security")
+        inactive.active = False
+        inactive.save(update_fields=["active"])
+        before = {option.key: option.name for option in category_options()}
+        self.assertNotIn(str(inactive.pk), before)
+        category.name = "Renamed category"
+        category.save()
+        after = {option.key: option.name for option in category_options()}
+        self.assertEqual(after[str(category.pk)], "Renamed category")
+        self.assertIn(str(category.pk), before)
+        form = ComplaintForm({"category": str(category.pk), "location": "HOSTEL-A", "title": "A request", "description": "A description longer than twenty five characters.", "priority": "LOW"}, categories=category_options(), locations=location_options())
+        self.assertTrue(form.is_valid(), form.errors)

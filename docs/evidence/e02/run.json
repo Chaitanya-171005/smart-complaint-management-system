@@ -1,0 +1,7 @@
+{
+  "executed_at_utc": "2026-10-27T13:13:04.339578+00:00",
+  "source_revision": "5cb300d2c636bff688578a36a3953e77075f141a",
+  "source_note": "Includes the working-tree corrections committed with this evidence.",
+  "pytest_exit_code": 0,
+  "coverage_gate_exit_code": 1
+}

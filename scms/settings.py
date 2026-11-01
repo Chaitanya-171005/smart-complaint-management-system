@@ -91,8 +91,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
-        # Wait for write locks instead of failing, so simultaneous requests queue up.
-        "OPTIONS": {"timeout": 20},
+        # Reserve the writer at outer transaction entry, before master-data reads.
+        # This avoids DEFERRED read-to-write lock upgrades during concurrent intake.
+        "OPTIONS": {"transaction_mode": "IMMEDIATE", "timeout": 20},
         # A file (not shared in-memory) test database: real concurrency tests need it,
         # because in-memory SQLite raises "table is locked" between threads.
         "TEST": {"NAME": BASE_DIR / "test_db.sqlite3"},

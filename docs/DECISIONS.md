@@ -1,6 +1,15 @@
 # Open decisions and recorded decisions
 
-## D01 - Initial routing, SLA and escalation configuration (REQ-ADM-03)
+## D01 - Campus configuration and emergency channels
+
+**Status: provisional, pending campus confirmation.** B17's initial routing/SLA
+configuration is an implementation baseline, not confirmed campus policy.
+F1/F3 must confirm categories, canonical location codes and emergency channels
+before final intake acceptance. B07 tests use synthetic data and do not invent
+campus emergency numbers. B07's adapter contract and the category-name limit
+discrepancy with B17 are documented in B07.md for owner confirmation.
+
+## D01a - Initial routing, SLA and escalation configuration (REQ-ADM-03)
 
 **Status: PROVISIONAL. Values require campus confirmation (SRS DOM-03); they are Administrator-editable defaults.**
 
@@ -32,6 +41,8 @@ escalation policy. F1's Department-deactivation service must call
 `routing.services.department_in_use` and enforce this guard (or require an Administrator to
 first replace/deactivate those B17 configurations); B17 does not own Department lifecycle
 operations.
+
+B17 supplies the category side of the B07 intake contract.
 
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
 

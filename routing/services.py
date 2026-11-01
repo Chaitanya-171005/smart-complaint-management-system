@@ -9,11 +9,12 @@ from functools import wraps
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
+from accounts.config_audit import record_change
+from accounts.models import ConfigAuditEvent, Location
 from accounts.permissions import can_manage_configuration, require_permission
 
 from .models import (
     Category,
-    ConfigurationAuditEvent,
     EscalationPolicy,
     Priority,
     RoutingRule,
@@ -55,13 +56,9 @@ def _snapshot(obj, fields):
 
 
 def _audit(actor, obj, action, old_values=None, new_values=None):
-    return ConfigurationAuditEvent.objects.create(
-        actor=actor,
-        entity_type=type(obj).__name__,
-        entity_id=obj.pk,
-        action=action,
-        old_values=old_values or {},
-        new_values=new_values or {},
+    return record_change(
+        actor=actor, entity_type=type(obj).__name__, entity_id=obj.pk,
+        action=action, old=old_values, new=new_values,
     )
 
 
@@ -74,7 +71,12 @@ def _validate(instance):
 
 
 def _normalise_location(location_code):
-    return (location_code or "").strip().upper()
+    return Location.normalize_code(location_code or "")
+
+
+def _validate_location(code):
+    if code and not Location.objects.filter(code=code, active=True).exists():
+        raise ConfigurationError({"location_code": "Choose an active location code from Locations."})
 
 
 def _positive_int(value, field_name, minimum=1, maximum=None, message=None):
@@ -135,7 +137,7 @@ def create_category(actor, *, name, minimum_priority=Priority.LOW):
     _audit(
         actor,
         category,
-        ConfigurationAuditEvent.Action.CREATED,
+        ConfigAuditEvent.Action.CREATE,
         new_values=_snapshot(category, ("name", "minimum_priority", "active")),
     )
     return category
@@ -153,7 +155,7 @@ def update_category(actor, category, *, name=None, minimum_priority=None):
     _audit(
         actor,
         category,
-        ConfigurationAuditEvent.Action.UPDATED,
+        ConfigAuditEvent.Action.UPDATE,
         old,
         _snapshot(category, ("name", "minimum_priority", "active")),
     )
@@ -177,7 +179,7 @@ def deactivate_category(actor, category):
         _audit(
             actor,
             category,
-            ConfigurationAuditEvent.Action.DEACTIVATED,
+            ConfigAuditEvent.Action.DEACTIVATE,
             old,
             _snapshot(category, ("name", "minimum_priority", "active")),
         )
@@ -193,7 +195,7 @@ def reactivate_category(actor, category):
         _audit(
             actor,
             category,
-            ConfigurationAuditEvent.Action.REACTIVATED,
+            ConfigAuditEvent.Action.REACTIVATE,
             old,
             _snapshot(category, ("name", "minimum_priority", "active")),
         )
@@ -203,6 +205,7 @@ def reactivate_category(actor, category):
 @admin_operation
 def create_routing_rule(actor, *, category=None, location_code="", department, precedence=100):
     location_code = _normalise_location(location_code)
+    _validate_location(location_code)
     precedence = _positive_int(precedence, "precedence")
     if _active_rule_exists(category=category, location_code=location_code):
         raise ConfigurationError(
@@ -223,7 +226,7 @@ def create_routing_rule(actor, *, category=None, location_code="", department, p
     _audit(
         actor,
         rule,
-        ConfigurationAuditEvent.Action.CREATED,
+        ConfigAuditEvent.Action.CREATE,
         new_values=_snapshot(
             rule, ("category", "location_code", "department", "precedence", "active")
         ),
@@ -245,7 +248,10 @@ def update_routing_rule(
     if category is not UNSET:
         rule.category = category
     if location_code is not UNSET:
-        rule.location_code = _normalise_location(location_code)
+        normalized = _normalise_location(location_code)
+        if normalized != rule.location_code:
+            _validate_location(normalized)
+        rule.location_code = normalized
     if department is not UNSET:
         rule.department = department
     if precedence is not UNSET:
@@ -265,7 +271,7 @@ def update_routing_rule(
     _audit(
         actor,
         rule,
-        ConfigurationAuditEvent.Action.UPDATED,
+        ConfigAuditEvent.Action.UPDATE,
         old,
         _snapshot(rule, ("category", "location_code", "department", "precedence", "active")),
     )
@@ -281,7 +287,7 @@ def deactivate_routing_rule(actor, rule):
         _audit(
             actor,
             rule,
-            ConfigurationAuditEvent.Action.DEACTIVATED,
+            ConfigAuditEvent.Action.DEACTIVATE,
             old,
             _snapshot(rule, ("category", "location_code", "department", "precedence", "active")),
         )
@@ -313,7 +319,7 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
         _audit(
             actor,
             config,
-            ConfigurationAuditEvent.Action.CREATED,
+            ConfigAuditEvent.Action.CREATE,
             new_values=_snapshot(
                 config, ("category", "priority", "duration_minutes", "active")
             ),
@@ -326,7 +332,7 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
         _audit(
             actor,
             config,
-            ConfigurationAuditEvent.Action.UPDATED,
+            ConfigAuditEvent.Action.UPDATE,
             old,
             _snapshot(config, ("category", "priority", "duration_minutes", "active")),
         )
@@ -352,7 +358,7 @@ def deactivate_sla_configuration(actor, config):
         _audit(
             actor,
             config,
-            ConfigurationAuditEvent.Action.DEACTIVATED,
+            ConfigAuditEvent.Action.DEACTIVATE,
             old,
             _snapshot(config, ("category", "priority", "duration_minutes", "active")),
         )
@@ -400,7 +406,7 @@ def update_escalation_policy(
     _audit(
         actor,
         policy,
-        ConfigurationAuditEvent.Action.UPDATED,
+        ConfigAuditEvent.Action.UPDATE,
         old,
         _snapshot(policy, ("default_department", "interval_minutes", "maximum_level")),
     )
@@ -444,7 +450,7 @@ def create_escalation_policy(
     _audit(
         actor,
         policy,
-        ConfigurationAuditEvent.Action.CREATED,
+        ConfigAuditEvent.Action.CREATE,
         new_values=_snapshot(policy, ("default_department", "interval_minutes", "maximum_level")),
     )
     return policy
@@ -456,3 +462,8 @@ def department_in_use(department):
         RoutingRule.objects.filter(department=department, active=True).exists()
         or EscalationPolicy.objects.filter(default_department=department).exists()
     )
+
+
+def location_in_use(code):
+    """The Location deactivation service must call this before deactivation."""
+    return RoutingRule.objects.filter(active=True, location_code=_normalise_location(code)).exists()

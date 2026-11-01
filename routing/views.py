@@ -6,10 +6,10 @@ from django.http import HttpResponseBadRequest
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods
 
-from accounts.models import Department, User
+from accounts.models import ConfigAuditEvent, Department, Location, User
 from accounts.permissions import role_required
 
-from .models import Category, ConfigurationAuditEvent, EscalationPolicy, Priority, RoutingRule, SLAConfiguration
+from .models import Category, EscalationPolicy, Priority, RoutingRule, SLAConfiguration
 from .services import (
     ConfigurationError,
     create_escalation_policy,
@@ -141,11 +141,13 @@ def configuration(request):
         "routing/configuration.html",
         {
             "categories": Category.objects.all(),
+            "locations": Location.objects.filter(active=True).order_by("code"),
+            "active_location_codes": set(Location.objects.filter(active=True).values_list("code", flat=True)),
             "departments": Department.objects.filter(active=True).order_by("name"),
             "rules": RoutingRule.objects.select_related("category", "department").all(),
             "sla_configurations": SLAConfiguration.objects.select_related("category").all(),
             "policy": EscalationPolicy.objects.select_related("default_department").filter(key="default").first(),
             "priorities": Priority.choices,
-            "audit_events": ConfigurationAuditEvent.objects.select_related("actor")[:20],
+            "audit_events": ConfigAuditEvent.objects.filter(entity_type__in=("Category", "RoutingRule", "SLAConfiguration", "EscalationPolicy")).order_by("-created_at", "-pk")[:20],
         },
     )

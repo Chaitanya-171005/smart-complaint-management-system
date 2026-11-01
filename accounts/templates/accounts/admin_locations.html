@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Locations - SCMS</title>
+</head>
+<body>
+  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+  <h1>Locations</h1>
+  <p>Locations are deactivated, never deleted. The code is the stable key used by other modules.</p>
+  <table>
+    <tr><th>Code</th><th>Block</th><th>Floor</th><th>Room / area</th><th>Status</th><th>Actions</th></tr>
+    {% for loc in locations %}
+    <tr>
+      <td>{{ loc.code }}</td><td>{{ loc.block }}</td><td>{{ loc.floor }}</td><td>{{ loc.room_area }}</td>
+      <td>{% if loc.active %}Active{% else %}Inactive{% endif %}</td>
+      <td>
+        <a href="{% url 'accounts:admin_location_edit' loc.pk %}">Edit</a>
+        <form method="post" action="{% url 'accounts:admin_location_active' loc.pk %}" style="display:inline">
+          {% csrf_token %}
+          <input type="hidden" name="active" value="{% if loc.active %}false{% else %}true{% endif %}">
+          <button type="submit">{% if loc.active %}Deactivate{% else %}Reactivate{% endif %}</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No locations yet.</td></tr>
+    {% endfor %}
+  </table>
+  <h2>Add a location</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+  </form>
+</body>
+</html>
