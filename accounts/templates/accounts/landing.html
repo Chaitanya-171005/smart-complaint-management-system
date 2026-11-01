@@ -17,6 +17,7 @@
   {% if user.role == "ADMIN" %}
   <nav>
     <ul>
+      <li><a href="{% url 'accounts:admin_users' %}">Users and roles</a></li>
       <li><a href="{% url 'accounts:admin_departments' %}">Departments</a></li>
       <li><a href="{% url 'accounts:admin_locations' %}">Locations</a></li>
     </ul>
