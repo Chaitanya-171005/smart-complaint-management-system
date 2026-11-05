@@ -489,3 +489,113 @@ class RoutingConfigurationTests(TestCase):
         self.assertIn(str(category.pk), before)
         form = ComplaintForm({"category": str(category.pk), "location": "HOSTEL-A", "title": "A request", "description": "A description longer than twenty five characters.", "priority": "LOW"}, categories=category_options(), locations=location_options())
         self.assertTrue(form.is_valid(), form.errors)
+
+
+class StaleRecordTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            email="admin@pes.edu", password="Campus123", full_name="Admin", role=User.Role.ADMIN
+        )
+        self.maintenance = Department.objects.create(name="Maintenance")
+        self.administration = Department.objects.create(name="Administration")
+        Location.objects.create(code="HOSTEL-A", block="Hostel", room_area="Room A")
+        self.category = Category.objects.get(name="Other")
+
+    def audit(self, obj, action):
+        return ConfigAuditEvent.objects.filter(
+            entity_type=type(obj).__name__, entity_id=str(obj.pk), action=action
+        )
+
+    def rule(self):
+        return create_routing_rule(self.admin, category=self.category, department=self.maintenance, precedence=10)
+
+    def policy(self):
+        return create_escalation_policy(self.admin, default_department=self.administration,
+                                        interval_minutes=60, maximum_level=2)
+
+    def test_edit_stale_category_keeps_deactivated_state_and_audits_current_values(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        update_category(self.admin, stale, name="Miscellaneous")
+        self.category.refresh_from_db()
+        self.assertEqual((self.category.name, self.category.active), ("Miscellaneous", False))
+        event = self.audit(stale, "UPDATE").first()
+        self.assertEqual((event.old_values["name"], event.old_values["active"]), ("Other", False))
+
+    def test_edit_stale_rule_keeps_deactivated_state_and_audits_current_values(self):
+        rule = self.rule()
+        stale = RoutingRule.objects.get(pk=rule.pk)
+        deactivate_routing_rule(self.admin, rule)
+        update_routing_rule(self.admin, stale, precedence=5)
+        rule.refresh_from_db()
+        self.assertEqual((rule.precedence, rule.active), (5, False))
+        event = self.audit(rule, "UPDATE").first()
+        self.assertEqual((event.old_values["precedence"], event.old_values["active"]), (10, False))
+
+    def test_edit_stale_policy_keeps_newer_interval_and_audits_it(self):
+        policy = self.policy()
+        stale = EscalationPolicy.objects.get(pk=policy.pk)
+        update_escalation_policy(self.admin, policy, interval_minutes=120)
+        update_escalation_policy(self.admin, stale, maximum_level=4)
+        policy.refresh_from_db()
+        self.assertEqual((policy.interval_minutes, policy.maximum_level), (120, 4))
+        event = self.audit(policy, "UPDATE").first()
+        self.assertEqual((event.old_values["interval_minutes"], event.old_values["maximum_level"]), (120, 2))
+        self.assertEqual((event.new_values["interval_minutes"], event.new_values["maximum_level"]), (120, 4))
+
+    def test_create_rule_rejects_stale_inactive_category(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(self.admin, category=stale, department=self.maintenance)
+        self.assertFalse(RoutingRule.objects.exists())
+        self.assertFalse(ConfigAuditEvent.objects.filter(entity_type="RoutingRule", action="CREATE").exists())
+
+    def test_create_rule_rejects_stale_inactive_department(self):
+        stale = Department.objects.get(pk=self.maintenance.pk)
+        Department.objects.filter(pk=stale.pk).update(active=False)
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(self.admin, category=self.category, department=stale)
+        self.assertFalse(RoutingRule.objects.exists())
+        self.assertFalse(ConfigAuditEvent.objects.filter(entity_type="RoutingRule", action="CREATE").exists())
+
+    def test_update_rule_rejects_stale_inactive_category(self):
+        rule = self.rule()
+        category = Category.objects.get(name="Electrical")
+        stale = Category.objects.get(pk=category.pk)
+        deactivate_category(self.admin, category)
+        with self.assertRaises(ConfigurationError):
+            update_routing_rule(self.admin, rule, category=stale)
+        rule.refresh_from_db()
+        self.assertEqual(rule.category_id, self.category.pk)
+
+    def test_update_policy_rejects_stale_inactive_department(self):
+        policy = self.policy()
+        stale = Department.objects.get(pk=self.maintenance.pk)
+        Department.objects.filter(pk=stale.pk).update(active=False)
+        with self.assertRaises(ConfigurationError):
+            update_escalation_policy(self.admin, policy, default_department=stale)
+        policy.refresh_from_db()
+        self.assertEqual(policy.default_department_id, self.administration.pk)
+
+    def test_set_sla_rejects_stale_inactive_category(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        with self.assertRaises(ConfigurationError):
+            set_sla_configuration(self.admin, category=stale, priority=Priority.LOW, duration_minutes=60)
+        self.assertFalse(SLAConfiguration.objects.filter(category=stale).exists())
+
+    def test_deactivate_stale_category_is_noop(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        deactivate_category(self.admin, stale)
+        self.assertFalse(stale.active)
+        self.assertEqual(self.audit(stale, "DEACTIVATE").count(), 1)
+
+    def test_missing_record_raises_configuration_error(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        stale.pk = 99999999
+        with self.assertRaises(ConfigurationError) as error:
+            update_category(self.admin, stale, name="Missing")
+        self.assertEqual(error.exception.message_dict["category"],
+                         ["This record no longer exists. Reload the page and try again."])

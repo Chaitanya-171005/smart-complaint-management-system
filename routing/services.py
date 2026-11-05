@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
 from accounts.config_audit import record_change
-from accounts.models import ConfigAuditEvent, Location
+from accounts.models import ConfigAuditEvent, Department, Location
 from accounts.permissions import can_manage_configuration, require_permission
 
 from .models import (
@@ -48,10 +48,22 @@ def admin_operation(func):
     return wrapper
 
 
+def _lock(model, instance, label):
+    """Refresh in place under a row lock; SQLite IMMEDIATE serializes writers."""
+    if instance is None:
+        return None
+    try:
+        instance.refresh_from_db(from_queryset=model.objects.select_for_update())
+    except model.DoesNotExist as exc:
+        raise ConfigurationError({label: "This record no longer exists. Reload the page and try again."}) from exc
+    return instance
+
+
 def _snapshot(obj, fields):
     result = {}
     for field in fields:
-        result[field] = getattr(obj, f"{field}_id", getattr(obj, field))
+        id_field = f"{field}_id"
+        result[field] = getattr(obj, id_field) if hasattr(obj, id_field) else getattr(obj, field)
     return result
 
 
@@ -75,7 +87,7 @@ def _normalise_location(location_code):
 
 
 def _validate_location(code):
-    if code and not Location.objects.filter(code=code, active=True).exists():
+    if code and not Location.objects.select_for_update().filter(code=code, active=True).order_by("pk").first():
         raise ConfigurationError({"location_code": "Choose an active location code from Locations."})
 
 
@@ -145,13 +157,17 @@ def create_category(actor, *, name, minimum_priority=Priority.LOW):
 
 @admin_operation
 def update_category(actor, category, *, name=None, minimum_priority=None):
+    _lock(Category, category, "category")
     old = _snapshot(category, ("name", "minimum_priority", "active"))
+    changed = []
     if name is not None:
         category.name = name.strip()
+        changed.append("name")
     if minimum_priority is not None:
         category.minimum_priority = minimum_priority
+        changed.append("minimum_priority")
     _validate(category)
-    category.save()
+    category.save(update_fields=changed)
     _audit(
         actor,
         category,
@@ -164,6 +180,7 @@ def update_category(actor, category, *, name=None, minimum_priority=None):
 
 @admin_operation
 def deactivate_category(actor, category):
+    _lock(Category, category, "category")
     if category.active:
         if category.routing_rules.filter(active=True).exists():
             raise ConfigurationError(
@@ -188,6 +205,7 @@ def deactivate_category(actor, category):
 
 @admin_operation
 def reactivate_category(actor, category):
+    _lock(Category, category, "category")
     if not category.active:
         old = _snapshot(category, ("name", "minimum_priority", "active"))
         category.active = True
@@ -204,6 +222,8 @@ def reactivate_category(actor, category):
 
 @admin_operation
 def create_routing_rule(actor, *, category=None, location_code="", department, precedence=100):
+    _lock(Category, category, "category")
+    _lock(Department, department, "department")
     location_code = _normalise_location(location_code)
     _validate_location(location_code)
     precedence = _positive_int(precedence, "precedence")
@@ -244,6 +264,7 @@ def update_routing_rule(
     department=UNSET,
     precedence=UNSET,
 ):
+    _lock(RoutingRule, rule, "rule")
     old = _snapshot(rule, ("category", "location_code", "department", "precedence", "active"))
     if category is not UNSET:
         rule.category = category
@@ -256,6 +277,8 @@ def update_routing_rule(
         rule.department = department
     if precedence is not UNSET:
         rule.precedence = _positive_int(precedence, "precedence")
+    _lock(Category, rule.category, "category")
+    _lock(Department, rule.department, "department")
     if rule.active and _active_rule_exists(
         category=rule.category, location_code=rule.location_code, excluding=rule
     ):
@@ -280,6 +303,7 @@ def update_routing_rule(
 
 @admin_operation
 def deactivate_routing_rule(actor, rule):
+    _lock(RoutingRule, rule, "rule")
     if rule.active:
         old = _snapshot(rule, ("category", "location_code", "department", "precedence", "active"))
         rule.active = False
@@ -296,14 +320,15 @@ def deactivate_routing_rule(actor, rule):
 
 @admin_operation
 def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
+    _lock(Category, category, "category")
     duration_minutes = _sla_duration(duration_minutes)
     if priority not in Priority.values:
         raise ConfigurationError({"priority": "Choose a supported priority."})
     if category is not None and not category.active:
         raise ConfigurationError({"category": "An inactive category cannot have an SLA override."})
-    config = SLAConfiguration.objects.filter(
+    config = SLAConfiguration.objects.select_for_update().filter(
         active=True, category=category, priority=priority
-    ).first()
+    ).order_by("pk").first()
     if config is None:
         config = SLAConfiguration(
             category=category, priority=priority, duration_minutes=duration_minutes
@@ -341,6 +366,8 @@ def set_sla_configuration(actor, *, priority, duration_minutes, category=None):
 
 @admin_operation
 def deactivate_sla_configuration(actor, config):
+    _lock(SLAConfiguration, config, "config")
+    _lock(Category, config.category, "category")
     if config.active:
         if (
             config.category_id is None
@@ -369,9 +396,12 @@ def deactivate_sla_configuration(actor, config):
 def update_escalation_policy(
     actor, policy, *, default_department=None, interval_minutes=None, maximum_level=None
 ):
+    _lock(EscalationPolicy, policy, "policy")
     old = _snapshot(policy, ("default_department", "interval_minutes", "maximum_level"))
+    changed = []
     if default_department is not None:
         policy.default_department = default_department
+        changed.append("default_department")
     if interval_minutes is not None:
         policy.interval_minutes = _positive_int(
             interval_minutes,
@@ -383,6 +413,7 @@ def update_escalation_policy(
                 "(30 days)."
             ),
         )
+        changed.append("interval_minutes")
     if maximum_level is not None:
         policy.maximum_level = _positive_int(
             maximum_level,
@@ -391,18 +422,14 @@ def update_escalation_policy(
             maximum=MAX_ESCALATION_LEVEL,
             message=f"Enter a whole number from 1 to {MAX_ESCALATION_LEVEL}.",
         )
-    try:
-        _validate(policy)
-        if not policy.default_department.active:
-            raise ConfigurationError(
-                {"default_department": "The default department must be active."}
-            )
-    except ConfigurationError:
-        policy.default_department_id = old["default_department"]
-        policy.interval_minutes = old["interval_minutes"]
-        policy.maximum_level = old["maximum_level"]
-        raise
-    policy.save()
+        changed.append("maximum_level")
+    _lock(Department, policy.default_department, "default_department")
+    _validate(policy)
+    if not policy.default_department.active:
+        raise ConfigurationError(
+            {"default_department": "The default department must be active."}
+        )
+    policy.save(update_fields=changed)
     _audit(
         actor,
         policy,
@@ -418,6 +445,7 @@ def create_escalation_policy(
     actor, *, default_department, interval_minutes, maximum_level
 ):
     """Create the singleton policy after F1's departments are available."""
+    _lock(Department, default_department, "default_department")
     if EscalationPolicy.objects.filter(key="default").exists():
         raise ConfigurationError("The escalation policy already exists.")
     policy = EscalationPolicy(
@@ -446,7 +474,11 @@ def create_escalation_policy(
         raise ConfigurationError(
             {"default_department": "The default department must be active."}
         )
-    policy.save()
+    try:
+        with transaction.atomic():
+            policy.save()
+    except IntegrityError as exc:
+        raise ConfigurationError("The escalation policy already exists.") from exc
     _audit(
         actor,
         policy,
