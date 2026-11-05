@@ -1,9 +1,15 @@
 """Complaint records and intake persistence primitives."""
 
+import hashlib
+import secrets
+
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 from django.db.models import Q
+from django.db.models.functions import Length
+from django.db.models.lookups import LessThanOrEqual
 
 from .validators import validate_description, validate_single_line
 
@@ -39,8 +45,9 @@ class ComplaintIdSequence(models.Model):
 class IntakeReceipt(models.Model):
     """Internal authenticated retry receipt, committed with required intake writes.
 
-    Not a Complaint: no production intake path exists yet. Never expose this
-    table through admin or treat possession of a key as authorization.
+    complaint_id retains the accepted external ID. The Complaint FK migration is
+    tracked in #15 with the complete intake adapter and legacy receipt backfill.
+    A request key authorizes no complaint access.
     """
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT,
@@ -61,7 +68,11 @@ class IntakeReceipt(models.Model):
 
 
 class Complaint(models.Model):
-    """Persist a complaint with its submitted category and location labels."""
+    """Persist stable reference keys, label snapshots and lifecycle data.
+
+    category_key is nullable for records predating the stable-key migration.
+    New intake must supply it and validate the current reference before saving.
+    """
 
     class Priority(models.TextChoices):
         LOW = "LOW", "Low"
@@ -91,6 +102,7 @@ class Complaint(models.Model):
         max_length=64, unique=True, null=True, blank=True, editable=False,
         validators=[RegexValidator(r"\A[0-9a-f]{64}\Z")],
     )
+    category_key = models.CharField(max_length=100, null=True)
     category = models.CharField(max_length=50)
     sub_category = models.CharField(max_length=50, blank=True, validators=[validate_single_line])
     location_code = models.CharField(max_length=100)
@@ -108,9 +120,25 @@ class Complaint(models.Model):
     status = models.CharField(max_length=11, choices=Status.choices, default=Status.SUBMITTED)
     submitted_at = models.DateTimeField(editable=False)
     due_at = models.DateTimeField()
+    # None means a routing decision has not yet been recorded.
+    unrouted = models.BooleanField(null=True, default=None)
+    routing_rule_key = models.CharField(max_length=100, blank=True)
+    is_escalated = models.BooleanField(default=False)
+    escalation_level = models.PositiveSmallIntegerField(default=0)
+    reopen_count = models.PositiveSmallIntegerField(default=0)
+    resolution_remarks = models.TextField(max_length=2000, blank=True)
+    rating = models.PositiveSmallIntegerField(
+        null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)],
+    )
+    resolved_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         constraints = [
+            models.CheckConstraint(
+                condition=Q(complaint_id__regex=r"\ASCMS-[0-9]{4}-[0-9]{6}\Z"),
+                name="complaint_identifier_format",
+            ),
             models.CheckConstraint(
                 condition=(
                     Q(submitted_by__isnull=False, reference_digest__isnull=True)
@@ -119,7 +147,44 @@ class Complaint(models.Model):
                 ),
                 name="complaint_submitter_or_reference_digest",
             ),
+            models.CheckConstraint(
+                condition=Q(rating__isnull=True) | Q(rating__gte=1, rating__lte=5),
+                name="complaint_rating_in_range",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    LessThanOrEqual(Length("category_key"), 100)
+                    & LessThanOrEqual(Length("category"), 50)
+                    & LessThanOrEqual(Length("sub_category"), 50)
+                    & LessThanOrEqual(Length("location_code"), 100)
+                    & LessThanOrEqual(Length("block"), 20)
+                    & LessThanOrEqual(Length("floor"), 10)
+                    & LessThanOrEqual(Length("room_area"), 30)
+                    & LessThanOrEqual(Length("title"), 120)
+                    & LessThanOrEqual(Length("description"), 2000)
+                    & LessThanOrEqual(Length("routing_rule_key"), 100)
+                    & LessThanOrEqual(Length("resolution_remarks"), 2000)
+                ),
+                name="complaint_text_within_limits",
+            ),
         ]
+        indexes = [
+            models.Index(fields=["department", "status", "due_at"], name="complaint_department_queue"),
+            models.Index(fields=["submitted_by", "submitted_at"], name="complaint_submitter_list"),
+        ]
+
+    def issue_anonymous_reference(self):
+        """Generate one 128-bit reference for a new anonymous complaint.
+
+        Return the raw reference to the trusted intake caller and retain only its
+        digest. The caller displays it only after the full intake transaction
+        commits, with a loss warning and private, no-store response headers.
+        """
+        if not self._state.adding or self.submitted_by_id is not None or self.reference_digest is not None:
+            raise ValidationError("A reference can be issued once for a new anonymous complaint.")
+        reference = secrets.token_hex(16)
+        self.reference_digest = hashlib.sha256(reference.encode("ascii")).hexdigest()
+        return reference
 
     def __str__(self):
         return self.complaint_id
