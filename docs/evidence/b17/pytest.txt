@@ -1,0 +1,84 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.2, settings: scms.settings (from ini)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: cov-7.1.0, django-4.14.0
+collected 531 items
+
+accounts/test_foundation.py .........                                    [  1%]
+accounts/test_login.py ................................                  [  7%]
+accounts/test_permissions.py .................................           [ 13%]
+accounts/test_reference_data.py ........................................ [ 21%]
+............................                                             [ 26%]
+accounts/test_registration.py ......................................     [ 33%]
+accounts/test_session.py .................                               [ 37%]
+accounts/test_user_admin.py ........................................     [ 44%]
+complaints/test_forms.py ..........                                      [ 46%]
+routing/tests.py .......................                                 [ 50%]
+test_fixtures.py ......                                                  [ 51%]
+workflow/test_history.py ............                                    [ 54%]
+accounts/test_permissions_integration.py ............                    [ 56%]
+accounts/test_registration.py ..                                         [ 56%]
+accounts/test_user_admin.py ......                                       [ 58%]
+complaints/test_identifiers.py .........................                 [ 62%]
+complaints/test_intake.py ...................................sss         [ 69%]
+accounts/test_foundation.py ....                                         [ 70%]
+accounts/test_permissions_integration.py s                               [ 70%]
+complaints/test_forms.py ............................................... [ 79%]
+.....................................................................    [ 92%]
+test_coverage_summary.py ..............                                  [ 95%]
+test_fixtures.py ....                                                    [ 96%]
+test_run_tests.py ...........                                            [ 98%]
+workflow/tests.py ..........                                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.6-final-0 _______________
+
+Name                              Stmts   Miss Branch BrPart   Cover   Missing
+------------------------------------------------------------------------------
+accounts/admin.py                     1      0      0      0 100.00%
+accounts/admin_views.py             101      0     26      2  98.43%   73->75, 96->98
+accounts/apps.py                      3      0      0      0 100.00%
+accounts/config_audit.py             17      0      6      0 100.00%
+accounts/forms.py                    34      1      8      1  95.24%   25
+accounts/models.py                  149      6      8      1  95.54%   85, 93, 156, 173, 204, 253
+accounts/permissions.py             137      1     54      1  98.95%   168
+accounts/reference_adapters.py        4      0      0      0 100.00%
+accounts/reference_services.py      118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py              3      0      0      0 100.00%
+accounts/services.py                 77      0     18      0 100.00%
+accounts/urls.py                      4      0      0      0 100.00%
+accounts/user_admin_services.py      65      0     20      0 100.00%
+accounts/validators.py                7      1      2      0  88.89%   15
+accounts/views.py                    59      1     14      0  98.63%   82
+complaints/admin.py                   1      0      0      0 100.00%
+complaints/apps.py                    3      0      0      0 100.00%
+complaints/forms.py                  84      0     24      0 100.00%
+complaints/identifiers.py            26      0     10      1  97.22%   49->56
+complaints/intake.py                 73      0     22      0 100.00%
+complaints/models.py                 18      0      0      0 100.00%
+complaints/reference_data.py         11      0      0      0 100.00%
+complaints/services.py                5      0      0      0 100.00%
+complaints/validators.py             14      0      6      0 100.00%
+complaints/views.py                   1      1      0      0   0.00%   1
+routing/adapters.py                   4      0      0      0 100.00%
+routing/admin.py                      1      0      0      0 100.00%
+routing/apps.py                       3      0      0      0 100.00%
+routing/models.py                    93     11     22      9  82.61%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207
+routing/services.py                 216     19     70     16  87.76%   87, 126-127, 167->186, 191->202, 224, 250->255, 257->259, 262, 267, 269, 283->294, 301, 315-316, 344->365, 374, 397-404, 422, 446
+routing/urls.py                       4      0      0      0 100.00%
+routing/views.py                     55     15     26      7  70.37%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+workflow/admin.py                    14      3      0      0  78.57%   21, 24, 27
+workflow/apps.py                      3      0      0      0 100.00%
+workflow/history_service.py           9      0      2      0 100.00%
+workflow/models.py                   52      2     10      1  95.16%   27, 84
+workflow/services.py                 23      2      8      0  93.55%   55-56
+workflow/views.py                     1      1      0      0   0.00%   1
+------------------------------------------------------------------------------
+TOTAL                              1493     68    384     41  94.09%
+Coverage JSON written to file coverage.json
+=========================== short test summary info ============================
+SKIPPED [3] complaints/test_intake.py:272: B09 PR #58 is not merged; storage integration pending.
+SKIPPED [1] accounts/test_permissions_integration.py:228: complaints.Complaint is not merged yet; contract: docs/AUTHORIZATION.md
+======================= 527 passed, 4 skipped in 16.83s ========================

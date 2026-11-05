@@ -9,6 +9,41 @@ before final intake acceptance. B07 tests use synthetic data and do not invent
 campus emergency numbers. B07's adapter contract and the category-name limit
 discrepancy with B17 are documented in B07.md for owner confirmation.
 
+## D01a - Initial routing, SLA and escalation configuration (REQ-ADM-03)
+
+**Status: PROVISIONAL. Values require campus confirmation (SRS DOM-03); they are Administrator-editable defaults.**
+
+Categories and base SLAs seed with B17;
+departments, initial routes and the default-department escalation policy are configured only
+after F1 supplies its Department master data. All values remain Administrator-editable and are
+stored as configuration, not hard-coded into routing, due-date or escalation logic.
+
+| Configuration | Initial value |
+| --- | --- |
+| Categories | Electrical, Plumbing, Wi-Fi/Network, Cleanliness, Security, Other |
+| Departments | F1-owned master data: Maintenance, IT Support, Housekeeping, Security, Administration |
+| Default department | Administration, configured after F1's data is present |
+| Category minimum priority | Electrical: Medium; Security: High; all other categories: Low |
+| SLA duration | Low: 7 days; Medium: 3 days; High: 1 day; Critical: 4 hours |
+| Initial category routes | Configure after F1 data: Electrical/Plumbing -> Maintenance; Wi-Fi/Network -> IT Support; Cleanliness -> Housekeeping; Security -> Security |
+| Escalation | Every 24 hours after due time; maximum level 3 |
+| Permitted ranges | SLA duration: 1–525600 minutes (one year); escalation interval: 1–43200 minutes (30 days); maximum escalation level: 1–10 |
+
+Category names are limited to 50 characters (SRS Appendix B-2) so that B07 intake and B17 administration agree.
+
+Location-specific routes are intentionally not seeded because the team has not agreed
+campus location codes. They can be added by an Administrator once F1's canonical location
+reference data is available.
+
+**Department deactivation integration contract (F1).** A Department cannot be deactivated
+while it is referenced by an active routing rule or as the default department of an
+escalation policy. F1's Department-deactivation service must call
+`routing.services.department_in_use` and enforce this guard (or require an Administrator to
+first replace/deactivate those B17 configurations); B17 does not own Department lifecycle
+operations.
+
+B17 supplies the category side of the B07 intake contract.
+
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
 
 **Source.** REQ-AUTH-01: a duplicate email creates no account and gets the same generic
