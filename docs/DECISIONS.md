@@ -1,5 +1,14 @@
 # Open decisions and recorded decisions
 
+## D02 - Exact evidence byte limit
+
+**Status: pending team confirmation.** REQ-CMP-03 says at most 5 MB; SRS section 7
+explicitly leaves the byte convention open. Issue #14 requires this decision
+before final exact-limit acceptance. The B09 foundation uses a provisional
+conservative 5,000,000-byte default and supports 5,242,880 by configuration.
+Tests cover both candidates without claiming either is agreed. F2/F4 must
+record the decision here before closing #14; see B09.md.
+
 ## D01 - Campus configuration and emergency channels
 
 **Status: provisional, pending campus confirmation.** B17's initial routing/SLA
