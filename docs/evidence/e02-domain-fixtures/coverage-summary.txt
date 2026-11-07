@@ -1,0 +1,9 @@
+Module         Statements       Line     Branch  Status
+accounts              780     98.21%     96.20%  PASS
+complaints            248     99.60%     98.39%  PASS
+routing               405     90.62%     77.50%  PASS
+workflow              102     92.16%     95.00%  PASS
+
+Targets: line >= 70%; branch >= 60% per module.
+Fewer than 10 statements: PLACEHOLDER (heuristic, not feature acceptance).
+Coverage gate: PASS
