@@ -16,7 +16,7 @@ def complaint_fields(department_factory):
     submitted_at = timezone.now()
     return {
         "complaint_id": "SCMS-2026-000001",
-        "category_key": "synthetic-category-1",
+        "category_key": "1",  # Synthetic positive Category primary key.
         "category": "Maintenance",
         "location_code": "TEST-BLOCK",
         "block": "Test block",
@@ -80,7 +80,9 @@ def test_database_rejects_malformed_identifiers(complaint_fields, identifier):
      ("resolution_remarks", 2000)],
 )
 def test_database_enforces_text_limits_on_sqlite_too(complaint_fields, field, limit):
-    complaint_fields[field] = "x" * (limit + 1)
+    complaint_fields[field] = ("1" if field == "category_key" else "x") * (limit + 1)
+    if field == "routing_rule_key":
+        complaint_fields["unrouted"] = False
     with pytest.raises(IntegrityError), transaction.atomic():
         Complaint.objects.create(**complaint_fields, reference_digest="a" * 64)
 
@@ -126,12 +128,67 @@ def test_complaint_and_form_priorities_match():
 
 
 def test_complaint_and_routing_priorities_match():
-    from django.apps import apps
-    try:
-        routing_priority = apps.get_model("routing", "Category")._meta.get_field("minimum_priority")
-    except LookupError:
-        pytest.skip("B17 PR #53 must merge before the routing priority contract can run.")
-    assert Complaint.Priority.choices == list(routing_priority.choices)
+    from routing.models import Priority
+    assert Complaint.Priority.choices == Priority.choices
+
+
+@pytest.mark.parametrize("key", [None, "", " ", "0", "scope:1"])
+def test_database_requires_a_category_primary_key(complaint_fields, key):
+    complaint_fields["category_key"] = key
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Complaint.objects.create(**complaint_fields, reference_digest="a" * 64)
+
+
+def test_database_rejects_an_omitted_category_key(complaint_fields):
+    complaint_fields.pop("category_key")
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Complaint.objects.create(**complaint_fields, reference_digest="a" * 64)
+
+
+@pytest.mark.parametrize(("escalated", "level"), [(True, 0), (False, 1)])
+def test_database_rejects_inconsistent_escalation(complaint_fields, escalated, level):
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Complaint.objects.create(**complaint_fields, reference_digest="a" * 64,
+                                 is_escalated=escalated, escalation_level=level)
+
+
+@pytest.mark.parametrize(("escalated", "level"), [(False, 0), (True, 1), (True, 3)])
+def test_database_accepts_consistent_escalation(complaint_fields, escalated, level):
+    complaint = Complaint.objects.create(**complaint_fields, reference_digest="a" * 64,
+                                         is_escalated=escalated, escalation_level=level)
+    complaint.refresh_from_db()
+    assert complaint.is_escalated == escalated
+    assert complaint.escalation_level == level
+
+
+@pytest.mark.parametrize(("unrouted", "key"), [(False, ""), (True, "1"), (None, "1")])
+def test_database_rejects_inconsistent_routing(complaint_fields, unrouted, key):
+    with pytest.raises(IntegrityError), transaction.atomic():
+        Complaint.objects.create(**complaint_fields, reference_digest="a" * 64,
+                                 unrouted=unrouted, routing_rule_key=key)
+
+
+@pytest.mark.parametrize(("unrouted", "key"), [(False, "1"), (True, ""), (None, "")])
+def test_database_accepts_consistent_routing(complaint_fields, unrouted, key):
+    complaint = Complaint.objects.create(**complaint_fields, reference_digest="a" * 64,
+                                         unrouted=unrouted, routing_rule_key=key)
+    complaint.refresh_from_db()
+    assert complaint.unrouted is unrouted
+    assert complaint.routing_rule_key == key
+
+
+def test_reference_hash_matches_the_issuance_encoding():
+    from .references import hash_reference
+    reference = "0123456789abcdef" * 2
+    assert hash_reference(reference) == hashlib.sha256(reference.encode("ascii")).hexdigest()
+
+
+@pytest.mark.parametrize("reference", [None, 123, b"a" * 32, "a" * 31, "a" * 33,
+                                      "A" * 32, "g" * 32, " " + "a" * 32])
+def test_reference_hash_rejects_malformed_lookup_values(reference):
+    from .references import hash_reference
+    with pytest.raises(ValueError):
+        hash_reference(reference)
 
 
 def test_permissions_on_real_authenticated_and_anonymous_records(complaint_fields, user_factory):

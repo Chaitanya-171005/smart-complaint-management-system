@@ -1,6 +1,5 @@
 """Complaint records and intake persistence primitives."""
 
-import hashlib
 import secrets
 
 from django.conf import settings
@@ -12,6 +11,7 @@ from django.db.models.functions import Length
 from django.db.models.lookups import LessThanOrEqual
 
 from .validators import validate_description, validate_single_line
+from .references import hash_reference
 
 
 class ComplaintIdSequence(models.Model):
@@ -70,8 +70,9 @@ class IntakeReceipt(models.Model):
 class Complaint(models.Model):
     """Persist stable reference keys, label snapshots and lifecycle data.
 
-    category_key is nullable for records predating the stable-key migration.
-    New intake must supply it and validate the current reference before saving.
+    category_key is str(category.pk), required alongside the category label
+    snapshot. routing_rule_key is str(rule.pk), never the mutable rule scope_key.
+    Intake must validate the current references before saving these snapshots.
     """
 
     class Priority(models.TextChoices):
@@ -102,7 +103,9 @@ class Complaint(models.Model):
         max_length=64, unique=True, null=True, blank=True, editable=False,
         validators=[RegexValidator(r"\A[0-9a-f]{64}\Z")],
     )
-    category_key = models.CharField(max_length=100, null=True)
+    category_key = models.CharField(
+        max_length=100, validators=[RegexValidator(r"\A[1-9][0-9]*\Z")],
+    )
     category = models.CharField(max_length=50)
     sub_category = models.CharField(max_length=50, blank=True, validators=[validate_single_line])
     location_code = models.CharField(max_length=100)
@@ -136,6 +139,10 @@ class Complaint(models.Model):
     class Meta:
         constraints = [
             models.CheckConstraint(
+                condition=Q(category_key__regex=r"\A[1-9][0-9]*\Z"),
+                name="complaint_category_key_format",
+            ),
+            models.CheckConstraint(
                 condition=Q(complaint_id__regex=r"\ASCMS-[0-9]{4}-[0-9]{6}\Z"),
                 name="complaint_identifier_format",
             ),
@@ -150,6 +157,19 @@ class Complaint(models.Model):
             models.CheckConstraint(
                 condition=Q(rating__isnull=True) | Q(rating__gte=1, rating__lte=5),
                 name="complaint_rating_in_range",
+            ),
+            models.CheckConstraint(
+                condition=(Q(is_escalated=False, escalation_level=0)
+                           | Q(is_escalated=True, escalation_level__gt=0)),
+                name="complaint_escalation_consistent",
+            ),
+            models.CheckConstraint(
+                condition=(
+                    (Q(unrouted__isnull=False, unrouted=False) & ~Q(routing_rule_key=""))
+                    | Q(unrouted=True, routing_rule_key="")
+                    | Q(unrouted__isnull=True, routing_rule_key="")
+                ),
+                name="complaint_routing_consistent",
             ),
             models.CheckConstraint(
                 condition=(
@@ -183,7 +203,7 @@ class Complaint(models.Model):
         if not self._state.adding or self.submitted_by_id is not None or self.reference_digest is not None:
             raise ValidationError("A reference can be issued once for a new anonymous complaint.")
         reference = secrets.token_hex(16)
-        self.reference_digest = hashlib.sha256(reference.encode("ascii")).hexdigest()
+        self.reference_digest = hash_reference(reference)
         return reference
 
     def __str__(self):
