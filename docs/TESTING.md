@@ -43,10 +43,56 @@ Root conftest.py provides department_factory, department, user_factory,
 complainant_user, staff_user, head_user and scms_admin_user. Factories accept
 field overrides. Role fixtures use accounts.models.User.Role constants.
 
+Domain fixtures also live in root conftest.py:
+
+| Fixture | Contract |
+| --- | --- |
+| `category_factory(**fields)` | Unique synthetic B17 category, validated before saving |
+| `location_factory(**fields)` | Unique synthetic F1 location with canonical code |
+| `routing_rule_factory(**fields)` | Category route in the shared `department` by default; supply `category=None` and a location code for a location-only route |
+| `sla_factory(**fields)` | Category-specific synthetic 120-minute LOW SLA; seeded global SLAs remain unchanged |
+| `routing_configuration` | Dictionary containing one related `department`, `category`, `location`, `rule`, `sla` and default `policy` |
+| `complaint_factory(...)` | Valid persisted Complaint with an allocated ID; requires PR #62's schema |
+
+`routing_configuration` temporarily sets the default escalation policy to its
+synthetic department, 120-minute interval and maximum level 2. Pytest rolls back
+these changes after each test. These values are fixture data, not campus defaults.
+Request fixtures explicitly; they do not seed configuration for unrelated tests.
+
+Complaint factories accept `category_record` and `location_record` to reuse real
+reference rows. Other keyword overrides are Complaint model fields. For example:
+
+```python
+def test_owner_record(complaint_factory, complainant_user, routing_configuration):
+    config = routing_configuration
+    complaint = complaint_factory(
+        submitted_by=complainant_user,
+        category_record=config["category"],
+        location_record=config["location"],
+    )
+    assert complaint.submitted_by_id == complainant_user.pk
+```
+
+The default Complaint is synthetic, with `unrouted=True` and a due time two hours
+after submission. The factory does not perform B14/B16 routing or SLA calculation,
+write initial history, or create an intake receipt. Those services require their
+own integration tests. `anonymous=True` invokes the real reference-generation
+method and retains only the digest; it does not return or preserve the raw
+reference. Reference-display tests must exercise the intake service directly.
+The factory validates and saves inside one transaction; invalid overrides roll
+back its new references, user and ID reservation. Construct models directly when
+a test intentionally needs invalid rows.
+
 test_fixtures.py builds every shared fixture and checks roles, department
 relationships, password handling, overrides and uniqueness. Two independent
 parameterized cases create the same unique values after asserting their
 absence, verifying test database cleanup without relying on execution order.
+
+test_domain_fixtures.py checks real reference relationships, overrides, uniqueness,
+seed preservation, rollback, anonymous identity and isolation. Complaint cases
+report an explicit dependency skip while PR #62 is absent. A combined checkout
+containing that schema must execute those cases before accepting its integration.
+Run `python -m pytest test_fixtures.py test_domain_fixtures.py --no-cov -q`.
 
 All values are synthetic, not confirmed campus policy. scms_admin_user has
 the application ADMIN role, not Django superuser access. Only tests requesting
@@ -69,11 +115,11 @@ error (exit 2). Only all-module success returns 0.
 test_coverage_summary.py exercises threshold boundaries, failure codes,
 placeholders, missing/invalid reports, missing branch data and safe import.
 
-B07 adds real complaint form validation; routing remains a placeholder on this
-branch until B17 integrates. The gate therefore remains FAIL despite passing
-tests. Even when all modules pass later, coverage is not feature acceptance:
-the Complaint model, HTTP view and full intake flow still need implementation
-and acceptance tests. Do not lower thresholds or add dummy branches.
+B07 validation and B17 configuration are merged. Read the actual coverage report
+for the current source rather than reusing an earlier placeholder result. A
+passing coverage gate does not establish completed features: the production HTTP
+submission flow and complete intake integration still require acceptance tests.
+Do not lower thresholds or add dummy branches.
 
 ## Evidence
 
@@ -102,6 +148,7 @@ The initial base was confirmed as 8766bf27d4744a0f0221c97742305dc9b59455ea.
 
 ## Remaining scope
 
-Complaint/configuration fixtures depend on the shared models. Full module
-coverage acceptance and Jenkins/GitHub Actions integration remain pending.
-Issue #19 stays open.
+Reference/configuration fixtures are available. Complaint fixtures require the
+schema from PR #62 and are verified in a combined checkout before integration.
+Full module acceptance, continued tests for new features and Jenkins/GitHub
+Actions integration remain pending. Issue #19 stays open.
