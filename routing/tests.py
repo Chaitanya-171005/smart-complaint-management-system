@@ -1,3 +1,601 @@
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import IntegrityError, transaction
 from django.test import TestCase
+from django.urls import reverse
 
-# Create your tests here.
+from accounts.models import ConfigAuditEvent, Department, Location, SecurityEvent, User
+
+from .models import (
+    Category,
+    EscalationPolicy,
+    MAX_ESCALATION_INTERVAL_MINUTES,
+    MAX_ESCALATION_LEVEL,
+    MAX_SLA_DURATION_MINUTES,
+    Priority,
+    RoutingRule,
+    SLAConfiguration,
+)
+from .services import (
+    ConfigurationError,
+    create_category,
+    create_escalation_policy,
+    create_routing_rule,
+    deactivate_category,
+    deactivate_routing_rule,
+    deactivate_sla_configuration,
+    department_in_use,
+    location_in_use,
+    update_routing_rule,
+    reactivate_category,
+    set_sla_configuration,
+    update_category,
+    update_escalation_policy,
+)
+
+
+class RoutingConfigurationTests(TestCase):
+    """B17 / REQ-ADM-03 and REQ-ADM-04 regression tests."""
+
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            email="admin@pes.edu",
+            password="Campus123",
+            full_name="Admin",
+            role=User.Role.ADMIN,
+        )
+        self.staff = User.objects.create_user(
+            email="staff@pes.edu",
+            password="Campus123",
+            full_name="Staff",
+            role=User.Role.STAFF,
+        )
+        self.maintenance = Department.objects.create(name="Maintenance")
+        self.administration = Department.objects.create(name="Administration")
+        Location.objects.create(code="HOSTEL-A", block="Hostel", room_area="Room A")
+        Location.objects.create(code="CAMPUS-A", block="Campus", room_area="Room A")
+
+    def test_initial_configuration_is_seeded_from_agreed_d01_values(self):
+        self.assertSetEqual(
+            set(Category.objects.values_list("name", flat=True)),
+            {"Electrical", "Plumbing", "Wi-Fi/Network", "Cleanliness", "Security", "Other"},
+        )
+        self.assertEqual(Category.objects.get(name="Electrical").minimum_priority, Priority.MEDIUM)
+        self.assertEqual(Category.objects.get(name="Security").minimum_priority, Priority.HIGH)
+        self.assertEqual(SLAConfiguration.objects.filter(category=None, active=True).count(), 4)
+        self.assertFalse(EscalationPolicy.objects.exists())
+        self.assertFalse(RoutingRule.objects.exists())
+
+    def test_only_administrator_can_change_configuration(self):
+        with self.assertRaises(PermissionDenied):
+            create_category(self.staff, name="Lift", minimum_priority=Priority.HIGH)
+        self.assertFalse(Category.objects.filter(name="Lift").exists())
+        self.assertEqual(
+            SecurityEvent.objects.filter(
+                user=self.staff,
+                event_type=SecurityEvent.EventType.AUTHORIZATION_REFUSED,
+            ).count(),
+            1,
+        )
+
+    def test_refused_sla_configuration_is_logged(self):
+        with self.assertRaises(PermissionDenied):
+            set_sla_configuration(self.staff, priority=Priority.LOW, duration_minutes=60)
+        self.assertEqual(
+            SecurityEvent.objects.filter(
+                user=self.staff,
+                event_type=SecurityEvent.EventType.AUTHORIZATION_REFUSED,
+            ).count(),
+            1,
+        )
+
+    def test_category_name_is_limited_to_fifty_characters(self):
+        fifty_character_name = "C" * 50
+        category = create_category(self.admin, name=fifty_character_name)
+        self.assertEqual(category.name, fifty_character_name)
+
+        fifty_one_character_name = "C" * 51
+        with self.assertRaises(ConfigurationError):
+            create_category(self.admin, name=fifty_one_character_name)
+        with self.assertRaises(ConfigurationError):
+            update_category(self.admin, category, name=fifty_one_character_name)
+
+    def test_category_change_is_audited_and_deactivation_preserves_the_row(self):
+        category = create_category(self.admin, name="Lift", minimum_priority=Priority.MEDIUM)
+        created = ConfigAuditEvent.objects.get(entity_type="Category", entity_id=category.pk)
+        self.assertEqual(created.actor, self.admin)
+        self.assertEqual(created.action, ConfigAuditEvent.Action.CREATE)
+        self.assertEqual(created.new_values["minimum_priority"], Priority.MEDIUM)
+
+        update_category(self.admin, category, minimum_priority=Priority.HIGH)
+        updated = ConfigAuditEvent.objects.filter(entity_id=category.pk).first()
+        self.assertEqual(updated.action, ConfigAuditEvent.Action.UPDATE)
+        self.assertEqual(updated.old_values["minimum_priority"], Priority.MEDIUM)
+        self.assertEqual(updated.new_values["minimum_priority"], Priority.HIGH)
+
+        deactivate_category(self.admin, category)
+        category.refresh_from_db()
+        self.assertFalse(category.active)
+        self.assertTrue(Category.objects.filter(pk=category.pk).exists())
+
+        reactivate_category(self.admin, category)
+        category.refresh_from_db()
+        self.assertTrue(category.active)
+        self.assertTrue(
+            ConfigAuditEvent.objects.filter(
+                entity_type="Category",
+                entity_id=category.pk,
+                action=ConfigAuditEvent.Action.REACTIVATE,
+            ).exists()
+        )
+
+    def test_category_deactivation_requires_active_dependents_to_be_disabled_first(self):
+        category = Category.objects.get(name="Electrical")
+        rule = create_routing_rule(
+            self.admin, category=category, department=self.maintenance
+        )
+        with self.assertRaises(ConfigurationError):
+            deactivate_category(self.admin, category)
+
+        deactivate_routing_rule(self.admin, rule)
+        override = set_sla_configuration(
+            self.admin, category=category, priority=Priority.HIGH, duration_minutes=60
+        )
+        with self.assertRaises(ConfigurationError):
+            deactivate_category(self.admin, category)
+
+        deactivate_sla_configuration(self.admin, override)
+        deactivate_category(self.admin, category)
+        category.refresh_from_db()
+        self.assertFalse(category.active)
+
+    def test_active_duplicate_routing_rule_is_rejected_and_location_is_normalized(self):
+        category = Category.objects.get(name="Electrical")
+        create_routing_rule(
+            self.admin, category=category, department=self.maintenance, precedence=100
+        )
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(
+                self.admin, category=category, department=self.maintenance, precedence=200
+            )
+
+        rule = create_routing_rule(
+            self.admin,
+            category=category,
+            location_code=" hostel-a ",
+            department=self.maintenance,
+            precedence=10,
+        )
+        self.assertEqual(rule.location_code, "HOSTEL-A")
+        self.assertEqual(rule.precedence, 10)
+
+    def test_rule_requires_a_scope_and_an_active_department(self):
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(self.admin, department=self.maintenance)
+
+        self.maintenance.active = False
+        self.maintenance.save(update_fields=["active"])
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(
+                self.admin,
+                category=Category.objects.get(name="Other"),
+                department=self.maintenance,
+            )
+
+    def test_sla_duration_enforces_its_permitted_range(self):
+        range_message = f"from 1 to {MAX_SLA_DURATION_MINUTES} (one year)"
+        for value in (0, MAX_SLA_DURATION_MINUTES + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=value)
+            self.assertIn(range_message, str(error.exception))
+
+        minimum = set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=1)
+        self.assertEqual(minimum.duration_minutes, 1)
+        maximum = set_sla_configuration(
+            self.admin, priority=Priority.LOW, duration_minutes=MAX_SLA_DURATION_MINUTES
+        )
+        self.assertEqual(maximum.duration_minutes, MAX_SLA_DURATION_MINUTES)
+
+    def test_escalation_interval_and_level_enforce_their_permitted_ranges(self):
+        policy = create_escalation_policy(
+            self.admin,
+            default_department=self.administration,
+            interval_minutes=1,
+            maximum_level=1,
+        )
+        self.assertEqual((policy.interval_minutes, policy.maximum_level), (1, 1))
+
+        interval_message = f"from 1 to {MAX_ESCALATION_INTERVAL_MINUTES} (30 days)"
+        for value in (0, MAX_ESCALATION_INTERVAL_MINUTES + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                update_escalation_policy(self.admin, policy, interval_minutes=value)
+            self.assertIn(interval_message, str(error.exception))
+        update_escalation_policy(
+            self.admin, policy, interval_minutes=MAX_ESCALATION_INTERVAL_MINUTES
+        )
+        policy.refresh_from_db()
+        self.assertEqual(policy.interval_minutes, MAX_ESCALATION_INTERVAL_MINUTES)
+
+        level_message = f"from 1 to {MAX_ESCALATION_LEVEL}"
+        for value in (0, MAX_ESCALATION_LEVEL + 1, "not-a-number"):
+            with self.assertRaises(ConfigurationError) as error:
+                update_escalation_policy(self.admin, policy, maximum_level=value)
+            self.assertIn(level_message, str(error.exception))
+        update_escalation_policy(self.admin, policy, maximum_level=MAX_ESCALATION_LEVEL)
+        policy.refresh_from_db()
+        self.assertEqual(policy.maximum_level, MAX_ESCALATION_LEVEL)
+
+    def test_sla_and_escalation_settings_are_audited(self):
+        sla = set_sla_configuration(self.admin, priority=Priority.LOW, duration_minutes=360)
+        self.assertEqual(sla.duration_minutes, 360)
+        self.assertTrue(
+            ConfigAuditEvent.objects.filter(
+                entity_type="SLAConfiguration", entity_id=sla.pk, action="UPDATE"
+            ).exists()
+        )
+
+        policy = create_escalation_policy(
+            self.admin,
+            default_department=self.administration,
+            interval_minutes=1440,
+            maximum_level=3,
+        )
+        update_escalation_policy(self.admin, policy, maximum_level=4)
+        policy.refresh_from_db()
+        self.assertEqual(policy.maximum_level, 4)
+        self.assertTrue(ConfigAuditEvent.objects.filter(
+            entity_type="EscalationPolicy", entity_id=str(policy.pk),
+            action=ConfigAuditEvent.Action.UPDATE,
+        ).exists())
+
+    def test_sla_rejects_inactive_categories(self):
+        category = create_category(self.admin, name="Lift")
+        deactivate_category(self.admin, category)
+        with self.assertRaises(ConfigurationError):
+            set_sla_configuration(
+                self.admin, category=category, priority=Priority.LOW, duration_minutes=60
+            )
+
+    def test_department_in_use_reports_active_routing_and_escalation_references(self):
+        unused = Department.objects.create(name="Unused")
+        self.assertFalse(department_in_use(unused))
+
+        rule = create_routing_rule(
+            self.admin,
+            category=Category.objects.get(name="Electrical"),
+            department=self.maintenance,
+        )
+        self.assertTrue(department_in_use(self.maintenance))
+        deactivate_routing_rule(self.admin, rule)
+        self.assertFalse(department_in_use(self.maintenance))
+
+        create_escalation_policy(
+            self.admin,
+            default_department=self.administration,
+            interval_minutes=1440,
+            maximum_level=3,
+        )
+        self.assertTrue(department_in_use(self.administration))
+
+    def test_last_active_default_sla_for_a_priority_cannot_be_deactivated(self):
+        default = SLAConfiguration.objects.get(category=None, priority=Priority.LOW)
+        with self.assertRaises(ConfigurationError):
+            deactivate_sla_configuration(self.admin, default)
+        default.refresh_from_db()
+        self.assertTrue(default.active)
+
+    def test_database_checks_prevent_nonpositive_configuration(self):
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            SLAConfiguration.objects.create(priority=Priority.LOW, duration_minutes=0)
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            EscalationPolicy.objects.create(
+                key="invalid",
+                default_department=self.maintenance,
+                interval_minutes=0,
+                maximum_level=1,
+            )
+
+    def test_database_constraint_prevents_duplicate_active_routing_scope(self):
+        category = Category.objects.get(name="Other")
+        first = RoutingRule.objects.create(
+            category=category, location_code="Hostel-A", department=self.maintenance
+        )
+        self.assertEqual(first.scope_key, f"{category.pk}:HOSTEL-A")
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            RoutingRule.objects.create(
+                category=category, location_code=" hostel-a ", department=self.maintenance
+            )
+        first.active = False
+        first.save(update_fields=["active"])
+        replacement = RoutingRule.objects.create(
+            category=category, location_code="hostel-a", department=self.maintenance
+        )
+        self.assertTrue(replacement.active)
+
+    def test_database_constraints_protect_case_insensitive_category_and_sla_scope(self):
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            Category.objects.create(name="electrical")
+
+        category = Category.objects.get(name="Electrical")
+        SLAConfiguration.objects.create(
+            category=category, priority=Priority.LOW, duration_minutes=60
+        )
+        with self.assertRaises(IntegrityError), transaction.atomic():
+            SLAConfiguration.objects.create(
+                category=category, priority=Priority.LOW, duration_minutes=120
+            )
+
+    def test_audit_records_are_append_only(self):
+        category = create_category(self.admin, name="Transport")
+        audit = ConfigAuditEvent.objects.get(entity_id=category.pk)
+        with self.assertRaises(ValidationError):
+            audit.save()
+        with self.assertRaises(ValidationError):
+            ConfigAuditEvent.objects.filter(pk=audit.pk).delete()
+
+    def test_configuration_screen_allows_only_admin_and_uses_services(self):
+        url = reverse("routing:configuration")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+        self.client.force_login(self.staff)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 403)
+
+        self.client.force_login(self.admin)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Routing, SLA and escalation configuration")
+        self.assertContains(response, "provisional")
+        response = self.client.post(
+            url,
+            {
+                "action": "create_category",
+                "name": "Transport",
+                "minimum_priority": Priority.MEDIUM,
+            },
+        )
+        self.assertRedirects(response, url)
+        category = Category.objects.get(name="Transport")
+        self.assertTrue(
+            ConfigAuditEvent.objects.filter(
+                entity_type="Category", entity_id=category.pk, actor=self.admin
+            ).exists()
+        )
+
+    def test_screen_exposes_all_configuration_actions(self):
+        url = reverse("routing:configuration")
+        category = Category.objects.get(name="Other")
+        rule = create_routing_rule(
+            self.admin, category=category, department=self.maintenance, precedence=20
+        )
+        sla = set_sla_configuration(
+            self.admin, category=category, priority=Priority.LOW, duration_minutes=60
+        )
+        self.client.force_login(self.admin)
+
+        response = self.client.post(
+            url,
+            {
+                "action": "update_category",
+                "category_id": category.pk,
+                "name": "Miscellaneous",
+                "minimum_priority": Priority.MEDIUM,
+            },
+        )
+        self.assertRedirects(response, url)
+        category.refresh_from_db()
+        self.assertEqual((category.name, category.minimum_priority), ("Miscellaneous", Priority.MEDIUM))
+
+        response = self.client.post(
+            url,
+            {
+                "action": "update_rule",
+                "rule_id": rule.pk,
+                "category_id": category.pk,
+                "location_code": "campus-a",
+                "department_id": self.maintenance.pk,
+                "precedence": 2,
+            },
+        )
+        self.assertRedirects(response, url)
+        rule.refresh_from_db()
+        self.assertEqual((rule.location_code, rule.precedence), ("CAMPUS-A", 2))
+
+        response = self.client.post(url, {"action": "deactivate_sla", "sla_id": sla.pk})
+        self.assertRedirects(response, url)
+        sla.refresh_from_db()
+        self.assertFalse(sla.active)
+
+        response = self.client.post(
+            url,
+            {
+                "action": "create_escalation",
+                "default_department_id": self.administration.pk,
+                "interval_minutes": 1440,
+                "maximum_level": 3,
+            },
+        )
+        self.assertRedirects(response, url)
+        self.assertTrue(EscalationPolicy.objects.filter(key="default").exists())
+
+    def test_location_validation_and_usage(self):
+        category = Category.objects.get(name="Other")
+        for code in ("UNKNOWN", "CLOSED"):
+            if code == "CLOSED":
+                Location.objects.create(code=code, block="Closed", active=False)
+            with self.assertRaises(ConfigurationError) as error:
+                create_routing_rule(self.admin, category=category, location_code=code, department=self.maintenance)
+            self.assertIn("location_code", error.exception.message_dict)
+        rule = create_routing_rule(self.admin, category=category, location_code=" hostel-a ", department=self.maintenance)
+        self.assertEqual(rule.location_code, "HOSTEL-A")
+        self.assertTrue(location_in_use(" hostel-a "))
+        self.assertFalse(location_in_use("unused"))
+        location = Location.objects.get(code="HOSTEL-A")
+        location.active = False
+        location.save(update_fields=["active"])
+        update_routing_rule(self.admin, rule, location_code="hostel-a", precedence=2)
+        self.client.force_login(self.admin)
+        response = self.client.get(reverse("routing:configuration"))
+        self.assertContains(response, 'value="HOSTEL-A" selected')
+        deactivate_routing_rule(self.admin, rule)
+        self.assertFalse(location_in_use("HOSTEL-A"))
+        blank = create_routing_rule(self.admin, category=category, location_code="", department=self.maintenance)
+        self.assertEqual(blank.location_code, "")
+
+    def test_updating_location_to_unknown_or_inactive_code_is_refused(self):
+        Location.objects.create(code="LAB-1", block="Lab A")
+        Location.objects.create(code="OLD-LAB", block="Lab B", active=False)
+        rule = create_routing_rule(
+            self.admin,
+            category=Category.objects.get(name="Other"),
+            location_code="LAB-1",
+            department=self.maintenance,
+        )
+        updates = ConfigAuditEvent.objects.filter(
+            entity_type="RoutingRule", entity_id=str(rule.pk),
+            action=ConfigAuditEvent.Action.UPDATE,
+        )
+        count_before = updates.count()
+        for code in ("OLD-LAB", "NO-SUCH-PLACE"):
+            with self.subTest(code=code):
+                with self.assertRaises(ConfigurationError) as error:
+                    update_routing_rule(
+                        self.admin, rule, location_code=code, precedence=rule.precedence
+                    )
+                self.assertIn("location_code", error.exception.message_dict)
+
+        rule.refresh_from_db()
+        self.assertEqual(rule.location_code, "LAB-1")
+        self.assertEqual(updates.count(), count_before)
+        update_routing_rule(self.admin, rule, location_code="lab-1", precedence=5)
+        self.assertEqual(rule.location_code, "LAB-1")
+        self.assertEqual(rule.precedence, 5)
+
+    def test_category_adapter_and_intake_form(self):
+        from accounts.reference_adapters import location_options
+        from complaints.forms import ComplaintForm
+        from .adapters import category_options
+
+        category = Category.objects.get(name="Other")
+        inactive = Category.objects.get(name="Security")
+        inactive.active = False
+        inactive.save(update_fields=["active"])
+        before = {option.key: option.name for option in category_options()}
+        self.assertNotIn(str(inactive.pk), before)
+        category.name = "Renamed category"
+        category.save()
+        after = {option.key: option.name for option in category_options()}
+        self.assertEqual(after[str(category.pk)], "Renamed category")
+        self.assertIn(str(category.pk), before)
+        form = ComplaintForm({"category": str(category.pk), "location": "HOSTEL-A", "title": "A request", "description": "A description longer than twenty five characters.", "priority": "LOW"}, categories=category_options(), locations=location_options())
+        self.assertTrue(form.is_valid(), form.errors)
+
+
+class StaleRecordTests(TestCase):
+    def setUp(self):
+        self.admin = User.objects.create_user(
+            email="admin@pes.edu", password="Campus123", full_name="Admin", role=User.Role.ADMIN
+        )
+        self.maintenance = Department.objects.create(name="Maintenance")
+        self.administration = Department.objects.create(name="Administration")
+        Location.objects.create(code="HOSTEL-A", block="Hostel", room_area="Room A")
+        self.category = Category.objects.get(name="Other")
+
+    def audit(self, obj, action):
+        return ConfigAuditEvent.objects.filter(
+            entity_type=type(obj).__name__, entity_id=str(obj.pk), action=action
+        )
+
+    def rule(self):
+        return create_routing_rule(self.admin, category=self.category, department=self.maintenance, precedence=10)
+
+    def policy(self):
+        return create_escalation_policy(self.admin, default_department=self.administration,
+                                        interval_minutes=60, maximum_level=2)
+
+    def test_edit_stale_category_keeps_deactivated_state_and_audits_current_values(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        update_category(self.admin, stale, name="Miscellaneous")
+        self.category.refresh_from_db()
+        self.assertEqual((self.category.name, self.category.active), ("Miscellaneous", False))
+        event = self.audit(stale, "UPDATE").first()
+        self.assertEqual((event.old_values["name"], event.old_values["active"]), ("Other", False))
+
+    def test_edit_stale_rule_keeps_deactivated_state_and_audits_current_values(self):
+        rule = self.rule()
+        stale = RoutingRule.objects.get(pk=rule.pk)
+        deactivate_routing_rule(self.admin, rule)
+        update_routing_rule(self.admin, stale, precedence=5)
+        rule.refresh_from_db()
+        self.assertEqual((rule.precedence, rule.active), (5, False))
+        event = self.audit(rule, "UPDATE").first()
+        self.assertEqual((event.old_values["precedence"], event.old_values["active"]), (10, False))
+
+    def test_edit_stale_policy_keeps_newer_interval_and_audits_it(self):
+        policy = self.policy()
+        stale = EscalationPolicy.objects.get(pk=policy.pk)
+        update_escalation_policy(self.admin, policy, interval_minutes=120)
+        update_escalation_policy(self.admin, stale, maximum_level=4)
+        policy.refresh_from_db()
+        self.assertEqual((policy.interval_minutes, policy.maximum_level), (120, 4))
+        event = self.audit(policy, "UPDATE").first()
+        self.assertEqual((event.old_values["interval_minutes"], event.old_values["maximum_level"]), (120, 2))
+        self.assertEqual((event.new_values["interval_minutes"], event.new_values["maximum_level"]), (120, 4))
+
+    def test_create_rule_rejects_stale_inactive_category(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(self.admin, category=stale, department=self.maintenance)
+        self.assertFalse(RoutingRule.objects.exists())
+        self.assertFalse(ConfigAuditEvent.objects.filter(entity_type="RoutingRule", action="CREATE").exists())
+
+    def test_create_rule_rejects_stale_inactive_department(self):
+        stale = Department.objects.get(pk=self.maintenance.pk)
+        Department.objects.filter(pk=stale.pk).update(active=False)
+        with self.assertRaises(ConfigurationError):
+            create_routing_rule(self.admin, category=self.category, department=stale)
+        self.assertFalse(RoutingRule.objects.exists())
+        self.assertFalse(ConfigAuditEvent.objects.filter(entity_type="RoutingRule", action="CREATE").exists())
+
+    def test_update_rule_rejects_stale_inactive_category(self):
+        rule = self.rule()
+        category = Category.objects.get(name="Electrical")
+        stale = Category.objects.get(pk=category.pk)
+        deactivate_category(self.admin, category)
+        with self.assertRaises(ConfigurationError):
+            update_routing_rule(self.admin, rule, category=stale)
+        rule.refresh_from_db()
+        self.assertEqual(rule.category_id, self.category.pk)
+
+    def test_update_policy_rejects_stale_inactive_department(self):
+        policy = self.policy()
+        stale = Department.objects.get(pk=self.maintenance.pk)
+        Department.objects.filter(pk=stale.pk).update(active=False)
+        with self.assertRaises(ConfigurationError):
+            update_escalation_policy(self.admin, policy, default_department=stale)
+        policy.refresh_from_db()
+        self.assertEqual(policy.default_department_id, self.administration.pk)
+
+    def test_set_sla_rejects_stale_inactive_category(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        with self.assertRaises(ConfigurationError):
+            set_sla_configuration(self.admin, category=stale, priority=Priority.LOW, duration_minutes=60)
+        self.assertFalse(SLAConfiguration.objects.filter(category=stale).exists())
+
+    def test_deactivate_stale_category_is_noop(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        deactivate_category(self.admin, self.category)
+        deactivate_category(self.admin, stale)
+        self.assertFalse(stale.active)
+        self.assertEqual(self.audit(stale, "DEACTIVATE").count(), 1)
+
+    def test_missing_record_raises_configuration_error(self):
+        stale = Category.objects.get(pk=self.category.pk)
+        stale.pk = 99999999
+        with self.assertRaises(ConfigurationError) as error:
+            update_category(self.admin, stale, name="Missing")
+        self.assertEqual(error.exception.message_dict["category"],
+                         ["This record no longer exists. Reload the page and try again."])
