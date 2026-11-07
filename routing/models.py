@@ -207,3 +207,52 @@ class EscalationPolicy(models.Model):
         return f"Every {self.interval_minutes} min, maximum level {self.maximum_level}"
 
 
+
+
+class RoutingDecisionQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Routing decisions cannot be edited.")
+
+    def delete(self):
+        raise ValidationError("Routing decisions cannot be deleted.")
+
+
+class RoutingDecision(models.Model):
+    """Immutable routing snapshot; Complaint will reference it or copy its fields."""
+
+    class Basis(models.TextChoices):
+        CATEGORY_LOCATION = "CATEGORY_LOCATION", "Category and location"
+        CATEGORY = "CATEGORY", "Category"
+        LOCATION = "LOCATION", "Location"
+        DEFAULT = "DEFAULT", "Default"
+
+    # Replace with a foreign key, or copy this snapshot, when Complaint lands.
+    complaint_id = models.CharField(max_length=16, unique=True, editable=False)
+    department = models.ForeignKey(
+        "accounts.Department", on_delete=models.PROTECT, related_name="routing_decisions"
+    )
+    rule = models.ForeignKey(RoutingRule, null=True, blank=True, on_delete=models.PROTECT)
+    basis = models.CharField(max_length=17, choices=Basis.choices)
+    unrouted = models.BooleanField()
+    reason = models.CharField(max_length=200)
+    decided_at = models.DateTimeField()
+
+    objects = RoutingDecisionQuerySet.as_manager()
+
+    class Meta:
+        ordering = ["decided_at", "pk"]
+        constraints = [
+            models.CheckConstraint(
+                condition=(Q(basis="DEFAULT", rule__isnull=True, unrouted=True)
+                           | (~Q(basis="DEFAULT") & Q(rule__isnull=False, unrouted=False))),
+                name="routing_decision_consistent_basis",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Routing decisions cannot be edited.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Routing decisions cannot be deleted.")
