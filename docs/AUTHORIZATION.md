@@ -20,10 +20,12 @@ Complaint model will use a nullable FK to accounts.User: authenticated intake
 sets it from the authorized request.user, while anonymous intake leaves it null.
 It is never accepted from POST. This matches Tanmay's existing tracking service
 and tests and the SRS B-2 "submitter" field; no `owner` alias is planned.
-F4 model integration remains to be verified when the model is implemented.
+The real model field contract is verified by
+`test_real_complaint_model_follows_contract`. Real-record ownership and anonymous
+access tests run in `complaints/test_models.py`. F4 view/history integration
+remains tracked separately in B21-B25.
 Either the related object or the `<name>_id` value works.
-`test_real_complaint_model_follows_contract` skips
-until `complaints.Complaint` exists, then checks the model against this table.
+`test_real_complaint_model_follows_contract` checks the model against this table.
 
 ## Administrator and complaint content (decision against the SRS)
 The SRS gives the Administrator users/roles/membership, master data, routing/SLA, campus
