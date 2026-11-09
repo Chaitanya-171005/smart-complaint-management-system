@@ -51,6 +51,19 @@ escalation policy. F1's Department-deactivation service must call
 first replace/deactivate those B17 configurations); B17 does not own Department lifecycle
 operations.
 
+**Routing precedence.** Category and location rules take priority over category-only
+rules, which take priority over location-only rules. Lower precedence numbers win;
+1 is highest, and ties go to the older rule. Inactive rules and rules for inactive
+departments are ignored. If nothing matches, the default department is used and
+the unrouted flag is set. Decisions are snapshots stored per complaint and are
+never recomputed. Precedence orders rules for display and acts as a defensive tie-break: because duplicate active rules for the same scope are rejected, a complaint matches at most one active rule per specificity tier.
+
+**Intake integration.** Inside `execute_intake`, the intake adapter's operation calls
+`route_and_record(ctx.complaint_id, category, location_code, now=ctx.submitted_at)`.
+A `RoutingConfigurationError` must roll back the whole intake and be shown to the
+user as a safe generic message. When the Complaint model is merged, it either
+references the RoutingDecision or copies its fields.
+
 B17 supplies the category side of the B07 intake contract.
 
 ## D06 - Password-reset assistance (REQ-AUTH-01, SRS section 7)
