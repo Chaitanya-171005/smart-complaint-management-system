@@ -1,11 +1,10 @@
-"""B04 integration tests: the permission helpers against real database rows.
+"""B04 integration tests for the shared permission contract.
 
-``complaints.Complaint`` does not exist yet (F2, Atul). Until it is merged these tests use
-a test-only ``StandInComplaint`` model (see the ``complaint_model`` fixture) with the agreed field contract (docs/AUTHORIZATION.md):
-``submitted_by`` (User or null for anonymous), ``department`` and ``assignee`` (User or null).
-When the real model lands, ``test_real_complaint_model_follows_contract`` starts running
-instead of skipping; then point ``complaint_model`` below at the real model and adapt
-``new_complaint`` to its required fields.
+The fixture matrix uses StandInComplaint to isolate permission behaviour.
+The real Complaint model is checked by test_real_complaint_model_follows_contract.
+Real-record ownership and anonymous access cases also run in
+complaints/test_models.py. Full F4 view/history integration remains tracked in
+its feature issues.
 """
 
 import itertools

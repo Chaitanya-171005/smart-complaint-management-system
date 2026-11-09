@@ -1,7 +1,8 @@
-"""B10 authenticated retry/transaction guard; actual intake adapters are pending.
+"""B10 authenticated retry/transaction guard for trusted intake adapters.
 
-Only trusted application code may supply operation/after_commit callbacks.
-There is deliberately no view that acknowledges an unimplemented Complaint.
+Complaint persistence is defined in complaints.models. The production operation
+adapter and HTTP submission flow remain tracked in #15 and #16. Only trusted
+application code may supply operation/after_commit callbacks.
 """
 
 import hashlib

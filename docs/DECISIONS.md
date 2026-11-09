@@ -1,5 +1,14 @@
 # Open decisions and recorded decisions
 
+## D02 - Exact evidence byte limit
+
+**Status: pending team confirmation.** REQ-CMP-03 says at most 5 MB; SRS section 7
+explicitly leaves the byte convention open. Issue #14 requires this decision
+before final exact-limit acceptance. The B09 foundation uses a provisional
+conservative 5,000,000-byte default and supports 5,242,880 by configuration.
+Tests cover both candidates without claiming either is agreed. F2/F4 must
+record the decision here before closing #14; see B09.md.
+
 ## D01 - Campus configuration and emergency channels
 
 **Status: provisional, pending campus confirmation.** B17's initial routing/SLA
@@ -41,6 +50,19 @@ escalation policy. F1's Department-deactivation service must call
 `routing.services.department_in_use` and enforce this guard (or require an Administrator to
 first replace/deactivate those B17 configurations); B17 does not own Department lifecycle
 operations.
+
+**Routing precedence.** Category and location rules take priority over category-only
+rules, which take priority over location-only rules. Lower precedence numbers win;
+1 is highest, and ties go to the older rule. Inactive rules and rules for inactive
+departments are ignored. If nothing matches, the default department is used and
+the unrouted flag is set. Decisions are snapshots stored per complaint and are
+never recomputed. Precedence orders rules for display and acts as a defensive tie-break: because duplicate active rules for the same scope are rejected, a complaint matches at most one active rule per specificity tier.
+
+**Intake integration.** Inside `execute_intake`, the intake adapter's operation calls
+`route_and_record(ctx.complaint_id, category, location_code, now=ctx.submitted_at)`.
+A `RoutingConfigurationError` must roll back the whole intake and be shown to the
+user as a safe generic message. When the Complaint model is merged, it either
+references the RoutingDecision or copies its fields.
 
 B17 supplies the category side of the B07 intake contract.
 
