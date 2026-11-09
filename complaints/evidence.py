@@ -171,7 +171,7 @@ class PrivateEvidenceStorage(FileSystemStorage):
 
 
 @contextmanager
-def staged_evidence(files):
+def staged_evidence(files, *, anonymous=False):
     """Validate ALL files before storage; remove this batch if the operation fails.
 
     Put the caller's transaction.atomic() INSIDE this context, so a database
@@ -195,7 +195,11 @@ def staged_evidence(files):
             try:
                 storage.delete(item.storage_name)
             except OSError:
-                logging.getLogger(__name__).exception("Evidence rollback cleanup failed")
+                if anonymous:
+                    # Exception messages can contain private filenames/content.
+                    logging.getLogger(__name__).error("Anonymous evidence rollback cleanup failed")
+                else:
+                    logging.getLogger(__name__).exception("Evidence rollback cleanup failed")
         raise
 
 

@@ -1,4 +1,4 @@
-"""Authenticated B10 aggregate service, awaiting the B07 HTTP integration.
+"""B10 aggregate persistence shared by authenticated and anonymous intake.
 
 Call with raw form fields, a retained request key and the complete file batch.
 Clients cannot supply derived fields, fingerprints, actors or operation callbacks.
@@ -58,6 +58,52 @@ def _clean_fields(data):
     return values
 
 
+def _persist_complaint(context, fields, *, anonymous=False):
+    """Shared required writes, called only inside the outer intake transaction."""
+    category = Category.objects.select_for_update().filter(pk=fields["category"], active=True).first()
+    location = Location.objects.select_for_update().filter(code=fields["location"], active=True).first()
+    if category is None or location is None:
+        raise ValidationError("Select an active category and location.", code="inactive_reference")
+    form = ComplaintForm(
+        fields, categories=[CategoryOption(str(category.pk), category.name)],
+        locations=[LocationOption(location.code, location.block, location.room_area, location.floor)],
+    )
+    # Raw DB updates can introduce invalid active reference labels, independently
+    # of the user-field validation performed before hashing.
+    if not form.is_valid():
+        raise ValidationError(form.errors.as_data())
+    outcome = route_and_prioritize(
+        complaint_id=context.complaint_id, category=category, location_code=location.code,
+        indicated_priority=fields["priority"], submitted_at=context.submitted_at,
+    )
+    user = None if anonymous else context.user
+    complaint = Complaint(
+        complaint_id=context.complaint_id, submitted_by=user,
+        category_key=str(category.pk), category=category.name,
+        sub_category=fields["sub_category"], location_code=location.code,
+        block=location.block, floor=location.floor, room_area=location.room_area,
+        title=fields["title"], description=fields["description"],
+        submitted_at=context.submitted_at, **outcome.as_complaint_fields(),
+    )
+    reference = complaint.issue_anonymous_reference() if anonymous else None
+    complaint.full_clean()
+    complaint.save(force_insert=True)
+    for item in context.evidence:
+        Attachment.objects.create(
+            complaint=complaint, storage_name=item.storage_name,
+            original_name=item.original_name, content_type=item.content_type,
+            size=item.size, sha256=item.sha256, stage=Attachment.Stage.INTAKE, uploaded_by=user,
+        )
+    actor = (ComplaintHistory.ActorKind.ANONYMOUS if anonymous
+             else ComplaintHistory.ActorKind.COMPLAINANT)
+    record_history(complaint.complaint_id, ComplaintHistory.EventType.SUBMITTED,
+                   actor, new_state=Complaint.Status.SUBMITTED)
+    record_history(complaint.complaint_id, ComplaintHistory.EventType.ALLOCATED,
+                   ComplaintHistory.ActorKind.SYSTEM, previous_state=Complaint.Status.SUBMITTED,
+                   new_state=Complaint.Status.ASSIGNED)
+    return complaint, reference
+
+
 def submit_authenticated_complaint(*, user, key, data, files=()):
     """Persist one real aggregate or return its original accepted retry result.
 
@@ -79,50 +125,7 @@ def submit_authenticated_complaint(*, user, key, data, files=()):
     )
 
     def persist(context):
-        category = Category.objects.select_for_update().filter(
-            pk=fields["category"], active=True,
-        ).first()
-        location = Location.objects.select_for_update().filter(
-            code=fields["location"], active=True,
-        ).first()
-        if category is None or location is None:
-            raise ValidationError("Select an active category and location.", code="inactive_reference")
-        form = ComplaintForm(
-            fields,
-            categories=[CategoryOption(str(category.pk), category.name)],
-            locations=[LocationOption(location.code, location.block, location.room_area, location.floor)],
-        )
-        # _clean_fields validates user values, but active master-data labels can
-        # still contain invalid text from a direct DB write. Refuse that graph.
-        if not form.is_valid():
-            raise ValidationError(form.errors.as_data())
-        outcome = route_and_prioritize(
-            complaint_id=context.complaint_id, category=category, location_code=location.code,
-            indicated_priority=fields["priority"], submitted_at=context.submitted_at,
-        )
-        complaint = Complaint(
-            complaint_id=context.complaint_id, submitted_by=context.user,
-            category_key=str(category.pk), category=category.name,
-            sub_category=fields["sub_category"], location_code=location.code,
-            block=location.block, floor=location.floor, room_area=location.room_area,
-            title=fields["title"], description=fields["description"],
-            submitted_at=context.submitted_at, **outcome.as_complaint_fields(),
-        )
-        complaint.full_clean()
-        complaint.save(force_insert=True)
-        for item in context.evidence:
-            Attachment.objects.create(
-                complaint=complaint, storage_name=item.storage_name,
-                original_name=item.original_name, content_type=item.content_type,
-                size=item.size, sha256=item.sha256, stage=Attachment.Stage.INTAKE,
-                uploaded_by=context.user,
-            )
-        record_history(complaint.complaint_id, ComplaintHistory.EventType.SUBMITTED,
-                       ComplaintHistory.ActorKind.COMPLAINANT, new_state=Complaint.Status.SUBMITTED)
-        record_history(complaint.complaint_id, ComplaintHistory.EventType.ALLOCATED,
-                       ComplaintHistory.ActorKind.SYSTEM, previous_state=Complaint.Status.SUBMITTED,
-                       new_state=Complaint.Status.ASSIGNED)
-        return complaint
+        return _persist_complaint(context, fields)[0]
 
     # Stage immutable validated snapshots, not caller-owned streams that could
     # change between hashing and storage. B09 revalidates those same byte values.

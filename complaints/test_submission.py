@@ -329,8 +329,8 @@ def test_receipt_migration_preserves_and_links_only_exact_matches(args, complain
     wrong_time = complaint_factory(submitted_by=args["user"])
     before = set(Complaint.objects.values_list("complaint_id", flat=True))
     old = [("complaints", "0003_complaint")]
-    new = [("complaints", "0004_attachment_intakereceipt_accepted_complaint_and_more")]
     executor = MigrationExecutor(connection)
+    latest = executor.loader.graph.leaf_nodes()
     executor.migrate(old)
     try:
         apps = executor.loader.project_state(old).apps
@@ -345,7 +345,7 @@ def test_receipt_migration_preserves_and_links_only_exact_matches(args, complain
                                     payload_digest="a" * 64, complaint_id=identifier,
                                     submitted_at=timestamp)
     finally:
-        MigrationExecutor(connection).migrate(new)
+        MigrationExecutor(connection).migrate(latest)
     assert set(Complaint.objects.values_list("complaint_id", flat=True)) == before
     assert IntakeReceipt.objects.count() == 4
     assert IntakeReceipt.objects.get(complaint_id=matching.complaint_id).accepted_complaint_id == matching.complaint_id

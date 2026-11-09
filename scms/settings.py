@@ -55,6 +55,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "complaints.privacy_middleware.AnonymousPrivacyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -179,3 +180,7 @@ EVIDENCE_MAX_IMAGE_PIXELS = 25_000_000
 # are confirmed. Test fixtures use explicitly synthetic values.
 COMPLAINT_INTAKE_ENABLED = os.environ.get("COMPLAINT_INTAKE_ENABLED", "False") == "True"
 COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").strip()
+
+# B11/B12: keep disabled until D01 and external logging/privacy checks are verified.
+ANONYMOUS_INTAKE_ENABLED = os.environ.get("ANONYMOUS_INTAKE_ENABLED", "False") == "True"
+ANONYMOUS_PRIVACY_READY = os.environ.get("ANONYMOUS_PRIVACY_READY", "False") == "True"
