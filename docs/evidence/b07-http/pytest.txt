@@ -4,7 +4,7 @@ django: version: 6.1.2, settings: scms.settings (from ini)
 rootdir: <repo>
 configfile: pytest.ini
 plugins: cov-7.1.0, django-4.14.0
-collected 842 items
+collected 855 items
 
 accounts/test_foundation.py .........                                    [  1%]
 accounts/test_login.py ................................                  [  4%]
@@ -13,37 +13,39 @@ accounts/test_reference_data.py ........................................ [ 13%]
 ............................                                             [ 16%]
 accounts/test_registration.py ......................................     [ 21%]
 accounts/test_session.py .................                               [ 23%]
-accounts/test_user_admin.py ........................................     [ 28%]
+accounts/test_user_admin.py ........................................     [ 27%]
 complaints/test_evidence.py .......................                      [ 30%]
-complaints/test_forms.py ..........                                      [ 32%]
-complaints/test_models.py .............................................. [ 37%]
-                                                                         [ 37%]
-routing/test_resolver.py ......                                          [ 38%]
-routing/test_sla.py .......                                              [ 39%]
+complaints/test_forms.py ..........                                      [ 31%]
+complaints/test_models.py .............................................. [ 36%]
+                                                                         [ 36%]
+routing/test_resolver.py ......                                          [ 37%]
+routing/test_sla.py .......                                              [ 38%]
 routing/tests.py .................................                       [ 42%]
 test_domain_fixtures.py ................                                 [ 44%]
-test_fixtures.py ......                                                  [ 45%]
-workflow/test_history.py ............                                    [ 47%]
-accounts/test_permissions_integration.py ............                    [ 48%]
-accounts/test_registration.py ..                                         [ 48%]
-accounts/test_user_admin.py ......                                       [ 49%]
-complaints/test_evidence.py ..                                           [ 49%]
-complaints/test_http_intake.py ...................................       [ 53%]
-complaints/test_identifiers.py .........................                 [ 56%]
-complaints/test_intake.py ......................................         [ 61%]
-complaints/test_submission.py ........................................   [ 66%]
+test_fixtures.py ......                                                  [ 44%]
+workflow/test_history.py ............                                    [ 46%]
+accounts/test_permissions_integration.py ............                    [ 47%]
+accounts/test_registration.py ..                                         [ 47%]
+accounts/test_user_admin.py ......                                       [ 48%]
+complaints/test_evidence.py ..                                           [ 48%]
+complaints/test_http_intake.py ...................................       [ 52%]
+complaints/test_identifiers.py .........................                 [ 55%]
+complaints/test_intake.py ......................................         [ 60%]
+complaints/test_submission.py .......................................... [ 65%]
+                                                                         [ 65%]
 routing/test_intake_entrypoint.py ........                               [ 66%]
-routing/test_intake_routing.py ...                                       [ 67%]
-routing/test_resolver.py .                                               [ 67%]
+routing/test_intake_routing.py ...                                       [ 66%]
+routing/test_resolver.py .                                               [ 66%]
 accounts/test_foundation.py ....                                         [ 67%]
-accounts/test_permissions_integration.py .                               [ 68%]
-complaints/test_checks.py ....................                           [ 70%]
-complaints/test_evidence.py ............................................ [ 75%]
-.....                                                                    [ 76%]
-complaints/test_forms.py ............................................... [ 81%]
-.....................................................................    [ 90%]
-complaints/test_models.py ...........                                    [ 91%]
-routing/test_sla.py ..................................                   [ 95%]
+accounts/test_permissions_integration.py .                               [ 67%]
+complaints/test_checks.py ....................                           [ 69%]
+complaints/test_evidence.py ............................................ [ 74%]
+.....                                                                    [ 75%]
+complaints/test_forms.py ............................................... [ 80%]
+.....................................................................    [ 88%]
+complaints/test_models.py ...........                                    [ 90%]
+routing/test_sla.py ..................................                   [ 94%]
+test_ci_checks.py ...........                                            [ 95%]
 test_coverage_summary.py ..............                                  [ 97%]
 test_fixtures.py ....                                                    [ 97%]
 test_run_tests.py ...........                                            [ 98%]
@@ -80,7 +82,7 @@ complaints/models.py                 92      1      2      0  98.94%   220
 complaints/reference_data.py         16      0      0      0 100.00%
 complaints/references.py              6      0      2      0 100.00%
 complaints/services.py                5      0      0      0 100.00%
-complaints/submission.py             66      1     20      1  97.67%   96
+complaints/submission.py             66      0     20      0 100.00%
 complaints/urls.py                    4      0      0      0 100.00%
 complaints/validators.py             14      0      6      0 100.00%
 complaints/views.py                 101      1     14      1  98.26%   134
@@ -101,6 +103,6 @@ workflow/models.py                   52      2     10      1  95.16%   27, 84
 workflow/services.py                 23      2      8      0  93.55%   55-56
 workflow/views.py                     1      1      0      0   0.00%   1
 ------------------------------------------------------------------------------
-TOTAL                              2104     65    508     38  95.98%
+TOTAL                              2104     64    508     37  96.06%
 Coverage JSON written to file coverage.json
-======================= 842 passed in 164.76s (0:02:44) ========================
+======================= 855 passed in 168.18s (0:02:48) ========================
