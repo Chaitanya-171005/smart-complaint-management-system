@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Configuration audit - SCMS</title>
+</head>
+<body>
+  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+  <h1>Configuration audit log</h1>
+  <p>Read-only record of administrative configuration changes. It is separate from complaint history,
+     and entries cannot be edited or deleted. Sensitive values are never stored.</p>
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Filter</button>
+  </form>
+  <table>
+    <tr><th>When</th><th>Administrator</th><th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr>
+    {% for event in page %}
+    <tr>
+      <td>{{ event.created_at|date:"Y-m-d H:i:s" }}</td>
+      <td>{{ event.actor_identifier }}</td>
+      <td>{{ event.get_action_display }}</td>
+      <td>{{ event.entity_type }} #{{ event.entity_id }}</td>
+      <td>{% for key, value in event.old_values.items %}{{ key }}: {{ value }}<br>{% empty %}-{% endfor %}</td>
+      <td>{% for key, value in event.new_values.items %}{{ key }}: {{ value }}<br>{% empty %}-{% endfor %}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="6">No configuration changes recorded.</td></tr>
+    {% endfor %}
+  </table>
+  <p>
+    {% if page.has_previous %}<a href="?{{ filter_query }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %}
+    Page {{ page.number }} of {{ page.paginator.num_pages }}
+    {% if page.has_next %}<a href="?{{ filter_query }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}
+  </p>
+</body>
+</html>

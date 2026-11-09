@@ -5,7 +5,21 @@ and its audit record are saved together or not at all. Sensitive values are repl
 stored. This is not complaint history and offers no way to edit or delete a record.
 """
 
-from .models import ConfigAuditEvent
+from .models import ConfigAuditEvent, User
+
+# The shared vocabulary: ``entity_type`` is the Django model's class name. F1 and F3 audit ONLY these entities, so the Administrator can read one
+# consistent trail (REQ-ADM-04). Adding an entity is a deliberate, reviewed change to this list.
+ENTITY_TYPES = {
+    # F1: administration of reference data and users
+    "Department": "Department",
+    "Location": "Location",
+    "User": "User role and membership",
+    # F3: routing, SLA and escalation configuration
+    "Category": "Category",
+    "RoutingRule": "Routing rule",
+    "SLAConfiguration": "SLA configuration",
+    "EscalationPolicy": "Escalation policy",
+}
 
 # Field names that must never reach the audit table, whatever the caller passes.
 SENSITIVE_FIELDS = frozenset(
@@ -37,7 +51,17 @@ def _clean(values):
 
 
 def record_change(*, actor, entity_type, entity_id, action, old=None, new=None):
-    """Append one audit record. ``actor`` must be the acting (authenticated) user."""
+    """Append one audit record. ``actor`` must be the acting (authenticated) user.
+
+    Raises ``ValueError`` for an unknown entity or action: that is a programming error in the
+    calling module, caught in tests, never something a user can trigger.
+    """
+    if entity_type not in ENTITY_TYPES:
+        raise ValueError(f"Unknown configuration entity {entity_type!r}; see ENTITY_TYPES.")
+    if action not in ConfigAuditEvent.Action.values:
+        raise ValueError(f"Unknown configuration action {action!r}.")
+    if not isinstance(actor, User) or actor.pk is None:
+        raise ValueError("A configuration change must be recorded against a saved user.")
     return ConfigAuditEvent.objects.create(
         actor=actor,
         actor_identifier=getattr(actor, "email", "") or "",

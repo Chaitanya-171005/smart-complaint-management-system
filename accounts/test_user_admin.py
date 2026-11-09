@@ -86,7 +86,7 @@ def test_unchanged_request_changes_and_records_nothing(admin, person):
 
 def test_change_writes_an_audit_record_and_a_security_event(admin, person, dept):
     svc.set_role_and_membership(admin, person, role="STAFF", department=dept)
-    audit = ConfigAuditEvent.objects.get(entity_type="user")
+    audit = ConfigAuditEvent.objects.get(entity_type="User")
     assert audit.actor == admin and audit.entity_id == str(person.pk) and audit.action == "UPDATE"
     assert audit.old_values == {"role": "COMPLAINANT", "department": None}
     assert audit.new_values == {"role": "STAFF", "department": dept.pk}
@@ -152,7 +152,7 @@ def test_invalid_combinations_are_refused_and_change_nothing(admin, person, dept
         svc.set_role_and_membership(admin, person, role=role, department=dept if department else None)
     assert snapshot() == before
     assert events("ROLE_CHANGE_REFUSED").count() == 1 and not events("ROLE_CHANGED").exists()
-    assert not ConfigAuditEvent.objects.filter(entity_type="user").exists()
+    assert not ConfigAuditEvent.objects.filter(entity_type="User").exists()
 
 
 def test_unknown_and_inactive_departments_cannot_be_assigned(admin, person, dept):

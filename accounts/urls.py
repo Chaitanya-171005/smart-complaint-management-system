@@ -19,6 +19,7 @@ urlpatterns = [
     path("admin-config/departments/<int:pk>/active/", admin_views.department_active, name="admin_department_active"),
     path("admin-config/users/", admin_views.users, name="admin_users"),
     path("admin-config/users/<int:pk>/edit/", admin_views.user_edit, name="admin_user_edit"),
+    path("admin-config/audit/", admin_views.audit_log, name="admin_audit"),
     path("admin-config/locations/", admin_views.locations, name="admin_locations"),
     path("admin-config/locations/<int:pk>/edit/", admin_views.location_edit, name="admin_location_edit"),
     path("admin-config/locations/<int:pk>/active/", admin_views.location_active, name="admin_location_active"),
