@@ -3,17 +3,7 @@
 import re
 
 import pytest
-from django.apps import apps
 from django.core.exceptions import ValidationError
-
-
-@pytest.fixture
-def real_complaint_factory(complaint_factory):
-    try:
-        apps.get_model("complaints", "Complaint")
-    except LookupError:
-        pytest.skip("Complaint fixture checks require the schema from PR #62.")
-    return complaint_factory
 
 
 def test_reference_factories_are_unique_and_keep_overrides(category_factory, location_factory):
@@ -58,8 +48,29 @@ def test_routing_configuration_is_one_consistent_graph(routing_configuration):
     assert config["rule"].location_code == config["location"].code
     assert config["rule"].department_id == config["policy"].default_department_id == config["department"].pk
     assert config["policy"].key == "default"
-    assert config["sla"].duration_minutes == config["policy"].interval_minutes == 120
+    assert config["sla"].duration_minutes == 120
+    assert config["policy"].interval_minutes == 120
     assert config["policy"].maximum_level == 2
+
+
+@pytest.mark.parametrize("existing", [False, True])
+def test_invalid_policy_is_not_persisted(request, monkeypatch, department_factory, existing):
+    from routing.models import EscalationPolicy
+
+    assert not EscalationPolicy.objects.filter(key="default").exists()
+    if existing:
+        EscalationPolicy.objects.create(
+            default_department=department_factory(), interval_minutes=30, maximum_level=1,
+        )
+    before = list(EscalationPolicy.objects.values())
+
+    def reject_policy(self, *args, **kwargs):
+        raise ValidationError("Synthetic invalid escalation policy")
+
+    monkeypatch.setattr(EscalationPolicy, "full_clean", reject_policy)
+    with pytest.raises(ValidationError, match="Synthetic invalid escalation policy"):
+        request.getfixturevalue("routing_configuration")
+    assert list(EscalationPolicy.objects.values()) == before
 
 
 @pytest.mark.parametrize("case", [1, 2])
@@ -77,11 +88,13 @@ def test_reference_factory_rows_do_not_leak_between_tests(case, category_factory
 
 
 @pytest.mark.parametrize("anonymous", [False, True])
-def test_complaint_factory_persists_valid_identity(real_complaint_factory, anonymous):
-    complaint = real_complaint_factory(anonymous=anonymous)
+def test_complaint_factory_persists_valid_identity(complaint_factory, anonymous):
+    complaint = complaint_factory(anonymous=anonymous)
     complaint.refresh_from_db()
     complaint.full_clean()
     assert re.fullmatch(r"SCMS-[0-9]{4}-[0-9]{6}", complaint.complaint_id)
+    assert complaint.status == "ASSIGNED" and complaint.department_id is not None
+    assert complaint.unrouted is True and complaint.routing_rule_key == ""
     if anonymous:
         assert complaint.submitted_by_id is None
         assert re.fullmatch(r"[0-9a-f]{64}", complaint.reference_digest)
@@ -90,11 +103,11 @@ def test_complaint_factory_persists_valid_identity(real_complaint_factory, anony
         assert complaint.reference_digest is None
 
 
-def test_complaint_factory_preserves_explicit_graph(real_complaint_factory, routing_configuration,
+def test_complaint_factory_preserves_explicit_graph(complaint_factory, routing_configuration,
                                                    user_factory, staff_user):
     config = routing_configuration
     owner = user_factory()
-    complaint = real_complaint_factory(
+    complaint = complaint_factory(
         category_record=config["category"], location_record=config["location"],
         submitted_by=owner, department=config["department"], assignee=staff_user,
         priority="HIGH", status="ASSIGNED", unrouted=False,
@@ -104,16 +117,16 @@ def test_complaint_factory_preserves_explicit_graph(real_complaint_factory, rout
     assert complaint.category == config["category"].name
     assert complaint.location_code == config["location"].code
     assert complaint.submitted_by_id == owner.pk
-    assert complaint.department_id == staff_user.department_id
+    assert complaint.department_id == config["department"].pk
     assert complaint.assignee_id == staff_user.pk
     assert complaint.priority == "HIGH" and complaint.status == "ASSIGNED"
     assert complaint.routing_rule_key == str(config["rule"].pk)
 
 
-def test_repeated_complaint_factory_calls_reserve_unique_ids(real_complaint_factory):
+def test_repeated_complaint_factory_calls_reserve_unique_ids(complaint_factory):
     from complaints.models import ComplaintIdSequence
 
-    rows = [real_complaint_factory(anonymous=True) for _ in range(3)]
+    rows = [complaint_factory(anonymous=True) for _ in range(3)]
     assert len({row.pk for row in rows}) == 3
     assert len({row.complaint_id for row in rows}) == 3
     assert len({row.reference_digest for row in rows}) == 3
@@ -121,7 +134,7 @@ def test_repeated_complaint_factory_calls_reserve_unique_ids(real_complaint_fact
     assert ComplaintIdSequence.objects.get(year=year).last_value == 3
 
 
-def test_failed_complaint_fixture_rolls_back_its_graph_and_id(real_complaint_factory):
+def test_failed_complaint_fixture_rolls_back_its_graph_and_id(complaint_factory):
     from accounts.models import Location
     from complaints.models import Complaint, ComplaintIdSequence
     from routing.models import Category
@@ -129,22 +142,22 @@ def test_failed_complaint_fixture_rolls_back_its_graph_and_id(real_complaint_fac
     before = (Category.objects.count(), Location.objects.count(), Complaint.objects.count(),
               list(ComplaintIdSequence.objects.values_list("year", "last_value")))
     with pytest.raises(ValidationError):
-        real_complaint_factory(rating=6)
+        complaint_factory(rating=6)
     after = (Category.objects.count(), Location.objects.count(), Complaint.objects.count(),
              list(ComplaintIdSequence.objects.values_list("year", "last_value")))
     assert after == before
 
 
-def test_anonymous_factory_refuses_an_account_link(real_complaint_factory, user_factory):
+def test_anonymous_factory_refuses_an_account_link(complaint_factory, user_factory):
     with pytest.raises(ValidationError):
-        real_complaint_factory(anonymous=True, submitted_by=user_factory())
+        complaint_factory(anonymous=True, submitted_by=user_factory())
 
 
 @pytest.mark.parametrize("case", [1, 2])
-def test_complaint_factory_database_isolation(case, real_complaint_factory):
+def test_complaint_factory_database_isolation(case, complaint_factory):
     from complaints.models import Complaint
 
     identifier = "SCMS-2026-999998"
     assert not Complaint.objects.filter(complaint_id=identifier).exists()
-    real_complaint_factory(complaint_id=identifier)
+    complaint_factory(complaint_id=identifier)
     assert Complaint.objects.filter(complaint_id=identifier).count() == 1

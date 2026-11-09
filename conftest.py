@@ -149,18 +149,21 @@ def routing_configuration(db, department, category_factory, location_factory,
     location = location_factory()
     rule = routing_rule_factory(category=category, location_code=location.code)
     sla = sla_factory(category=category)
-    policy, _ = EscalationPolicy.objects.update_or_create(
-        key="default", defaults={"default_department": department,
-                                 "interval_minutes": 120, "maximum_level": 2},
-    )
+    policy = EscalationPolicy.objects.filter(key="default").first()
+    if policy is None:
+        policy = EscalationPolicy(key="default")
+    policy.default_department = department
+    policy.interval_minutes = 120
+    policy.maximum_level = 2
     policy.full_clean()
+    policy.save()
     return {"department": department, "category": category, "location": location,
             "rule": rule, "sla": sla, "policy": policy}
 
 
 @pytest.fixture
 def complaint_factory(db, user_factory, department, category_factory, location_factory):
-    """Persist valid synthetic Complaints; requires the schema supplied by PR #62.
+    """Persist valid synthetic Complaints in the merged application schema.
 
     category_record/location_record select references; other overrides name model
     fields. anonymous=True generates a digest and discards the raw reference.
@@ -189,7 +192,7 @@ def complaint_factory(db, user_factory, department, category_factory, location_f
                 "description": "The light in this synthetic test room does not turn on.",
                 "priority": model.Priority.LOW, "department": department,
                 "submitted_at": submitted_at, "due_at": submitted_at + timedelta(hours=2),
-                "unrouted": True,
+                "status": model.Status.ASSIGNED, "unrouted": True,
             }
             values.update(overrides)
             if "complaint_id" not in values:

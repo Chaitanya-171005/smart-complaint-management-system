@@ -52,11 +52,13 @@ Domain fixtures also live in root conftest.py:
 | `routing_rule_factory(**fields)` | Category route in the shared `department` by default; supply `category=None` and a location code for a location-only route |
 | `sla_factory(**fields)` | Category-specific synthetic 120-minute LOW SLA; seeded global SLAs remain unchanged |
 | `routing_configuration` | Dictionary containing one related `department`, `category`, `location`, `rule`, `sla` and default `policy` |
-| `complaint_factory(...)` | Valid persisted Complaint with an allocated ID; requires PR #62's schema |
+| `complaint_factory(...)` | Valid persisted ASSIGNED Complaint with an allocated ID, using the merged schema |
 
 `routing_configuration` temporarily sets the default escalation policy to its
 synthetic department, 120-minute interval and maximum level 2. Pytest rolls back
 these changes after each test. These values are fixture data, not campus defaults.
+The policy is validated before either creating or updating its database row.
+The SLA duration and escalation interval are independent settings.
 Request fixtures explicitly; they do not seed configuration for unrelated tests.
 
 Complaint factories accept `category_record` and `location_record` to reuse real
@@ -73,9 +75,10 @@ def test_owner_record(complaint_factory, complainant_user, routing_configuration
     assert complaint.submitted_by_id == complainant_user.pk
 ```
 
-The default Complaint is synthetic, with `unrouted=True` and a due time two hours
-after submission. The factory does not perform B14/B16 routing or SLA calculation,
-write initial history, or create an intake receipt. Those services require their
+The default Complaint is synthetic, with status `ASSIGNED`, a department,
+`unrouted=True`, an empty rule key and a due time two hours after submission.
+This represents a fallback-assigned record. The factory does not perform B14/B16
+routing or SLA calculation, write initial history, or create an intake receipt. Those services require their
 own integration tests. `anonymous=True` invokes the real reference-generation
 method and retains only the digest; it does not return or preserve the raw
 reference. Reference-display tests must exercise the intake service directly.
@@ -89,9 +92,10 @@ parameterized cases create the same unique values after asserting their
 absence, verifying test database cleanup without relying on execution order.
 
 test_domain_fixtures.py checks real reference relationships, overrides, uniqueness,
-seed preservation, rollback, anonymous identity and isolation. Complaint cases
-report an explicit dependency skip while PR #62 is absent. A combined checkout
-containing that schema must execute those cases before accepting its integration.
+seed preservation, rollback, anonymous identity and isolation. The Complaint
+schema is merged, so Complaint fixture cases run directly with no dependency
+skip guard. A missing model is a test failure. Policy-validation failures are
+checked for both new and existing policies without persisting invalid changes.
 Run `python -m pytest test_fixtures.py test_domain_fixtures.py --no-cov -q`.
 
 All values are synthetic, not confirmed campus policy. scms_admin_user has
@@ -99,6 +103,19 @@ the application ADMIN role, not Django superuser access. Only tests requesting
 the shared user factory temporarily use the fast salted MD5 test hasher;
 production settings and unrelated tests retain their own password settings.
 Each module owner maintains their functional tests.
+
+## Test runtime diagnostics
+
+To include the ten slowest test phases in the normal evidence output, run:
+
+    PYTEST_ADDOPTS="--durations=10" python scripts/run_tests.py --evidence-dir docs/evidence/e02-domain-fixtures
+
+Keep the normal coverage options and password settings for this comparison.
+The earlier 135-second result was recorded on the contributor's macOS machine;
+it is an observed run time, not an application performance benchmark. Compare
+setup, call and teardown timings before attributing the difference to hardware,
+Python version, password hashing or other local conditions. Do not change
+production password hashing or skip tests to shorten a report.
 
 ## Coverage gate
 
@@ -148,7 +165,6 @@ The initial base was confirmed as 8766bf27d4744a0f0221c97742305dc9b59455ea.
 
 ## Remaining scope
 
-Reference/configuration fixtures are available. Complaint fixtures require the
-schema from PR #62 and are verified in a combined checkout before integration.
+Reference/configuration and Complaint fixtures use the merged application models.
 Full module acceptance, continued tests for new features and Jenkins/GitHub
 Actions integration remain pending. Issue #19 stays open.
