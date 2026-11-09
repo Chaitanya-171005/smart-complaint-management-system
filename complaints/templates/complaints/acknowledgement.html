@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complaint submitted - SCMS</title></head>
+<body>
+  <h1>Your complaint was submitted</h1>
+  <dl>
+    <dt>Complaint ID</dt><dd>{{ complaint.complaint_id }}</dd>
+    <dt>Submitted</dt><dd>{{ submitted_at|date:"c" }}</dd>
+    <dt>Status</dt><dd>{{ complaint.get_status_display }}</dd>
+    <dt>Due</dt><dd>{{ complaint.due_at|date:"c" }}</dd>
+  </dl>
+  {% if attachments %}
+  <h2>Submitted evidence</h2>
+  <ul>{% for attachment in attachments %}
+    <li><a href="{% url 'complaints:download_evidence' pk=attachment.pk %}">{{ attachment.original_name }}</a></li>
+  {% endfor %}</ul>
+  {% endif %}
+  <p><a href="{% url 'accounts:home' %}">Home</a></p>
+  <p><a href="{% url 'complaints:submit' %}">Start another complaint</a></p>
+</body>
+</html>

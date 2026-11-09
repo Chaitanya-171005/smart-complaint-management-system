@@ -84,9 +84,9 @@ migration consistency checks. Tests use synthetic configuration, real persistent
 models/private files, required failure injection, migration backfill, concurrent
 same-key requests and authorized downloads against an actual Attachment.
 
-Before closing the issues, implement and review the authenticated CSRF-protected
-page/POST, reference-option/error handling, confirmed D01 emergency notice,
-post-commit acknowledgement and GET/HEAD-only protected download endpoint.
+The authenticated page/POST, reference/error handling, post-commit acknowledgement
+and protected GET/HEAD download endpoint are implemented in B07_HTTP.md. They
+require review and confirmed D01 references/emergency information before release.
 Keep the original request key on timeout; never present failed input as accepted.
 The endpoint must be non-atomic if ATOMIC_REQUESTS is enabled.
 
