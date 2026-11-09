@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Submit a complaint - SCMS</title></head>
+<body>
+  <nav><a href="{% url 'accounts:home' %}">Home</a></nav>
+  <h1>Submit a complaint</h1>
+  <aside aria-labelledby="emergency-heading">
+    <h2 id="emergency-heading">For emergencies</h2>
+    <p>{{ emergency_notice|linebreaksbr }}</p>
+  </aside>
+  <form method="post" enctype="multipart/form-data" action="{% url 'complaints:submit' %}">
+    {% csrf_token %}
+    <input type="hidden" name="request_token" value="{{ request_token }}">
+    {{ form.as_p }}
+    <p><label for="id_evidence">Evidence (optional)</label><br>
+      <input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf">
+      <br>Attach up to three JPEG, PNG or PDF files. Select the same files again when retrying.
+    </p>
+    <p>Keep this form if the response is interrupted. Retry the same request with the same details and files.</p>
+    <button type="submit"{% if form.configuration_unavailable or not request_token %} disabled{% endif %}>Submit complaint</button>
+  </form>
+  {% if not form.is_bound or not request_token %}
+  <p><a href="{% url 'complaints:submit' %}">Start a new form</a></p>
+  {% endif %}
+</body>
+</html>
