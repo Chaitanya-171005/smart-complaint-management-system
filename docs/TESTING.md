@@ -165,6 +165,9 @@ The initial base was confirmed as 8766bf27d4744a0f0221c97742305dc9b59455ea.
 
 ## Remaining scope
 
+See [CI_TEST_HANDOFF.md](CI_TEST_HANDOFF.md) for the shared pipeline check command,
+artifact contract and E03/E04 ownership. Real pipeline execution is still required.
+
 Reference/configuration and Complaint fixtures use the merged application models.
 Full module acceptance, continued tests for new features and Jenkins/GitHub
 Actions integration remain pending. Issue #19 stays open.
