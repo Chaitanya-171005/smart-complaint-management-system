@@ -221,10 +221,7 @@ def test_fresh_rows_from_the_database_work_without_loading_related_objects(campu
 
 
 def test_real_complaint_model_follows_contract():
-    try:
-        real = apps.get_model("complaints", "Complaint")
-    except LookupError:
-        pytest.skip("complaints.Complaint is not merged yet; contract: docs/AUTHORIZATION.md")
+    real = apps.get_model("complaints", "Complaint")
     fields = {f.name: f for f in real._meta.get_fields()}
     for name in (perm.OWNER_FIELD, perm.DEPARTMENT_FIELD, perm.ASSIGNEE_FIELD):
         assert name in fields, f"Complaint must have a '{name}' field (docs/AUTHORIZATION.md)"
