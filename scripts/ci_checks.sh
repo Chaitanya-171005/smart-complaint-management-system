@@ -17,6 +17,11 @@ if [ -e "$evidence_dir" ]; then
     exit 2
 fi
 
+if [ -z "${DJANGO_SECRET_KEY:-}" ]; then
+    printf '%s\n' 'Export DJANGO_SECRET_KEY with a test-only value before running CI checks.' >&2
+    exit 2
+fi
+
 "$ci_python" manage.py check
 "$ci_python" manage.py makemigrations --check --dry-run
 "$ci_python" scripts/run_tests.py --evidence-dir "$evidence_dir"

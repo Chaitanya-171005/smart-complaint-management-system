@@ -7,15 +7,22 @@ Related issues: #19 (Atul), #27 (Chaitanya, Jenkins/deployment), and #40
 
 Use a clean checkout and the project's virtual environment. Install both
 requirements files, then supply an ephemeral test-only Django secret through
-`DJANGO_SECRET_KEY`. Never use production credentials or a production database.
+an exported `DJANGO_SECRET_KEY`. The wrapper refuses an unset or empty value
+with a clear message and exit code 2. Never use production credentials or a
+production database.
 Follow SETUP.md for supported local configuration and Python requirements.
+For local use, a value stored only in `.env` must be loaded into the wrapper's
+environment first; the wrapper does not parse or execute `.env` itself.
 
 ```sh
 python -m pip install -r requirements.txt -r requirements-dev.txt
 sh scripts/ci_checks.sh
 ```
 
-The entry point works from any working directory. It runs, in order:
+Invoke the entry point using its path from any working directory. It switches
+to the repository root before running the checks. **Relative evidence-directory
+arguments are relative to the repository root**, not the caller's directory;
+absolute arguments retain their supplied destination. It runs, in order:
 
 1. Django system checks.
 2. Migration-drift checks (`makemigrations --check --dry-run`).
@@ -30,6 +37,16 @@ An optional first argument selects a different **new** evidence directory.
 Existing destinations are refused to avoid publishing stale results. Set
 `SCMS_CI_PYTHON` to a Python executable path if the environment does not expose
 its activated interpreter as `python`.
+
+`test_ci_checks.py` runs the real shell wrapper in isolated temporary checkouts
+with a fake interpreter supplied through `SCMS_CI_PYTHON`. It verifies argument
+refusal, existing destinations, stage order, failure exit propagation, path
+semantics, unique default destinations and the missing-secret diagnostic.
+These subprocess contract tests do not substitute for a real Django/test run.
+Generate final execution evidence **through the wrapper**, from a clean source
+commit, into a new directory. Preserve previously committed evidence directories.
+Record the actual wrapper command, source revision and returned exit code beside
+the runner reports so the invocation can be distinguished from a direct runner call.
 
 ## Integrate and retain evidence
 
@@ -58,6 +75,8 @@ E03 and must be verified there rather than inferred from a SQLite result.
   #27 and #40. Do not claim a CI service was exercised from a local run alone.
 
 For a safe failure check in an isolated test job, `EVIDENCE_MAX_BYTES=0` causes
-the existing Django system check to refuse the configuration. Do not apply this
+the existing Django system check to refuse the configuration. Use a throwaway
+job with an exported, test-only `DJANGO_SECRET_KEY`; without it the wrapper stops
+before the intended configuration failure is exercised. Do not apply this
 setting to a running deployment. Final persistence, security/static checks and
 PostgreSQL/container acceptance remain owned by E03 and its related tasks.
