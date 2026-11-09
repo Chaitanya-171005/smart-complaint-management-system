@@ -1,8 +1,8 @@
 # Authenticated complaint submission and evidence HTTP flow
 
 Related to #12, #13, #14 and #15. This builds on PR #67's real aggregate service.
-While #67 is under review, keep this contribution on a separate branch/PR based
-on that branch. Retarget to Main once the dependency merges.
+PR #67 is merged. This contribution incorporates Main through merge b632e55;
+the pull request should now target Main and retain only the HTTP-flow changes.
 
 ## Routes and behavior
 
@@ -58,13 +58,43 @@ explicitly synthetic configuration and a visibly labelled synthetic notice.
 Previously accepted records remain accessible through their authorized routes
 when new intake is disabled.
 
+The enabling value is case-sensitive: only the exact string `True` enables
+intake; `true`, `1`, an unset value or `False` leave it disabled. E03 must pass
+both `COMPLAINT_INTAKE_ENABLED` and the confirmed, nonblank
+`COMPLAINT_EMERGENCY_NOTICE` into the Docker/Jenkins application environment.
+Setting them only in a developer's shell does not configure a deployed container.
+
+## Upload request boundary (Q02/E03 deployment requirement)
+
+The HTTP view does not cap the total request body before multipart parsing.
+Django can spool uploads larger than `FILE_UPLOAD_MAX_MEMORY_SIZE` into temporary
+files; `DATA_UPLOAD_MAX_MEMORY_SIZE` excludes uploaded-file bytes. B09's maximum
+file count, per-file byte limit and content checks apply after receipt, so they
+do not prevent an oversized or many-file request from consuming ingress and
+temporary-disk resources.
+
+Before enabling deployed intake, Q02/E03 must configure and verify a total
+request-body limit at the reverse proxy, before requests reach Django. Align
+the limit with the confirmed D02 per-file limit, the complete three-file batch
+and a bounded allowance for fields/multipart overhead. Verify a valid maximum
+batch succeeds and an over-limit body is rejected with 413 without reaching
+the application. Django's memory thresholds are not a substitute for that limit.
+No reverse-proxy/deployment configuration exists in this contribution; the
+deployment limit and its verification remain an explicit release prerequisite.
+
 ## Validation and remaining scope
 
 Run `python -m pytest complaints/test_http_intake.py --no-cov`, system checks and
 migration drift checks. Generate full-suite evidence from a clean source commit
-into a new `docs/evidence/b07-http/` directory; preserve all older evidence.
-Development verification passed all 35 HTTP tests and the full 842-test suite
-with no skips and all module coverage gates passing. Tests exercise actual
+under `docs/evidence/b07-http/`, after committing the Main merge and review edits.
+The original evidence commit fe91b3e directly follows source commit
+f3113003ea10f3cddaa02493da4a521f60fe4392, matching its recorded `source_revision`;
+that original 842-test run remains in Git history. Refresh the current reports
+from the updated clean source and commit those reports separately.
+Verification with Main merged passed all 855 tests with no skips, including the
+35 HTTP cases; all module coverage gates and Django system/migration checks
+passed. The extra tests come from the merged CI-wrapper and B10 review updates.
+Tests exercise actual
 HTTP, storage and DB paths, CSRF, required fields, escaping,
 token/account scope, conflict/replay, configuration failures, history rollback,
 attachment GET/HEAD permissions, current membership and ATOMIC_REQUESTS.
