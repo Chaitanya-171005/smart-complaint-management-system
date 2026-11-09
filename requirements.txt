@@ -3,3 +3,4 @@ python-dotenv
 Pillow==13.0.0
 pypdf==6.21.4
 psycopg[binary]==3.3.8
+gunicorn==26.2.0

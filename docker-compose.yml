@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:17.6
+    environment:
+      POSTGRES_DB: ${DJANGO_DB_NAME:?Set DJANGO_DB_NAME}
+      POSTGRES_USER: ${DJANGO_DB_USER:?Set DJANGO_DB_USER}
+      POSTGRES_PASSWORD: ${DJANGO_DB_PASSWORD:?Set DJANGO_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY}
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
+      DJANGO_DB_ENGINE: postgresql
+      DJANGO_DB_NAME: ${DJANGO_DB_NAME:?Set DJANGO_DB_NAME}
+      DJANGO_DB_USER: ${DJANGO_DB_USER:?Set DJANGO_DB_USER}
+      DJANGO_DB_PASSWORD: ${DJANGO_DB_PASSWORD:?Set DJANGO_DB_PASSWORD}
+      DJANGO_DB_HOST: db
+      DJANGO_DB_PORT: "5432"
+      PRIVATE_EVIDENCE_ROOT: /data/private-evidence
+      COMPLAINT_INTAKE_ENABLED: ${COMPLAINT_INTAKE_ENABLED:-False}
+      COMPLAINT_EMERGENCY_NOTICE: ${COMPLAINT_EMERGENCY_NOTICE:-}
+    volumes:
+      - private_evidence:/data/private-evidence
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    restart: unless-stopped
+volumes:
+  postgres_data:
+  private_evidence:
