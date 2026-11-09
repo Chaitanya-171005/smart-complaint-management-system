@@ -20,6 +20,8 @@ from complaints import intake, submission
 from complaints.evidence import evidence_download_response
 from complaints.models import Attachment, Complaint, ComplaintIdSequence, IntakeReceipt
 from routing.models import Category, RoutingDecision, SLAConfiguration
+from routing.resolver import RoutingConfigurationError
+from routing.sla import SLAConfigurationError
 from workflow.models import ComplaintHistory
 
 pytestmark = pytest.mark.django_db(transaction=True)
@@ -156,7 +158,7 @@ def test_unicode_is_normalized_before_validation_storage_and_retry(args):
 
 
 @pytest.mark.parametrize("target", [
-    "complaints.submission.route_and_record", "complaints.submission.derive_priority_and_due",
+    "routing.intake.route_and_record", "routing.intake.derive_priority_and_due",
     "complaints.submission.record_history", "complaints.submission.Attachment.objects.create",
     "complaints.intake.IntakeReceipt.objects.create", "database_commit",
 ])
@@ -173,6 +175,22 @@ def test_required_failures_rollback_graph_identifier_and_files(args, settings, t
     assert_empty(settings)
     result = submission.submit_authenticated_complaint(**args, files=[image_upload()])
     assert result.complaint_id.endswith("000001")
+
+
+@pytest.mark.parametrize("failure,error", [("routing", RoutingConfigurationError), ("sla", SLAConfigurationError)])
+def test_real_configuration_errors_propagate_without_acceptance(args, routing_configuration, settings, failure, error):
+    if failure == "routing":
+        rule = routing_configuration["rule"]
+        rule.active = False
+        rule.save()
+        department = routing_configuration["policy"].default_department
+        department.active = False
+        department.save()
+    else:
+        SLAConfiguration.objects.update(active=False)
+    with pytest.raises(error):
+        submission.submit_authenticated_complaint(**args, files=[image_upload()])
+    assert_empty(settings)
 
 
 def test_second_history_failure_removes_first_event_too(args, settings):

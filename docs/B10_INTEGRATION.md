@@ -21,11 +21,13 @@ verified MIME/size/stage. Storage uses immutable byte snapshots of that input.
 Current labels, routing policy and derived priority/deadline are not retry input.
 
 The guard rechecks and locks the account. For a new operation, the service
-rechecks active Category/Location rows within the transaction, records B14 routing,
-derives B16 effective priority/deadline, creates Complaint and INTAKE Attachment
+rechecks active Category/Location rows within the transaction and calls B14's
+`route_and_prioritize()` entry point. That entry point derives B16 priority/deadline
+before recording routing. The adapter creates Complaint and INTAKE Attachment
 metadata, and appends B21 SUBMITTED then ALLOCATED history with states SUBMITTED
-then ASSIGNED. It copies department, unrouted and str(decision.rule_id), or an
-empty key for fallback. An INTAKE attachment's uploader is the authorized account.
+then ASSIGNED. `RoutingOutcome.as_complaint_fields()` supplies department,
+unrouted, the rule key, priority, due_at and ASSIGNED status, so the field mapping
+has one owner. An INTAKE attachment's uploader is the authorized account.
 F4 must independently authorize RESOLUTION writes and enforce its operation limit.
 
 The ID reservation, aggregate, routing, history and linked retry receipt commit
@@ -35,6 +37,23 @@ their newly staged files are removed. Changed normalized inputs are refused.
 Required failures, including database commit errors, roll back the graph and ID,
 and B09 removes this attempt's new files. Existing accepted files remain intact.
 Storage and rollback failures are not silently converted into successful intake.
+
+`RoutingConfigurationError`, `SLAConfigurationError`, and
+`ValidationError(code="inactive_reference")` propagate to the HTTP caller.
+The future view must show a configuration/validation failure, preserve safe
+input and the original request key, and never render an acknowledgement for
+these errors. Idempotency conflicts and legacy reconciliation errors also remain
+refusals; a generic exception handler must not convert them into success.
+
+### F4 event decision still required
+
+Automatic routing currently emits ALLOCATED with actor SYSTEM and the state
+transition SUBMITTED to ASSIGNED. B15's Head-to-Staff allocation will also use
+ALLOCATED with its own actor/state context. Before #15 closes, Tanmay/F4 must
+confirm whether those contexts distinguish the events sufficiently or whether
+automatic routing needs a separate event type. Track the shared contract with
+#31 and #23. This follow-up preserves the current event; it does not claim that
+F4 has confirmed the decision or introduce a new enum unilaterally.
 
 ## Additive migration and legacy receipts
 

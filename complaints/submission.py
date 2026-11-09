@@ -14,9 +14,8 @@ from django.core.files.base import ContentFile
 
 from accounts.models import Location, User
 from accounts.permissions import can_submit_complaint, require_permission
+from routing.intake import route_and_prioritize
 from routing.models import Category
-from routing.resolver import route_and_record
-from routing.sla import derive_priority_and_due
 from workflow.history_service import record_history
 from workflow.models import ComplaintHistory
 
@@ -95,18 +94,17 @@ def submit_authenticated_complaint(*, user, key, data, files=()):
         )
         if not form.is_valid():
             raise ValidationError(form.errors.as_data())
-        decision = route_and_record(context.complaint_id, category, location.code, now=context.submitted_at)
-        sla = derive_priority_and_due(category, fields["priority"], context.submitted_at)
+        outcome = route_and_prioritize(
+            complaint_id=context.complaint_id, category=category, location_code=location.code,
+            indicated_priority=fields["priority"], submitted_at=context.submitted_at,
+        )
         complaint = Complaint(
             complaint_id=context.complaint_id, submitted_by=context.user,
             category_key=str(category.pk), category=category.name,
             sub_category=fields["sub_category"], location_code=location.code,
             block=location.block, floor=location.floor, room_area=location.room_area,
             title=fields["title"], description=fields["description"],
-            priority=sla.priority, department=decision.department,
-            status=Complaint.Status.ASSIGNED, submitted_at=context.submitted_at, due_at=sla.due_at,
-            unrouted=decision.unrouted,
-            routing_rule_key=str(decision.rule_id) if decision.rule_id is not None else "",
+            submitted_at=context.submitted_at, **outcome.as_complaint_fields(),
         )
         complaint.full_clean()
         complaint.save(force_insert=True)
