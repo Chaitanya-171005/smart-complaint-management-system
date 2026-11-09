@@ -1,0 +1,10 @@
+{
+  "command": [
+    "sh",
+    "scripts/ci_checks.sh",
+    "docs/evidence/e02-ci-wrapper-review"
+  ],
+  "started_at_utc": "2026-11-09T08:10:39.932980+00:00",
+  "source_revision": "7d5f9f0108fb275ab746efa39e67c43043d9803e",
+  "exit_code": 0
+}
