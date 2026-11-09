@@ -207,6 +207,57 @@ class EscalationPolicy(models.Model):
         return f"Every {self.interval_minutes} min, maximum level {self.maximum_level}"
 
 
+class EscalationRunQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Escalation runs cannot be edited directly.")
+
+    def delete(self):
+        raise ValidationError("Escalation runs cannot be deleted.")
+
+
+class EscalationRun(models.Model):
+    """A run is created once and may only be finished once."""
+
+    class Status(models.TextChoices):
+        RUNNING = "RUNNING", "Running"
+        COMPLETED = "COMPLETED", "Completed"
+        FAILED = "FAILED", "Failed"
+
+    started_at = models.DateTimeField()
+    finished_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.RUNNING)
+    examined = models.PositiveIntegerField(default=0)
+    escalated = models.PositiveIntegerField(default=0)
+    skipped = models.PositiveIntegerField(default=0)
+    failed = models.PositiveIntegerField(default=0)
+    error = models.TextField(blank=True)
+
+    objects = EscalationRunQuerySet.as_manager()
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(
+                condition=(Q(status="RUNNING", finished_at__isnull=True)
+                           | Q(status__in=["COMPLETED", "FAILED"], finished_at__isnull=False)),
+                name="escalation_run_status_finished_consistent",
+            ),
+            models.CheckConstraint(
+                condition=Q(examined__gte=0, escalated__gte=0, skipped__gte=0, failed__gte=0),
+                name="escalation_run_counts_nonnegative",
+            ),
+        ]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old = type(self).objects.filter(pk=self.pk).first()
+            if old is None or old.status != self.Status.RUNNING or self.status not in (self.Status.COMPLETED, self.Status.FAILED) or self.started_at != old.started_at:
+                raise ValidationError("Escalation runs can only be finished once.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Escalation runs cannot be deleted.")
+
+
 
 
 class RoutingDecisionQuerySet(models.QuerySet):
