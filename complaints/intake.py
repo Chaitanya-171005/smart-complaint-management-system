@@ -1,7 +1,7 @@
 """B10 authenticated retry/transaction guard for trusted intake adapters.
 
-Complaint persistence is defined in complaints.models. The production operation
-adapter and HTTP submission flow remain tracked in #15 and #16. Only trusted
+Real authenticated persistence is supplied by complaints.submission. The HTTP
+submission flow remains tracked in #15 and #16. Only trusted
 application code may supply operation/after_commit callbacks.
 """
 
@@ -22,13 +22,17 @@ from accounts.models import User
 from accounts.permissions import can_submit_complaint, require_permission
 
 from .identifiers import allocate_complaint_id
-from .models import IntakeReceipt
+from .models import Complaint, IntakeReceipt
 
 HEX_DIGEST = re.compile(r"[0-9a-f]{64}\Z")
 
 
 class IdempotencyConflict(ValidationError):
     """A previously accepted request key was reused with different content."""
+
+
+class IntakeReconciliationRequired(ValidationError):
+    """A legacy receipt cannot safely be acknowledged as a real Complaint."""
 
 
 @dataclass(frozen=True)
@@ -76,7 +80,8 @@ class _ReplayResult(Exception):
         self.result = result
 
 
-def execute_intake(*, user, key, payload_digest, operation, staging=None, after_commit=None):
+def execute_intake(*, user, key, payload_digest, operation, staging=None, after_commit=None,
+                   require_complaint=False):
     """Run a trusted required-operation adapter once per (account, request key).
 
     operation(IntakeContext) must persist the real Complaint plus required
@@ -85,6 +90,8 @@ def execute_intake(*, user, key, payload_digest, operation, staging=None, after_
     The guard cannot infer whether an arbitrary callback implemented that contract.
 
     Own the OUTERMOST transaction: the result is returned only after commit.
+    Production adapters set require_complaint=True and return the persisted
+    Complaint. Legacy generic guard callers retain their existing behavior.
     Optional staging() returns B09's cleanup context manager. Its descriptors
     are context.evidence. It encloses the transaction and is unwound on replay
     too, so re-uploaded retry bytes cannot become orphaned duplicate files.
@@ -122,17 +129,33 @@ def execute_intake(*, user, key, payload_digest, operation, staging=None, after_
                             "This request key was already used with different submission data.",
                             code="idempotency_conflict",
                         )
+                    if require_complaint:
+                        complaint = receipt.accepted_complaint
+                        if (complaint is None or complaint.submitted_by_id != current_user.pk
+                                or complaint.submitted_at != receipt.submitted_at):
+                            raise IntakeReconciliationRequired(
+                                "This earlier submission requires reconciliation; do not start a duplicate.",
+                                code="intake_reconciliation",
+                            )
                     result = IntakeResult(receipt.complaint_id, receipt.submitted_at, True)
                 else:
                     submitted_at = timezone.now()
                     complaint_id = allocate_complaint_id(submitted_at=submitted_at)
                     context = IntakeContext(current_user, complaint_id, submitted_at, tuple(staged))
-                    operation(context)
+                    complaint = operation(context)
+                    if require_complaint:
+                        if (not isinstance(complaint, Complaint) or complaint._state.adding
+                                or complaint._state.db != "default"
+                                or complaint.complaint_id != complaint_id
+                                or complaint.submitted_by_id != current_user.pk
+                                or complaint.submitted_at != submitted_at):
+                            raise ValueError("The production operation must return its persisted Complaint.")
                     # No PENDING receipt is committed. The receipt, ID reservation
                     # and all callback writes either commit together or roll back.
                     IntakeReceipt.objects.create(
                         user=current_user, key_digest=key_digest, payload_digest=payload_digest,
                         complaint_id=complaint_id, submitted_at=submitted_at,
+                        accepted_complaint=complaint if require_complaint else None,
                     )
                     result = IntakeResult(complaint_id, submitted_at, False)
                     if after_commit is not None:

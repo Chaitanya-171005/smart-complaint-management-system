@@ -45,8 +45,9 @@ class ComplaintIdSequence(models.Model):
 class IntakeReceipt(models.Model):
     """Internal authenticated retry receipt, committed with required intake writes.
 
-    complaint_id retains the accepted external ID. The Complaint FK migration is
-    tracked in #15 with the complete intake adapter and legacy receipt backfill.
+    complaint_id retains the external ID for compatibility. accepted_complaint
+    links real intake records; unmatched legacy receipts remain unlinked and
+    require reconciliation before the production service may replay them.
     A request key authorizes no complaint access.
     """
 
@@ -55,6 +56,10 @@ class IntakeReceipt(models.Model):
     key_digest = models.CharField(max_length=64, editable=False)
     payload_digest = models.CharField(max_length=64, editable=False)
     complaint_id = models.CharField(max_length=16, unique=True, editable=False)
+    accepted_complaint = models.OneToOneField(
+        "Complaint", to_field="complaint_id", null=True, blank=True,
+        on_delete=models.PROTECT, related_name="intake_receipt", editable=False,
+    )
     submitted_at = models.DateTimeField(editable=False)
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
 
@@ -64,6 +69,11 @@ class IntakeReceipt(models.Model):
                                     name="intake_receipt_user_key_unique"),
             models.CheckConstraint(condition=~Q(complaint_id=""),
                                    name="intake_receipt_has_identifier"),
+            models.CheckConstraint(
+                condition=Q(accepted_complaint__isnull=True)
+                | Q(accepted_complaint=models.F("complaint_id")),
+                name="intake_receipt_complaint_matches",
+            ),
         ]
 
 
@@ -208,3 +218,42 @@ class Complaint(models.Model):
 
     def __str__(self):
         return self.complaint_id
+
+
+class Attachment(models.Model):
+    """Private evidence metadata; bytes are opened only after parent authorization.
+
+    F2 writes INTAKE in its transaction. F4 must enforce its own resolution
+    permissions and batch limit before writing RESOLUTION. No public file URL.
+    """
+
+    class Stage(models.TextChoices):
+        INTAKE = "INTAKE", "Intake"
+        RESOLUTION = "RESOLUTION", "Resolution"
+
+    complaint = models.ForeignKey(Complaint, on_delete=models.PROTECT, related_name="attachments")
+    storage_name = models.CharField(max_length=36, unique=True, editable=False)
+    original_name = models.CharField(max_length=255)
+    content_type = models.CharField(max_length=16)
+    size = models.PositiveIntegerField()
+    sha256 = models.CharField(max_length=64, editable=False)
+    stage = models.CharField(max_length=10, choices=Stage.choices)
+    uploaded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.PROTECT, related_name="+",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(condition=Q(size__gt=0), name="attachment_nonempty"),
+            models.CheckConstraint(condition=Q(stage__in=["INTAKE", "RESOLUTION"]),
+                                   name="attachment_valid_stage"),
+            models.CheckConstraint(condition=Q(sha256__regex=r"\A[0-9a-f]{64}\Z"),
+                                   name="attachment_sha256_format"),
+            models.CheckConstraint(
+                condition=(Q(storage_name__regex=r"\A[0-9a-f]{32}\.jpg\Z", content_type="image/jpeg")
+                           | Q(storage_name__regex=r"\A[0-9a-f]{32}\.png\Z", content_type="image/png")
+                           | Q(storage_name__regex=r"\A[0-9a-f]{32}\.pdf\Z", content_type="application/pdf")),
+                name="attachment_storage_mime_matches",
+            ),
+        ]

@@ -1,7 +1,7 @@
 """Shared B09 validation, private storage and authorized download primitives.
 
-No public file URL is provided. Attachment persistence and the production view
-must be integrated with the future Complaint model; see docs/B09.md.
+No public file URL is provided. Real Attachment metadata is written by the
+authenticated submission service; production HTTP/F4 integration remains open.
 """
 
 import hashlib
@@ -112,7 +112,7 @@ def validate_evidence(files):
         name = getattr(upload, "name", "")
         if not isinstance(name, str):
             name = ""
-        name = name.replace("\\", "/").rsplit("/", 1)[-1]
+        name = unicodedata.normalize("NFC", name.replace("\\", "/").rsplit("/", 1)[-1])
         if not name or len(name) > 255 or any(
             unicodedata.category(char) in ("Cc", "Cf", "Zl", "Zp") for char in name
         ):
@@ -204,7 +204,7 @@ def evidence_download_response(*, user, attachment):
 
     attachment is trusted persistent metadata with complaint, storage_name and
     content_type. NEVER construct it from request fields or accept a separate
-    caller-selected complaint. The production metadata/view is still pending.
+    caller-selected complaint. Production HTTP view integration is still pending.
     """
     if attachment is None:
         raise Http404
