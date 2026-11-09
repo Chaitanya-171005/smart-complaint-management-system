@@ -1,2 +1,4 @@
 Django>=6.1.2,<6.2
 python-dotenv
+Pillow==13.0.0
+pypdf==6.21.4

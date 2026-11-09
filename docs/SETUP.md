@@ -31,3 +31,14 @@ Generate a secret key with:
 - Secrets come from environment variables (`.env`, never committed). `.env.example` lists the names.
 - Shared services to be agreed by F1-F4 in follow-up issues: permission checks (B04, see docs/AUTHORIZATION.md), history/event recording (B29, Q03), routing hook called by intake (F2 -> F3).
 - Tests: pytest with `pytest.ini`; each app keeps `test_*.py` beside its code.
+
+## Private evidence storage (B09 foundation)
+
+Install the updated runtime requirements for Pillow/pypdf. PRIVATE_EVIDENCE_ROOT
+may be set in .env to an absolute private persistent volume; the local default
+is ignored `private-evidence/`. Never expose it via MEDIA_URL, a static directory,
+a reverse-proxy file alias or a public bucket. There is no public evidence URL.
+New storage roots/files use 0700/0600; provision existing volumes with equivalent
+access restrictions. See B09.md for the integration contract and remaining work.
+EVIDENCE_MAX_BYTES defaults provisionally to 5000000 while D02 is pending; the
+other supported candidate is 5242880. This is not a recorded team decision.
