@@ -55,6 +55,12 @@ automatic routing needs a separate event type. Track the shared contract with
 #31 and #23. This follow-up preserves the current event; it does not claim that
 F4 has confirmed the decision or introduce a new enum unilaterally.
 
+B15 PR #68 proposes nullable `ComplaintHistory.actor` and `assignee` fields.
+Once merged, automatic routing (actor_kind SYSTEM, no account actor or assignee)
+can be distinguished from a Head's allocation (recorded Head and Staff assignee).
+F4 should use that B15 contract when closing the event question in #31/#23;
+the proposed fields do not by themselves constitute F4 confirmation.
+
 ## Additive migration and legacy receipts
 
 0004 adds Attachment and a nullable `IntakeReceipt.accepted_complaint` relation

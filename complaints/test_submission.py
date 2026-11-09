@@ -231,6 +231,20 @@ def test_invalid_or_derived_fields_refused_before_storage(args, settings, field,
     assert_empty(settings)
 
 
+@pytest.mark.parametrize("model,selector,field", [
+    (Category, "category", "name"), (Location, "location", "block"),
+])
+def test_invalid_active_reference_text_rolls_back_staged_files(args, settings, model, selector, field):
+    query = {"pk" if selector == "category" else "code": args["data"][selector]}
+    model.objects.filter(**query).update(**{field: "Invalid\nreference"})
+    with patch.object(submission, "route_and_prioritize") as route:
+        with pytest.raises(ValidationError) as error:
+            submission.submit_authenticated_complaint(**args, files=[image_upload()])
+        assert "__all__" in error.value.message_dict
+        route.assert_not_called()
+    assert_empty(settings)
+
+
 @pytest.mark.parametrize("model,selector", [(Category, "category"), (Location, "location")])
 def test_inactive_reference_is_rechecked_after_staging(args, settings, model, selector):
     from complaints.evidence import PrivateEvidenceStorage

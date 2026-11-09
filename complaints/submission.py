@@ -92,6 +92,8 @@ def submit_authenticated_complaint(*, user, key, data, files=()):
             categories=[CategoryOption(str(category.pk), category.name)],
             locations=[LocationOption(location.code, location.block, location.room_area, location.floor)],
         )
+        # _clean_fields validates user values, but active master-data labels can
+        # still contain invalid text from a direct DB write. Refuse that graph.
         if not form.is_valid():
             raise ValidationError(form.errors.as_data())
         outcome = route_and_prioritize(
