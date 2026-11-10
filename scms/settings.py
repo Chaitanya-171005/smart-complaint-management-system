@@ -191,3 +191,22 @@ ANONYMOUS_TRACKING_ENABLED = os.environ.get("ANONYMOUS_TRACKING_ENABLED", "False
 ANONYMOUS_TRACKING_LIMITER_READY = os.environ.get("ANONYMOUS_TRACKING_LIMITER_READY", "False") == "True"
 ANONYMOUS_TRACKING_REDIS_URL = os.environ.get("ANONYMOUS_TRACKING_REDIS_URL", "")
 ANONYMOUS_TRACKING_SOURCE_SECRET = os.environ.get("ANONYMOUS_TRACKING_SOURCE_SECRET", "")
+
+# Anonymous release requires an explicit HTTPS topology and all secure-cookie /
+# redirect settings. Local authenticated development remains available over HTTP.
+# 'proxy' opts into trust of this header ONLY after the ingress strips client
+# values, overwrites it, and blocks direct access to the application backend.
+SCMS_HTTPS_MODE = os.environ.get("DJANGO_HTTPS_MODE", "").strip()
+SECURE_PROXY_SSL_HEADER = (
+    ("HTTP_X_FORWARDED_PROTO", "https") if SCMS_HTTPS_MODE == "proxy" else None
+)
+SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
+SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", "False") == "True"
+CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", "False") == "True"
+
+# Proxy mode accepts X-Real-IP only from these exact ingress networks. The
+# ingress MUST overwrite the header; do not add broad/untrusted client networks.
+ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = [
+    value.strip() for value in os.environ.get("ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS", "").split(",")
+    if value.strip()
+]

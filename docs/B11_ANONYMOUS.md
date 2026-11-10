@@ -1,7 +1,6 @@
 # B11 anonymous intake and one-time reference
 
-Owner: Atul (F2). Related to #16 and #17. Builds on PR #69; keep the PR based on
-that branch until #69 merges, then update and retarget to Main. This implements
+Owner: Atul (F2). Related to #16 and #17. Builds on merged PR #69 and targets Main. This implements
 submission, not the separate B13 tracking/feedback routes.
 
 ## HTTP contract
@@ -19,8 +18,48 @@ privacy middleware must run first. Missing prerequisites return 503 without
 acceptance. `manage.py check --deploy` reports complaints.E002 if anonymous
 intake is enabled with incomplete application configuration.
 
+### Route decision relative to SAD section 5
+
+The SAD's conceptual `/anonymous/new/` is implemented as
+`/complaints/anonymous/`, named `complaints:anonymous_submit`, to keep F2 routes
+under the existing complaint namespace. This is an explicit route deviation,
+not an additional endpoint or a change in access/validation requirements.
+Login links and forms use the named route; the first-position privacy middleware
+protects the concrete complaint-prefixed path. Do not add an alias or rename it
+without extending that middleware and its isolation tests to every entry path.
+
+### HTTPS and trusted reverse-proxy configuration
+
+Local authenticated HTTP development keeps anonymous intake disabled. For
+anonymous release, explicitly select `DJANGO_HTTPS_MODE=direct` for TLS delivered
+directly to the application, or `proxy` for a verified TLS-terminating ingress.
+Both modes also require these exact settings:
+
+```dotenv
+DJANGO_SECURE_SSL_REDIRECT=True
+DJANGO_SESSION_COOKIE_SECURE=True
+DJANGO_CSRF_COOKIE_SECURE=True
+```
+
+Proxy mode sets `SECURE_PROXY_SSL_HEADER=("HTTP_X_FORWARDED_PROTO", "https")`;
+direct/blank modes never trust that client header. Only choose proxy mode after
+E03/Q02 (#27/#28) verify that the ingress strips incoming forwarded-protocol
+values, sets its own value, preserves the public Host, and blocks direct backend
+access. Never trust arbitrary client-supplied X-Forwarded-Proto. For example, a
+controlled nginx upstream sets `Host $host` and `X-Forwarded-Proto $scheme`.
+The actual TLS certificates, listener and network restrictions belong to E03.
+
+The release predicate and complaints.E002 check require an explicit valid mode,
+its matching proxy-header setting, SSL redirection, secure session/CSRF cookies
+and SecurityMiddleware. An unconfigured HTTPS deployment therefore cannot be
+attested merely by turning on the intake/privacy flags. Static checks cannot
+prove the external proxy is trustworthy; deployment tests must verify header
+spoofing, plain HTTP redirection, secure cookies, same-origin CSRF and successful
+HTTPS intake through the actual ingress before enabling release.
+
 Invalid fields/files return 400 with safe entered values and the same token.
-Changed content after acceptance returns 409. Required-operation failures return
+Changed content after acceptance returns 409, clears the unusable form token,
+disables resubmission and tells the user to reload/start a new form. Required-operation failures return
 a generic 503; unexpected view errors return a generic 500. None claim success
 or expose stack traces, SQL, file paths, reference values or private diagnostics.
 
@@ -73,6 +112,41 @@ A lost response can therefore mean a lost reference; there is deliberately no
 recovery endpoint or retry-based recovery. Starting a new form is a separate
 operation; users are told to retry the retained form to avoid duplicates.
 
+Operation tokens intentionally have no separate time expiry while receipt
+retention is undefined: a late same-operation retry can still acknowledge the
+original result without duplicating acceptance or redisplaying its reference.
+They are not read/ownership credentials and cannot recover a reference. A future
+expiry/retention policy must preserve a clear, safe retry contract; no arbitrary
+campus retention policy is assumed here. Public-intake abuse limiting remains
+optional hardening; B13's required tracking limit is separate.
+
+## Cross-module output acceptance
+
+`complainant_label` and `anonymous_summary` define the authorized output contract;
+they do not by themselves enforce future F3/F4 views, messages or reports.
+F3 integration work must cover queue/allocation (#23) and escalation (#26).
+F4 must cover notices/email (#36/#37), department reports (#39) and coordinate
+campus report/CSV consumers with their F1 owner (#8). Dedicated privacy follow-up
+tickets must be linked in PR #71 before re-review; #16/#17 stay open for actual
+owner-reviewed output/deployment acceptance.
+
+An explicit cross-branch regression lives in
+`integration_checks/anonymous_escalation.py`. In a checkout containing both
+#71 and unmerged B18/#70, run:
+
+```sh
+python -m pytest integration_checks/anonymous_escalation.py --no-cov -q
+```
+
+It creates a real anonymous intake, performs B18 escalation and calls a safe
+Head-notice hook using the real projection helpers and Django locmem email.
+It asserts no reporter account, no reporter email and no raw/digested reference
+in the Head payload/message. That injected hook verifies compatibility; it does
+not replace F4's pending persistent notice/outbox implementation. The file is
+explicitly invoked instead of auto-collected while B18 is unmerged; missing B18
+is an error, never a skip/pass. F3/F4 must integrate and extend this check for
+their real consumers before privacy release.
+
 ## Verification
 
 Tests exercise real database/private-file/HTTP paths with explicitly synthetic
@@ -82,17 +156,23 @@ concurrent duplicate submission, reference collision, actual rollback/cleanup,
 commit/storage/history failures, metadata removal and account/evidence isolation.
 The existing authenticated intake tests also run after the shared-code refactor.
 
-Development verification passed 921 tests with no skips (855 baseline plus 66
-anonymous/privacy cases), all module coverage gates, and Django system/migration
-consistency checks. This execution uses SQLite; no PostgreSQL or deployed
-privacy/logging acceptance is inferred from it.
+Original verification passed 921 tests with no skips (855 baseline plus 66
+anonymous/privacy cases). That evidence describes the earlier source commit.
+Review verification passed 936 tests with no skips, including 81 anonymous/privacy
+cases (the original 66 plus 15 HTTPS/proxy and preloaded-identity regressions). All
+four module coverage gates, Django system checks and migration checks passed.
+The explicit anonymous-escalation check also passed against B18/#70 source
+`b0cfe10392828ca974cdc56d7694278b48c9a4d4` combined with #71 and these review fixes.
+Fresh clean-source evidence must be generated after committing the fixes, using
+the command below. SQLite and the injected-notice compatibility check do not
+establish PostgreSQL, live F4 or deployed privacy/logging acceptance.
 
 Commit source, verify a clean tree, then run:
 
 ```sh
 python manage.py check
 python manage.py makemigrations --check --dry-run
-python scripts/run_tests.py --evidence-dir docs/evidence/b11-b12-anonymous
+python scripts/run_tests.py --evidence-dir docs/evidence/b11-b12-review
 ```
 
 Commit fresh evidence separately. The run metadata must identify that clean source

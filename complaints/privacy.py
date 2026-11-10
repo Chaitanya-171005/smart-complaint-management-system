@@ -87,7 +87,10 @@ def private_evidence(files):
                     pixels = image.convert(mode)
                     clean = Image.new(mode, pixels.size)
                     clean.paste(pixels)
-                    clean.save(output, format="PNG" if mode == "RGBA" else "JPEG")
+                    if mode == "RGBA":
+                        clean.save(output, format="PNG")
+                    else:
+                        clean.save(output, format="JPEG", quality=95, subsampling=0)
         except Exception:
             raise ValidationError("Evidence could not be prepared privately. Select another file.",
                                   code="private_evidence") from None

@@ -4,6 +4,9 @@ import hashlib
 import hmac
 import ipaddress
 import secrets
+import threading
+import time
+import weakref
 from functools import lru_cache
 from urllib.parse import urlsplit
 
@@ -16,10 +19,13 @@ from redis.retry import Retry
 LIMIT = 10
 WINDOW = 600
 EPOCH_KEY = "scms:b13:epoch"
+VERIFICATION_TTL = 30
+_verified_until = weakref.WeakKeyDictionary()
+_verification_lock = threading.Lock()
 
 # The entire prune/check/insert/expire operation is atomic across app workers.
 # Entries contain only server time and an independent random attempt nonce.
-SLIDING_WINDOW = """
+SLIDING_WINDOW = """#!lua
 local t = redis.call('TIME')
 local now = tonumber(t[1]) * 1000000 + tonumber(t[2])
 local window = tonumber(ARGV[1]) * 1000000
@@ -79,6 +85,10 @@ def verify_ephemeral_backend(client):
     A dedicated, non-replicated, memory-only Redis is required. Deployment must
     also forbid manual snapshots, FLUSH, MONITOR, tracing and host swap/dumps.
     """
+    # Flagged Lua scripts (Redis 7+) refuse execution before any write at OOM.
+    version = str(client.info("server").get("redis_version", "")).split(".")[0]
+    if not version.isdecimal() or int(version) < 7:
+        raise TrackingUnavailable
     expected = {
         "save": "", "appendonly": "no", "maxmemory-policy": "noeviction",
         "slowlog-log-slower-than": "-1", "notify-keyspace-events": "",
@@ -97,25 +107,49 @@ def verify_ephemeral_backend(client):
         raise TrackingUnavailable
 
 
+def ensure_ephemeral_backend(client):
+    """Cache only a successful attestation, for at most 30 monotonic seconds.
+
+    This caches no source/credential data and grants no allowance. Epoch/Lua
+    restart quarantine remains checked atomically on every attempt. Services
+    denying CONFIG GET/INFO are unsupported; no unverified fallback is allowed.
+    """
+    with _verification_lock:
+        now = time.monotonic()
+        if now < _verified_until.get(client, 0):
+            return
+        _verified_until.pop(client, None)
+        verify_ephemeral_backend(client)
+        _verified_until[client] = now + VERIFICATION_TTL
+
+
+def invalidate_backend(client):
+    with _verification_lock:
+        _verified_until.pop(client, None)
+
+
 @sensitive_variables()
 def consume_attempt(source):
     """Return (allowed, retry seconds); accept no reference/complaint argument.
 
-    Only an HMAC of the request peer address becomes a Redis key, for <=600s
+    Only an HMAC of an IPv4 address or IPv6 /64 becomes a Redis key, for <=600s
     after its last allowed attempt. No source key is attached to request/model.
     """
+    client = None
     try:
         if not limiter_configured():
             raise TrackingUnavailable
         address = ipaddress.ip_address(source)
         if isinstance(address, ipaddress.IPv6Address) and address.ipv4_mapped:
             address = address.ipv4_mapped
+        if isinstance(address, ipaddress.IPv6Address):
+            address = ipaddress.ip_network((address, 64), strict=False).network_address
         key = "scms:b13:source:" + hmac.new(
             settings.ANONYMOUS_TRACKING_SOURCE_SECRET.encode("utf-8"),
             address.packed, hashlib.sha256,
         ).hexdigest()
         client = redis_client(settings.ANONYMOUS_TRACKING_REDIS_URL)
-        verify_ephemeral_backend(client)
+        ensure_ephemeral_backend(client)
         # A non-identifying global epoch is initialized inside the same script.
         # After restart/lost state, refuse all lookups for a full window even
         # if Redis restarted between the configuration check and this EVAL.
@@ -123,7 +157,13 @@ def consume_attempt(source):
         if allowed not in (0, 1) or not isinstance(retry, int) or not 0 <= retry <= WINDOW:
             raise TrackingUnavailable
         return bool(allowed), retry
+    except TrackingUnavailable:
+        # Expected refusal (including restart quarantine) does not invalidate a
+        # successful configuration check. Lua still enforces it on every call.
+        raise TrackingUnavailable("Reference tracking is temporarily unavailable.") from None
     except Exception:
+        if client is not None:
+            invalidate_backend(client)
         # Redis errors can include endpoints/credentials/key material. Neither
         # pass them to a response nor emit exception text to logs/APM.
         raise TrackingUnavailable("Reference tracking is temporarily unavailable.") from None

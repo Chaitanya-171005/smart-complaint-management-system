@@ -37,6 +37,12 @@ PEER = "198.51.100.18"
 
 @pytest.fixture
 def backend(settings, monkeypatch):
+    settings.SCMS_HTTPS_MODE = "direct"
+    settings.SECURE_PROXY_SSL_HEADER = None
+    settings.SECURE_SSL_REDIRECT = True
+    settings.SESSION_COOKIE_SECURE = True
+    settings.CSRF_COOKIE_SECURE = True
+    settings.ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = []
     settings.DEBUG = False
     settings.CSRF_USE_SESSIONS = False
     settings.ANONYMOUS_PRIVACY_READY = True
@@ -48,13 +54,21 @@ def backend(settings, monkeypatch):
     client.set(limits.EPOCH_KEY, "0")  # The synthetic instance has completed warmup.
     config = {"save": "", "appendonly": "no", "maxmemory-policy": "noeviction",
               "maxmemory": "1048576", "slowlog-log-slower-than": "-1", "notify-keyspace-events": ""}
-    info = {"server": {"uptime_in_seconds": 1000},
+    info = {"server": {"uptime_in_seconds": 1000, "redis_version": "7.4.2"},
             "replication": {"role": "master", "connected_slaves": 0},
             "persistence": {"rdb_bgsave_in_progress": 0, "aof_enabled": 0, "aof_rewrite_in_progress": 0}}
     # fakeredis executes the production Lua script. Configuration/uptime checks
     # are explicit test doubles; real server acceptance belongs to E03.
     client.config_get = Mock(side_effect=lambda name: {name: config[name]})
     client.info = Mock(side_effect=lambda section: info[section])
+    # fakeredis does not parse Redis 7's shebang. Execute the unchanged Lua body
+    # here; real-Redis integration separately checks the complete flagged script
+    # and its OOM policy. Never remove the production script header.
+    emulator_eval = client.eval
+    def eval_body(script, *args):
+        assert script.startswith("#!lua\n")
+        return emulator_eval(script.split("\n", 1)[1], *args)
+    client.eval = eval_body
     monkeypatch.setattr(limits, "redis_client", lambda url: client)
     yield client, config, info
     client.close()
@@ -136,7 +150,7 @@ def test_signed_in_account_is_isolated_without_logout(backend, complaint, client
     assert response.status_code == 200 and response.wsgi_request.user.is_anonymous
     assert list(Session.objects.values()) == sessions and "sessionid" not in response.cookies
     assert PRIVATE.encode() not in response.content
-    assert client.get(reverse("accounts:landing_complainant")).status_code == 200
+    assert client.get(reverse("accounts:landing_complainant"), secure=True).status_code == 200
 
 
 def test_tenth_allowed_eleventh_throttled_before_any_database_lookup(backend, complaint, client):
@@ -337,7 +351,7 @@ def test_csrf_cross_origin_and_http_transport_are_refused(backend):
                        HTTP_ORIGIN="https://other.example.test").status_code == 403
     assert client.post(url, data, content_type="application/x-www-form-urlencoded", secure=True,
                        HTTP_ORIGIN="https://testserver").status_code == 200
-    assert client.post(url, data, content_type="application/x-www-form-urlencoded").status_code == 503
+    assert client.post(url, data, content_type="application/x-www-form-urlencoded").status_code == 301
 
 
 def test_get_never_looks_up_url_credentials_or_consumes_an_attempt(backend, complaint, client):
@@ -398,8 +412,8 @@ def test_lookup_escapes_master_labels_and_does_not_grant_other_routes(backend, c
     Complaint.objects.filter(pk=complaint.pk).update(category="<script>bad</script>")
     response = lookup(client)
     assert b"<script>" not in response.content and b"&lt;script&gt;" in response.content
-    assert client.get(reverse("complaints:acknowledgement", args=[complaint.complaint_id])).status_code == 302
-    assert client.get(reverse("complaints:download_evidence", args=[999]), {"reference": REFERENCE}).status_code == 404
+    assert client.get(reverse("complaints:acknowledgement", args=[complaint.complaint_id]), secure=True).status_code == 302
+    assert client.get(reverse("complaints:download_evidence", args=[999]), {"reference": REFERENCE}, secure=True).status_code == 404
     assert not Session.objects.exists() and not SecurityEvent.objects.exists()
 
 
@@ -441,3 +455,129 @@ def test_real_redis_connection_configuration_disallows_retries_and_uses_timeouts
         assert kwargs["socket_timeout"] == kwargs["socket_connect_timeout"] == 1
         assert kwargs["retry"].get_retries() == 0
         limits.redis_client.cache_clear()
+
+
+def test_successful_backend_verification_is_cached_for_at_most_30_seconds(backend):
+    client = backend[0]
+    with patch.object(limits.time, "monotonic", return_value=100):
+        limits.consume_attempt(PEER)
+        checked = client.config_get.call_count, client.info.call_count
+        assert checked == (6, 3)
+    with patch.object(limits.time, "monotonic", return_value=129.9):
+        limits.consume_attempt(PEER)
+        assert (client.config_get.call_count, client.info.call_count) == checked
+    with patch.object(limits.time, "monotonic", return_value=130):
+        limits.consume_attempt(PEER)
+        assert (client.config_get.call_count, client.info.call_count) == (12, 6)
+
+
+def test_failed_backend_verification_is_never_cached(backend):
+    backend[1]["save"] = "900 1"
+    for _ in range(2):
+        with pytest.raises(limits.TrackingUnavailable):
+            limits.consume_attempt(PEER)
+    assert backend[0].config_get.call_count == 2
+    backend[1]["save"] = ""
+    assert limits.consume_attempt(PEER)[0]
+
+
+def test_eval_error_invalidates_a_cached_backend_verification(backend):
+    client = backend[0]
+    limits.consume_attempt(PEER)
+    with patch.object(client, "eval", side_effect=RuntimeError(PRIVATE)):
+        with pytest.raises(limits.TrackingUnavailable):
+            limits.consume_attempt(PEER)
+    backend[1]["save"] = "900 1"
+    with pytest.raises(limits.TrackingUnavailable):
+        limits.consume_attempt(PEER)
+
+
+def test_expired_successful_check_rechecks_and_refuses_changed_configuration(backend):
+    with patch.object(limits.time, "monotonic", return_value=100):
+        limits.consume_attempt(PEER)
+    backend[1]["appendonly"] = "yes"
+    with patch.object(limits.time, "monotonic", return_value=130):
+        with pytest.raises(limits.TrackingUnavailable):
+            limits.consume_attempt(PEER)
+    assert backend[0].zcard(backend[0].keys("scms:b13:source:*")[0]) == 1
+
+
+def test_ipv6_addresses_within_one_64_share_limit_but_other_prefix_is_independent(backend):
+    for value in range(1, 11):
+        assert limits.consume_attempt(f"2001:db8:1234:5678::{value:x}")[0]
+    assert not limits.consume_attempt("2001:db8:1234:5678:ffff:ffff:ffff:ffff")[0]
+    assert limits.consume_attempt("2001:db8:1234:5679::1")[0]
+
+
+def test_proxy_mode_separates_verified_clients_and_scrubs_forwarding_headers(backend, settings, client):
+    settings.SCMS_HTTPS_MODE = "proxy"
+    settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    settings.ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = ["192.0.2.8/32"]
+    for _ in range(10):
+        response = lookup(client, peer="192.0.2.8", HTTP_X_REAL_IP=PEER)
+        assert response.status_code == 200
+        assert "HTTP_X_REAL_IP" not in response.wsgi_request.META
+        assert "REMOTE_ADDR" not in response.wsgi_request.META
+    assert lookup(client, peer="192.0.2.8", HTTP_X_REAL_IP=PEER).status_code == 429
+    assert lookup(client, peer="192.0.2.8", HTTP_X_REAL_IP="198.51.100.19").status_code == 200
+
+
+@pytest.mark.parametrize("peer,header", [("192.0.2.9", PEER), ("192.0.2.8", ""),
+    ("192.0.2.8", "198.51.100.18, 203.0.113.1"), ("192.0.2.8", "example.test"),
+    ("192.0.2.8", "fe80::1%eth0")])
+def test_proxy_mode_refuses_untrusted_peer_or_nonliteral_source(backend, settings, client, peer, header):
+    settings.SCMS_HTTPS_MODE = "proxy"
+    settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    settings.ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = ["192.0.2.8/32"]
+    assert lookup(client, peer=peer, HTTP_X_REAL_IP=header).status_code == 503
+    assert backend[0].keys("scms:b13:source:*") == []
+
+
+def test_direct_mode_ignores_forged_real_ip_header(backend, client):
+    for index in range(10):
+        assert lookup(client, HTTP_X_REAL_IP=f"203.0.113.{index+1}").status_code == 200
+    assert lookup(client, HTTP_X_REAL_IP="203.0.113.99").status_code == 429
+
+
+@pytest.mark.parametrize("setting,value", [("SCMS_HTTPS_MODE", ""),
+    ("SECURE_SSL_REDIRECT", False), ("SESSION_COOKIE_SECURE", False),
+    ("CSRF_COOKIE_SECURE", False)])
+def test_tracking_requires_https_release_configuration(backend, settings, client, setting, value):
+    setattr(settings, setting, value)
+    assert [error.id for error in check_tracking_privacy(None)] == ["complaints.E003"]
+    assert lookup(client).status_code == 503
+    assert backend[0].keys("scms:b13:source:*") == []
+
+
+@pytest.mark.parametrize("networks", [[], ["invalid"], ["0.0.0.0/0"], ["::/0"], "192.0.2.8/32"])
+def test_proxy_mode_requires_explicit_restricted_ingress_networks(backend, settings, networks):
+    settings.SCMS_HTTPS_MODE = "proxy"
+    settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    settings.ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = networks
+    assert [error.id for error in check_tracking_privacy(None)] == ["complaints.E003"]
+
+
+@pytest.mark.parametrize("attribute", ["session", "user", "_cached_user"])
+def test_preloaded_identity_cannot_consume_tracking_allowance(backend, attribute):
+    request = RequestFactory().post("/complaints/track/", secure=True, REMOTE_ADDR=PEER)
+    setattr(request, attribute, {} if attribute == "session" else AnonymousUser())
+    response = AnonymousPrivacyMiddleware(tracking_views.track_reference)(request)
+    assert response.status_code == 503 and not request.anonymous_privacy_isolated
+    assert backend[0].keys("scms:b13:source:*") == []
+
+
+def test_restart_quarantine_does_not_repeat_cached_configuration_calls(backend):
+    backend[0].delete(limits.EPOCH_KEY)
+    for _ in range(2):
+        with pytest.raises(limits.TrackingUnavailable):
+            limits.consume_attempt(PEER)
+    assert backend[0].config_get.call_count == 6 and backend[0].info.call_count == 3
+    assert backend[0].keys("scms:b13:source:*") == []
+
+
+@pytest.mark.parametrize("version", ["6.2.14", "", "unknown"])
+def test_backend_requires_redis_7_flagged_script_support(backend, version):
+    backend[2]["server"]["redis_version"] = version
+    with pytest.raises(limits.TrackingUnavailable):
+        limits.consume_attempt(PEER)
+    assert not backend[0].keys("scms:b13:source:*")

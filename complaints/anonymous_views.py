@@ -64,9 +64,10 @@ def anonymous_submission(request):
                     key=key, data=data, files=request.FILES.getlist("evidence"),
                 )
             except IdempotencyConflict:
-                form, status = _form(data), 409
+                form, token, status = _form(data), "", 409
                 form.is_valid()
-                form.add_error(None, "This form was already accepted with different details.")
+                form.add_error(None, "This form was already accepted with different details. "
+                                     "Reload the anonymous form to start a new submission.")
             except ValidationError as error:
                 form, status = _form(data), 400
                 form.is_valid()

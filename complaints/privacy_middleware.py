@@ -11,6 +11,7 @@ from django.views.debug import ExceptionReporter, SafeExceptionReporterFilter
 
 from .checks import tracking_release_ready
 from .tracking_limits import TrackingUnavailable, consume_attempt
+from .tracking_source import tracking_source
 
 
 class AnonymousReporterFilter(SafeExceptionReporterFilter):
@@ -59,7 +60,11 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
             return
         request.anonymous_intake = True
         request.anonymous_tracking = path == "/complaints/track"
-        request.anonymous_privacy_isolated = not hasattr(request, "session")
+        # Defense against an upstream request wrapper preloading identity. The
+        # first-in-MIDDLEWARE release check is still mandatory independently.
+        request.anonymous_privacy_isolated = not any(
+            hasattr(request, name) for name in ("session", "user", "_cached_user")
+        )
         request.exception_reporter_filter = AnonymousReporterFilter()
         request.exception_reporter_class = AnonymousExceptionReporter
         request.sensitive_post_parameters = "__ALL__"
@@ -68,10 +73,10 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 and request.anonymous_privacy_isolated and request.is_secure()
                 and tracking_release_ready()):
             # Consume before reading credentials/body or doing a complaint query.
-            # Only REMOTE_ADDR is trusted; forwarding headers are never accepted
-            # from arbitrary clients. The ingress must set the actual peer.
+            # Proxy source headers are accepted only from configured peers and
+            # are removed below before any downstream middleware or view runs.
             try:
-                allowed, retry = consume_attempt(request.META.get("REMOTE_ADDR", ""))
+                allowed, retry = consume_attempt(tracking_source(request))
                 request.tracking_allowed = allowed
                 if not allowed:
                     refusal = HttpResponse("Too many tracking attempts. Please try again later.", status=429)
