@@ -178,14 +178,22 @@ def _apply_locked_transition(complaint, actor, target_state, reason):
     No user-supplied callback, update dictionary or anonymous/system flag exists.
     """
     _authorize(actor, complaint, target_state)
+    return _persist_locked_transition(complaint, actor, target_state, reason)
+
+
+def _persist_locked_transition(complaint, actor, target_state, reason):
+    """Internal writer after account or scheduler validation under the row lock.
+
+    None means SYSTEM only here; public account actions still deny it.
+    """
     previous = complaint.status
     complaint.status = target_state
     complaint.save(update_fields=["status"])
     event_type = (ComplaintHistory.EventType.RESOLVED if target_state == State.RESOLVED
                   else ComplaintHistory.EventType.STATUS_CHANGED)
     # PR #68 owns the optional account field/API; do not duplicate its schema.
-    account = {"actor": actor} if any(field.name == "actor" for field in ComplaintHistory._meta.fields) else {}
-    history = record_history(complaint.complaint_id, event_type, actor.role,
+    account = {"actor": actor} if actor is not None and any(field.name == "actor" for field in ComplaintHistory._meta.fields) else {}
+    history = record_history(complaint.complaint_id, event_type, actor.role if actor else "SYSTEM",
                              previous_state=previous, new_state=target_state, remarks=reason, **account)
     return TransitionResult(complaint.complaint_id, previous, target_state, history.pk, _revision(complaint))
 
