@@ -210,3 +210,8 @@ ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = [
     value.strip() for value in os.environ.get("ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS", "").split(",")
     if value.strip()
 ]
+
+# E03/Q02 must verify the deployed ingress, Docker env and backend isolation
+# before attesting anonymous transport. Static topology flags alone do not prove it.
+ANONYMOUS_TRANSPORT_VERIFIED = os.environ.get("ANONYMOUS_TRANSPORT_VERIFIED", "False") == "True"
+SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_SECURE_HSTS_SECONDS", "0"))

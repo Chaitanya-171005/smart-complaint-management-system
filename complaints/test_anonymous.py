@@ -74,6 +74,8 @@ def pdf_upload():
 
 @pytest.fixture
 def setup(routing_configuration, settings):
+    settings.ANONYMOUS_TRANSPORT_VERIFIED = True
+    settings.SECURE_HSTS_SECONDS = 300
     settings.SCMS_HTTPS_MODE = "direct"
     settings.SECURE_PROXY_SSL_HEADER = None
     settings.SECURE_SSL_REDIRECT = True
@@ -417,7 +419,7 @@ def test_cleanup_failure_logging_is_generic(setup, settings, caplog):
 
 
 def test_cookie_ip_headers_query_and_error_report_are_isolated(setup):
-    request = RequestFactory().post("/complaints/anonymous/?email=" + SECRET, {
+    request = RequestFactory().post("/anonymous/new/?email=" + SECRET, {
         "title": SECRET, "request_token": "c" * 64,
     }, REMOTE_ADDR="198.51.100.18", HTTP_X_FORWARDED_FOR="198.51.100.18",
         HTTP_USER_AGENT=SECRET, HTTP_AUTHORIZATION=SECRET,
@@ -443,8 +445,8 @@ def test_privacy_response_headers_and_no_get_recovery_route(setup, client):
     assert response["Referrer-Policy"] == "no-referrer"
     assert "no-store" in response["Cache-Control"] and "noarchive" in response["X-Robots-Tag"]
     assert "form-action 'self'" in response["Content-Security-Policy"]
-    for path in (f"/complaints/anonymous/{reference}/", f"/complaints/reference/{reference}/",
-                 f"/complaints/anonymous/recover/{reference}/"):
+    for path in (f"/anonymous/new/{reference}/", f"/complaints/reference/{reference}/",
+                 f"/anonymous/new/recover/{reference}/"):
         assert client.get(path, secure=True).status_code == 404
     assert client.put(reverse("complaints:anonymous_submit"), data="{}", secure=True).status_code == 405
 
@@ -562,6 +564,7 @@ def test_failure_after_issuance_never_logs_or_exposes_reference(setup, client, c
 
 
 @pytest.mark.parametrize("name,value", [
+    ("ANONYMOUS_TRANSPORT_VERIFIED", False), ("SECURE_HSTS_SECONDS", 0),
     ("SCMS_HTTPS_MODE", ""), ("SCMS_HTTPS_MODE", "unknown"),
     ("SECURE_SSL_REDIRECT", False), ("CSRF_COOKIE_SECURE", False),
     ("SESSION_COOKIE_SECURE", False),
@@ -619,9 +622,92 @@ def test_direct_tls_mode_does_not_trust_a_client_forwarded_proto_header(setup, s
 
 @pytest.mark.parametrize("attribute", ["session", "user", "_cached_user"])
 def test_preloaded_request_identity_is_rejected_even_with_first_middleware(setup, settings, attribute):
-    request = RequestFactory().post("/complaints/anonymous/", setup["data"], secure=True)
+    request = RequestFactory().post("/anonymous/new/", setup["data"], secure=True)
     setattr(request, attribute, {} if attribute == "session" else AnonymousUser())
     assert anonymous_release_ready()
     response = AnonymousPrivacyMiddleware(anonymous_views.anonymous_submission)(request)
     assert response.status_code == 503 and not request.anonymous_privacy_isolated
     empty(settings)
+
+
+def test_sad_route_and_login_link_preserve_authenticated_urls(setup, client):
+    from django.urls import resolve
+    assert reverse("complaints:anonymous_submit") == "/anonymous/new/"
+    assert resolve("/anonymous/new/").view_name == "complaints:anonymous_submit"
+    assert reverse("complaints:submit") == "/complaints/new/"
+    assert reverse("complaints:acknowledgement", args=["SCMS-2026-00001"]) == "/complaints/SCMS-2026-00001/submitted/"
+    assert reverse("complaints:download_evidence", args=[1]) == "/complaints/evidence/1/"
+    login = client.get(reverse("accounts:login"), secure=True)
+    assert b'href="/anonymous/new/"' in login.content
+    for method in (client.get, client.post):
+        assert method("/complaints/anonymous/", secure=True).status_code == 404
+
+
+@pytest.mark.parametrize("outcome", ["form", "invalid", "accepted"])
+def test_anonymous_csrf_cookie_is_session_lifetime_with_existing_persistent_cookie(setup, settings, outcome):
+    client = Client(enforce_csrf_checks=True)
+    # A prior signed-in page may have issued Django's default persistent cookie.
+    login = client.get(reverse("accounts:login"), secure=True)
+    assert login.cookies[settings.CSRF_COOKIE_NAME]["max-age"]
+    form = client.get(reverse("complaints:anonymous_submit"), secure=True)
+    csrf = client.cookies[settings.CSRF_COOKIE_NAME].value
+    response = form
+    if outcome != "form":
+        response = post(setup, client, form.context["request_token"],
+                        csrfmiddlewaretoken=csrf,
+                        **({"description": "short"} if outcome == "invalid" else {}))
+        assert response.status_code == (400 if outcome == "invalid" else 200)
+    cookie = response.cookies[settings.CSRF_COOKIE_NAME]
+    assert cookie.value == csrf and cookie["secure"]
+    assert not cookie["max-age"] and not cookie["expires"]
+    assert "sessionid" not in response.cookies and not Session.objects.exists()
+
+
+@pytest.fixture(scope="module")
+def noisy_jpeg_bytes():
+    from random import Random
+    # At quality 85 this genuine noisy JPEG is <3 MB. Re-encoding at quality 95
+    # without subsampling grows it beyond either proposed D02 limit.
+    image = Image.frombytes("RGB", (1900, 1900), Random(71).randbytes(1900 * 1900 * 3))
+    stream = BytesIO()
+    image.save(stream, format="JPEG", quality=85)
+    return stream.getvalue()
+
+
+@pytest.mark.parametrize("limit", [5_000_000, 5 * 1024 * 1024])
+def test_near_limit_jpeg_growth_rejects_entire_batch_before_staging(setup, settings, noisy_jpeg_bytes, limit):
+    from complaints.evidence import validate_evidence
+    settings.EVIDENCE_MAX_BYTES = limit
+    # JPEG parsers permit trailing bytes; padding makes the actual readable
+    # upload exactly one byte below the boundary without changing its pixels.
+    original = noisy_jpeg_bytes + b"\0" * (limit - 1 - len(noisy_jpeg_bytes))
+    assert len(original) == limit - 1
+    file = SimpleUploadedFile("near-limit.jpg", original, content_type="image/jpeg")
+    assert validate_evidence([file])[0].data == original
+    with pytest.raises(ValidationError) as caught:
+        anonymous.submit_anonymous_complaint(**args(setup), files=[upload(), file])
+    assert caught.value.code == "size"
+    empty(settings)
+
+
+@pytest.mark.parametrize("limit", [5_000_000, 5 * 1024 * 1024])
+def test_near_limit_jpeg_that_fits_after_sanitizing_is_committed(setup, settings, limit):
+    settings.EVIDENCE_MAX_BYTES = limit
+    stream = BytesIO()
+    Image.new("RGB", (1900, 1900), "red").save(stream, format="JPEG", quality=85)
+    original = stream.getvalue()
+    file = SimpleUploadedFile("private.jpg", original + b"\0" * (limit - 1 - len(original)),
+                              content_type="image/jpeg")
+    accepted = anonymous.submit_anonymous_complaint(**args(setup), files=[file])
+    attachment = Attachment.objects.get()
+    assert accepted.reference and attachment.original_name == "evidence.jpg"
+    stored = (settings.PRIVATE_EVIDENCE_ROOT / attachment.storage_name).read_bytes()
+    assert attachment.size == len(stored) < limit and attachment.sha256 == hashlib.sha256(stored).hexdigest()
+    with Image.open(BytesIO(stored)) as image:
+        assert not image.getexif() and image.size == (1900, 1900)
+
+
+def test_verified_https_response_sets_hsts(setup, client):
+    response = client.get(reverse("complaints:anonymous_submit"), secure=True)
+    assert response.status_code == 200
+    assert response["Strict-Transport-Security"] == "max-age=300"

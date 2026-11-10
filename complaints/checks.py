@@ -45,7 +45,7 @@ def check_anonymous_privacy(app_configs, **kwargs):
         "Anonymous intake is enabled without its complete privacy/release configuration.",
         hint="Use first-position AnonymousPrivacyMiddleware, DEBUG=False, cookie-based CSRF, "
              "confirmed emergency information, HTTPS mode, secure session/CSRF cookies, "
-             "SSL redirection and both intake/privacy gates. See docs/B12_PRIVACY.md.",
+             "SSL redirection, HSTS, verified transport and both intake/privacy gates. See docs/B12_PRIVACY.md.",
         id="complaints.E002",
     )]
 

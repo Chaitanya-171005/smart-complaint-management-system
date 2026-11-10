@@ -5,18 +5,21 @@ Requirements: REQ-ANON-03, REQ-SEC-06. Tests: TC-04 and B12 privacy checks.
 
 ## User flow
 
-`GET /complaints/track/` shows an empty reference form without login. The reference
+`GET /anonymous/track/` shows an empty reference form without login. The reference
 is submitted only by a CSRF-protected, same-origin HTTPS POST. A query-string
 reference does not perform a lookup. References are never echoed in response
 forms, links, cookies or sessions. Lost references remain unrecoverable.
 
-### Route decision relative to SAD section 5
+### Routes aligned with SAD section 8
 
-The SAD's conceptual `/anonymous/track/` is implemented as `/complaints/track/`,
-with the named route `complaints:track_reference`, to retain the existing F2
-complaint namespace. This is an explicit route deviation, consistent with B11's
-`/complaints/anonymous/` decision in `B11_ANONYMOUS.md`. No alias exists; an alias
-or rename must update the first-position privacy middleware and isolation tests.
+The canonical tracking route is `/anonymous/track/`, named
+`complaints:track_reference`. Intake is `/anonymous/new/`, consistent with B11.
+Both are isolated by the first-position privacy middleware. The old
+`/complaints/track/` and `/complaints/anonymous/` paths are not aliases or redirects.
+Named links and forms resolve to the canonical paths; authenticated routes keep
+their `/complaints/` prefix. Anonymous CSRF cookies are browser-session cookies
+without Max-Age or Expires, including when a signed-in page previously issued a
+persistent CSRF cookie. Anti-CSRF validation remains enforced.
 
 A valid reference shows only complaint ID, category, location, current status,
 escalation flag and permitted status history. It does not authorize the full
@@ -113,7 +116,10 @@ E03/F3 must provide and verify the following before enabling it:
    with two distinct observed network sources instead of claiming per-person
    fairness. This limitation must be recorded in release acceptance.
 5. Serve tracking over HTTPS with the same explicit mode, secure session/CSRF
-   cookies, SSL redirection and SecurityMiddleware requirements as B11. E003 and
+   cookies, SSL redirection, positive HSTS, verified transport and SecurityMiddleware
+   requirements as B11. `ANONYMOUS_TRANSPORT_VERIFIED` defaults to False and stays
+   False until E03/Q02 verify deployed TLS/HSTS, Docker env forwarding and blocked
+   direct backend access. E003 and
    the request release predicate enforce these static settings. Proxy mode must
    overwrite X-Forwarded-Proto and preserve the public Host INCLUDING a nondefault
    port (`proxy_set_header Host $http_host`). B12 removes X-Forwarded-Host before
@@ -158,6 +164,8 @@ ANONYMOUS_TRACKING_REDIS_URL=
 ANONYMOUS_TRACKING_SOURCE_SECRET=
 ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS=
 ANONYMOUS_PRIVACY_READY=False
+ANONYMOUS_TRANSPORT_VERIFIED=False
+DJANGO_SECURE_HSTS_SECONDS=0
 ```
 
 The URL supports redis/rediss, with no query/fragment. Django's deployment check
@@ -171,7 +179,7 @@ not prevent holders of existing references from checking status.
 Apply this only inside a reviewed TLS server with restricted backend access:
 
 ```nginx
-location /complaints/ {
+location /anonymous/ {
     proxy_pass http://scms_backend;
     proxy_set_header Host $http_host;
     proxy_set_header X-Forwarded-Proto $scheme;
@@ -181,7 +189,7 @@ location /complaints/ {
 }
 ```
 
-For B13 also enforce a 1 KiB body limit on `/complaints/track/`, and disable/redact
+For B13 also enforce a 1 KiB body limit on `/anonymous/track/`, and disable/redact
 request headers, cookies, body, query and response capture for both anonymous
 routes. Adapt the exact location/upstream/certificates in E03/Q02; this snippet
 alone is not an approved deployment. If nginx itself is behind another proxy,
@@ -222,9 +230,9 @@ not pipeline-run evidence.
 
 ## Verification and remaining acceptance
 
-Original application evidence recorded 991 tests with 70 tracking cases. Review
-verification now passes 1,034 default-suite tests with no skips, including 98
-tracking cases and 81 anonymous/privacy cases. Every module coverage gate and
+Original application evidence recorded 991 tests with 70 tracking cases; the
+first review recorded 1,034 tests. The SAD-route follow-up passes 1,049 default-suite
+tests with no skips, including 102 tracking cases and 92 anonymous/privacy cases. Every module coverage gate and
 Django system/migration check passed. The source used SQLite; deployed
 acceptance remains separate.
 
@@ -243,13 +251,17 @@ The nine explicit real-backend/proxy checks passed locally against disposable
 Redis 7.4.2 and nginx 1.28.0 over real TLS sockets. This includes entry-time OOM
 refusal, concurrency and actual distinct client buckets behind one proxy. The
 earlier Redis 6.2 smoke check is superseded: Redis below 7 is now unsupported.
-The GitHub workflow is supplied but its hosted run/deployed acceptance remains
-pending; no local result is labelled Jenkins/Actions deployment evidence.
+The earlier source passed GitHub Actions full-suite and nine real Redis/TLS checks:
+https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/42793833882
+The route follow-up also passed all nine checks locally, now asserting the
+canonical routes, HSTS and session-lifetime CSRF cookies through real nginx/TLS.
+The hosted workflow must rerun on the new source; a previous run does not certify
+this revision. Neither disposable local nor hosted checks prove deployed acceptance.
 
-Record fresh review evidence under `docs/evidence/b13-review/` only after the
+Record fresh review evidence under `docs/evidence/b13-route-review/` only after the
 source commit. Preserve the original `b13-tracking` evidence directory. Source
 and evidence are separate commits. Keep prior B11/B12 evidence unchanged. SQLite application tests and disposable Redis/proxy checks do not establish
-PostgreSQL, hosted Jenkins/Actions, deployed TLS/logging or performance acceptance. Issue #18 remains
+PostgreSQL, Jenkins, deployed TLS/logging or performance acceptance. Issue #18 remains
 open until peer review/merge and the deployment/history checks are completed.
 This does not close #16/#17 or introduce reference recovery or feedback.
 

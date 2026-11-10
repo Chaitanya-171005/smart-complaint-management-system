@@ -24,6 +24,16 @@ from django.conf import settings as django_settings
 from complaints import tracking_limits as limits
 
 
+@pytest.fixture(scope="session", autouse=True)
+def integration_https_startup_settings():
+    # pytest-django's session-scoped live server creates SecurityMiddleware
+    # before function-scoped settings fixtures; that middleware caches HSTS.
+    # Configure it at startup, as a real deployed process would be configured.
+    from django.test import override_settings
+    with override_settings(SECURE_HSTS_SECONDS=300):
+        yield
+
+
 @pytest.fixture
 def real_backend(settings):
     url = os.environ.get("SCMS_TRACKING_REDIS_TEST_URL", "")
@@ -36,6 +46,8 @@ def real_backend(settings):
     settings.ANONYMOUS_PRIVACY_READY = True
     settings.DEBUG = False
     settings.CSRF_USE_SESSIONS = False
+    settings.ANONYMOUS_TRANSPORT_VERIFIED = True
+    settings.SECURE_HSTS_SECONDS = 300
     settings.SCMS_HTTPS_MODE = "direct"
     settings.SECURE_PROXY_SSL_HEADER = None
     settings.SECURE_SSL_REDIRECT = settings.SESSION_COOKIE_SECURE = settings.CSRF_COOKIE_SECURE = True
@@ -190,7 +202,7 @@ http {{
             process.wait(timeout=5)
 
 
-def proxy_request(proxy, source, method, path="/complaints/track/", token=None, forged="203.0.113.99"):
+def proxy_request(proxy, source, method, path="/anonymous/track/", token=None, forged="203.0.113.99"):
     port, context = proxy
     connection = http.client.HTTPSConnection("127.0.0.1", port, context=context,
                                             source_address=(source, 0), timeout=5)
@@ -208,7 +220,7 @@ def proxy_request(proxy, source, method, path="/complaints/track/", token=None, 
         connection.close()
 
 
-def csrf_token(proxy, source, path="/complaints/track/"):
+def csrf_token(proxy, source, path="/anonymous/track/"):
     status, headers, body = proxy_request(proxy, source, "GET", path)
     assert status == 200
     cookies = SimpleCookie()
@@ -216,6 +228,8 @@ def csrf_token(proxy, source, path="/complaints/track/"):
         if name.lower() == "set-cookie":
             cookies.load(value)
     assert cookies["csrftoken"]["secure"] and b"b" * 32 not in body
+    assert not cookies["csrftoken"]["max-age"] and not cookies["csrftoken"]["expires"]
+    assert ("Strict-Transport-Security", "max-age=300") in headers
     return cookies["csrftoken"].value
 
 
@@ -240,7 +254,7 @@ def test_real_proxy_rewritten_host_fails_csrf(tls_proxy):
 def test_real_proxy_preserves_b11_same_origin_form(tls_proxy, settings, routing_configuration):
     settings.COMPLAINT_INTAKE_ENABLED = settings.ANONYMOUS_INTAKE_ENABLED = True
     settings.COMPLAINT_EMERGENCY_NOTICE = "SYNTHETIC TEST only, not campus policy."
-    path = "/complaints/anonymous/"
+    path = "/anonymous/new/"
     token = csrf_token(tls_proxy, "127.0.0.2", path)
     status, _, body = proxy_request(tls_proxy, "127.0.0.2", "POST", path, token)
     # Missing B11 operation token/input is safe validation (400), not CSRF (403).

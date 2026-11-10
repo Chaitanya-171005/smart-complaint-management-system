@@ -37,6 +37,8 @@ PEER = "198.51.100.18"
 
 @pytest.fixture
 def backend(settings, monkeypatch):
+    settings.ANONYMOUS_TRANSPORT_VERIFIED = True
+    settings.SECURE_HSTS_SECONDS = 300
     settings.SCMS_HTTPS_MODE = "direct"
     settings.SECURE_PROXY_SSL_HEADER = None
     settings.SECURE_SSL_REDIRECT = True
@@ -317,7 +319,7 @@ def test_tracking_remains_available_when_new_intake_is_disabled(backend, setting
 
 
 def test_view_without_consumed_allowance_fails_closed(backend):
-    request = RequestFactory().post("/complaints/track/", secure=True)
+    request = RequestFactory().post("/anonymous/track/", secure=True)
     request.anonymous_tracking = request.anonymous_privacy_isolated = True
     assert tracking_views.track_reference(request).status_code == 503
 
@@ -418,7 +420,7 @@ def test_lookup_escapes_master_labels_and_does_not_grant_other_routes(backend, c
 
 
 def test_private_headers_and_error_report_scrub_source_reference_cookie_and_query(backend):
-    request = RequestFactory().post("/complaints/track/?reference=" + REFERENCE,
+    request = RequestFactory().post("/anonymous/track/?reference=" + REFERENCE,
                                     urlencode({"reference": REFERENCE}),
                                     content_type="application/x-www-form-urlencoded", secure=True,
                                     REMOTE_ADDR=PEER, HTTP_USER_AGENT=PRIVATE,
@@ -539,7 +541,8 @@ def test_direct_mode_ignores_forged_real_ip_header(backend, client):
     assert lookup(client, HTTP_X_REAL_IP="203.0.113.99").status_code == 429
 
 
-@pytest.mark.parametrize("setting,value", [("SCMS_HTTPS_MODE", ""),
+@pytest.mark.parametrize("setting,value", [("ANONYMOUS_TRANSPORT_VERIFIED", False),
+    ("SECURE_HSTS_SECONDS", 0), ("SCMS_HTTPS_MODE", ""),
     ("SECURE_SSL_REDIRECT", False), ("SESSION_COOKIE_SECURE", False),
     ("CSRF_COOKIE_SECURE", False)])
 def test_tracking_requires_https_release_configuration(backend, settings, client, setting, value):
@@ -559,7 +562,7 @@ def test_proxy_mode_requires_explicit_restricted_ingress_networks(backend, setti
 
 @pytest.mark.parametrize("attribute", ["session", "user", "_cached_user"])
 def test_preloaded_identity_cannot_consume_tracking_allowance(backend, attribute):
-    request = RequestFactory().post("/complaints/track/", secure=True, REMOTE_ADDR=PEER)
+    request = RequestFactory().post("/anonymous/track/", secure=True, REMOTE_ADDR=PEER)
     setattr(request, attribute, {} if attribute == "session" else AnonymousUser())
     response = AnonymousPrivacyMiddleware(tracking_views.track_reference)(request)
     assert response.status_code == 503 and not request.anonymous_privacy_isolated
@@ -581,3 +584,24 @@ def test_backend_requires_redis_7_flagged_script_support(backend, version):
     with pytest.raises(limits.TrackingUnavailable):
         limits.consume_attempt(PEER)
     assert not backend[0].keys("scms:b13:source:*")
+
+
+
+def test_tracking_route_matches_sad_and_old_path_is_not_an_alias(backend, client):
+    from django.urls import resolve
+    assert reverse("complaints:track_reference") == "/anonymous/track/"
+    assert resolve("/anonymous/track/").view_name == "complaints:track_reference"
+    assert reverse("complaints:anonymous_submit") == "/anonymous/new/"
+    for method in (client.get, client.post):
+        assert method("/complaints/track/", secure=True).status_code == 404
+
+
+def test_tracking_csrf_cookie_is_session_lifetime(backend, settings):
+    client = Client(enforce_csrf_checks=True)
+    form = client.get(reverse("complaints:track_reference"), secure=True)
+    cookie = form.cookies[settings.CSRF_COOKIE_NAME]
+    assert cookie["secure"] and not cookie["max-age"] and not cookie["expires"]
+    response = lookup(client, REFERENCE, HTTP_X_CSRFTOKEN=cookie.value, HTTP_ORIGIN="https://testserver")
+    assert response.status_code == 200
+    cookie = response.cookies[settings.CSRF_COOKIE_NAME]
+    assert cookie["secure"] and not cookie["max-age"] and not cookie["expires"]

@@ -5,7 +5,7 @@ submission, not the separate B13 tracking/feedback routes.
 
 ## HTTP contract
 
-`GET /complaints/anonymous/` opens a no-login form. `POST` submits it with normal
+`GET /anonymous/new/` opens a no-login form. `POST` submits it with normal
 CSRF protection, a signed random operation token and the complete evidence batch.
 HTTPS is required. The login page links to the anonymous route. Session cookies,
 account authentication, identity headers and query parameters are isolated by
@@ -18,15 +18,16 @@ privacy middleware must run first. Missing prerequisites return 503 without
 acceptance. `manage.py check --deploy` reports complaints.E002 if anonymous
 intake is enabled with incomplete application configuration.
 
-### Route decision relative to SAD section 5
+### Routes aligned with SAD section 8
 
-The SAD's conceptual `/anonymous/new/` is implemented as
-`/complaints/anonymous/`, named `complaints:anonymous_submit`, to keep F2 routes
-under the existing complaint namespace. This is an explicit route deviation,
-not an additional endpoint or a change in access/validation requirements.
-Login links and forms use the named route; the first-position privacy middleware
-protects the concrete complaint-prefixed path. Do not add an alias or rename it
-without extending that middleware and its isolation tests to every entry path.
+The canonical intake route is `/anonymous/new/` (GET and POST), named
+`complaints:anonymous_submit`. The namespace is retained for existing named links;
+the URL matches the SAD. The old `/complaints/anonymous/` path is not an alias or
+redirect and accepts no submission. Login links and forms use the named route.
+The first-position privacy middleware isolates the canonical path, including
+its slashless form before CommonMiddleware handling. B13 uses the SAD's
+`/anonymous/track/` on its dependent branch; the authenticated complaint routes
+remain under `/complaints/`.
 
 ### HTTPS and trusted reverse-proxy configuration
 
@@ -39,20 +40,29 @@ Both modes also require these exact settings:
 DJANGO_SECURE_SSL_REDIRECT=True
 DJANGO_SESSION_COOKIE_SECURE=True
 DJANGO_CSRF_COOKIE_SECURE=True
+DJANGO_SECURE_HSTS_SECONDS=300
+ANONYMOUS_TRANSPORT_VERIFIED=False
 ```
+
+The HSTS value above is a short rollout example, not campus policy. E03/Q02 must
+choose and verify the actual duration, forward all these variables into Docker,
+and test the running ingress before setting `ANONYMOUS_TRANSPORT_VERIFIED=True`.
+This separate attestation defaults to False; topology/cookie flags alone cannot
+make `anonymous_transport_ready()` return True. Do not attest a laptop unit test
+as deployed transport acceptance.
 
 Proxy mode sets `SECURE_PROXY_SSL_HEADER=("HTTP_X_FORWARDED_PROTO", "https")`;
 direct/blank modes never trust that client header. Only choose proxy mode after
 E03/Q02 (#27/#28) verify that the ingress strips incoming forwarded-protocol
 values, sets its own value, preserves the public Host, and blocks direct backend
 access. Never trust arbitrary client-supplied X-Forwarded-Proto. For example, a
-controlled nginx upstream sets `Host $host` and `X-Forwarded-Proto $scheme`.
+controlled nginx upstream sets `Host $http_host` and `X-Forwarded-Proto $scheme`.
 The actual TLS certificates, listener and network restrictions belong to E03.
 
 The release predicate and complaints.E002 check require an explicit valid mode,
-its matching proxy-header setting, SSL redirection, secure session/CSRF cookies
-and SecurityMiddleware. An unconfigured HTTPS deployment therefore cannot be
-attested merely by turning on the intake/privacy flags. Static checks cannot
+its matching proxy-header setting, SSL redirection, secure session/CSRF cookies,
+positive HSTS, the explicit deployment attestation and SecurityMiddleware.
+An unconfigured HTTPS deployment therefore cannot be attested merely by turning on the intake/privacy flags. Static checks cannot
 prove the external proxy is trustworthy; deployment tests must verify header
 spoofing, plain HTTP redirection, secure cookies, same-origin CSRF and successful
 HTTPS intake through the actual ingress before enabling release.
@@ -163,6 +173,10 @@ cases (the original 66 plus 15 HTTPS/proxy and preloaded-identity regressions). 
 four module coverage gates, Django system checks and migration checks passed.
 The explicit anonymous-escalation check also passed against B18/#70 source
 `b0cfe10392828ca974cdc56d7694278b48c9a4d4` combined with #71 and these review fixes.
+The route follow-up passed 947 tests with no skips, including 92 anonymous/privacy
+cases. These add SAD route/login-link checks, session-lifetime CSRF cookies,
+positive HSTS and transport attestation refusal, and near-limit JPEG acceptance
+and whole-batch refusal. All module gates, system and migration checks passed.
 Fresh clean-source evidence must be generated after committing the fixes, using
 the command below. SQLite and the injected-notice compatibility check do not
 establish PostgreSQL, live F4 or deployed privacy/logging acceptance.
@@ -172,7 +186,7 @@ Commit source, verify a clean tree, then run:
 ```sh
 python manage.py check
 python manage.py makemigrations --check --dry-run
-python scripts/run_tests.py --evidence-dir docs/evidence/b11-b12-review
+python scripts/run_tests.py --evidence-dir docs/evidence/b11-b12-route-review
 ```
 
 Commit fresh evidence separately. The run metadata must identify that clean source
