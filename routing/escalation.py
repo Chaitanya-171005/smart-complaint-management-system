@@ -1,6 +1,7 @@
 """Scheduled escalation, with a no-op notification hook until F4 supplies one."""
 
 from datetime import timedelta
+import sys
 
 from django.db import transaction
 from django.db.models import OuterRef, Q, Subquery
@@ -53,6 +54,13 @@ def run_escalation(*, now=None, notify=None):
         candidates = _eligible(now, policy).values_list("pk", flat=True)
         for pk in candidates.iterator(chunk_size=500):
             run.examined += 1
+            committed = False
+
+            def after_commit(complaint, department):
+                nonlocal committed
+                committed = True
+                notify_safely(complaint, complaint.escalation_level, department)
+
             try:
                 with transaction.atomic():
                     complaint = Complaint.objects.select_for_update().filter(pk=pk).first()
@@ -69,19 +77,34 @@ def run_escalation(*, now=None, notify=None):
                     )
                     department = complaint.department
                     transaction.on_commit(lambda complaint=complaint, department=department:
-                                          notify_safely(complaint, complaint.escalation_level, department))
+                                          after_commit(complaint, department))
                 run.escalated += 1
-            except Exception:
-                run.failed += 1
-        run.status = EscalationRun.Status.COMPLETED
-    except Exception as exc:
+            except BaseException as exc:
+                # A callback may interrupt after the transaction has committed.
+                if committed:
+                    run.escalated += 1
+                else:
+                    run.failed += 1
+                if not isinstance(exc, Exception):
+                    raise
+        run.status = EscalationRun.Status.FAILED if run.failed else EscalationRun.Status.COMPLETED
+        if run.failed:
+            run.error = "One or more complaints could not be processed."
+    except BaseException as exc:
         run.status = EscalationRun.Status.FAILED
-        run.error = "Escalation setup failed."
+        run.error = ("Escalation interrupted." if not isinstance(exc, Exception)
+                     else "Escalation setup failed.")
         exc.escalation_run = run
         raise
     finally:
         if notification_failures:
             run.error = f"{run.error} notification_failed={notification_failures}".strip()
         run.finished_at = timezone.now()
-        run.save(update_fields=["status", "finished_at", "examined", "escalated", "skipped", "failed", "error"])
+        pending = sys.exc_info()[1]
+        try:
+            run.save(update_fields=["status", "finished_at", "examined", "escalated", "skipped", "failed", "error"])
+        except BaseException:
+            if pending is None:
+                raise
+            pending.add_note("Escalation run finalization also failed.")
     return run

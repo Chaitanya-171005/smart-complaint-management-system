@@ -117,7 +117,7 @@ def test_interrupted_complaint_rolls_back_and_retry_finishes(policy, complaint_f
 
     monkeypatch.setattr(escalation, "record_history", intermittent)
     run = run_at(now)
-    assert (run.examined, run.escalated, run.skipped, run.failed, run.status) == (3, 2, 0, 1, "COMPLETED")
+    assert (run.examined, run.escalated, run.skipped, run.failed, run.status) == (3, 2, 0, 1, "FAILED")
     assert run.finished_at is not None
     for index, complaint in enumerate(complaints):
         complaint.refresh_from_db()
@@ -265,3 +265,97 @@ def test_notification_failure_does_not_block_later_notification(policy, complain
         complaint.refresh_from_db()
         assert complaint.is_escalated and complaint.escalation_level == 1
         assert history(complaint).count() == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_command_processing_failure_reports_failed_and_keeps_success(policy, complaint_factory, monkeypatch, capsys):
+    from django.core.management import call_command
+    from django.core.management.base import CommandError
+    from routing import escalation
+    from routing.models import EscalationRun
+    now = timezone.now()
+    complaints = [complaint_factory(due_at=now - timedelta(minutes=1)) for _ in range(2)]
+    original = escalation.record_history
+    def fail_one(complaint_id, *args, **kwargs):
+        if complaint_id == complaints[1].complaint_id:
+            raise RuntimeError('sensitive detail')
+        return original(complaint_id, *args, **kwargs)
+    monkeypatch.setattr(escalation, 'record_history', fail_one)
+    with pytest.raises(CommandError, match='Escalation run failed'):
+        call_command('run_escalation')
+    run = EscalationRun.objects.get()
+    assert (run.status, run.examined, run.escalated, run.skipped, run.failed) == ('FAILED', 2, 1, 0, 1)
+    assert run.finished_at is not None and 'sensitive detail' not in run.error
+    assert 'status=FAILED examined=2 escalated=1 skipped=0 failed=1' in capsys.readouterr().out
+    for complaint, level in zip(complaints, [1, 0]):
+        complaint.refresh_from_db()
+        assert complaint.escalation_level == level
+        assert history(complaint).count() == level
+
+
+@pytest.mark.django_db(transaction=True)
+def test_keyboard_interrupt_rolls_back_current_complaint_and_retry(policy, complaint_factory, monkeypatch):
+    from routing import escalation
+    from routing.models import EscalationRun
+    now = timezone.now()
+    complaints = [complaint_factory(due_at=now - timedelta(minutes=1)) for _ in range(3)]
+    original = escalation.record_history
+    interruption = KeyboardInterrupt('original interruption')
+    def interrupt(complaint_id, *args, **kwargs):
+        if complaint_id == complaints[1].complaint_id:
+            raise interruption
+        return original(complaint_id, *args, **kwargs)
+    monkeypatch.setattr(escalation, 'record_history', interrupt)
+    with pytest.raises(KeyboardInterrupt) as caught:
+        run_escalation(now=now)
+    assert caught.value is interruption
+    run = EscalationRun.objects.get()
+    assert (run.status, run.examined, run.escalated, run.skipped, run.failed) == ('FAILED', 2, 1, 0, 1)
+    assert run.finished_at is not None and run.error == 'Escalation interrupted.'
+    for complaint, level in zip(complaints, [1, 0, 0]):
+        complaint.refresh_from_db()
+        assert complaint.escalation_level == level and history(complaint).count() == level
+    monkeypatch.setattr(escalation, 'record_history', original)
+    retry = run_escalation(now=now + timedelta(minutes=1))
+    assert (retry.status, retry.examined, retry.escalated, retry.failed) == ('COMPLETED', 2, 2, 0)
+    assert all(history(complaint).count() == 1 for complaint in complaints)
+
+
+@pytest.mark.django_db(transaction=True)
+def test_interruption_in_notification_counts_committed_complaint(policy, complaint_factory):
+    from routing.models import EscalationRun
+    now = timezone.now()
+    complaint = complaint_factory(due_at=now - timedelta(minutes=1))
+    interruption = KeyboardInterrupt('notify interrupted')
+    def notify(*args):
+        raise interruption
+    with pytest.raises(KeyboardInterrupt) as caught:
+        run_escalation(now=now, notify=notify)
+    assert caught.value is interruption
+    run = EscalationRun.objects.get()
+    assert (run.status, run.examined, run.escalated, run.failed) == ('FAILED', 1, 1, 0)
+    complaint.refresh_from_db()
+    assert complaint.escalation_level == 1 and history(complaint).count() == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_interruption_survives_finalization_failure(policy, complaint_factory, monkeypatch):
+    from routing import escalation
+    from routing.models import EscalationRun
+    now = timezone.now()
+    complaint_factory(due_at=now - timedelta(minutes=1))
+    interruption = KeyboardInterrupt('original')
+    def interrupt(*args, **kwargs):
+        raise interruption
+    original_save = EscalationRun.save
+    def fail_finalization(self, *args, **kwargs):
+        if self.pk:
+            from django.core.exceptions import ValidationError
+            raise ValidationError('finalization failed')
+        return original_save(self, *args, **kwargs)
+    monkeypatch.setattr(escalation, 'record_history', interrupt)
+    monkeypatch.setattr(EscalationRun, 'save', fail_finalization)
+    with pytest.raises(KeyboardInterrupt) as caught:
+        run_escalation(now=now)
+    assert caught.value is interruption
+    assert 'Escalation run finalization also failed.' in caught.value.__notes__
