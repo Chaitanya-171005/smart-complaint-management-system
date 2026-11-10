@@ -67,4 +67,4 @@ trail. New records always use the class name.
 
 - F1 operations (departments, locations, users) are audited and tested for completeness.
 - F3 operations (B17) already call `record_change` with the vocabulary above, and
-  `test_f3_operations_use_the_shared_audit` checks them.
+  `test_every_f3_operation_records_exactly_one_shared_audit_event` checks them.
