@@ -1,0 +1,6 @@
+# E03/Q02 example only: review the paths, runtime user and environment before installing.
+# The web app and worker must share a persistent DB and the same MAILERS settings.
+# Django reads /srv/scms/.env; protect it and never include credentials in this file.
+# Configure SMTP STARTTLS/SMTPS and a bounded transport timeout (e.g. 30 seconds).
+# Due timestamps, attempt limits and stale-claim recovery are database-backed.
+* * * * * cd /srv/scms && /srv/scms/.venv/bin/python manage.py deliver_notifications --limit 100

@@ -75,6 +75,12 @@ class ComplaintHistory(models.Model):
         if self.actor_kind == self.ActorKind.ANONYMOUS:
             self.remarks = ""
 
+        if not isinstance(self.complaint_ref, str) or not self.complaint_ref.strip():
+            raise ValidationError({"complaint_ref": "A complaint reference is required."})
+        # Validate lengths and required values before SQLite can silently accept
+        # overlong strings. Anonymous remarks have already been discarded.
+        self.clean_fields(exclude=["occurred_at"])
+
         super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -82,3 +88,8 @@ class ComplaintHistory(models.Model):
 
     def __str__(self):
         return f"{self.complaint_ref}: {self.event_type}"
+
+
+# B26 models live separately to keep the B21 history contract independent.
+from .notification_models import EmailDelivery, Notification, NotificationEvent  # noqa: E402,F401
+from .notification_models import EmailAttempt  # noqa: E402,F401
