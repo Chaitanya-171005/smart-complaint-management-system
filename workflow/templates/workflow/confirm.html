@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Confirm resolution — SCMS</title></head>
+<body>
+  <h1>Confirm resolution</h1>
+  <p>Confirmation closes complaint {{ complaint_id }}. Rating is optional.</p>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Confirm and close</button>
+  </form>
+</body>
+</html>

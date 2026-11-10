@@ -6,6 +6,9 @@
   <p><a href="{% url 'workflow:complaint_list' %}">My complaints</a></p>
   <h1><code>{{ complaint.complaint_id }}</code> — {{ complaint.title }}</h1>
   <p>Status: <strong>{{ complaint.get_status_display }}</strong></p>
+  {% if complaint.status == "RESOLVED" %}<p><a href="{% url 'workflow:confirm' complaint.complaint_id %}">Confirm resolution</a></p>{% endif %}
+  {% if complaint.status == "RESOLVED" %}<p><a href="{% url 'workflow:reject_resolution' complaint.complaint_id %}">Reject resolution</a></p>{% endif %}
+  {% if complaint.rating %}<p>Rating: {{ complaint.rating }} / 5</p>{% endif %}
   <p>Category: {{ complaint.category }}{% if complaint.sub_category %} / {{ complaint.sub_category }}{% endif %}</p>
   <p>Location: {{ complaint.block }} / {{ complaint.floor }} / {{ complaint.room_area }}</p>
   <p>Priority: {{ complaint.get_priority_display }} · Department: {{ complaint.department.name }}</p>
