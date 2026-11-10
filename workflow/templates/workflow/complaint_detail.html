@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complaint {{ complaint.complaint_id }} — SCMS</title>
+<style>body{font-family:system-ui,sans-serif;max-width:50rem;margin:2rem auto;padding:0 1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}code{overflow-wrap:anywhere}li{margin:1rem 0}</style></head>
+<body>
+  <p><a href="{% url 'workflow:complaint_list' %}">My complaints</a></p>
+  <h1><code>{{ complaint.complaint_id }}</code> — {{ complaint.title }}</h1>
+  <p>Status: <strong>{{ complaint.get_status_display }}</strong></p>
+  <p>Category: {{ complaint.category }}{% if complaint.sub_category %} / {{ complaint.sub_category }}{% endif %}</p>
+  <p>Location: {{ complaint.block }} / {{ complaint.floor }} / {{ complaint.room_area }}</p>
+  <p>Priority: {{ complaint.get_priority_display }} · Department: {{ complaint.department.name }}</p>
+  <p>Submitted: {{ complaint.submitted_at }} · Due: {{ complaint.due_at }}</p>
+  {% if complaint.is_escalated %}<p>Escalated — level {{ complaint.escalation_level }}</p>{% endif %}
+  <h2>Description</h2><pre>{{ complaint.description }}</pre>
+  {% if complaint.resolution_remarks %}<h2>Resolution remarks</h2><pre>{{ complaint.resolution_remarks }}</pre>{% endif %}
+  {% if complaint.resolved_at %}<p>Resolved: {{ complaint.resolved_at }}</p>{% endif %}
+  {% if complaint.closed_at %}<p>Closed: {{ complaint.closed_at }}</p>{% endif %}
+  {% if complaint.reopen_count %}<p>Reopen count: {{ complaint.reopen_count }}</p>{% endif %}
+  <h2>Evidence</h2><ul>
+    {% for attachment in evidence %}<li><a href="{% url 'complaints:download_evidence' attachment.pk %}">Download {{ attachment.get_stage_display }} evidence {{ forloop.counter }}</a> ({{ attachment.content_type }}, {{ attachment.size }} bytes)</li>
+    {% empty %}<li>No evidence attached.</li>{% endfor %}
+  </ul>
+  <h2>History</h2><ol>
+    {% for event in history_page %}<li>
+      <p>{{ event.occurred_at }} — {{ event.get_event_type_display }} ({{ event.get_actor_kind_display }})</p>
+      <p>{{ event.previous_state|default:"—" }} → {{ event.new_state|default:"—" }}</p>
+      {% if event.remarks %}<pre>{{ event.remarks }}</pre>{% endif %}
+    </li>{% empty %}<li>No history recorded.</li>{% endfor %}
+  </ol>
+  <nav aria-label="History pages">
+    {% if history_page.has_previous %}<a href="?history_page={{ history_page.previous_page_number }}">Previous events</a>{% endif %}
+    <span>Page {{ history_page.number }} of {{ history_page.paginator.num_pages }}</span>
+    {% if history_page.has_next %}<a href="?history_page={{ history_page.next_page_number }}">Next events</a>{% endif %}
+  </nav>
+</body>
+</html>

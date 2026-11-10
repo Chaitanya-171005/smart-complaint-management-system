@@ -171,12 +171,13 @@ class PrivateEvidenceStorage(FileSystemStorage):
 
 
 @contextmanager
-def staged_evidence(files):
+def staged_evidence(files, *, anonymous=False):
     """Validate ALL files before storage; remove this batch if the operation fails.
 
     Put the caller's transaction.atomic() INSIDE this context, so a database
     commit failure propagates through it and removes the staged files too.
-    This does not protect against process crashes; B10 needs orphan recovery.
+    Accepted Attachment rows protect bytes if a callback raises after commit.
+    Unknown database state defers cleanup; process crashes still need recovery.
     """
     validated = validate_evidence(files)
     storage = PrivateEvidenceStorage()
@@ -188,14 +189,26 @@ def staged_evidence(files):
                                          len(item.data), hashlib.sha256(item.data).hexdigest()))
         yield tuple(stored)
     except BaseException:
-        # Attempt every cleanup, even if one deletion fails. Preserve the
-        # operation's original exception; failed cleanup must be logged.
+        # Reuse PR #76's primary-metadata protection: a post-commit exception
+        # must never remove accepted bytes. Do not duplicate storage in F4.
         import logging
+        from .models import Attachment
+        try:
+            accepted = set(Attachment.objects.using("default").filter(
+                storage_name__in=[item.storage_name for item in stored],
+            ).values_list("storage_name", flat=True))
+        except Exception:
+            accepted = {item.storage_name for item in stored}
+            logging.getLogger(__name__).error("Evidence rollback cleanup deferred to recovery")
         for item in stored:
+            if item.storage_name in accepted:
+                continue
             try:
                 storage.delete(item.storage_name)
             except OSError:
-                logging.getLogger(__name__).exception("Evidence rollback cleanup failed")
+                message = ("Anonymous evidence rollback cleanup failed" if anonymous
+                           else "Evidence rollback cleanup failed")
+                logging.getLogger(__name__).error("%s; recovery required", message)
         raise
 
 

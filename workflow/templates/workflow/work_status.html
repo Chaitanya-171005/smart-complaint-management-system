@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Complaint work status — SCMS</title>
+  <style>body{font-family:system-ui,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+  <h1>Complaint work status</h1>
+  <p>Complaint <code>{{ complaint.complaint_id }}</code></p>
+  <p>Status: <strong>{{ complaint.get_status_display }}</strong></p>
+  {% if can_start %}<p><a href="{% url 'workflow:progress' complaint.complaint_id %}">Start work</a></p>{% endif %}
+  {% if can_resolve %}<p><a href="{% url 'workflow:resolve' complaint.complaint_id %}">Submit resolution</a></p>{% endif %}
+  {% if complaint.resolved_at %}<p>Resolved: {{ complaint.resolved_at }}</p>{% endif %}
+  {% if complaint.resolution_remarks %}<h2>Resolution remarks</h2><pre>{{ complaint.resolution_remarks }}</pre>{% endif %}
+  {% if evidence %}<h2>Resolution evidence</h2><ul>
+    {% for attachment in evidence %}<li><a href="{% url 'complaints:download_evidence' attachment.pk %}">Download evidence {{ forloop.counter }}</a></li>{% endfor %}
+  </ul>{% endif %}
+</body>
+</html>
