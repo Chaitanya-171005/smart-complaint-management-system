@@ -9,7 +9,7 @@ certification for unimplemented reports, notifications or tracking.
 
 | Surface | Enforced boundary |
 | --- | --- |
-| Anonymous HTTP request | Middleware runs before session/auth, removes session/auth/identity headers, source IP and GET parameters; only the CSRF cookie is retained for validation. No account lookup is used by intake. |
+| Anonymous HTTP request | Middleware runs before session/auth, removes session/auth/identity headers, source IP and GET parameters; only the CSRF cookie is retained for validation, and its response lifetime is restricted to the browser session. No account lookup is used by intake. |
 | Signed-in visitor | Existing browser login is neither attached to the complaint nor refreshed/changed by the anonymous route. It remains usable on other routes. |
 | Complaint and routing | Submitter is NULL; no name/email/IP column is added. Current category/location/routing/SLA validation still applies. |
 | Operation receipt | Random operation-key hash and normalized payload hash only; no user, session, source or IP field. This key is not a tracking reference or source-throttling key. |
@@ -45,7 +45,14 @@ from arbitrary user-authored content. The form warns users not to include these
 details. It also states that PDF annotations are removed. Image re-encoding may
 change encoded bytes; the anonymous retry fingerprint uses the sanitized bytes.
 JPEG re-encoding uses quality 95 without chroma subsampling to reduce additional
-loss. Oversized sanitized files are rejected rather than bypassing the B09 limit.
+loss, but it is still lossy and can produce a larger file than the upload.
+Near-limit regressions use deterministic noisy JPEGs just below both candidate
+5 MB conventions (5,000,000 and 5,242,880 bytes): when the sanitized image exceeds
+the configured bound, the entire submission is rejected before staging or database
+writes. A near-limit JPEG whose sanitized output fits is accepted without retaining
+original metadata. Users may need to resize or select another image; the application
+does not silently lower quality, preserve private originals or bypass the B09 limit.
+These two test bounds do not resolve D02; the team must confirm its byte convention.
 Only the sanitized bytes' SHA-256 is retained: the original can contain private
 metadata and is deliberately not preserved or fingerprinted as a second artifact.
 PDF parsing stays strict; malformed/scanner-specific PDFs that require repair
@@ -70,8 +77,12 @@ Keep them False until the responsible owners record the following checks:
 - F1/F3/team confirm D01 campus references/emergency instructions and D02 byte
   convention. Supply the actual notice and shared intake flag; use no invented
   campus numbers or unlabelled synthetic policy.
-- E03/Q02 verify TLS at ingress, correctly trusted/stripped proxy headers and no
-  direct backend bypass. Configure/test the total upload body limit before Django.
+- E03/Q02 verify TLS and HSTS at ingress, correctly overwritten proxy headers and
+  blocked direct backend access. Forward/test the HTTPS mode, redirect, secure
+  cookie, HSTS and attestation env values in the actual Docker environment.
+  `ANONYMOUS_TRANSPORT_VERIFIED` stays False until those deployment checks pass;
+  `anonymous_transport_ready()` also requires positive HSTS. Configure/test the
+  total upload body limit before Django.
 - E03/Q03 disable or redact anonymous-route access logs, request/response body
   capture, cookies, query strings, source IP/user-agent/forwarded headers and APM
   traces at reverse proxies, web servers, error collectors and analytics. This
@@ -79,10 +90,20 @@ Keep them False until the responsible owners record the following checks:
 - Explicitly redact Cookie/Set-Cookie, CSRF-cookie values, X-CSRFToken and posted
   csrfmiddlewaretoken on BOTH signed-in and anonymous routes. The CSRF cookie
   is stable browser metadata; keeping it for CSRF does not make upstream logs
-  unlinkable. No proxy/APM/analytics collector may use it to correlate identity.
+  unlinkable. Anonymous response cookies have no Max-Age or Expires, including
+  after acceptance and validation failure; this replaces a previously persistent
+  CSRF cookie with a session-lifetime one without modifying login cookies. It does
+  not prevent within-session correlation. No proxy/APM/analytics collector may use
+  CSRF values to correlate identity.
 - Configure the explicit direct/proxy HTTPS mode, secure session/CSRF cookies
   and SSL redirection described in B11_ANONYMOUS.md. Verify trusted proxy header
   replacement and denied direct backend access under #27/#28.
+- **Release blocker: real F3/F4 consumers must call the privacy helpers.**
+  `complainant_label()` and `anonymous_summary()` currently have no application
+  callers; helper tests alone are insufficient. Complete and owner-review #74
+  (F3 queue, allocation, escalation) and #75 (F4 notices, reports, CSV), including
+  anonymous escalation and real staff notification without reporter email or
+  reference disclosure. Keep release disabled while either integration is pending.
 - F4/report/notification owners use the Anonymous label and explicit safe
   projection, omit raw references and submitter linkage, and test real exports,
   messages and staff screens as those surfaces become available. Anonymous intake

@@ -50,7 +50,7 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        if request.path_info.rstrip("/") != "/complaints/anonymous":
+        if request.path_info.rstrip("/") != "/anonymous/new":
             return
         request.anonymous_intake = True
         # Defense against an upstream request wrapper preloading identity. The
@@ -89,6 +89,24 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
 
     def process_response(self, request, response):
         if getattr(request, "anonymous_intake", False):
+            # CsrfViewMiddleware has already set its cookie on the response.
+            # Keep validation intact but replace any persistent CSRF cookie with
+            # a browser-session cookie on anonymous responses only. Auth/session
+            # cookie settings and the existing signed-in session are unchanged.
+            cookie = response.cookies.get(settings.CSRF_COOKIE_NAME)
+            if cookie is None and request.META.get("CSRF_COOKIE"):
+                # Successful POSTs need not render a new csrf_token, so Django
+                # may omit Set-Cookie. Replace an incoming persistent cookie too.
+                response.set_cookie(
+                    settings.CSRF_COOKIE_NAME, request.META["CSRF_COOKIE"],
+                    path=settings.CSRF_COOKIE_PATH, domain=settings.CSRF_COOKIE_DOMAIN,
+                    secure=settings.CSRF_COOKIE_SECURE, httponly=settings.CSRF_COOKIE_HTTPONLY,
+                    samesite=settings.CSRF_COOKIE_SAMESITE,
+                )
+                cookie = response.cookies[settings.CSRF_COOKIE_NAME]
+            if cookie is not None:
+                cookie["max-age"] = ""
+                cookie["expires"] = ""
             patch_cache_control(response, private=True, no_store=True, no_cache=True, max_age=0)
             response["Referrer-Policy"] = "no-referrer"
             response["X-Robots-Tag"] = "noindex, nofollow, noarchive"

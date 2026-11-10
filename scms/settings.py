@@ -196,3 +196,8 @@ SECURE_PROXY_SSL_HEADER = (
 SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
 SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", "False") == "True"
 CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", "False") == "True"
+
+# E03/Q02 must verify the deployed ingress, Docker env and backend isolation
+# before attesting anonymous transport. Static topology flags alone do not prove it.
+ANONYMOUS_TRANSPORT_VERIFIED = os.environ.get("ANONYMOUS_TRANSPORT_VERIFIED", "False") == "True"
+SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_SECURE_HSTS_SECONDS", "0"))
