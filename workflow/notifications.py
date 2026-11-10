@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import Q
 from django.http import Http404
+from django.utils import timezone
 
 from accounts.models import User
 from accounts.permissions import can_view_complaint, scope_complaints
@@ -135,3 +136,18 @@ def get_notification(user, notice_id):
         return notifications_for(user).get(pk=notice_id)
     except Notification.DoesNotExist:
         raise Http404 from None
+
+
+def unread_count(user):
+    return notifications_for(user).filter(read_at__isnull=True).count()
+
+
+@transaction.atomic
+def mark_notification_read(user, notice_id):
+    """Recipient/current-scope only; first read timestamp wins on repeat POSTs."""
+    current = (User.objects.select_for_update().filter(pk=user.pk).first()
+               if user is not None and user.is_authenticated else None)
+    notices = notifications_for(current).filter(pk=notice_id)
+    changed = notices.filter(read_at__isnull=True).update(read_at=timezone.now())
+    if not changed and not notices.exists():
+        raise Http404

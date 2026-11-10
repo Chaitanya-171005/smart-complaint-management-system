@@ -2,6 +2,7 @@
 <html lang="en">
 <head><meta charset="utf-8"><title>Confirm resolution — SCMS</title></head>
 <body>
+{% load notification_tags %}{% notification_header %}
   <h1>Confirm resolution</h1>
   <p>Confirmation closes complaint {{ complaint_id }}. Rating is optional.</p>
   <form method="post">

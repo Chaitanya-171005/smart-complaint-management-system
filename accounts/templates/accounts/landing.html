@@ -6,6 +6,7 @@
   <title>{{ role_label }} - SCMS</title>
 </head>
 <body>
+{% load notification_tags %}{% notification_header %}
   <header>
     <p>Signed in as {{ user.full_name }} ({{ role_label }})</p>
     <form method="post" action="{% url 'accounts:logout' %}">
