@@ -90,7 +90,7 @@ def create_department(actor, name):
         raise ValidationError({"name": "A department with this name already exists."})
     dept = Department(name=name, active=True)
     _save(dept, "name", "A department with this name already exists.")
-    record_change(actor=actor, entity_type="department", entity_id=dept.pk,
+    record_change(actor=actor, entity_type="Department", entity_id=dept.pk,
                   action=Action.CREATE, new=_department_values(dept))
     return dept
 
@@ -110,7 +110,7 @@ def rename_department(actor, department, name):
         return department
     department.name = name
     _save(department, "name", "A department with this name already exists.")
-    record_change(actor=actor, entity_type="department", entity_id=department.pk,
+    record_change(actor=actor, entity_type="Department", entity_id=department.pk,
                   action=Action.UPDATE, old=old, new=_department_values(department))
     return department
 
@@ -124,7 +124,7 @@ def set_department_active(actor, department, active):
     old = _department_values(department)
     department.active = bool(active)
     department.save(update_fields=["active"])
-    record_change(actor=actor, entity_type="department", entity_id=department.pk,
+    record_change(actor=actor, entity_type="Department", entity_id=department.pk,
                   action=Action.REACTIVATE if active else Action.DEACTIVATE,
                   old=old, new=_department_values(department))
     return department
@@ -170,7 +170,7 @@ def create_location(actor, *, code, block, floor, room_area):
     _check_location_unique(fields)
     loc = Location(active=True, **fields)
     _save(loc, "code", "This location already exists.")
-    record_change(actor=actor, entity_type="location", entity_id=loc.pk,
+    record_change(actor=actor, entity_type="Location", entity_id=loc.pk,
                   action=Action.CREATE, new=_location_values(loc))
     return loc
 
@@ -187,7 +187,7 @@ def update_location(actor, location, *, block, floor, room_area):
     if _location_values(location) == old:
         return location
     _save(location, "room_area", "This block, floor and room/area already exists.")
-    record_change(actor=actor, entity_type="location", entity_id=location.pk,
+    record_change(actor=actor, entity_type="Location", entity_id=location.pk,
                   action=Action.UPDATE, old=old, new=_location_values(location))
     return location
 
@@ -200,7 +200,7 @@ def set_location_active(actor, location, active):
     old = _location_values(location)
     location.active = bool(active)
     location.save(update_fields=["active"])
-    record_change(actor=actor, entity_type="location", entity_id=location.pk,
+    record_change(actor=actor, entity_type="Location", entity_id=location.pk,
                   action=Action.REACTIVATE if active else Action.DEACTIVATE,
                   old=old, new=_location_values(location))
     return location
