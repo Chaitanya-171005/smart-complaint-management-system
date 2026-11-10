@@ -184,3 +184,10 @@ COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").st
 # B11/B12: keep disabled until D01 and external logging/privacy checks are verified.
 ANONYMOUS_INTAKE_ENABLED = os.environ.get("ANONYMOUS_INTAKE_ENABLED", "False") == "True"
 ANONYMOUS_PRIVACY_READY = os.environ.get("ANONYMOUS_PRIVACY_READY", "False") == "True"
+
+# B13 has an independent release gate: existing references can still be checked
+# when new anonymous submissions are disabled. No local/DB-cache fallback.
+ANONYMOUS_TRACKING_ENABLED = os.environ.get("ANONYMOUS_TRACKING_ENABLED", "False") == "True"
+ANONYMOUS_TRACKING_LIMITER_READY = os.environ.get("ANONYMOUS_TRACKING_LIMITER_READY", "False") == "True"
+ANONYMOUS_TRACKING_REDIS_URL = os.environ.get("ANONYMOUS_TRACKING_REDIS_URL", "")
+ANONYMOUS_TRACKING_SOURCE_SECRET = os.environ.get("ANONYMOUS_TRACKING_SOURCE_SECRET", "")
