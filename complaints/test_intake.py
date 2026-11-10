@@ -1,7 +1,7 @@
 """B10 guard tests with real DB writes and explicitly synthetic operation adapters.
 
-The adapters do not stand in for completed Complaint/routing acceptance. Optional
-B09 tests exercise the actual private storage when that contribution is present.
+The adapters do not stand in for completed Complaint/routing acceptance. Merged
+B09 storage integration is required and exercised without dependency skips.
 """
 
 import hashlib
@@ -268,8 +268,8 @@ def test_database_constraints_reject_duplicate_keys(args):
 
 
 @pytest.mark.parametrize("mode", ["success-replay", "operation-failure", "commit-failure"])
-def test_real_b09_storage_contract_when_available(args, settings, tmp_path, monkeypatch, mode):
-    evidence = pytest.importorskip("complaints.evidence", reason="B09 PR #58 is not merged; storage integration pending.")
+def test_real_b09_storage_contract(args, settings, tmp_path, monkeypatch, mode):
+    from complaints import evidence
     from io import BytesIO
     from PIL import Image
     from django.core.files.uploadedfile import SimpleUploadedFile

@@ -14,6 +14,9 @@
     </form>
   </header>
   <h1>{{ role_label }} home</h1>
+  {% if user.role == "COMPLAINANT" %}
+  <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
+  {% endif %}
   {% if user.role == "ADMIN" %}
   <nav>
     <ul>

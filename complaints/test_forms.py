@@ -325,12 +325,10 @@ def test_submission_permission_is_the_shared_b04_predicate():
     assert services.can_submit_complaint is can_submit_complaint
 
 
-def test_indicated_priority_matches_b17_when_available():
-    from routing import models
+def test_indicated_priority_matches_b17():
+    from routing.models import Priority
 
-    if not hasattr(models, "Priority"):
-        pytest.skip("B17 PR #53 is not merged; run this contract test again after integration.")
-    assert ComplaintForm.Priority.CHOICES == tuple(models.Priority.choices)
+    assert ComplaintForm.Priority.CHOICES == tuple(Priority.choices)
 
 
 @pytest.mark.parametrize("description,valid", [
