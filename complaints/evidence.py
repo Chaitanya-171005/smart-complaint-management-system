@@ -1,7 +1,8 @@
 """Shared B09 validation, private storage and authorized download primitives.
 
 No public file URL is provided. Real Attachment metadata is written by the
-authenticated submission service; production HTTP/F4 integration remains open.
+authenticated submission service. F4 must retain the shared staging/commit
+boundary; process-crash reconciliation is documented in docs/B10_RECOVERY.md.
 """
 
 import hashlib
@@ -26,6 +27,7 @@ from pypdf import PdfReader
 from accounts.permissions import authorize_or_404, can_view_evidence
 
 from .checks import valid_evidence_byte_limit
+from .evidence_recovery import evidence_lease, sync_directory
 
 MAX_FILES = 3
 FORMATS = {".jpg": "image/jpeg", ".jpeg": "image/jpeg",
@@ -164,39 +166,66 @@ class PrivateEvidenceStorage(FileSystemStorage):
             with os.fdopen(descriptor, "wb") as destination:
                 for chunk in content.chunks():
                     destination.write(chunk)
+                destination.flush()
+                os.fsync(destination.fileno())
+            sync_directory(self.location)
         except BaseException:
-            os.unlink(path)
+            try:
+                os.unlink(path)
+                sync_directory(self.location)
+            except OSError:
+                import logging
+                logging.getLogger(__name__).error("Evidence partial-write cleanup deferred to recovery")
             raise
         return name
 
 
 @contextmanager
-def staged_evidence(files):
-    """Validate ALL files before storage; remove this batch if the operation fails.
+def staged_evidence(files, *, anonymous=False):
+    """Validate the complete batch and hold a writer lease through DB commit.
 
-    Put the caller's transaction.atomic() INSIDE this context, so a database
-    commit failure propagates through it and removes the staged files too.
-    This does not protect against process crashes; B10 needs orphan recovery.
+    Put the caller's transaction.atomic() INSIDE this context. Bytes and their
+    directory entries are synced before they can be acknowledged by a DB commit.
+    Ordinary cleanup consults primary Attachment metadata; an error after commit
+    must never remove accepted bytes. Unknown DB state defers to recovery.
     """
+    import logging
     validated = validate_evidence(files)
-    storage = PrivateEvidenceStorage()
-    stored = []
-    try:
-        for item in validated:
-            name = storage.save(uuid4().hex + item.extension, ContentFile(item.data))
-            stored.append(StoredEvidence(name, item.original_name, item.content_type,
-                                         len(item.data), hashlib.sha256(item.data).hexdigest()))
-        yield tuple(stored)
-    except BaseException:
-        # Attempt every cleanup, even if one deletion fails. Preserve the
-        # operation's original exception; failed cleanup must be logged.
-        import logging
-        for item in stored:
+    if not validated:
+        yield ()
+        return
+    with evidence_lease():
+        storage = PrivateEvidenceStorage()
+        stored = []
+        try:
+            for item in validated:
+                name = storage.save(uuid4().hex + item.extension, ContentFile(item.data))
+                stored.append(StoredEvidence(name, item.original_name, item.content_type,
+                                             len(item.data), hashlib.sha256(item.data).hexdigest()))
+            yield tuple(stored)
+        except BaseException:
+            from .models import Attachment
             try:
-                storage.delete(item.storage_name)
+                accepted = set(Attachment.objects.using("default").filter(
+                    storage_name__in=[item.storage_name for item in stored],
+                ).values_list("storage_name", flat=True))
+            except Exception:
+                accepted = {item.storage_name for item in stored}
+                logging.getLogger(__name__).error("Evidence rollback cleanup deferred to recovery")
+            for item in stored:
+                if item.storage_name in accepted:
+                    continue
+                try:
+                    storage.delete(item.storage_name)
+                except OSError:
+                    message = ("Anonymous evidence rollback cleanup failed" if anonymous
+                               else "Evidence rollback cleanup failed")
+                    logging.getLogger(__name__).error("%s; recovery required", message)
+            try:
+                sync_directory(storage.location)
             except OSError:
-                logging.getLogger(__name__).exception("Evidence rollback cleanup failed")
-        raise
+                logging.getLogger(__name__).error("Evidence cleanup sync deferred to recovery")
+            raise
 
 
 def evidence_download_response(*, user, attachment):
