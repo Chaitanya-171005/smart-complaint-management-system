@@ -135,15 +135,74 @@ def test_a_change_needs_a_saved_acting_user():
     assert not ConfigAuditEvent.objects.exists()
 
 
-def test_f3_operations_use_the_shared_audit(admin):
+def test_every_f3_operation_records_exactly_one_shared_audit_event(admin, department_factory):
     from routing import services as routing
+    from routing.models import EscalationPolicy, Priority
 
-    before = ConfigAuditEvent.objects.count()
-    category = routing.create_category(admin, name="Synthetic Audit Category")
-    routing.deactivate_category(admin, category)
-    events = new_events(before)
-    assert [(e.entity_type, e.action) for e in events] == [("Category", "CREATE"), ("Category", "DEACTIVATE")]
-    assert all(e.entity_type in ENTITY_TYPES and e.actor == admin for e in events)
+    dept = department_factory()
+    other = department_factory()
+    Location.objects.create(code="AUD-F3", block="Block F", room_area="Room 3")
+    seen = []
+
+    def step(label, entity, action, operation):
+        before = ConfigAuditEvent.objects.count()
+        result = operation()
+        events = new_events(before)
+        assert len(events) == 1, f"{label}: expected one audit event, got {len(events)}"
+        event = events[0]
+        assert (event.entity_type, event.action) == (entity, action), label
+        assert event.entity_type in ENTITY_TYPES and event.actor == admin and event.created_at, label
+        seen.append(label)
+        return result
+
+    category = step("create category", "Category", "CREATE", lambda: routing.create_category(admin, name="Synthetic F3 Cat"))
+    step("update category", "Category", "UPDATE",
+         lambda: routing.update_category(admin, category, minimum_priority=Priority.HIGH))
+    rule = step("create rule", "RoutingRule", "CREATE",
+                lambda: routing.create_routing_rule(admin, category=category, location_code="aud-f3",
+                                                    department=dept, precedence=10))
+    step("update rule", "RoutingRule", "UPDATE", lambda: routing.update_routing_rule(admin, rule, precedence=20))
+    step("deactivate rule", "RoutingRule", "DEACTIVATE", lambda: routing.deactivate_routing_rule(admin, rule))
+    sla = step("set SLA (create)", "SLAConfiguration", "CREATE",
+               lambda: routing.set_sla_configuration(admin, priority=Priority.LOW, duration_minutes=600,
+                                                     category=category))
+    step("set SLA (update)", "SLAConfiguration", "UPDATE",
+         lambda: routing.set_sla_configuration(admin, priority=Priority.LOW, duration_minutes=900, category=category))
+    step("deactivate SLA", "SLAConfiguration", "DEACTIVATE", lambda: routing.deactivate_sla_configuration(admin, sla))
+    EscalationPolicy.objects.all().delete()
+    policy = step("create escalation policy", "EscalationPolicy", "CREATE",
+                  lambda: routing.create_escalation_policy(admin, default_department=dept,
+                                                           interval_minutes=1440, maximum_level=3))
+    step("update escalation policy", "EscalationPolicy", "UPDATE",
+         lambda: routing.update_escalation_policy(admin, policy, default_department=other, interval_minutes=720))
+    step("deactivate category", "Category", "DEACTIVATE", lambda: routing.deactivate_category(admin, category))
+    step("reactivate category", "Category", "REACTIVATE", lambda: routing.reactivate_category(admin, category))
+    assert len(seen) == 12
+
+
+def test_legacy_lowercase_entity_rows_still_appear_under_the_class_name_filter(admin):
+    # The table is append-only, so an older database can hold lowercase names. The raw insert
+    # below stands in for such a row.
+    ConfigAuditEvent.objects.bulk_create([
+        ConfigAuditEvent(actor=admin, actor_identifier=admin.email, entity_type="department",
+                         entity_id="1", action="CREATE", new_values={"name": "Legacy"}),
+    ])
+    record_change(actor=admin, entity_type="Department", entity_id=2, action="CREATE", new={"name": "Current"})
+    page = login(admin).get(AUDIT_URL, {"entity_type": "Department"}).content.decode()
+    assert "name: Legacy" in page and "name: Current" in page
+
+
+@pytest.mark.parametrize("bad", ["text", ["a"], 5, ("a", 1)])
+def test_old_and_new_values_must_be_dicts_or_none(admin, bad):
+    for field in ("old", "new"):
+        with pytest.raises(ValueError):
+            record_change(actor=admin, entity_type="Department", entity_id=1, action="UPDATE", **{field: bad})
+    assert not ConfigAuditEvent.objects.exists()
+
+
+def test_the_audit_table_has_a_caption_and_column_headers(admin):
+    page = login(admin).get(AUDIT_URL).content.decode()
+    assert "<caption>" in page and page.count('scope="col"') == 6
 
 
 # --- sensitive values never reach the audit -------------------------------------------------------

@@ -60,6 +60,9 @@ def record_change(*, actor, entity_type, entity_id, action, old=None, new=None):
         raise ValueError(f"Unknown configuration entity {entity_type!r}; see ENTITY_TYPES.")
     if action not in ConfigAuditEvent.Action.values:
         raise ValueError(f"Unknown configuration action {action!r}.")
+    for label, values in (("old", old), ("new", new)):
+        if values is not None and not isinstance(values, dict):
+            raise ValueError(f"{label} must be a dict of field values or None, not {type(values).__name__}.")
     if not isinstance(actor, User) or actor.pk is None:
         raise ValueError("A configuration change must be recorded against a saved user.")
     return ConfigAuditEvent.objects.create(

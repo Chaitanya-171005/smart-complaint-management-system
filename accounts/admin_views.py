@@ -190,7 +190,9 @@ def audit_log(request):
     if form.is_valid():
         data = form.cleaned_data
         if data["entity_type"]:
-            events = events.filter(entity_type=data["entity_type"])
+            # Older databases may hold lowercase entity names from before the class-name
+            # convention; the table is append-only, so match case-insensitively.
+            events = events.filter(entity_type__iexact=data["entity_type"])
         if data["action"]:
             events = events.filter(action=data["action"])
         if data["actor"]:

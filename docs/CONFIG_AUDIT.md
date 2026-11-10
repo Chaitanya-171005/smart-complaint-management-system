@@ -47,6 +47,13 @@ a `SecurityEvent` (`ROLE_CHANGED`, or `ROLE_CHANGE_REFUSED` / `AUTHORIZATION_REF
 recorded outside the transaction so they persist). The configuration audit says what changed; the
 security log supports security review (REQ-SEC-08).
 
+## Older databases
+
+Before the class-name convention, F1 wrote lowercase entity names (`department`, `location`,
+`user`). The table is append-only, so those rows cannot be rewritten. The audit screen therefore
+filters entity names case-insensitively, and a database that holds both spellings still shows one
+trail. New records always use the class name.
+
 ## Not complaint history, and not editable
 
 - `ConfigAuditEvent` is a separate table in `accounts`. It has no link to `workflow.ComplaintHistory`
@@ -61,4 +68,3 @@ security log supports security review (REQ-SEC-08).
 - F1 operations (departments, locations, users) are audited and tested for completeness.
 - F3 operations (B17) already call `record_change` with the vocabulary above, and
   `test_f3_operations_use_the_shared_audit` checks them.
-- Both affected owners (F1 and F3) must review this contract (issue #7 definition of done).

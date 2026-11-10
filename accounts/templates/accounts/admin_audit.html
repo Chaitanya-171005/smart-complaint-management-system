@@ -15,7 +15,8 @@
     <button type="submit">Filter</button>
   </form>
   <table>
-    <tr><th>When</th><th>Administrator</th><th>Action</th><th>Entity</th><th>Before</th><th>After</th></tr>
+    <caption>Configuration changes, newest first</caption>
+    <tr><th scope="col">When</th><th scope="col">Administrator</th><th scope="col">Action</th><th scope="col">Entity</th><th scope="col">Before</th><th scope="col">After</th></tr>
     {% for event in page %}
     <tr>
       <td>{{ event.created_at|date:"Y-m-d H:i:s" }}</td>
