@@ -184,3 +184,15 @@ COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").st
 # B11/B12: keep disabled until D01 and external logging/privacy checks are verified.
 ANONYMOUS_INTAKE_ENABLED = os.environ.get("ANONYMOUS_INTAKE_ENABLED", "False") == "True"
 ANONYMOUS_PRIVACY_READY = os.environ.get("ANONYMOUS_PRIVACY_READY", "False") == "True"
+
+# Anonymous release requires an explicit HTTPS topology and all secure-cookie /
+# redirect settings. Local authenticated development remains available over HTTP.
+# 'proxy' opts into trust of this header ONLY after the ingress strips client
+# values, overwrites it, and blocks direct access to the application backend.
+SCMS_HTTPS_MODE = os.environ.get("DJANGO_HTTPS_MODE", "").strip()
+SECURE_PROXY_SSL_HEADER = (
+    ("HTTP_X_FORWARDED_PROTO", "https") if SCMS_HTTPS_MODE == "proxy" else None
+)
+SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
+SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", "False") == "True"
+CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", "False") == "True"

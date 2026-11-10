@@ -31,6 +31,12 @@ check and must never be used to grant public full-record access. F4 should use
 these boundaries as its staff/history/report screens are implemented. B13 will
 need its own restricted history projection and transient tracking throttle.
 
+The upstream-preloaded-identity check is separate from middleware ordering: it
+rejects a request that already has session/user/cached-user state, including
+when an outer WSGI/custom request wrapper populated it before the configured
+first middleware. Regressions cover those preloaded objects and bad ordering.
+Neither check removes the deployment checklist below.
+
 ## What metadata removal cannot guarantee
 
 Names/email/phone numbers can be deliberately written into the complaint,
@@ -38,7 +44,13 @@ visible PDF text or image pixels. No software can infer every person's identity
 from arbitrary user-authored content. The form warns users not to include these
 details. It also states that PDF annotations are removed. Image re-encoding may
 change encoded bytes; the anonymous retry fingerprint uses the sanitized bytes.
-Oversized sanitized files are rejected rather than bypassing the B09 limit.
+JPEG re-encoding uses quality 95 without chroma subsampling to reduce additional
+loss. Oversized sanitized files are rejected rather than bypassing the B09 limit.
+Only the sanitized bytes' SHA-256 is retained: the original can contain private
+metadata and is deliberately not preserved or fingerprinted as a second artifact.
+PDF parsing stays strict; malformed/scanner-specific PDFs that require repair
+can be refused with the generic select-another-file error. Real campus scanner
+compatibility remains part of B09/D02 acceptance; this is not a universal-PDF claim.
 
 This application does not promise network-level anonymity, hide physical browser
 history/screenshots, recover a lost tracking reference, or remove identity from
@@ -64,6 +76,13 @@ Keep them False until the responsible owners record the following checks:
   capture, cookies, query strings, source IP/user-agent/forwarded headers and APM
   traces at reverse proxies, web servers, error collectors and analytics. This
   must happen outside Django too; middleware cannot erase upstream logs.
+- Explicitly redact Cookie/Set-Cookie, CSRF-cookie values, X-CSRFToken and posted
+  csrfmiddlewaretoken on BOTH signed-in and anonymous routes. The CSRF cookie
+  is stable browser metadata; keeping it for CSRF does not make upstream logs
+  unlinkable. No proxy/APM/analytics collector may use it to correlate identity.
+- Configure the explicit direct/proxy HTTPS mode, secure session/CSRF cookies
+  and SSL redirection described in B11_ANONYMOUS.md. Verify trusted proxy header
+  replacement and denied direct backend access under #27/#28.
 - F4/report/notification owners use the Anonymous label and explicit safe
   projection, omit raw references and submitter linkage, and test real exports,
   messages and staff screens as those surfaces become available. Anonymous intake

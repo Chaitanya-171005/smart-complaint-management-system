@@ -53,7 +53,11 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
         if request.path_info.rstrip("/") != "/complaints/anonymous":
             return
         request.anonymous_intake = True
-        request.anonymous_privacy_isolated = not hasattr(request, "session")
+        # Defense against an upstream request wrapper preloading identity. The
+        # first-in-MIDDLEWARE release check is still mandatory independently.
+        request.anonymous_privacy_isolated = not any(
+            hasattr(request, name) for name in ("session", "user", "_cached_user")
+        )
         request.exception_reporter_filter = AnonymousReporterFilter()
         request.exception_reporter_class = AnonymousExceptionReporter
         request.sensitive_post_parameters = "__ALL__"

@@ -26,7 +26,7 @@ from pypdf import PdfReader, PdfWriter
 from accounts import permissions
 from accounts.models import Location, SecurityEvent, User
 from complaints import anonymous, anonymous_views, submission
-from complaints.checks import check_anonymous_privacy
+from complaints.checks import anonymous_release_ready, check_anonymous_privacy
 from complaints.evidence import PrivateEvidenceStorage
 from complaints.intake import IdempotencyConflict, new_intake_key
 from complaints.models import AnonymousIntakeReceipt, Attachment, Complaint, ComplaintIdSequence, IntakeReceipt
@@ -74,6 +74,11 @@ def pdf_upload():
 
 @pytest.fixture
 def setup(routing_configuration, settings):
+    settings.SCMS_HTTPS_MODE = "direct"
+    settings.SECURE_PROXY_SSL_HEADER = None
+    settings.SECURE_SSL_REDIRECT = True
+    settings.SESSION_COOKIE_SECURE = True
+    settings.CSRF_COOKIE_SECURE = True
     settings.COMPLAINT_INTAKE_ENABLED = True
     settings.ANONYMOUS_INTAKE_ENABLED = True
     settings.ANONYMOUS_PRIVACY_READY = True
@@ -293,7 +298,7 @@ def test_http_has_no_login_requirement_and_displays_reference_only_on_first_post
     replay = post(setup, client, key, evidence=upload())
     assert replay.status_code == 200 and replay.context["reference"] is None
     assert reference.encode() not in replay.content and b"already accepted" in replay.content
-    assert reference.encode() not in client.get(reverse("complaints:anonymous_submit")).content
+    assert reference.encode() not in client.get(reverse("complaints:anonymous_submit"), secure=True).content
     assert all(reference not in str(cookie) for cookie in client.cookies.values())
     assert not Session.objects.exists()
 
@@ -319,7 +324,7 @@ def test_logged_in_submitter_and_forged_identity_are_not_attached(setup, client,
     assert response.wsgi_request.user.is_anonymous
     assert "sessionid" not in response.cookies
     assert SECRET.encode() not in response.content and b"Private identity" not in response.content
-    assert client.get(reverse("accounts:landing_complainant")).status_code == 200
+    assert client.get(reverse("accounts:landing_complainant"), secure=True).status_code == 200
 
 
 @pytest.mark.parametrize("flag,value", [("COMPLAINT_INTAKE_ENABLED", False), ("ANONYMOUS_INTAKE_ENABLED", False),
@@ -328,7 +333,7 @@ def test_logged_in_submitter_and_forged_identity_are_not_attached(setup, client,
 def test_release_gates_block_get_and_post(setup, client, settings, flag, value):
     setattr(settings, flag, value)
     url = reverse("complaints:anonymous_submit")
-    assert client.get(url).status_code == client.post(url, setup["data"]).status_code == 503
+    assert client.get(url, secure=True).status_code == client.post(url, setup["data"], secure=True).status_code == 503
     empty(settings)
 
 
@@ -342,14 +347,14 @@ def test_deployment_check_requires_privacy_release_gates(setup, settings):
 
 def test_missing_privacy_middleware_fails_closed(setup, client, settings):
     settings.MIDDLEWARE = [path for path in settings.MIDDLEWARE if "AnonymousPrivacy" not in path]
-    assert Client().post(reverse("complaints:anonymous_submit"), setup["data"]).status_code == 503
+    assert Client().post(reverse("complaints:anonymous_submit"), setup["data"], secure=True).status_code == 503
     empty(settings)
 
 
 def test_privacy_middleware_after_session_middleware_fails_closed(setup, settings):
     path = "complaints.privacy_middleware.AnonymousPrivacyMiddleware"
     settings.MIDDLEWARE = [entry for entry in settings.MIDDLEWARE if entry != path] + [path]
-    assert Client().post(reverse("complaints:anonymous_submit"), setup["data"]).status_code == 503
+    assert Client().post(reverse("complaints:anonymous_submit"), setup["data"], secure=True).status_code == 503
     empty(settings)
 
 
@@ -387,6 +392,8 @@ def test_http_conflict_never_creates_another_complaint(setup, client):
     assert post(setup, client, key).status_code == 200
     response = post(setup, client, key, title="Different submission")
     assert response.status_code == 409 and "reference" not in response.context
+    assert response.context["request_token"] == "" and key.encode() not in response.content
+    assert b"Reload the anonymous form" in response.content and b"disabled" in response.content
     assert Complaint.objects.count() == 1
 
 
@@ -438,8 +445,8 @@ def test_privacy_response_headers_and_no_get_recovery_route(setup, client):
     assert "form-action 'self'" in response["Content-Security-Policy"]
     for path in (f"/complaints/anonymous/{reference}/", f"/complaints/reference/{reference}/",
                  f"/complaints/anonymous/recover/{reference}/"):
-        assert client.get(path).status_code == 404
-    assert client.put(reverse("complaints:anonymous_submit"), data="{}").status_code == 405
+        assert client.get(path, secure=True).status_code == 404
+    assert client.put(reverse("complaints:anonymous_submit"), data="{}", secure=True).status_code == 405
 
 
 def test_anonymous_reference_or_id_never_grants_full_record_or_evidence(setup, client, user_factory):
@@ -448,10 +455,10 @@ def test_anonymous_reference_or_id_never_grants_full_record_or_evidence(setup, c
     attachment = Attachment.objects.get()
     download = reverse("complaints:download_evidence", args=[attachment.pk])
     ack = reverse("complaints:acknowledgement", args=[complaint.complaint_id])
-    assert client.get(download + "?reference=" + response.context["reference"]).status_code == 404
+    assert client.get(download + "?reference=" + response.context["reference"], secure=True).status_code == 404
     client.force_login(user_factory())
-    assert client.get(ack).status_code == 404 and client.get(download).status_code == 404
-    assert not get_owned_complaints(client.get(ack).wsgi_request.user, Complaint.objects.all()).exists()
+    assert client.get(ack, secure=True).status_code == 404 and client.get(download, secure=True).status_code == 404
+    assert not get_owned_complaints(client.get(ack, secure=True).wsgi_request.user, Complaint.objects.all()).exists()
     staff = user_factory(role=User.Role.STAFF, department=complaint.department)
     assert permissions.can_view_complaint(staff, complaint)
     assert complainant_label(complaint) == "Anonymous"
@@ -525,7 +532,7 @@ def test_unexpected_http_exception_returns_generic_nonacceptance(setup, client, 
 
 def test_http_transport_cannot_accept_anonymous_submission(setup, client, settings):
     url = reverse("complaints:anonymous_submit")
-    assert client.get(url).status_code == client.post(url, setup["data"]).status_code == 503
+    assert client.get(url).status_code == client.post(url, setup["data"]).status_code == 301
     empty(settings)
 
 
@@ -535,7 +542,7 @@ def test_authorization_refusal_does_not_join_account_to_anonymous_complaint(setu
     attachment = Attachment.objects.get()
     user = user_factory(email=SECRET)
     client.force_login(user)
-    response = client.get(reverse("complaints:download_evidence", args=[attachment.pk]))
+    response = client.get(reverse("complaints:download_evidence", args=[attachment.pk]), secure=True)
     assert response.status_code == 404
     event = SecurityEvent.objects.get(event_type="AUTHORIZATION_REFUSED")
     assert event.user == user and event.identifier == SECRET
@@ -552,3 +559,69 @@ def test_failure_after_issuance_never_logs_or_exposes_reference(setup, client, c
     assert response.status_code == 503
     assert reference not in response.content.decode() and reference not in caplog.text
     assert not Complaint.objects.exists() and not AnonymousIntakeReceipt.objects.exists()
+
+
+@pytest.mark.parametrize("name,value", [
+    ("SCMS_HTTPS_MODE", ""), ("SCMS_HTTPS_MODE", "unknown"),
+    ("SECURE_SSL_REDIRECT", False), ("CSRF_COOKIE_SECURE", False),
+    ("SESSION_COOKIE_SECURE", False),
+    ("SECURE_PROXY_SSL_HEADER", ("HTTP_X_FORWARDED_PROTO", "https")),
+])
+def test_anonymous_tls_release_settings_are_required(setup, settings, client, name, value):
+    setattr(settings, name, value)
+    assert not anonymous_release_ready()
+    assert [error.id for error in check_anonymous_privacy(None)] == ["complaints.E002"]
+    url = reverse("complaints:anonymous_submit")
+    assert client.get(url, secure=True).status_code == 503
+    assert client.post(url, setup["data"], secure=True).status_code == 503
+    empty(settings)
+
+
+def test_anonymous_tls_requires_security_middleware(setup, settings):
+    settings.MIDDLEWARE = [entry for entry in settings.MIDDLEWARE
+                           if entry != "django.middleware.security.SecurityMiddleware"]
+    assert not anonymous_release_ready()
+    assert [error.id for error in check_anonymous_privacy(None)] == ["complaints.E002"]
+
+
+def test_trusted_tls_proxy_accepts_post_and_issues_secure_csrf_cookie(setup, settings):
+    settings.SCMS_HTTPS_MODE = "proxy"
+    settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    client = Client(enforce_csrf_checks=True)
+    url = reverse("complaints:anonymous_submit")
+    form = client.get(url, HTTP_X_FORWARDED_PROTO="https", HTTP_HOST="testserver")
+    assert form.status_code == 200 and form.wsgi_request.is_secure()
+    assert form.cookies[settings.CSRF_COOKIE_NAME]["secure"]
+    response = client.post(url, {**setup["data"], "request_token": form.context["request_token"],
+                                 "csrfmiddlewaretoken": client.cookies[settings.CSRF_COOKIE_NAME].value},
+                           HTTP_X_FORWARDED_PROTO="https", HTTP_HOST="testserver", HTTP_ORIGIN="https://testserver")
+    assert response.status_code == 200 and response.context["reference"]
+    assert Complaint.objects.get().submitted_by_id is None and not Session.objects.exists()
+
+
+@pytest.mark.parametrize("value", [None, "http", ""])
+def test_missing_or_insecure_proxy_scheme_cannot_accept_intake(setup, settings, client, value):
+    settings.SCMS_HTTPS_MODE = "proxy"
+    settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    headers = {} if value is None else {"HTTP_X_FORWARDED_PROTO": value}
+    response = client.post(reverse("complaints:anonymous_submit"), setup["data"], **headers)
+    assert response.status_code == 301 and response.url.startswith("https://")
+    empty(settings)
+
+
+def test_direct_tls_mode_does_not_trust_a_client_forwarded_proto_header(setup, settings, client):
+    assert anonymous_release_ready() and settings.SECURE_PROXY_SSL_HEADER is None
+    response = client.post(reverse("complaints:anonymous_submit"), setup["data"],
+                           HTTP_X_FORWARDED_PROTO="https")
+    assert response.status_code == 301
+    empty(settings)
+
+
+@pytest.mark.parametrize("attribute", ["session", "user", "_cached_user"])
+def test_preloaded_request_identity_is_rejected_even_with_first_middleware(setup, settings, attribute):
+    request = RequestFactory().post("/complaints/anonymous/", setup["data"], secure=True)
+    setattr(request, attribute, {} if attribute == "session" else AnonymousUser())
+    assert anonymous_release_ready()
+    response = AnonymousPrivacyMiddleware(anonymous_views.anonymous_submission)(request)
+    assert response.status_code == 503 and not request.anonymous_privacy_isolated
+    empty(settings)
