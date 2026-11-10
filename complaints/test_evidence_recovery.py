@@ -34,6 +34,19 @@ def png():
     return buffer.getvalue()
 
 
+def child_environment(root):
+    """Give each real child the active pytest DB, including PostgreSQL test name."""
+    environment = os.environ.copy()
+    config = {name: connection.settings_dict[name] for name in (
+        "ENGINE", "NAME", "USER", "PASSWORD", "HOST", "PORT", "OPTIONS",
+    )}
+    config["NAME"] = str(config["NAME"])
+    environment.update(DJANGO_SETTINGS_MODULE="scms.settings",
+        DJANGO_SECRET_KEY="synthetic-child-test-only", PRIVATE_EVIDENCE_ROOT=str(root),
+        SCMS_TEST_DATABASE=json.dumps(config))
+    return environment
+
+
 @pytest.fixture
 def root(settings, tmp_path):
     settings.PRIVATE_EVIDENCE_ROOT = tmp_path / "private"
@@ -272,6 +285,8 @@ CHILD = r'''
 import base64, json, os, signal
 from contextlib import contextmanager
 import django
+from django.conf import settings
+settings.DATABASES = {"default": json.loads(os.environ["SCMS_TEST_DATABASE"])}
 django.setup()
 from django.core.files.base import ContentFile
 from accounts.models import User
@@ -306,11 +321,14 @@ def test_sigkill_intake_recovery_keeps_only_committed_graph(root, complainant_us
     config = routing_configuration
     data = {"category": str(config["category"].pk), "location": config["location"].code,
         "title": "Synthetic crash check", "description": "Synthetic description for interrupted intake.", "priority": "LOW"}
-    environment = os.environ.copy()
-    environment.update(DJANGO_SETTINGS_MODULE="scms.settings", DJANGO_SECRET_KEY="synthetic-child-test-only",
-        DJANGO_DB_PATH=str(connection.settings_dict["NAME"]), PRIVATE_EVIDENCE_ROOT=str(root),
-        SCMS_CRASH_POINT=point, SCMS_TEST_USER=str(complainant_user.pk), SCMS_TEST_FIELDS=json.dumps(data),
+    environment = child_environment(root)
+    environment.update(SCMS_CRASH_POINT=point, SCMS_TEST_USER=str(complainant_user.pk), SCMS_TEST_FIELDS=json.dumps(data),
         SCMS_TEST_PNG=base64.b64encode(png()).decode())
+    from complaints.models import ComplaintIdSequence
+    from routing.models import RoutingDecision
+    from workflow.models import ComplaintHistory
+    graph = (Complaint, IntakeReceipt, Attachment, RoutingDecision, ComplaintHistory, ComplaintIdSequence)
+    before = {model.__name__: list(model.objects.order_by("pk").values()) for model in graph}
     result = subprocess.run([sys.executable, "-c", CHILD], env=environment,
         cwd=Path(__file__).resolve().parents[1], capture_output=True, text=True, timeout=20)
     assert result.returncode == -signal.SIGKILL, result.stderr
@@ -322,7 +340,7 @@ def test_sigkill_intake_recovery_keeps_only_committed_graph(root, complainant_us
         assert (root / attachment.storage_name).read_bytes() == png()
     else:
         assert report.referenced == 0 and report.orphaned == 1
-        assert not Complaint.objects.exists() and not IntakeReceipt.objects.exists() and not Attachment.objects.exists()
+        assert {model.__name__: list(model.objects.order_by("pk").values()) for model in graph} == before
         assert len(list((root / QUARANTINE).iterdir())) == 1
     # A restarted app retries the SAME operation key, without resetting data.
     from complaints.submission import submit_authenticated_complaint
@@ -330,6 +348,9 @@ def test_sigkill_intake_recovery_keeps_only_committed_graph(root, complainant_us
         data=data, files=[ContentFile(png(), name="synthetic.png")])
     assert retried.replayed is (point == "after")
     assert Complaint.objects.count() == IntakeReceipt.objects.count() == Attachment.objects.count() == 1
+    assert RoutingDecision.objects.count() == 1
+    assert ComplaintHistory.objects.count() == 2
+    assert ComplaintIdSequence.objects.count() == 1
     # Same command is safe on a second run, with no record deletions/reset.
     assert reconcile_evidence(apply=True).orphaned == 0
 
@@ -359,7 +380,9 @@ def test_private_storage_root_symlink_is_refused(tmp_path, settings):
 def test_live_writer_in_another_process_prevents_recovery(root):
     import select
     child = r"""
-import django, sys
+import django, json, os, sys
+from django.conf import settings
+settings.DATABASES = {"default": json.loads(os.environ["SCMS_TEST_DATABASE"])}
 django.setup()
 from django.core.files.base import ContentFile
 from complaints.evidence import staged_evidence
@@ -368,9 +391,7 @@ with staged_evidence([ContentFile(png(), name="synthetic.png")]):
     print("ready", flush=True)
     sys.stdin.readline()
 """
-    environment = os.environ.copy()
-    environment.update(DJANGO_SETTINGS_MODULE="scms.settings", DJANGO_SECRET_KEY="synthetic-child-test-only",
-                       PRIVATE_EVIDENCE_ROOT=str(root))
+    environment = child_environment(root)
     process = subprocess.Popen([sys.executable, "-c", child], env=environment,
         cwd=Path(__file__).resolve().parents[1], stdin=subprocess.PIPE,
         stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)

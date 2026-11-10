@@ -100,7 +100,7 @@ python manage.py check
 python manage.py makemigrations --check --dry-run
 ```
 
-Local Main-based verification passed 885 tests with no skips, including 30
+Earlier Main-based verification passed 885 tests with no skips, including 30
 recovery tests; every module coverage gate and Django system/migration check
 passed. A separate integration checkout combining these changes with PR #73
 head `1e8841e86b69cc9981eec33214ad59f69a2b3d5f` passed all 1,064 tests with no
@@ -134,3 +134,51 @@ including the full suite and real process-death tests, on supported Linux
 runners and retains sanitized evidence. Hosted run links must be recorded after
 execution; a workflow file alone is not run evidence. This supplements the E03
 Jenkins handoff and does not replace deployment/restart acceptance.
+
+
+## PostgreSQL process-death verification
+
+The recovery subprocesses now inherit the active pytest database configuration,
+including PostgreSQL's generated test database name, host and port. A SQLite
+path alone is insufficient on PostgreSQL. Test credentials are passed only in
+the private child environment, never printed or written to the recovery report.
+The SIGKILL cases compare the complete complaint/attachment/receipt/routing/
+history/ID-sequence graph and retry the same operation after reconciliation.
+
+`scms.recovery_postgresql_settings` is an explicit test-only settings module.
+It requires every `RECOVERY_POSTGRES_*` variable and never falls back to SQLite.
+It leaves production database configuration with E03. Use an isolated empty
+PostgreSQL instance whose test user may create/drop its own test database; never
+use a production database or production credentials. The test runner creates and
+drops Django's separate test database in that instance.
+
+```sh
+python -m pip install 'psycopg[binary]==3.3.8'
+# Set DJANGO_SECRET_KEY and RECOVERY_POSTGRES_NAME, USER, PASSWORD, HOST, PORT
+# to the isolated test instance, then:
+DJANGO_SETTINGS_MODULE=scms.recovery_postgresql_settings python manage.py check
+DJANGO_SETTINGS_MODULE=scms.recovery_postgresql_settings python manage.py makemigrations --check --dry-run
+DJANGO_SETTINGS_MODULE=scms.recovery_postgresql_settings python integration_checks/run_recovery_postgresql.py
+```
+
+The runner checks the actual backend, records its PostgreSQL/Python/Django
+versions and source revision, and requires exactly 30 executed recovery cases,
+zero skips and zero failures. Its artifacts contain run.json, pytest.txt and
+junit.xml. It reports component acceptance only. The `postgresql-recovery` job
+in the existing Evidence crash recovery workflow starts PostgreSQL 17.6 and runs
+these checks independently of the full SQLite regression/coverage job. A hosted
+run link is evidence only after both jobs have actually completed successfully.
+
+The earlier local Docker persistence run is separately recorded in PR #80 for
+E03 source 526a0d31ea4a50f666b641839177a87e79c81f6b. It does not include PR #76
+and must not be used as proof of this crash-reconciliation implementation.
+Final merged deployment, scheduler overlap/interruption, competing auto-close
+and feedback, real notification/outbox failures, and power-loss/backup recovery
+remain outside this component run. Issue #21 remains open.
+
+Preparation checks for this PostgreSQL follow-up passed all 925 Main-integrated
+SQLite tests with no skips and all module gates. The 30 recovery cases also
+passed on an isolated actual PostgreSQL 17.6 server, including all three
+SIGKILL boundaries and cross-process writer exclusion. These preparation
+results are separate from the fresh clean-source and hosted evidence recorded
+when publishing the follow-up; neither closes final deployment acceptance.
