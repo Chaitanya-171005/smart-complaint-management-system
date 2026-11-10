@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Complaint dashboard — SCMS</title></head>
+<body>
+{% load notification_tags %}{% notification_header %}
+<h1>{% if is_head %}Department{% else %}My complaints{% endif %} dashboard</h1>
+<p>Current permitted records snapshot. Date-range reports, resolution durations and calculated open/overdue metrics await D03 and the shared B30 reporting contract.</p>
+<form method="get">
+<label for="status">Status</label><select id="status" name="status">
+<option value="">All statuses</option>
+{% for value,label in statuses %}<option value="{{ value }}"{% if value == selected_status %} selected{% endif %}>{{ label }}</option>{% endfor %}
+</select>
+<label for="category">Category</label><input id="category" name="category" value="{{ selected_category }}">
+<button type="submit">Filter</button>
+</form>
+{% if is_head %}
+<p><a href="{% url 'workflow:department_report' department_id %}?{{ export_query }}">Export current department snapshot CSV</a></p>
+{% else %}<p><a href="{% url 'workflow:complaint_list' %}">My complaint details</a></p>{% endif %}
+<table><thead><tr><th>Group</th><th>Label</th><th>Count</th></tr></thead><tbody>
+{% for section,label,count in rows %}<tr><td>{{ section }}</td><td>{{ label }}</td><td>{{ count }}</td></tr>{% endfor %}
+</tbody></table>
+</body>
+</html>
