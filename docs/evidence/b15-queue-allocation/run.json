@@ -1,10 +1,8 @@
 {
-  "executed_at_utc": "2026-11-10T15:20:46.703285+00:00",
-  "source_revision": "05c7f7b27589bd042b76d087bea21744f444c412",
-  "working_tree_dirty": true,
-  "working_tree_status": [
-    "?? .env.docker"
-  ],
+  "executed_at_utc": "2026-11-11T04:13:19.445217+00:00",
+  "source_revision": "57dfb721805bd8de27986ae8565f559bb4e14f72",
+  "working_tree_dirty": false,
+  "working_tree_status": [],
   "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
   "pytest_exit_code": 0,
   "coverage_gate_exit_code": 0
