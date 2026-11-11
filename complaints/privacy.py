@@ -52,7 +52,8 @@ def anonymous_summary(complaint):
     return {
         "complaint_id": complaint.complaint_id, "complainant": "Anonymous",
         "category": complaint.category, "location": complaint.location_code,
-        "status": complaint.status, "is_escalated": complaint.is_escalated,
+        "status": complaint.status, "priority": complaint.priority,
+        "is_escalated": complaint.is_escalated,
         "escalation_level": complaint.escalation_level,
     }
 
