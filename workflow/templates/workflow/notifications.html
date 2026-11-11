@@ -6,7 +6,7 @@
 <h1>Notifications</h1>
 <ul>
 {% for notice in page %}
-  <li>{{ notice.created_at }} — {{ notice.event.public_id }} — {{ notice.event.get_kind_display }} — {{ notice.event.status }}
+  <li>{{ notice.created_at }} — {{ notice.event.public_id }} — {{ notice.event.get_kind_display }} — {{ notice.event.status }}{% if notice.event.anonymous %} — Complainant: Anonymous{% endif %}
   {% if notice.read_at %}<span>Read</span>{% else %}<strong>Unread</strong>
     <form method="post" action="{% url 'workflow:notification_read' notice.pk %}">
       {% csrf_token %}<button type="submit">Mark as read</button>
