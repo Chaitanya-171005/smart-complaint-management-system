@@ -17,8 +17,10 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from routing import views as routing_views
 
 urlpatterns = [
+    path("complaints/<str:complaint_id>/assign/", routing_views.assign, name="assign_complaint"),
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
     path("routing/", include("routing.urls")),

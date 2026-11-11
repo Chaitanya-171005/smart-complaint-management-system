@@ -1,4 +1,5 @@
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -50,6 +51,10 @@ class ComplaintHistory(models.Model):
     complaint_ref = models.CharField(max_length=100, db_index=True)
     event_type = models.CharField(max_length=20, choices=EventType.choices)
     actor_kind = models.CharField(max_length=20, choices=ActorKind.choices)
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                              on_delete=models.PROTECT, related_name="+")
+    assignee = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True,
+                                 on_delete=models.PROTECT, related_name="+")
     previous_state = models.CharField(max_length=50, blank=True)
     new_state = models.CharField(max_length=50, blank=True)
     occurred_at = models.DateTimeField(auto_now_add=True, db_index=True)
@@ -58,6 +63,10 @@ class ComplaintHistory(models.Model):
     objects = ComplaintHistoryQuerySet.as_manager()
 
     class Meta:
+        constraints = [models.CheckConstraint(
+            condition=~models.Q(actor_kind="ANONYMOUS") | models.Q(actor__isnull=True, assignee__isnull=True),
+            name="history_anonymous_has_no_account_refs",
+        )]
         ordering = ["occurred_at", "pk"]
         verbose_name = "Complaint history entry"
         verbose_name_plural = "Complaint history entries"
@@ -74,6 +83,8 @@ class ComplaintHistory(models.Model):
 
         if self.actor_kind == self.ActorKind.ANONYMOUS:
             self.remarks = ""
+            self.actor = None
+            self.assignee = None
 
         super().save(*args, **kwargs)
 

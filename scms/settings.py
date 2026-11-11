@@ -175,7 +175,7 @@ except ValueError:
 # Processing safeguard, separate from the SRS compressed-file byte limit.
 EVIDENCE_MAX_IMAGE_PIXELS = 25_000_000
 
-# B07 release gate: enable only after D01 campus references/emergency details
-# are confirmed. Test fixtures use explicitly synthetic values.
+# Authenticated intake remains disabled until D01 campus references and
+# emergency details are confirmed; test fixtures use synthetic values.
 COMPLAINT_INTAKE_ENABLED = os.environ.get("COMPLAINT_INTAKE_ENABLED", "False") == "True"
 COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").strip()
