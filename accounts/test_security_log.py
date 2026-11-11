@@ -146,6 +146,53 @@ def test_secrets_passed_to_record_event_by_mistake_are_not_stored():
         assert reference not in text and PASSWORD not in text
 
 
+@pytest.mark.parametrize(
+    "typed",
+    [
+        "{ref}@example.test",
+        "{key}@example.test",
+        "{digest}@example.test",
+        "password=hunter2@example.test",
+        "person@example.test?token=abc123",
+        "person@example.test session_key={key}",
+    ],
+)
+def test_untrusted_email_shaped_identifiers_are_scrubbed_too(typed):
+    import hashlib
+
+    ref = secrets.token_hex(16)
+    key = "a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6"
+    digest = hashlib.sha256(ref.encode()).hexdigest()
+    text = typed.format(ref=ref, key=key, digest=digest)
+    record_event("LOGIN_FAILURE", identifier=text)
+    stored = SecurityEvent.objects.get().identifier
+    for secret in (ref, key, digest, "hunter2", "abc123"):
+        assert secret not in stored
+    assert REDACTED in stored
+
+
+def test_an_ordinary_typed_email_is_kept():
+    record_event("LOGIN_FAILURE", identifier="ordinary.person@example.test")
+    assert SecurityEvent.objects.get().identifier == "ordinary.person@example.test"
+
+
+def test_a_secret_typed_into_the_login_form_never_reaches_the_log():
+    reference = secrets.token_hex(16)
+    attempt_login(f"{reference}@example.test", "irrelevant")
+    attempt_login(f"password={PASSWORD}@example.test", "irrelevant")
+    stored = every_stored_text()
+    assert reference not in stored and PASSWORD not in stored
+    assert events("LOGIN_FAILURE").count() == 2
+
+
+def test_an_identifier_matching_another_users_email_is_not_trusted(user_factory):
+    person = user_factory()
+    other = user_factory()
+    record_event("LOGIN_FAILURE", user=other, identifier=person.email)
+    stored = SecurityEvent.objects.get().identifier
+    assert stored != person.email and REDACTED in stored  # fixture emails carry a 32-hex token
+
+
 def test_an_email_identifier_is_kept_as_is(user_factory):
     person = user_factory()
     record_event("LOGIN_FAILURE", user=person, identifier=person.email)

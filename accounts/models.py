@@ -270,5 +270,19 @@ class ConfigAuditEvent(models.Model):
     def delete(self, *args, **kwargs):
         raise ValidationError("Configuration audit records cannot be deleted.")
 
+    @staticmethod
+    def _pairs(values):
+        # A plain list of pairs for templates: ``values.items`` in a template would pick a
+        # field NAMED "items" instead of the dict method.
+        return list((values or {}).items())
+
+    @property
+    def old_pairs(self):
+        return self._pairs(self.old_values)
+
+    @property
+    def new_pairs(self):
+        return self._pairs(self.new_values)
+
     def __str__(self):
         return f"{self.action} {self.entity_type}#{self.entity_id}"

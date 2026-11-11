@@ -38,11 +38,12 @@ inventing free-form events. F2 and F4 supply their events through the same funct
 - Anonymous complaint references, their digests, and anything that links an anonymous report to a person.
 - Request bodies, query strings and file content.
 
-`record_event` enforces this even if a caller makes a mistake: free text and non-email identifiers
-are scrubbed, replacing any 32+ character token-like run (a reference, a session key, a digest) and
+`record_event` enforces this even if a caller makes a mistake: free text and identifiers are
+scrubbed (an identifier is kept verbatim only when it is exactly the acting user's own saved email;
+what was typed at login is untrusted, even when it contains an "@"), replacing any 32+ character token-like run (a reference, a session key, a digest) and
 any `password=...` / `token: ...` style assignment with `[redacted]`. Anonymous actors are recorded
-with no user and no identifier. The configuration audit (`ConfigAuditEvent`) applies the same idea
-to field values (B29).
+with no user and no identifier. The configuration audit (`ConfigAuditEvent`) applies the same `scrub` to every string value, key
+and object text at any depth, and also replaces values stored under sensitive key names (B29).
 
 ## Not editable
 

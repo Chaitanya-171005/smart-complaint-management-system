@@ -21,19 +21,32 @@ def scrub(text):
     return _TOKEN_LIKE.sub(REDACTED, text)
 
 
+def _safe_identifier(identifier, user):
+    """Keep the identifier verbatim only when it is the acting user's own saved email.
+
+    Anything else, including what was typed on the login form, is untrusted text: it is scrubbed
+    whether or not it contains an "@", so an email-shaped string cannot smuggle a password, a
+    session key or an anonymous reference into the log.
+    """
+    identifier = identifier or ""
+    own_email = getattr(user, "email", "") or ""
+    if own_email and identifier.lower() == own_email.lower():
+        return identifier
+    return scrub(identifier)
+
+
 def record_event(event_type, *, user=None, identifier="", target="", detail=""):
     """Append one security event.
 
     ``user`` is the actor (None when unauthenticated or anonymous). ``identifier`` is the actor's
-    sign-in email, or what was typed at login; it is empty for anonymous actors. ``target`` names
+    sign-in email, or what was typed at login (scrubbed unless it is the actor's own email); it is
+    empty for anonymous actors. ``target`` names
     what was acted on as ``Model#id``. Free text is scrubbed, so a secret passed by mistake is
     never stored. An unknown ``event_type`` is a programming error.
     """
     if event_type not in SecurityEvent.EventType.values:
         raise ValueError(f"Unknown security event type {event_type!r}.")
-    identifier = identifier or ""
-    if "@" not in identifier:  # emails are the one identifier format that is allowed through
-        identifier = scrub(identifier)
+    identifier = _safe_identifier(identifier, user)
     return SecurityEvent.objects.create(
         event_type=event_type,
         user=user,

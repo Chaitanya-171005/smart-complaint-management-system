@@ -1,12 +1,12 @@
 """Configuration audit contract (REQ-ADM-04, B29): who changed what, from what, to what.
 
 F1 and F3 call ``record_change`` from inside the same transaction as the change, so a change
-and its audit record are saved together or not at all. Sensitive values are replaced, never
+and its audit record are saved together or not at all. Sensitive values and secret-looking text are replaced, never
 stored. This is not complaint history and offers no way to edit or delete a record.
 """
 
 from .models import ConfigAuditEvent, SecurityEvent, User
-from .security_log import record_event
+from .security_log import record_event, scrub
 
 # The shared vocabulary: ``entity_type`` is the Django model's class name. F1 and F3 audit ONLY these entities, so the Administrator can read one
 # consistent trail (REQ-ADM-04). Adding an entity is a deliberate, reviewed change to this list.
@@ -34,17 +34,24 @@ def _is_sensitive(key):
 
 
 def _clean_value(value):
-    """Redact sensitive keys at every depth; leave only JSON-safe values."""
+    """Redact sensitive keys AND secret-looking text at every depth; keep only JSON-safe values.
+
+    A secret can hide in an ordinary field (a description, a name), not just under a key called
+    ``password``, so every string, including a key and the text of an unusual object, goes through
+    the same ``scrub`` rules the security log uses.
+    """
     if isinstance(value, dict):
         return {
-            str(key): REDACTED if _is_sensitive(key) else _clean_value(item)
+            scrub(str(key)): REDACTED if _is_sensitive(key) else _clean_value(item)
             for key, item in value.items()
         }
     if isinstance(value, (list, tuple, set, frozenset)):
         return [_clean_value(item) for item in value]
-    if isinstance(value, (str, int, float, bool, type(None))):
+    if isinstance(value, str):
+        return scrub(value)
+    if isinstance(value, (int, float, bool, type(None))):
         return value
-    return str(value)
+    return scrub(str(value))
 
 
 def _clean(values):
