@@ -1,10 +1,11 @@
 """Atomic assignment and reassignment of department complaints."""
 
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.http import Http404
 from django.db import transaction
 
 from accounts.models import User
-from accounts.permissions import authorize_or_404, can_allocate_complaint, require_permission
+from accounts.permissions import _refuse, can_allocate_complaint
 from complaints.models import Complaint
 from routing.queue import OPEN_QUEUE_STATUSES
 from workflow.history_service import record_history
@@ -23,16 +24,38 @@ class StaleAllocation(AllocationError):
         super().__init__("The assignment has changed.", code="modified_record")
 
 
-@transaction.atomic
+class _AllocationDenied(Exception):
+    def __init__(self, actor, complaint, concealed):
+        self.actor, self.complaint, self.concealed = actor, complaint, concealed
+
+
 def allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, reason=""):
+    try:
+        return _allocate_complaint(actor=actor, complaint_id=complaint_id, assignee=assignee,
+                                   expected_assignee_id=expected_assignee_id, reason=reason)
+    except _AllocationDenied as denial:
+        # Record after the mutation savepoint has rolled back. An enclosing
+        # caller transaction, if any, still controls this audit write's commit.
+        _refuse(denial.actor, can_allocate_complaint.__name__, denial.complaint)
+        if denial.concealed:
+            raise Http404 from None
+        raise PermissionDenied from None
+
+
+@transaction.atomic
+def _allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, reason=""):
     actor_id = getattr(actor, "pk", None)
-    actor = User.objects.filter(pk=actor_id).first()
+    actor = User.objects.select_for_update().filter(pk=actor_id).first()
     complaint = Complaint.objects.select_for_update().filter(complaint_id=complaint_id).first()
-    authorize_or_404(can_allocate_complaint, actor, complaint)
+    if complaint is None:
+        raise Http404
+    if not can_allocate_complaint(actor, complaint):
+        raise _AllocationDenied(actor, complaint, concealed=True)
     target_id = getattr(assignee, "pk", assignee)
     target = User.objects.select_for_update().filter(pk=target_id).first()
-    require_permission(can_allocate_complaint, actor, complaint,
-                       target if target is not None else User(is_active=False))
+    if not can_allocate_complaint(actor, complaint,
+                                  target if target is not None else User(is_active=False)):
+        raise _AllocationDenied(actor, complaint, concealed=False)
     if complaint.status not in ALLOCATABLE_STATUSES:
         raise AllocationError("The complaint cannot be allocated in its current state.",
                               code="not_allocatable")

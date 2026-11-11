@@ -123,3 +123,76 @@ def test_missing_complaint_refused(setup_allocation):
     head, staff, _ = setup_allocation
     with pytest.raises(Http404):
         allocate_complaint(actor=head, complaint_id="SCMS-2000-999999", assignee=staff, expected_assignee_id=None)
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('kind', ['cross_head', 'staff', 'complainant', 'admin', 'inactive_head',
+                                  'inactive_staff', 'cross_staff', 'nonstaff', 'missing_staff'])
+def test_refusal_audit_survives_allocation_rollback(kind, setup_allocation, user_factory, department_factory):
+    from accounts.models import SecurityEvent
+    head, staff, complaint = setup_allocation
+    complaint.assignee = staff
+    complaint.save(update_fields=['assignee'])
+    actor = head
+    target = staff
+    if kind == 'cross_head':
+        actor = user_factory(role=User.Role.HEAD, department=department_factory())
+    elif kind in ('staff', 'complainant', 'admin'):
+        actor = user_factory(role=kind.upper(), department=complaint.department if kind == 'staff' else None)
+    elif kind == 'inactive_head':
+        actor = user_factory(role=User.Role.HEAD, department=complaint.department, is_active=False)
+    elif kind == 'inactive_staff':
+        target = user_factory(role=User.Role.STAFF, department=complaint.department, is_active=False)
+    elif kind == 'cross_staff':
+        target = user_factory(role=User.Role.STAFF, department=department_factory())
+    elif kind == 'nonstaff':
+        target = user_factory(role=User.Role.HEAD, department=complaint.department)
+    else:
+        target = 99999999
+    before = SecurityEvent.objects.count()
+    with pytest.raises(Http404 if kind in ('cross_head', 'staff', 'complainant', 'admin', 'inactive_head') else PermissionDenied):
+        allocate(actor, complaint, target, staff.pk, 'coverage')
+    complaint.refresh_from_db()
+    assert complaint.assignee_id == staff.pk
+    assert not ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).exists()
+    events = SecurityEvent.objects.order_by('pk')[before:]
+    assert len(events) == 1
+    assert events[0].event_type == SecurityEvent.EventType.AUTHORIZATION_REFUSED
+    assert events[0].user_id == actor.pk
+    assert events[0].detail == f'can_allocate_complaint Complaint#{complaint.pk}'
+
+
+def test_missing_complaint_does_not_create_refusal_audit(setup_allocation):
+    from accounts.models import SecurityEvent
+    head, staff, _ = setup_allocation
+    before = SecurityEvent.objects.count()
+    with pytest.raises(Http404):
+        allocate_complaint(actor=head, complaint_id='SCMS-2000-999999', assignee=staff, expected_assignee_id=None)
+    assert SecurityEvent.objects.count() == before
+
+
+@pytest.mark.django_db(transaction=True)
+def test_revoked_head_access_is_rechecked_from_database(setup_allocation):
+    from accounts.models import SecurityEvent
+    head, staff, complaint = setup_allocation
+    User.objects.filter(pk=head.pk).update(role=User.Role.COMPLAINANT)
+    with pytest.raises(Http404):
+        allocate(head, complaint, staff)
+    complaint.refresh_from_db()
+    assert complaint.assignee is None
+    assert not ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).exists()
+    assert SecurityEvent.objects.filter(user_id=head.pk, event_type=SecurityEvent.EventType.AUTHORIZATION_REFUSED).count() == 1
+
+
+@pytest.mark.django_db(transaction=True)
+def test_enclosing_transaction_controls_refusal_audit(setup_allocation):
+    from django.db import transaction
+    from accounts.models import SecurityEvent
+    head, staff, complaint = setup_allocation
+    before = SecurityEvent.objects.count()
+    with pytest.raises(RuntimeError), transaction.atomic():
+        with pytest.raises(PermissionDenied):
+            allocate(head, complaint, 99999999)
+        assert SecurityEvent.objects.count() == before + 1
+        raise RuntimeError('caller rolls back')
+    assert SecurityEvent.objects.count() == before

@@ -170,3 +170,33 @@ def test_staff_queue_and_pagination(client, staff_user, department, department_f
     assert set(first.context['page'].object_list) | set(second.context['page'].object_list) == set(complaints)
     assert other.complaint_id not in first.content.decode()
     assert b'<form' not in first.content
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize('kind', ['cross_complaint', 'inactive_staff', 'cross_staff', 'missing_staff', 'staff_actor'])
+def test_http_denial_preserves_security_event(client, head_user, staff_user, department,
+                                               department_factory, user_factory, complaint_factory, kind):
+    from accounts.models import SecurityEvent
+    complaint = complaint_factory(department=department_factory() if kind == 'cross_complaint' else department,
+                                  assignee=staff_user)
+    actor = staff_user if kind == 'staff_actor' else head_user
+    if kind == 'inactive_staff':
+        target = user_factory(role=User.Role.STAFF, department=department, is_active=False).pk
+    elif kind == 'cross_staff':
+        target = user_factory(role=User.Role.STAFF, department=department_factory()).pk
+    elif kind == 'missing_staff':
+        target = 99999999
+    else:
+        target = staff_user.pk
+    client.force_login(actor)
+    before = SecurityEvent.objects.count()
+    response = client.post(reverse('assign_complaint', args=[complaint.complaint_id]),
+                           {'assignee': target, 'expected_assignee': staff_user.pk, 'reason': 'coverage'})
+    assert response.status_code == (404 if kind == 'cross_complaint' else 403)
+    complaint.refresh_from_db()
+    assert complaint.assignee_id == staff_user.pk
+    assert not ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).exists()
+    events = SecurityEvent.objects.order_by('pk')[before:]
+    assert len(events) == 1
+    assert events[0].event_type == SecurityEvent.EventType.AUTHORIZATION_REFUSED
+    assert events[0].user_id == actor.pk
