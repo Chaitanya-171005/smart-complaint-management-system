@@ -43,6 +43,7 @@ def test_newest_first_ties_pagination_and_get_never_mutates(notices, client):
     assert response.status_code == 200
     assert [n.pk for n in response.context['page']] == expected
     assert b'3 unread' in response.content
+    assert b'Complainant: Anonymous' not in response.content
     assert 'no-store' in response.headers['Cache-Control']
     assert client.head(listing()).status_code == 200
     assert client.get(reading(own.first())).status_code == 405
@@ -131,6 +132,7 @@ def test_anonymous_notice_renders_only_minimal_projection(complaint_factory, use
     response = client.get(listing())
     body = response.content.decode()
     assert complaint.complaint_id in body
+    assert 'Complainant: Anonymous' in body
     for private in ('PRIVATE TITLE','PRIVATE BODY','PRIVATE RESOLUTION','PRIVATE HISTORY REASON',
                     complaint.reference_digest,head.email,'storage_name','download_evidence'):
         assert private not in body
