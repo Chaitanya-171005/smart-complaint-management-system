@@ -3,6 +3,7 @@
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My complaints — SCMS</title>
 <style>body{font-family:system-ui,sans-serif;max-width:50rem;margin:2rem auto;padding:0 1rem}li{margin:1rem 0}select{max-width:100%}code{overflow-wrap:anywhere}</style></head>
 <body>
+{% load notification_tags %}{% notification_header %}
   <h1>My complaints</h1>
   <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
   <form method="get">

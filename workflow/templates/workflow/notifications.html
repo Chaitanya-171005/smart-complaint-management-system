@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Notifications — SCMS</title></head>
+<body>
+{% load notification_tags %}{% notification_header %}
+<h1>Notifications</h1>
+<ul>
+{% for notice in page %}
+  <li>{{ notice.created_at }} — {{ notice.event.public_id }} — {{ notice.event.get_kind_display }} — {{ notice.event.status }}
+  {% if notice.read_at %}<span>Read</span>{% else %}<strong>Unread</strong>
+    <form method="post" action="{% url 'workflow:notification_read' notice.pk %}">
+      {% csrf_token %}<button type="submit">Mark as read</button>
+    </form>
+  {% endif %}</li>
+{% empty %}<li>No notifications.</li>{% endfor %}
+</ul>
+<nav aria-label="Notification pages">
+{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">Previous</a>{% endif %}
+<span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+{% if page.has_next %}<a href="?page={{ page.next_page_number }}">Next</a>{% endif %}
+</nav>
+</body>
+</html>

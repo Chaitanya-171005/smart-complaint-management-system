@@ -7,6 +7,7 @@
   <style>body{font-family:system-ui,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem}pre{white-space:pre-wrap;overflow-wrap:anywhere}code{overflow-wrap:anywhere}</style>
 </head>
 <body>
+{% load notification_tags %}{% notification_header %}
   <h1>Complaint work status</h1>
   <p>Complaint <code>{{ complaint.complaint_id }}</code></p>
   <p>Status: <strong>{{ complaint.get_status_display }}</strong></p>

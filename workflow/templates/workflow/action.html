@@ -7,6 +7,7 @@
   <style>body{font-family:system-ui,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem}textarea{box-sizing:border-box;width:100%}input{max-width:100%}.errorlist{color:#9b1c1c}button{padding:.6rem 1rem}code{overflow-wrap:anywhere}</style>
 </head>
 <body>
+{% load notification_tags %}{% notification_header %}
   <h1>{% if resolution %}Resolve complaint{% else %}Start work{% endif %}</h1>
   <p>Complaint <code>{{ complaint_id }}</code></p>
   <form method="post"{% if resolution %} enctype="multipart/form-data"{% endif %}>

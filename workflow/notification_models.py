@@ -44,6 +44,7 @@ class Notification(models.Model):
     event = models.ForeignKey(NotificationEvent, on_delete=models.PROTECT, related_name="notices")
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
+    read_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ["-created_at", "-pk"]

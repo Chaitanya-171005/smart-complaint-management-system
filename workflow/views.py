@@ -24,8 +24,43 @@ from workflow.lifecycle import LifecycleError, get_transition_revision
 from workflow.resolution_service import progress_complaint, resolve_complaint
 from workflow.history_service import get_authorized_complaint_history
 from workflow.services import filter_complaints, get_owned_complaints, paginate_complaints
+from workflow.forms import ConfirmationForm
+from workflow.confirmation_service import confirm_resolution
 
 logger = logging.getLogger(__name__)
+
+
+@never_cache
+@vary_on_cookie
+@sensitive_post_parameters()
+@login_required
+@require_http_methods(["GET", "POST"])
+def confirm(request, complaint_id):
+    form = ConfirmationForm(request.POST if request.method == "POST" else None)
+    status = 200
+    try:
+        revision = get_transition_revision(actor=request.user, complaint_id=complaint_id,
+                                           target_state="CLOSED")
+        if request.method == "GET":
+            form = ConfirmationForm(initial={"revision": revision})
+        elif set(request.POST) - {"csrfmiddlewaretoken", "revision", "rating"} or request.FILES:
+            form.add_error(None, "Unsupported confirmation fields.")
+            status = 400
+        elif form.is_valid():
+            confirm_resolution(actor=request.user, complaint_id=complaint_id,
+                               expected_revision=form.cleaned_data["revision"],
+                               rating=form.cleaned_data["rating"])
+            return redirect("workflow:complaint_detail", complaint_id=complaint_id)
+        else:
+            status = 400
+    except LifecycleError as error:
+        form.add_error(None, error)
+        status = 409
+    except ValidationError as error:
+        form.add_error(None, error)
+        status = 400
+    return render(request, "workflow/confirm.html", {"form": form, "complaint_id": complaint_id},
+                  status=status)
 
 
 def _is_tracking_complainant(user):

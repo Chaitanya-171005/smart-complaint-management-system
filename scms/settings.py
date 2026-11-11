@@ -124,6 +124,9 @@ USE_I18N = True
 
 USE_TZ = True
 
+# D05 PROPOSED: exact expiry equality and first valid transaction wins.
+COMPLAINT_AUTO_CLOSE_DAYS = os.environ.get("COMPLAINT_AUTO_CLOSE_DAYS", "7")
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
