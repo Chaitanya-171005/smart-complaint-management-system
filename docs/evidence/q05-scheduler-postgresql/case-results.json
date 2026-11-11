@@ -1,0 +1,35 @@
+{
+  "source_junit_sha256": "e3d4df73cf0d597dbb2e37d02bb2dcb12b928a9baac0ee918e5f646b624919c4",
+  "cases": [
+    {
+      "name": "test_callback_failure_keeps_commit_and_retry_does_not_duplicate",
+      "outcome": "passed",
+      "time_seconds": 0.294
+    },
+    {
+      "name": "test_repeated_runs_respect_interval_and_maximum",
+      "outcome": "passed",
+      "time_seconds": 0.265
+    },
+    {
+      "name": "test_required_history_failure_rolls_back_then_retries",
+      "outcome": "passed",
+      "time_seconds": 0.233
+    },
+    {
+      "name": "test_sigkill_then_retry_preserves_one_escalation[after_commit]",
+      "outcome": "passed",
+      "time_seconds": 0.929
+    },
+    {
+      "name": "test_sigkill_then_retry_preserves_one_escalation[before_commit]",
+      "outcome": "passed",
+      "time_seconds": 0.969
+    },
+    {
+      "name": "test_two_processes_compete_for_same_due_complaint",
+      "outcome": "passed",
+      "time_seconds": 2.387
+    }
+  ]
+}
