@@ -11,6 +11,9 @@ def record_history(
     previous_state="",
     new_state="",
     remarks="",
+    *,
+    actor=None,
+    assignee=None,
 ):
     """
     Append one complaint history event after a successful operation.
@@ -22,6 +25,8 @@ def record_history(
     """
     if actor_kind == ComplaintHistory.ActorKind.ANONYMOUS:
         remarks = ""
+        actor = None
+        assignee = None
 
     event = ComplaintHistory.objects.create(
         complaint_ref="" if complaint_ref is None else str(complaint_ref),
@@ -30,6 +35,8 @@ def record_history(
         previous_state=previous_state or "",
         new_state=new_state or "",
         remarks=remarks or "",
+        actor=actor,
+        assignee=assignee,
     )
     # B26: required durable writes share the action/history transaction. No SMTP
     # or lossy on_commit enqueue; existing F2/F3 callers need no second hook.
