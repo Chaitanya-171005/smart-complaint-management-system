@@ -1,0 +1,128 @@
+"""Isolated Docker/PostgreSQL auto-close and feedback recovery check."""
+from datetime import datetime, timezone
+import hashlib
+import io
+import json
+import os
+from pathlib import Path
+import secrets
+import shutil
+import subprocess
+import tarfile
+from uuid import uuid4
+import zipfile
+
+REPO = 'Chaitanya-171005/smart-complaint-management-system'
+MAIN = 'ebc8ffdf9c1ae37365fad71c084869c73a35b4d0'
+F4 = '0a8ddc9db486de97bc010603f5b9124a8c26e200'
+TREE = '65fd8cf0d2b657d780cc94df830c5bd5a82085c0'
+
+
+def git(root, *args):
+    return subprocess.check_output(['git','-C',str(root),*args],text=True).strip()
+
+
+def finish(bundle):
+    root = Path(subprocess.check_output(['git','rev-parse','--show-toplevel'],text=True).strip())
+    assert git(root,'remote','get-url','origin') in {
+        f'https://github.com/{REPO}.git',f'https://github.com/{REPO}',f'git@github.com:{REPO}.git',
+    }, 'Unexpected repository.'
+    assert shutil.which('docker'), 'Docker Desktop is required.'
+    assert subprocess.run(['docker','info'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0, 'Start Docker Desktop, then rerun.'
+    assert subprocess.run(['docker','compose','version'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode == 0, 'Docker Compose v2 is required.'
+    subprocess.run(['git','-C',str(root),'fetch','origin',
+        'refs/heads/Main:refs/remotes/origin/Main',
+        'refs/heads/feature/B23-confirmation-rating-tanmay:refs/remotes/origin/feature/B23-confirmation-rating-tanmay'],check=True)
+    assert git(root,'rev-parse','origin/Main') == MAIN, 'Main changed; stop and share the output.'
+    assert git(root,'rev-parse','origin/feature/B23-confirmation-rating-tanmay') == F4, 'F4 changed; stop and share the output.'
+    directory = Path.home()/'scms-q05-runs'/('autoclose-'+uuid4().hex[:12])
+    directory.mkdir(parents=True,mode=0o700)
+    source = directory/'source'
+    subprocess.run(['git','-C',str(root),'worktree','add','--detach',str(source),F4],check=True)
+    subprocess.run(['git','-C',str(source),'merge','--no-ff','origin/Main','-m',
+        'Q05: combine F4 and Main for autoclose validation'],check=True)
+    assert git(source,'rev-parse','HEAD^{tree}') == TREE
+    assert not git(source,'status','--porcelain')
+    subprocess.run(['git','-C',str(source),'merge-base','--is-ancestor',
+        '7975360abb7c1ce74856884158199f625f8b7976','HEAD'],check=True)
+    metadata = {'repository':REPO,'source_revision':git(source,'rev-parse','HEAD'),'application_tree':TREE,
+        'application_working_tree_dirty':False,'parents':{'F4_PR78':F4,'Main':MAIN},
+        'dependency_PR77':'7975360abb7c1ce74856884158199f625f8b7976',
+        'started_at_utc':datetime.now(timezone.utc).isoformat()}
+    context = directory/'build-context';context.mkdir()
+    tracked = subprocess.check_output(['git','-C',str(source),'archive','--format=tar','HEAD'])
+    with tarfile.open(fileobj=io.BytesIO(tracked)) as archive:
+        archive.extractall(context,filter='data')
+    with zipfile.ZipFile(bundle) as archive:
+        names = [name for name in archive.namelist() if name.startswith('q05_checks/') and name.endswith('.py')]
+        assert len(names) == 4
+        metadata['harness_sha256'] = {}
+        for name in names:
+            content = archive.read(name)
+            target = context/name;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(content)
+            metadata['harness_sha256'][name] = hashlib.sha256(content).hexdigest()
+        (context/'Dockerfile').write_bytes(archive.read('Dockerfile'))
+        metadata['dockerfile_sha256'] = hashlib.sha256(archive.read('Dockerfile')).hexdigest()
+        metadata['driver_sha256'] = hashlib.sha256(archive.read('run_task.py')).hexdigest()
+    (context/'q05_checks/source.json').write_text(json.dumps(metadata,indent=2)+'\n')
+    output = directory/'evidence';output.mkdir(mode=0o700)
+    project = 'scmsq05autoclose'+uuid4().hex[:12]
+    values = {'Q05_DB_NAME':'q05_autoclose','Q05_DB_USER':'q05_autoclose',
+        'Q05_DB_PASSWORD':secrets.token_hex(32),'DJANGO_SECRET_KEY':secrets.token_urlsafe(48),
+        'Q05_UID':str(os.getuid()),'Q05_GID':str(os.getgid())}
+    private = directory/'private.env'
+    with open(private,'x',opener=lambda name,flags:os.open(name,flags,0o600)) as stream:
+        for name,value in values.items():stream.write(name+'='+value+'\n')
+    compose = directory/'compose.json'
+    config = {'services':{
+        'db':{'image':'postgres:17.6','environment':{'POSTGRES_DB':'${Q05_DB_NAME}',
+            'POSTGRES_USER':'${Q05_DB_USER}','POSTGRES_PASSWORD':'${Q05_DB_PASSWORD}'},
+            'volumes':['postgres_data:/var/lib/postgresql/data'],
+            'healthcheck':{'test':['CMD-SHELL','pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"'],
+                'interval':'3s','timeout':'5s','retries':30}},
+        'tests':{'build':{'context':str(context)},'user':'${Q05_UID}:${Q05_GID}',
+            'depends_on':{'db':{'condition':'service_healthy'}},
+            'environment':{'DJANGO_SECRET_KEY':'${DJANGO_SECRET_KEY}',
+                'DJANGO_SETTINGS_MODULE':'q05_checks.settings','PRIVATE_EVIDENCE_ROOT':'/tmp/q05-private',
+                'COMPLAINT_INTAKE_ENABLED':'False','Q05_DB_NAME':'${Q05_DB_NAME}',
+                'Q05_DB_USER':'${Q05_DB_USER}','Q05_DB_PASSWORD':'${Q05_DB_PASSWORD}',
+                'Q05_DB_HOST':'db','Q05_DB_PORT':'5432'},
+            'volumes':[{'type':'bind','source':str(output),'target':'/evidence'}]},
+        },'volumes':{'postgres_data':{}}}
+    compose.write_text(json.dumps(config,indent=2)+'\n')
+    command = ['docker','compose','--project-name',project,'--env-file',str(private),'--file',str(compose)]
+    env = dict(os.environ,**values)
+    assert not subprocess.check_output([*command,'ps','--all','-q'],env=env,text=True).strip(), 'Test project already exists; stop without touching it.'
+    phase = 'configuration';success = False
+    try:
+        subprocess.run([*command,'config','--quiet'],env=env,check=True)
+        phase = 'build'
+        print('Building isolated PostgreSQL autoclose checks; allow several minutes.',flush=True)
+        subprocess.run([*command,'build','tests'],env=env,check=True)
+        phase = 'postgresql_autoclose_checks'
+        subprocess.run([*command,'run','--rm','tests'],env=env,check=True)
+        report = json.loads((output/'report.json').read_text())
+        assert report['status'] == 'PASS_LIFECYCLE_COMPONENT_CHECKS' and report['executed_cases'] == 125
+        assert report['runtime']['database_vendor'] == 'postgresql'
+        assert report['application_tree'] == TREE
+        assert report['driver_sha256'] == metadata['driver_sha256']
+        success = True
+    except (subprocess.CalledProcessError,AssertionError,OSError,ValueError) as error:
+        if not (output/'report.json').exists():
+            (output/'report.json').write_text(json.dumps(dict(metadata,status='FAIL',failed_phase=phase,error_type=type(error).__name__),indent=2)+'\n')
+        print('Auto-close check did not pass. Keep the report for diagnosis.',flush=True)
+    finally:
+        stopped = subprocess.run([*command,'down'],env=env).returncode == 0  # Never delete named volumes.
+        if not stopped:
+            success = False
+            print('Could not stop isolated test containers; inspect this test project.',flush=True)
+    print(json.dumps({'status':'PASS_LIFECYCLE_COMPONENT_CHECKS' if success else 'FAIL',
+        'report':str(output/'report.json'),'test_project':project}),flush=True)
+    print('Share report.json; keep private.env private. Seven-day policy approval, real scheduler and email delivery remain pending; final Q05 stays open.',flush=True)
+    return 0 if success else 2
+
+
+if __name__ == '__main__':
+    try:raise SystemExit(finish(BUNDLE_PATH))
+    except (AssertionError,RuntimeError,OSError,subprocess.CalledProcessError) as error:
+        raise SystemExit(str(error)) from None

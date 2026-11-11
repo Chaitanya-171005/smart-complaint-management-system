@@ -1,0 +1,108 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.2, settings: scms.settings (from ini)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: cov-7.1.0, django-4.14.0
+collected 810 items
+
+accounts/test_foundation.py .........                                    [  1%]
+accounts/test_login.py ................................                  [  5%]
+accounts/test_permissions.py .................................           [  9%]
+accounts/test_reference_data.py ........................................ [ 14%]
+............................                                             [ 17%]
+accounts/test_registration.py ......................................     [ 22%]
+accounts/test_session.py .................                               [ 24%]
+accounts/test_user_admin.py ........................................     [ 29%]
+complaints/test_evidence.py .......................                      [ 32%]
+complaints/test_forms.py ..........                                      [ 33%]
+complaints/test_models.py .............................................. [ 39%]
+                                                                         [ 39%]
+routing/test_escalation.py ..........................                    [ 42%]
+routing/test_escalation_outer_transaction.py .                           [ 42%]
+routing/test_resolver.py ......                                          [ 43%]
+routing/test_sla.py .......                                              [ 43%]
+routing/tests.py .................................                       [ 48%]
+test_domain_fixtures.py ................                                 [ 50%]
+test_fixtures.py ......                                                  [ 50%]
+workflow/test_history.py ............                                    [ 52%]
+accounts/test_permissions_integration.py ............                    [ 53%]
+accounts/test_registration.py ..                                         [ 53%]
+accounts/test_user_admin.py ......                                       [ 54%]
+complaints/test_evidence.py ..                                           [ 54%]
+complaints/test_identifiers.py .........................                 [ 58%]
+complaints/test_intake.py ......................................         [ 62%]
+routing/test_escalation.py .....                                         [ 63%]
+routing/test_intake_entrypoint.py ........                               [ 64%]
+routing/test_intake_routing.py ...                                       [ 64%]
+routing/test_resolver.py .                                               [ 64%]
+accounts/test_foundation.py ....                                         [ 65%]
+accounts/test_permissions_integration.py .                               [ 65%]
+complaints/test_checks.py ....................                           [ 67%]
+complaints/test_evidence.py ............................................ [ 73%]
+.....                                                                    [ 73%]
+complaints/test_forms.py ............................................... [ 79%]
+.....................................................................    [ 88%]
+complaints/test_models.py ...........                                    [ 89%]
+routing/test_sla.py ..................................                   [ 93%]
+test_ci_checks.py ...........                                            [ 95%]
+test_coverage_summary.py ..............                                  [ 96%]
+test_fixtures.py ....                                                    [ 97%]
+test_run_tests.py ...........                                            [ 98%]
+workflow/tests.py ..........                                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.6-final-0 _______________
+
+Name                                            Stmts   Miss Branch BrPart   Cover   Missing
+--------------------------------------------------------------------------------------------
+accounts/admin.py                                   1      0      0      0 100.00%
+accounts/admin_views.py                           101      0     26      2  98.43%   73->75, 96->98
+accounts/apps.py                                    3      0      0      0 100.00%
+accounts/config_audit.py                           17      0      6      0 100.00%
+accounts/forms.py                                  34      1      8      1  95.24%   25
+accounts/models.py                                149      6      8      1  95.54%   85, 93, 156, 173, 204, 253
+accounts/permissions.py                           137      1     54      1  98.95%   168
+accounts/reference_adapters.py                      4      0      0      0 100.00%
+accounts/reference_services.py                    118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py                            3      0      0      0 100.00%
+accounts/services.py                               77      0     18      0 100.00%
+accounts/urls.py                                    4      0      0      0 100.00%
+accounts/user_admin_services.py                    65      0     20      0 100.00%
+accounts/validators.py                              7      1      2      0  88.89%   15
+accounts/views.py                                  59      1     14      0  98.63%   82
+complaints/admin.py                                 1      0      0      0 100.00%
+complaints/apps.py                                  5      0      0      0 100.00%
+complaints/checks.py                               10      0      2      0 100.00%
+complaints/evidence.py                            145      1     40      1  98.92%   114
+complaints/forms.py                                84      0     24      0 100.00%
+complaints/identifiers.py                          26      0     10      1  97.22%   49->56
+complaints/intake.py                               73      0     22      0 100.00%
+complaints/models.py                               76      1      2      0  98.72%   210
+complaints/reference_data.py                       11      0      0      0 100.00%
+complaints/references.py                            6      0      2      0 100.00%
+complaints/services.py                              5      0      0      0 100.00%
+complaints/validators.py                           14      0      6      0 100.00%
+complaints/views.py                                 1      1      0      0   0.00%   1
+routing/adapters.py                                 4      0      0      0 100.00%
+routing/admin.py                                   12      3      0      0  75.00%   12, 15, 18
+routing/apps.py                                     3      0      0      0 100.00%
+routing/escalation.py                              74      1     16      1  97.78%   108
+routing/intake.py                                  15      0      0      0 100.00%
+routing/management/commands/run_escalation.py      17      1      4      1  90.48%   16
+routing/models.py                                 150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+routing/resolver.py                                47      0     18      0 100.00%
+routing/services.py                               245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+routing/sla.py                                     34      0     14      0 100.00%
+routing/urls.py                                     4      0      0      0 100.00%
+routing/views.py                                   55     15     26      7  70.37%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+workflow/admin.py                                  14      3      0      0  78.57%   21, 24, 27
+workflow/apps.py                                    3      0      0      0 100.00%
+workflow/history_service.py                         9      0      2      0 100.00%
+workflow/models.py                                 52      2     10      1  95.16%   27, 84
+workflow/services.py                               23      2      8      0  93.55%   55-56
+workflow/views.py                                   1      1      0      0   0.00%   1
+--------------------------------------------------------------------------------------------
+TOTAL                                            1998     72    490     38  95.50%
+Coverage JSON written to file coverage.json
+============================= 810 passed in 45.40s =============================

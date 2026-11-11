@@ -1,0 +1,630 @@
+{
+  "source_junit_sha256": "70e047ab7ff2c89cb98a9d0dc9714a1d342ddeac21a096e93c6aeb44e0d0d15d",
+  "cases": [
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_partial_batch_failure_keeps_completed_item_and_retries_remaining",
+      "outcome": "passed",
+      "time_seconds": 0.611
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_sigkill_preserves_atomic_closure_history_and_outbox[after_commit]",
+      "outcome": "passed",
+      "time_seconds": 1.093
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_sigkill_preserves_atomic_closure_history_and_outbox[before_commit]",
+      "outcome": "passed",
+      "time_seconds": 0.989
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_two_processes_preserve_first_valid_lifecycle_outcome[auto]",
+      "outcome": "passed",
+      "time_seconds": 1.119
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_two_processes_preserve_first_valid_lifecycle_outcome[confirm]",
+      "outcome": "passed",
+      "time_seconds": 1.109
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_two_processes_preserve_first_valid_lifecycle_outcome[maximum]",
+      "outcome": "passed",
+      "time_seconds": 1.142
+    },
+    {
+      "id": "q05_checks.test_autoclose_recovery::test_two_processes_preserve_first_valid_lifecycle_outcome[reject]",
+      "outcome": "passed",
+      "time_seconds": 1.09
+    },
+    {
+      "id": "workflow.test_autoclose::test_auto_close_first_refuses_old_feedback_revision",
+      "outcome": "passed",
+      "time_seconds": 0.231
+    },
+    {
+      "id": "workflow.test_autoclose::test_before_at_after_exact_deadline[-1-0]",
+      "outcome": "passed",
+      "time_seconds": 1.476
+    },
+    {
+      "id": "workflow.test_autoclose::test_before_at_after_exact_deadline[0-1]",
+      "outcome": "passed",
+      "time_seconds": 0.231
+    },
+    {
+      "id": "workflow.test_autoclose::test_before_at_after_exact_deadline[1-1]",
+      "outcome": "passed",
+      "time_seconds": 0.241
+    },
+    {
+      "id": "workflow.test_autoclose::test_command_failure_is_sanitized",
+      "outcome": "passed",
+      "time_seconds": 0.169
+    },
+    {
+      "id": "workflow.test_autoclose::test_configured_duration[14]",
+      "outcome": "passed",
+      "time_seconds": 0.414
+    },
+    {
+      "id": "workflow.test_autoclose::test_configured_duration[1]",
+      "outcome": "passed",
+      "time_seconds": 0.225
+    },
+    {
+      "id": "workflow.test_autoclose::test_configured_duration[2]",
+      "outcome": "passed",
+      "time_seconds": 0.209
+    },
+    {
+      "id": "workflow.test_autoclose::test_configured_duration[3]",
+      "outcome": "passed",
+      "time_seconds": 0.203
+    },
+    {
+      "id": "workflow.test_autoclose::test_feedback_first_is_preserved_including_head_review[0]",
+      "outcome": "passed",
+      "time_seconds": 0.229
+    },
+    {
+      "id": "workflow.test_autoclose::test_feedback_first_is_preserved_including_head_review[2]",
+      "outcome": "passed",
+      "time_seconds": 0.233
+    },
+    {
+      "id": "workflow.test_autoclose::test_head_review_does_not_starve_batch",
+      "outcome": "passed",
+      "time_seconds": 0.268
+    },
+    {
+      "id": "workflow.test_autoclose::test_history_or_notice_failure_rolls_back_closure[workflow.lifecycle.record_history]",
+      "outcome": "passed",
+      "time_seconds": 0.237
+    },
+    {
+      "id": "workflow.test_autoclose::test_history_or_notice_failure_rolls_back_closure[workflow.notifications.Notification.objects.create]",
+      "outcome": "passed",
+      "time_seconds": 0.236
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[-1]",
+      "outcome": "passed",
+      "time_seconds": 0.215
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[0]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[1.5_0]",
+      "outcome": "passed",
+      "time_seconds": 0.21
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[1.5_1]",
+      "outcome": "passed",
+      "time_seconds": 0.247
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[36501]",
+      "outcome": "passed",
+      "time_seconds": 0.191
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[None]",
+      "outcome": "passed",
+      "time_seconds": 0.19
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[True]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_autoclose::test_invalid_duration_refused_without_writes[bad]",
+      "outcome": "passed",
+      "time_seconds": 0.193
+    },
+    {
+      "id": "workflow.test_autoclose::test_management_command_and_invalid_limit",
+      "outcome": "passed",
+      "time_seconds": 0.201
+    },
+    {
+      "id": "workflow.test_autoclose::test_missing_resolution_timestamp_excluded",
+      "outcome": "passed",
+      "time_seconds": 0.175
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[ASSIGNED]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[CLOSED]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[IN_PROGRESS]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[REJECTED]",
+      "outcome": "passed",
+      "time_seconds": 0.198
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[REOPENED]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_autoclose::test_other_states_excluded_even_with_expired_resolution[SUBMITTED]",
+      "outcome": "passed",
+      "time_seconds": 0.198
+    },
+    {
+      "id": "workflow.test_autoclose::test_overlapping_workers_and_feedback_first_transaction_wins[confirm]",
+      "outcome": "passed",
+      "time_seconds": 0.236
+    },
+    {
+      "id": "workflow.test_autoclose::test_overlapping_workers_and_feedback_first_transaction_wins[maximum]",
+      "outcome": "passed",
+      "time_seconds": 0.236
+    },
+    {
+      "id": "workflow.test_autoclose::test_overlapping_workers_and_feedback_first_transaction_wins[reject]",
+      "outcome": "passed",
+      "time_seconds": 0.228
+    },
+    {
+      "id": "workflow.test_autoclose::test_overlapping_workers_and_feedback_first_transaction_wins[worker]",
+      "outcome": "passed",
+      "time_seconds": 0.237
+    },
+    {
+      "id": "workflow.test_autoclose::test_repeated_runs_do_not_duplicate_and_preserve_metadata",
+      "outcome": "passed",
+      "time_seconds": 0.244
+    },
+    {
+      "id": "workflow.test_confirmation::test_actual_issued_reference_remains_blocked_without_b13",
+      "outcome": "passed",
+      "time_seconds": 0.189
+    },
+    {
+      "id": "workflow.test_confirmation::test_anonymous_reference_cannot_grant_confirmation_or_full_read[]",
+      "outcome": "passed",
+      "time_seconds": 0.184
+    },
+    {
+      "id": "workflow.test_confirmation::test_anonymous_reference_cannot_grant_confirmation_or_full_read[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]",
+      "outcome": "passed",
+      "time_seconds": 0.186
+    },
+    {
+      "id": "workflow.test_confirmation::test_anonymous_reference_cannot_grant_confirmation_or_full_read[wrong]",
+      "outcome": "passed",
+      "time_seconds": 0.184
+    },
+    {
+      "id": "workflow.test_confirmation::test_callers_outer_rollback_reverts_confirmation",
+      "outcome": "passed",
+      "time_seconds": 0.217
+    },
+    {
+      "id": "workflow.test_confirmation::test_concurrent_confirmation_accepts_only_once",
+      "outcome": "passed",
+      "time_seconds": 0.246
+    },
+    {
+      "id": "workflow.test_confirmation::test_csrf_get_post_redirect_and_closed_detail",
+      "outcome": "passed",
+      "time_seconds": 0.525
+    },
+    {
+      "id": "workflow.test_confirmation::test_duplicate_and_stale_actions_leave_no_extra_events",
+      "outcome": "passed",
+      "time_seconds": 0.223
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data0]",
+      "outcome": "passed",
+      "time_seconds": 0.24
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data1]",
+      "outcome": "passed",
+      "time_seconds": 0.235
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data2]",
+      "outcome": "passed",
+      "time_seconds": 0.237
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data3]",
+      "outcome": "passed",
+      "time_seconds": 0.24
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data4]",
+      "outcome": "passed",
+      "time_seconds": 0.233
+    },
+    {
+      "id": "workflow.test_confirmation::test_http_invalid_rating_or_reference_tampering_is_refused[data5]",
+      "outcome": "passed",
+      "time_seconds": 0.237
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[-1]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[0]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[1.0]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[1.5]",
+      "outcome": "passed",
+      "time_seconds": 0.192
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[1]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[6]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[False]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[True]",
+      "outcome": "passed",
+      "time_seconds": 0.208
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[]",
+      "outcome": "passed",
+      "time_seconds": 0.195
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[rating10]",
+      "outcome": "passed",
+      "time_seconds": 0.198
+    },
+    {
+      "id": "workflow.test_confirmation::test_invalid_domain_rating_is_atomic[rating9]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[ASSIGNED]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[CLOSED]",
+      "outcome": "passed",
+      "time_seconds": 0.193
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[IN_PROGRESS]",
+      "outcome": "passed",
+      "time_seconds": 0.193
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[REJECTED]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[REOPENED]",
+      "outcome": "passed",
+      "time_seconds": 0.194
+    },
+    {
+      "id": "workflow.test_confirmation::test_only_resolved_can_close[SUBMITTED]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_other_owner_http_get_and_post_are_concealed",
+      "outcome": "passed",
+      "time_seconds": 0.236
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[1]",
+      "outcome": "passed",
+      "time_seconds": 0.218
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[2]",
+      "outcome": "passed",
+      "time_seconds": 0.221
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[3]",
+      "outcome": "passed",
+      "time_seconds": 0.215
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[4]",
+      "outcome": "passed",
+      "time_seconds": 0.213
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[5]",
+      "outcome": "passed",
+      "time_seconds": 0.213
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_closes_with_optional_rating_and_department_notice[None]",
+      "outcome": "passed",
+      "time_seconds": 0.21
+    },
+    {
+      "id": "workflow.test_confirmation::test_owner_http_can_omit_rating",
+      "outcome": "passed",
+      "time_seconds": 0.254
+    },
+    {
+      "id": "workflow.test_confirmation::test_required_failure_rolls_back_closure_metadata_and_notices[workflow.lifecycle.record_history]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_confirmation::test_required_failure_rolls_back_closure_metadata_and_notices[workflow.notifications.Notification.objects.create]",
+      "outcome": "passed",
+      "time_seconds": 0.209
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[admin]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[head]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[inactive]",
+      "outcome": "passed",
+      "time_seconds": 0.195
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[none]",
+      "outcome": "passed",
+      "time_seconds": 0.185
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[other]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[revoked]",
+      "outcome": "passed",
+      "time_seconds": 0.192
+    },
+    {
+      "id": "workflow.test_confirmation::test_wrong_or_revoked_actor_cannot_confirm[staff]",
+      "outcome": "passed",
+      "time_seconds": 0.204
+    },
+    {
+      "id": "workflow.test_reopening::test_anonymous_reference_and_other_owner_cannot_reject",
+      "outcome": "passed",
+      "time_seconds": 0.273
+    },
+    {
+      "id": "workflow.test_reopening::test_csrf_read_only_get_form_redirect_and_tampering",
+      "outcome": "passed",
+      "time_seconds": 0.347
+    },
+    {
+      "id": "workflow.test_reopening::test_duplicate_and_concurrent_feedback_is_accepted_once[0]",
+      "outcome": "passed",
+      "time_seconds": 0.252
+    },
+    {
+      "id": "workflow.test_reopening::test_duplicate_and_concurrent_feedback_is_accepted_once[2]",
+      "outcome": "passed",
+      "time_seconds": 0.255
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[                              ]",
+      "outcome": "passed",
+      "time_seconds": 0.203
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[42]",
+      "outcome": "passed",
+      "time_seconds": 0.202
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[None]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[]",
+      "outcome": "passed",
+      "time_seconds": 0.2
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[xxxxxxxxxxxxxxxxxxx]",
+      "outcome": "passed",
+      "time_seconds": 0.201
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[xxxxxxxxxxxxxxxxxxxx\\x00]",
+      "outcome": "passed",
+      "time_seconds": 0.2
+    },
+    {
+      "id": "workflow.test_reopening::test_invalid_reason_leaves_everything_unchanged[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "outcome": "passed",
+      "time_seconds": 0.202
+    },
+    {
+      "id": "workflow.test_reopening::test_outer_rollback_and_prior_reason_retention",
+      "outcome": "passed",
+      "time_seconds": 0.28
+    },
+    {
+      "id": "workflow.test_reopening::test_reason_boundaries_are_trimmed_and_retained[2000]",
+      "outcome": "passed",
+      "time_seconds": 0.212
+    },
+    {
+      "id": "workflow.test_reopening::test_reason_boundaries_are_trimmed_and_retained[20]",
+      "outcome": "passed",
+      "time_seconds": 0.205
+    },
+    {
+      "id": "workflow.test_reopening::test_reopen_or_escalate_at_limit_without_changing_assignment_or_due[0]",
+      "outcome": "passed",
+      "time_seconds": 0.223
+    },
+    {
+      "id": "workflow.test_reopening::test_reopen_or_escalate_at_limit_without_changing_assignment_or_due[1]",
+      "outcome": "passed",
+      "time_seconds": 0.218
+    },
+    {
+      "id": "workflow.test_reopening::test_reopen_or_escalate_at_limit_without_changing_assignment_or_due[2]",
+      "outcome": "passed",
+      "time_seconds": 0.221
+    },
+    {
+      "id": "workflow.test_reopening::test_reopen_or_escalate_at_limit_without_changing_assignment_or_due[3]",
+      "outcome": "passed",
+      "time_seconds": 0.223
+    },
+    {
+      "id": "workflow.test_reopening::test_rollback_including_maximum_escalation[0-workflow.lifecycle.record_history]",
+      "outcome": "passed",
+      "time_seconds": 0.215
+    },
+    {
+      "id": "workflow.test_reopening::test_rollback_including_maximum_escalation[0-workflow.notifications.Notification.objects.create]",
+      "outcome": "passed",
+      "time_seconds": 0.282
+    },
+    {
+      "id": "workflow.test_reopening::test_rollback_including_maximum_escalation[2-workflow.notifications.Notification.objects.create]",
+      "outcome": "passed",
+      "time_seconds": 0.216
+    },
+    {
+      "id": "workflow.test_reopening::test_rollback_including_maximum_escalation[2-workflow.reopening_service.record_history]",
+      "outcome": "passed",
+      "time_seconds": 0.205
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[admin]",
+      "outcome": "passed",
+      "time_seconds": 0.201
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[head]",
+      "outcome": "passed",
+      "time_seconds": 0.201
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[inactive]",
+      "outcome": "passed",
+      "time_seconds": 0.202
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[none]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[other]",
+      "outcome": "passed",
+      "time_seconds": 0.202
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[revoked]",
+      "outcome": "passed",
+      "time_seconds": 0.201
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_actor_leaves_aggregate_unchanged[staff]",
+      "outcome": "passed",
+      "time_seconds": 0.207
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[ASSIGNED]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[CLOSED]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[IN_PROGRESS]",
+      "outcome": "passed",
+      "time_seconds": 0.199
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[REJECTED]",
+      "outcome": "passed",
+      "time_seconds": 0.196
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[REOPENED]",
+      "outcome": "passed",
+      "time_seconds": 0.195
+    },
+    {
+      "id": "workflow.test_reopening::test_wrong_state_refused[SUBMITTED]",
+      "outcome": "passed",
+      "time_seconds": 0.197
+    }
+  ]
+}
