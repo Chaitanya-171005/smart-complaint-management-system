@@ -1,0 +1,122 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.13.0, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.2, settings: scms.settings (from env)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: cov-7.1.0, django-4.14.0
+collected 925 items
+
+accounts/test_config_audit.py ........................................   [  4%]
+accounts/test_foundation.py .........                                    [  5%]
+accounts/test_login.py ................................                  [  8%]
+accounts/test_permissions.py .................................           [ 12%]
+accounts/test_reference_data.py ........................................ [ 16%]
+............................                                             [ 19%]
+accounts/test_registration.py ......................................     [ 23%]
+accounts/test_session.py .................                               [ 25%]
+accounts/test_user_admin.py ........................................     [ 29%]
+complaints/test_evidence.py ............................................ [ 34%]
+............................                                             [ 37%]
+complaints/test_forms.py ..........                                      [ 38%]
+complaints/test_models.py .............................................. [ 43%]
+                                                                         [ 43%]
+routing/test_resolver.py ......                                          [ 44%]
+routing/test_sla.py .......                                              [ 45%]
+routing/tests.py .................................                       [ 48%]
+test_domain_fixtures.py ................                                 [ 50%]
+test_fixtures.py ......                                                  [ 51%]
+workflow/test_history.py ............                                    [ 52%]
+accounts/test_permissions_integration.py ............                    [ 53%]
+accounts/test_registration.py ..                                         [ 53%]
+accounts/test_user_admin.py ......                                       [ 54%]
+complaints/test_evidence.py ..                                           [ 54%]
+complaints/test_evidence_recovery.py ..............................      [ 58%]
+complaints/test_http_intake.py ...................................       [ 61%]
+complaints/test_identifiers.py .........................                 [ 64%]
+complaints/test_intake.py ......................................         [ 68%]
+complaints/test_submission.py .......................................... [ 73%]
+                                                                         [ 73%]
+routing/test_intake_entrypoint.py ........                               [ 74%]
+routing/test_intake_routing.py ...                                       [ 74%]
+routing/test_resolver.py .                                               [ 74%]
+accounts/test_foundation.py ....                                         [ 74%]
+accounts/test_permissions_integration.py .                               [ 75%]
+complaints/test_checks.py ....................                           [ 77%]
+complaints/test_forms.py ............................................... [ 82%]
+.....................................................................    [ 89%]
+complaints/test_models.py ...........                                    [ 90%]
+routing/test_sla.py ..................................                   [ 94%]
+test_ci_checks.py ...........                                            [ 95%]
+test_coverage_summary.py ..............                                  [ 97%]
+test_fixtures.py ....                                                    [ 97%]
+test_run_tests.py ...........                                            [ 98%]
+workflow/tests.py ..........                                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.13.0-final-0 _______________
+
+Name                                                   Stmts   Miss Branch BrPart   Cover   Missing
+---------------------------------------------------------------------------------------------------
+accounts/admin.py                                          1      0      0      0 100.00%
+accounts/admin_views.py                                  134      0     38      2  98.84%   75->77, 98->100
+accounts/apps.py                                           3      0      0      0 100.00%
+accounts/config_audit.py                                  27      0     16      0 100.00%
+accounts/forms.py                                         34      1      8      1  95.24%   25
+accounts/models.py                                       149      6      8      1  95.54%   85, 93, 156, 173, 204, 253
+accounts/permissions.py                                  137      1     54      1  98.95%   168
+accounts/reference_adapters.py                             4      0      0      0 100.00%
+accounts/reference_services.py                           118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py                                   3      0      0      0 100.00%
+accounts/services.py                                      78      0     18      0 100.00%
+accounts/urls.py                                           4      0      0      0 100.00%
+accounts/user_admin_services.py                           65      0     20      0 100.00%
+accounts/validators.py                                     7      1      2      0  88.89%   15
+accounts/views.py                                         59      1     14      0  98.63%   82
+complaints/admin.py                                        1      0      0      0 100.00%
+complaints/apps.py                                         5      0      0      0 100.00%
+complaints/checks.py                                      10      0      2      0 100.00%
+complaints/evidence.py                                   180      1     44      1  99.11%   116
+complaints/evidence_recovery.py                          108      1     44      1  98.68%   112
+complaints/forms.py                                       84      0     24      0 100.00%
+complaints/identifiers.py                                 26      0     10      1  97.22%   49->56
+complaints/intake.py                                      88      1     30      1  98.31%   152
+complaints/management/commands/reconcile_evidence.py      15      2      0      0  86.67%   21-22
+complaints/models.py                                      92      1      2      0  98.94%   220
+complaints/reference_data.py                              16      0      0      0 100.00%
+complaints/references.py                                   6      0      2      0 100.00%
+complaints/services.py                                     5      0      0      0 100.00%
+complaints/submission.py                                  66      0     20      0 100.00%
+complaints/urls.py                                         4      0      0      0 100.00%
+complaints/validators.py                                  14      0      6      0 100.00%
+complaints/views.py                                      101      1     14      1  98.26%   134
+routing/adapters.py                                        4      0      0      0 100.00%
+routing/admin.py                                           1      0      0      0 100.00%
+routing/apps.py                                            3      0      0      0 100.00%
+routing/intake.py                                         22      0      0      0 100.00%
+routing/models.py                                        121     11     24      9  86.21%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207
+routing/resolver.py                                       54      0     18      0 100.00%
+routing/services.py                                      245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+routing/sla.py                                            41      0     14      0 100.00%
+routing/urls.py                                            4      0      0      0 100.00%
+routing/views.py                                          55     15     26      7  70.37%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+workflow/admin.py                                         14      3      0      0  78.57%   21, 24, 27
+workflow/apps.py                                           3      0      0      0 100.00%
+workflow/history_service.py                                9      0      2      0 100.00%
+workflow/models.py                                        52      2     10      1  95.16%   27, 84
+workflow/services.py                                      23      2      8      0  93.55%   55-56
+workflow/views.py                                          1      1      0      0   0.00%   1
+---------------------------------------------------------------------------------------------------
+TOTAL                                                   2296     67    578     38  96.28%
+Coverage JSON written to file coverage.json
+============================= slowest 10 durations =============================
+4.52s call     accounts/test_registration.py::test_password_stored_as_salted_hash_only
+3.15s call     routing/tests.py::RoutingConfigurationTests::test_screen_exposes_all_configuration_actions
+3.07s call     routing/tests.py::RoutingConfigurationTests::test_configuration_screen_allows_only_admin_and_uses_services
+3.05s call     routing/tests.py::RoutingConfigurationTests::test_location_validation_and_usage
+3.04s call     routing/tests.py::RoutingConfigurationTests::test_active_duplicate_routing_rule_is_rejected_and_location_is_normalized
+3.04s call     accounts/test_foundation.py::test_email_is_login_field_and_unique
+3.02s call     routing/tests.py::RoutingConfigurationTests::test_escalation_interval_and_level_enforce_their_permitted_ranges
+3.01s call     routing/tests.py::RoutingConfigurationTests::test_updating_location_to_unknown_or_inactive_code_is_refused
+3.01s call     routing/tests.py::RoutingConfigurationTests::test_category_deactivation_requires_active_dependents_to_be_disabled_first
+3.01s call     routing/tests.py::RoutingConfigurationTests::test_sla_and_escalation_settings_are_audited
+======================= 925 passed in 176.87s (0:02:56) ========================

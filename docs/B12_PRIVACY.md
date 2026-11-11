@@ -119,3 +119,24 @@ actual anonymous flow. The privacy-ready flag records an operator attestation;
 it cannot prove that external logging/integrations were checked. Missing or
 misordered privacy middleware, insecure HTTP, debug mode, session-based CSRF or
 missing release values fail closed rather than accepting a complaint.
+
+## B10 recovery integration
+
+Anonymous evidence staging uses the merged B10 shared writer lease and synced
+file writes through the outer database commit. Cleanup consults primary accepted
+Attachment metadata, preserves committed files after callback failure, and logs
+fixed messages without private parser/storage exceptions. Recovery requires the
+exclusive lease and retains integrity checks and reversible quarantine behavior.
+
+`integration_checks/anonymous_recovery.py` explicitly exercises anonymous process
+death before/during/after commit, same-key retry without recovering a previously
+returned reference, and an anonymous writer blocking concurrent recovery. Run it
+explicitly; its filename does not alter default pytest collection. The dedicated
+PostgreSQL runner requires 34 cases: 30 existing recovery cases and these four
+anonymous cases, with no skips or failures. GitHub Actions retains the actual
+backend/source metadata in `b11-recovery-postgresql-evidence`.
+
+These checks cover evidence recovery integration; they do not establish all
+anonymous PostgreSQL/privacy acceptance, real F4 delivery, F3/F4 output privacy,
+D01/D02 policy or deployed TLS/log-redaction acceptance. Anonymous intake remains
+disabled pending those prerequisites; PR73 remains a separate draft dependency.

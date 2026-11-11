@@ -17,6 +17,8 @@ from pypdf import PdfWriter
 from accounts.models import SecurityEvent, User
 from complaints import evidence
 
+pytestmark = pytest.mark.django_db
+
 
 def image_bytes(kind="PNG"):
     stream = BytesIO()
