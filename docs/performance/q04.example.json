@@ -1,0 +1,96 @@
+{
+  "users": 50,
+  "iterations_per_user": 10,
+  "environment": {
+    "source_revision": "",
+    "database_engine": "",
+    "dataset_description": "",
+    "network_conditions": ""
+  },
+  "cases": [
+    {
+      "name": "intake",
+      "enabled": false,
+      "role": "COMPLAINANT",
+      "method": "POST",
+      "path": "/complaints/new/",
+      "expect_status": 200,
+      "expect_pattern": "Your complaint was submitted",
+      "threshold_ms": 2000,
+      "prepare_path": "/complaints/new/",
+      "fresh_operation_token": true,
+      "payload": {
+        "title": "Synthetic Q04 {run_id}-{worker}-{iteration}",
+        "description": "Synthetic performance test complaint; not a campus incident.",
+        "priority": "LOW",
+        "sub_category": ""
+      },
+      "payload_env": {
+        "category": "SCMS_Q04_CATEGORY",
+        "location": "SCMS_Q04_LOCATION"
+      }
+    },
+    {
+      "name": "list",
+      "enabled": false,
+      "role": "COMPLAINANT",
+      "method": "GET",
+      "path": "/SET-DEPLOYED-LIST-PATH/",
+      "expect_status": 200,
+      "expect_pattern": "REPLACE_WITH_OPERATION_SPECIFIC_SUCCESS_PATTERN",
+      "threshold_ms": 2000,
+      "record_pattern": "REPLACE_WITH_ONE_MATCH_PER_COMPLAINT_ROW",
+      "min_records": 1,
+      "max_records": 25
+    },
+    {
+      "name": "detail",
+      "enabled": false,
+      "role": "COMPLAINANT",
+      "method": "GET",
+      "path": "/SET-DEPLOYED-DETAIL-PATH/",
+      "expect_status": 200,
+      "expect_pattern": "REPLACE_WITH_OPERATION_SPECIFIC_SUCCESS_PATTERN",
+      "threshold_ms": 2000
+    },
+    {
+      "name": "tracking",
+      "enabled": false,
+      "role": "ANONYMOUS",
+      "method": "POST",
+      "path": "/anonymous/track/",
+      "expect_status": 200,
+      "expect_pattern": "REPLACE_WITH_OPERATION_SPECIFIC_SUCCESS_PATTERN",
+      "threshold_ms": 2000,
+      "prepare_path": "/anonymous/track/",
+      "payload_env": {
+        "reference": "SCMS_Q04_REFERENCE"
+      },
+      "iterations_per_user": 9
+    },
+    {
+      "name": "queue",
+      "enabled": false,
+      "role": "HEAD",
+      "method": "GET",
+      "path": "/routing/queue/",
+      "expect_status": 200,
+      "expect_pattern": "REPLACE_WITH_OPERATION_SPECIFIC_SUCCESS_PATTERN",
+      "threshold_ms": 1500,
+      "record_pattern": "REPLACE_WITH_ONE_MATCH_PER_COMPLAINT_ROW",
+      "min_records": 1,
+      "max_records": 25
+    },
+    {
+      "name": "action",
+      "enabled": false,
+      "role": "HEAD",
+      "method": "POST",
+      "path": "/complaints/SET-COMPLAINT-ID/assign/",
+      "expect_status": 302,
+      "expect_pattern": "^/routing/queue/",
+      "threshold_ms": 1500,
+      "prepare_path": "/routing/queue/"
+    }
+  ]
+}

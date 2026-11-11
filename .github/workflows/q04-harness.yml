@@ -1,0 +1,36 @@
+name: Q04 harness regression checks
+on:
+  pull_request:
+    paths:
+      - 'scripts/q04_load.py'
+      - 'test_q04_load.py'
+      - 'docs/performance/**'
+      - '.github/workflows/q04-harness.yml'
+  push:
+    branches: [feature/Q04-performance-runner]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  harness-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DJANGO_SECRET_KEY: synthetic-harness-regression-test-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install project test dependencies
+        run: python -m pip install -r requirements.txt -r requirements-dev.txt
+      - name: Run system, migration, full tests and coverage checks
+        run: sh scripts/ci_checks.sh build/evidence/q04-harness-regression
+      - name: Retain regression evidence (not deployment performance results)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q04-harness-regression-evidence
+          path: build/evidence/q04-harness-regression/
+          if-no-files-found: error
