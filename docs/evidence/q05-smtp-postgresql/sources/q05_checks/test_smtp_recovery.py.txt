@@ -1,0 +1,363 @@
+"""Q05/B27: actual loopback SMTP and PostgreSQL worker boundaries.
+
+Synthetic relay acceptance is not external mailbox delivery or deployment acceptance.
+Clock overrides exercise exact retry boundaries without waiting real minutes.
+"""
+from contextlib import contextmanager
+from datetime import datetime, timedelta
+from io import StringIO
+import json
+import os
+from pathlib import Path
+import signal
+import socket
+import socketserver
+import subprocess
+import sys
+from threading import Event, Lock, Thread
+import time
+from unittest.mock import patch
+
+import pytest
+from django.core.management import call_command
+from django.db import connection
+from django.utils import timezone
+
+from accounts.models import User
+from complaints.models import Complaint
+from workflow.confirmation_service import confirm_resolution
+from workflow.email_delivery import deliver_email, due_delivery_ids
+from workflow.lifecycle import get_transition_revision
+from workflow.models import ComplaintHistory, EmailAttempt, EmailDelivery, Notification, NotificationEvent
+
+pytestmark = pytest.mark.django_db(transaction=True)
+
+
+class Relay(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
+    def __init__(self, mode='accept', failures=0):
+        self.mode, self.failures = mode, failures
+        self.lock, self.accepted_event, self.release = Lock(), Event(), Event()
+        self.attempted, self.accepted, self.recipients = [], [], []
+        super().__init__(('127.0.0.1', 0), Handler)
+
+
+class Handler(socketserver.StreamRequestHandler):
+    def handle(self):
+        self.connection.settimeout(4)
+        relay = self.server
+        try:
+            self.wfile.write(b'220 synthetic.local ESMTP\r\n')
+            while line := self.rfile.readline():
+                verb = line.split(b' ', 1)[0].strip().upper()
+                if verb in (b'EHLO', b'HELO'):
+                    self.wfile.write(b'250 synthetic.local\r\n')
+                elif verb == b'RCPT':
+                    with relay.lock:
+                        relay.recipients.append(line.decode('ascii').strip())
+                    self.wfile.write(b'550 SECRET synthetic recipient refusal\r\n' if relay.mode == 'rcpt550' else b'250 OK\r\n')
+                elif verb == b'DATA':
+                    self.wfile.write(b'354 Send data\r\n')
+                    parts = []
+                    while (part := self.rfile.readline()) != b'.\r\n':
+                        if not part:
+                            return
+                        parts.append(part)
+                    with relay.lock:
+                        relay.attempted.append(b''.join(parts))
+                        number = len(relay.attempted)
+                    if relay.mode == 'data550':
+                        self.wfile.write(b'550 SECRET synthetic permanent refusal\r\n')
+                    elif number <= relay.failures:
+                        self.wfile.write(b'451 SECRET synthetic temporary refusal\r\n')
+                    else:
+                        with relay.lock:
+                            relay.accepted.append(b''.join(parts))
+                        relay.accepted_event.set()
+                        if relay.mode == 'disconnect':
+                            return
+                        if relay.mode in ('hold', 'timeout'):
+                            if not relay.release.wait(12):
+                                return
+                        self.wfile.write(b'250 Accepted\r\n')
+                elif verb == b'QUIT':
+                    self.wfile.write(b'221 Bye\r\n')
+                    return
+                else:
+                    self.wfile.write(b'250 OK\r\n')
+        except (OSError, TimeoutError):
+            return
+
+
+@contextmanager
+def relay_server(settings, mode='accept', failures=0):
+    server = Relay(mode, failures)
+    thread = Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    settings.MAILERS = {'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+        'OPTIONS': {'host': '127.0.0.1', 'port': server.server_address[1], 'timeout': 0.3 if mode == 'timeout' else 3}}}
+    try:
+        yield server
+    finally:
+        server.release.set()
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=5)
+        assert not thread.is_alive()
+
+
+@pytest.fixture
+def closed_case(complaint_factory):
+    # A genuine successful business action must remain committed after SMTP errors.
+    complaint = complaint_factory(status='RESOLVED', resolution_remarks='Synthetic proof')
+    owner = complaint.submitted_by
+    revision = get_transition_revision(actor=owner, complaint_id=complaint.complaint_id, target_state='CLOSED')
+    confirm_resolution(actor=owner, complaint_id=complaint.complaint_id, expected_revision=revision, rating=4)
+    complaint.refresh_from_db()
+    assert complaint.status == 'CLOSED' and complaint.rating == 4
+    job = EmailDelivery.objects.get(notice__recipient=owner)
+    return complaint, job
+
+
+def business_snapshot():
+    return {model.__name__: list(model.objects.order_by('pk').values()) for model in
+        (Complaint, ComplaintHistory, NotificationEvent, Notification)}
+
+
+def intact(before, job):
+    assert business_snapshot() == before
+    job.refresh_from_db()
+    diagnostic = json.dumps(list(job.attempts.values()), default=str)
+    assert 'SECRET' not in diagnostic and '@example.test' not in diagnostic
+    assert Notification.objects.filter(pk=job.notice_id).exists()
+
+
+def run_worker(job, port, now, *, code=None, ready=None, gate=None):
+    config = {key: connection.settings_dict[key] for key in
+              ('ENGINE', 'NAME', 'USER', 'PASSWORD', 'HOST', 'PORT', 'OPTIONS')}
+    config['NAME'] = str(config['NAME'])
+    env = dict(os.environ, DJANGO_SETTINGS_MODULE='q05_checks.settings',
+               Q05_CHILD_DB_JSON=json.dumps(config), Q05_SMTP_PORT=str(port),
+               Q05_JOB=str(job.pk), Q05_NOW=now.isoformat(),
+               DJANGO_SECRET_KEY='synthetic-child-only')
+    script = '''
+import os, time
+from pathlib import Path
+from datetime import datetime
+import django
+django.setup()
+from workflow.email_delivery import deliver_email, _claim
+pk = int(os.environ['Q05_JOB'])
+now = datetime.fromisoformat(os.environ['Q05_NOW'])
+'''
+    if ready:
+        script += f"Path({str(ready)!r}).touch()\ndeadline = time.monotonic() + 12\nwhile not Path({str(gate)!r}).exists():\n    assert time.monotonic() < deadline\n    time.sleep(0.02)\n"
+    script += code or "assert deliver_email(pk, now=now) in ('SENT', 'SENDING')\n"
+    return subprocess.Popen([sys.executable, '-c', script], env=env, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+
+def completed(worker, expected=0):
+    out, err = worker.communicate(timeout=20)
+    assert worker.returncode == expected, (worker.returncode, out, err)
+
+
+def stop_workers(workers):
+    for worker in workers:
+        if worker.poll() is None:
+            worker.kill()
+        worker.communicate(timeout=10)
+
+
+@pytest.mark.parametrize('failures', [0, 1, 2, 3])
+def test_real_smtp_retry_boundaries_budget_and_committed_closure(closed_case, settings, failures):
+    _, job = closed_case
+    before = business_snapshot()
+    now = timezone.now()
+    with relay_server(settings, failures=failures) as server:
+        for number in range(1, min(failures + 1, 3) + 1):
+            status = deliver_email(job.pk, now=now)
+            job.refresh_from_db()
+            assert job.attempt_count == job.attempts.count() == number
+            if number <= failures and number < 3:
+                assert status == 'RETRY_WAIT'
+                assert job.next_attempt_at == now + timedelta(seconds=60 if number == 1 else 300)
+                early = job.next_attempt_at - timedelta(microseconds=1)
+                assert deliver_email(job.pk, now=early) == 'RETRY_WAIT'
+                assert job.pk not in due_delivery_ids(now=early)
+                assert job.pk in due_delivery_ids(now=job.next_attempt_at)
+                assert len(server.attempted) == number
+                now = job.next_attempt_at
+            else:
+                assert status == ('FAILED' if failures == 3 else 'SENT')
+            intact(before, job)
+        terminal = job.status
+        assert deliver_email(job.pk, now=now + timedelta(days=1)) == terminal
+        assert len(server.attempted) == min(failures + 1, 3)
+        assert len(server.accepted) == (0 if failures == 3 else 1)
+        if failures == 3:
+            assert job.failure_code == 'attempt_limit' and job.next_attempt_at is None
+
+
+@pytest.mark.parametrize('mode', ['data550', 'rcpt550'])
+def test_permanent_smtp_rejection_does_not_retry_or_undo_closure(closed_case, settings, mode):
+    _, job = closed_case
+    before = business_snapshot()
+    with relay_server(settings, mode=mode) as server:
+        assert deliver_email(job.pk) == 'FAILED'
+        job.refresh_from_db()
+        assert job.failure_code == 'permanent_rejection' and job.attempt_count == 1
+        assert deliver_email(job.pk, now=timezone.now() + timedelta(days=1)) == 'FAILED'
+        assert len(server.recipients) == 1 and not server.accepted
+    intact(before, job)
+
+
+@pytest.mark.parametrize('mode', ['disconnect', 'timeout'])
+def test_ambiguous_real_smtp_acceptance_is_not_blindly_resent(closed_case, settings, mode):
+    _, job = closed_case
+    before = business_snapshot()
+    with relay_server(settings, mode=mode) as server:
+        assert deliver_email(job.pk) == 'FAILED'
+        job.refresh_from_db()
+        assert job.failure_code == 'delivery_unknown'
+        assert job.attempts.get().status == 'UNKNOWN'
+        assert deliver_email(job.pk, now=timezone.now() + timedelta(days=1)) == 'FAILED'
+        assert len(server.accepted) == len(server.attempted) == 1
+    intact(before, job)
+
+
+def test_connection_refusal_then_new_worker_resumes_persisted_retry(closed_case, settings):
+    _, job = closed_case
+    before = business_snapshot()
+    with socket.socket() as unused:
+        unused.bind(('127.0.0.1', 0))  # Bound but not listening: actual ECONNREFUSED.
+        settings.MAILERS = {'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+            'OPTIONS': {'host': '127.0.0.1', 'port': unused.getsockname()[1], 'timeout': 2}}}
+        assert deliver_email(job.pk) == 'RETRY_WAIT'
+    job.refresh_from_db()
+    assert job.failure_code == 'connection_unavailable'
+    with relay_server(settings) as server:
+        worker = run_worker(job, server.server_address[1], job.next_attempt_at)
+        try:
+            completed(worker)
+        finally:
+            stop_workers([worker])
+        assert len(server.accepted) == 1
+    job.refresh_from_db()
+    assert job.status == 'SENT' and job.attempt_count == job.attempts.count() == 2
+    intact(before, job)
+
+
+def test_two_actual_workers_reserve_and_send_only_once(closed_case, settings, tmp_path):
+    _, job = closed_case
+    before = business_snapshot()
+    gate = tmp_path / 'go'
+    with relay_server(settings) as server:
+        workers = [run_worker(job, server.server_address[1], timezone.now(),
+            ready=tmp_path / str(i), gate=gate) for i in range(2)]
+        try:
+            deadline = time.monotonic() + 15
+            while not all((tmp_path / str(i)).exists() for i in range(2)):
+                assert time.monotonic() < deadline
+                time.sleep(0.02)
+            gate.touch()
+            for worker in workers:
+                completed(worker)
+        finally:
+            stop_workers(workers)
+        assert len(server.accepted) == len(server.attempted) == 1
+    job.refresh_from_db()
+    assert job.status == 'SENT' and job.attempt_count == job.attempts.count() == 1
+    intact(before, job)
+
+
+@pytest.mark.parametrize('phase', ['claimed', 'smtp_accepted'])
+def test_actual_sigkill_worker_recovery_at_durable_boundaries(closed_case, settings, phase):
+    _, job = closed_case
+    before = business_snapshot()
+    now = timezone.now()
+    with relay_server(settings, mode='hold' if phase == 'smtp_accepted' else 'accept') as server:
+        code = "import signal\n_claim(pk, now)\nos.kill(os.getpid(), signal.SIGKILL)\n" if phase == 'claimed' else None
+        worker = run_worker(job, server.server_address[1], now, code=code)
+        try:
+            if phase == 'smtp_accepted':
+                assert server.accepted_event.wait(10)
+                worker.kill()
+            completed(worker, expected=-signal.SIGKILL)
+        finally:
+            stop_workers([worker])
+            server.release.set()
+        job.refresh_from_db()
+        assert job.status == 'SENDING'
+        attempt = job.attempts.get()
+        assert attempt.status == ('CLAIMED' if phase == 'claimed' else 'SENDING')
+        recovered = deliver_email(job.pk, now=attempt.lease_expires_at)
+        if phase == 'claimed':
+            assert recovered == 'RETRY_WAIT' and not server.accepted
+            job.refresh_from_db()
+            completed_worker = run_worker(job, server.server_address[1], job.next_attempt_at)
+            try:
+                completed(completed_worker)
+            finally:
+                stop_workers([completed_worker])
+            job.refresh_from_db()
+            assert job.status == 'SENT' and job.attempt_count == 2
+            assert list(job.attempts.values_list('status', flat=True)) == ['ABANDONED', 'SENT']
+        else:
+            assert recovered == 'FAILED'
+            assert deliver_email(job.pk, now=attempt.lease_expires_at + timedelta(days=1)) == 'FAILED'
+            job.refresh_from_db()
+            assert job.failure_code == 'delivery_unknown' and job.attempt_count == 1
+            assert job.attempts.get().status == 'UNKNOWN'
+        assert len(server.accepted) == 1
+    intact(before, job)
+
+
+def test_smtp_accepted_but_database_finalization_failure_does_not_resend(closed_case, settings):
+    _, job = closed_case
+    before = business_snapshot()
+    from django.db import DatabaseError
+    with relay_server(settings) as server:
+        with patch('workflow.email_delivery._finish', side_effect=DatabaseError('SECRET synthetic finalization')):
+            with pytest.raises(DatabaseError):
+                deliver_email(job.pk)
+        job.refresh_from_db()
+        assert job.status == 'SENDING' and job.attempts.get().status == 'SENDING'
+        expiry = job.attempts.get().lease_expires_at
+        assert deliver_email(job.pk, now=expiry) == 'FAILED'
+        assert deliver_email(job.pk, now=expiry + timedelta(days=1)) == 'FAILED'
+        assert len(server.accepted) == 1
+    intact(before, job)
+
+
+def test_real_worker_command_processes_persisted_retry_without_reversing_action(closed_case, settings):
+    _, job = closed_case
+    before = business_snapshot()
+    with relay_server(settings, failures=1) as server:
+        call_command('deliver_notifications', stdout=StringIO())
+        job.refresh_from_db()
+        assert job.status == 'RETRY_WAIT' and len(server.attempted) == 1
+        call_command('deliver_notifications', stdout=StringIO())
+        assert len(server.attempted) == 1
+        due = job.next_attempt_at
+        with patch('workflow.email_delivery.timezone.now', return_value=due):
+            call_command('deliver_notifications', stdout=StringIO())
+        job.refresh_from_db()
+        assert job.status == 'SENT' and job.attempt_count == 2
+        assert len(server.accepted) == 1
+    intact(before, job)
+
+
+def test_recipient_revoked_before_due_retry_is_suppressed(closed_case, settings):
+    _, job = closed_case
+    before = business_snapshot()
+    with relay_server(settings, failures=1) as server:
+        assert deliver_email(job.pk) == 'RETRY_WAIT'
+        job.refresh_from_db()
+        User.objects.filter(pk=job.notice.recipient_id).update(is_active=False)
+        assert deliver_email(job.pk, now=job.next_attempt_at) == 'SUPPRESSED'
+        assert len(server.attempted) == 1 and not server.accepted
+    job.refresh_from_db()
+    assert job.attempt_count == 1
+    intact(before, job)

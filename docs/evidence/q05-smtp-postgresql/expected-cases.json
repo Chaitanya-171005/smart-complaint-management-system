@@ -1,0 +1,21 @@
+[
+  "q05_checks.test_smtp_recovery::test_actual_sigkill_worker_recovery_at_durable_boundaries[claimed]",
+  "q05_checks.test_smtp_recovery::test_actual_sigkill_worker_recovery_at_durable_boundaries[smtp_accepted]",
+  "q05_checks.test_smtp_recovery::test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[disconnect]",
+  "q05_checks.test_smtp_recovery::test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[timeout]",
+  "q05_checks.test_smtp_recovery::test_connection_refusal_then_new_worker_resumes_persisted_retry",
+  "q05_checks.test_smtp_recovery::test_permanent_smtp_rejection_does_not_retry_or_undo_closure[data550]",
+  "q05_checks.test_smtp_recovery::test_permanent_smtp_rejection_does_not_retry_or_undo_closure[rcpt550]",
+  "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[0]",
+  "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[1]",
+  "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[2]",
+  "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[3]",
+  "q05_checks.test_smtp_recovery::test_real_worker_command_processes_persisted_retry_without_reversing_action",
+  "q05_checks.test_smtp_recovery::test_recipient_revoked_before_due_retry_is_suppressed",
+  "q05_checks.test_smtp_recovery::test_smtp_accepted_but_database_finalization_failure_does_not_resend",
+  "q05_checks.test_smtp_recovery::test_two_actual_workers_reserve_and_send_only_once",
+  "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[0]",
+  "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[1]",
+  "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[2]",
+  "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[3]"
+]
