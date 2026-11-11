@@ -1,0 +1,45 @@
+{
+  "repository": "Chaitanya-171005/smart-complaint-management-system",
+  "source_revision": "0a8ddc9db486de97bc010603f5b9124a8c26e200",
+  "application_tree": "65fd8cf0d2b657d780cc94df830c5bd5a82085c0",
+  "application_working_tree_dirty": false,
+  "parents": {
+    "F4_PR78": "0a8ddc9db486de97bc010603f5b9124a8c26e200",
+    "Main": "ebc8ffdf9c1ae37365fad71c084869c73a35b4d0"
+  },
+  "dependency_PR77": "7975360abb7c1ce74856884158199f625f8b7976",
+  "started_at_utc": "2026-11-11T03:55:08.510572+00:00",
+  "harness_sha256": {
+    "q05_checks/__init__.py": "a16bdaf8945431bc5537294033f87fe96d14dfbec96f9713549627f96a76c78c",
+    "q05_checks/run.py": "7a743ea7f2ded038a60fe68c9da09f0161b23f5c4af202bfb2dc2a38d0fda763",
+    "q05_checks/settings.py": "e399e1015ae5c6229c3661f63451caf796f7716cac4b90d2ea799a35de1d57bd",
+    "q05_checks/test_autoclose_recovery.py": "6f281b64f835bf4b994eb50bf556eda10a7c8fbfa9846d3e7f194ff99e2316ca"
+  },
+  "dockerfile_sha256": "f44d00f6f7ea1576908d8b70cc165dc64740c0a56bc4b7dc234e080bd618f9aa",
+  "driver_sha256": "5a6729c9521ff401e61ffc77ca3b623eec4eb4259c0be3238e8d6f2eeebae4e3",
+  "runtime": {
+    "database_vendor": "postgresql",
+    "postgresql_version": 170006,
+    "python_version": "3.14.10",
+    "django_version": "6.1.3"
+  },
+  "scope": "Pinned draft F4 PR78 + Main lifecycle component checks; not policy or deployment approval",
+  "status": "PASS_LIFECYCLE_COMPONENT_CHECKS",
+  "pytest_exit_code": 0,
+  "executed_cases": 125,
+  "skipped": 0,
+  "failed_or_errored": 0,
+  "policy": {
+    "COMPLAINT_AUTO_CLOSE_DAYS": 7,
+    "approval": "PROPOSED_TEST_SETTING_ONLY"
+  },
+  "remaining_q05": [
+    "D05_auto_close_policy_approval",
+    "real_auto_close_scheduler_deployment",
+    "actual_SMTP_outbox_worker_delivery_and_retries",
+    "anonymous_PR73_feedback_integration",
+    "F3_migration_join_and_final_merged_deployment_validation",
+    "B18_abandoned_run_supervision"
+  ],
+  "notification_scope": "Actual durable history/event/notices/queued-email atomicity; SMTP delivery was not exercised."
+}
