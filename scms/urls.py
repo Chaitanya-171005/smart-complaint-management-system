@@ -25,4 +25,5 @@ urlpatterns = [
     path("accounts/", include("accounts.urls")),
     path("routing/", include("routing.urls")),
     path("complaints/", include("complaints.urls")),
+    path("complaints/", include("workflow.urls")),
 ]

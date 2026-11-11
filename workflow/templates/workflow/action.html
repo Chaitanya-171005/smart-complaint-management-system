@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if resolution %}Resolve complaint{% else %}Start work{% endif %} — SCMS</title>
+  <style>body{font-family:system-ui,sans-serif;max-width:42rem;margin:2rem auto;padding:0 1rem}textarea{box-sizing:border-box;width:100%}input{max-width:100%}.errorlist{color:#9b1c1c}button{padding:.6rem 1rem}code{overflow-wrap:anywhere}</style>
+</head>
+<body>
+  <h1>{% if resolution %}Resolve complaint{% else %}Start work{% endif %}</h1>
+  <p>Complaint <code>{{ complaint_id }}</code></p>
+  <form method="post"{% if resolution %} enctype="multipart/form-data"{% endif %}>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    {{ form.revision }}{{ form.revision.errors }}
+    <p>{{ form.remarks.label_tag }}{{ form.remarks.errors }}{{ form.remarks }}</p>
+    {% if resolution %}
+    <p>Describe the resolution in 20–2000 characters. Resolving leaves the complaint awaiting confirmation; it does not close it.</p>
+    <p><label for="evidence">Optional evidence</label></p>
+    <input id="evidence" type="file" name="evidence" multiple accept=".jpg,.jpeg,.png,.pdf">
+    <p>Attach at most three JPEG, PNG or PDF files, each at most 5 MB. Files remain private and are available only to authorized complaint readers.</p>
+    {% endif %}
+    <button type="submit">{% if resolution %}Submit resolution{% else %}Start work{% endif %}</button>
+  </form>
+  <p><a href="{% url 'workflow:work_status' complaint_id %}">View current work status</a></p>
+</body>
+</html>

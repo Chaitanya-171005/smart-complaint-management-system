@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>My complaints — SCMS</title>
+<style>body{font-family:system-ui,sans-serif;max-width:50rem;margin:2rem auto;padding:0 1rem}li{margin:1rem 0}select{max-width:100%}code{overflow-wrap:anywhere}</style></head>
+<body>
+  <h1>My complaints</h1>
+  <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
+  <form method="get">
+    <label for="status">Status</label><select id="status" name="status">
+      <option value="">All statuses</option>
+      {% for value,label in statuses %}<option value="{{ value }}"{% if value == selected_status %} selected{% endif %}>{{ label }}</option>{% endfor %}
+    </select>
+    <label for="category">Category</label><select id="category" name="category">
+      <option value="">All categories</option>
+      {% for value in categories %}<option value="{{ value }}"{% if value == selected_category %} selected{% endif %}>{{ value }}</option>{% endfor %}
+    </select>
+    <button type="submit">Filter</button>
+  </form>
+  <ul>
+    {% for complaint in page %}<li>
+      <a href="{% url 'workflow:complaint_detail' complaint.complaint_id %}"><code>{{ complaint.complaint_id }}</code> — {{ complaint.title }}</a>
+      <p>{{ complaint.category }} · {{ complaint.get_status_display }} · Submitted {{ complaint.submitted_at }}</p>
+    </li>{% empty %}<li>No complaints match these filters.</li>{% endfor %}
+  </ul>
+  <nav aria-label="Complaint pages">
+    {% if page.has_previous %}<a href="?{{ filter_query }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %}
+    <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}<a href="?{{ filter_query }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}
+  </nav>
+</body>
+</html>

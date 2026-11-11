@@ -16,6 +16,7 @@
   <h1>{{ role_label }} home</h1>
   {% if user.role == "COMPLAINANT" %}
   <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
+  <p><a href="{% url 'workflow:complaint_list' %}">My complaints</a></p>
   {% endif %}
   {% if user.role == "ADMIN" %}
   <nav>

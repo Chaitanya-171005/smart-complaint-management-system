@@ -329,8 +329,10 @@ def test_receipt_migration_preserves_and_links_only_exact_matches(args, complain
     wrong_time = complaint_factory(submitted_by=args["user"])
     before = set(Complaint.objects.values_list("complaint_id", flat=True))
     old = [("complaints", "0003_complaint")]
-    new = [("complaints", "0004_attachment_intakereceipt_accepted_complaint_and_more")]
     executor = MigrationExecutor(connection)
+    # Restore the complete schema: dependent app migrations are unapplied when
+    # rolling back complaints, including B26's outbox and future additions.
+    new = executor.loader.graph.leaf_nodes()
     executor.migrate(old)
     try:
         apps = executor.loader.project_state(old).apps
