@@ -91,7 +91,7 @@ def test_change_writes_an_audit_record_and_a_security_event(admin, person, dept)
     assert audit.old_values == {"role": "COMPLAINANT", "department": None}
     assert audit.new_values == {"role": "STAFF", "department": dept.pk}
     event = events("ROLE_CHANGED").get()
-    assert event.user == admin and f"#{person.pk}" in event.detail and "STAFF" in event.detail
+    assert event.user == admin and event.target == f"User#{person.pk}" and "STAFF" in event.detail
 
 
 def test_records_contain_no_credentials(admin, person, dept):

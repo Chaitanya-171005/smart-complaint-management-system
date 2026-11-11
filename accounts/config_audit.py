@@ -5,7 +5,8 @@ and its audit record are saved together or not at all. Sensitive values are repl
 stored. This is not complaint history and offers no way to edit or delete a record.
 """
 
-from .models import ConfigAuditEvent, User
+from .models import ConfigAuditEvent, SecurityEvent, User
+from .security_log import record_event
 
 # The shared vocabulary: ``entity_type`` is the Django model's class name. F1 and F3 audit ONLY these entities, so the Administrator can read one
 # consistent trail (REQ-ADM-04). Adding an entity is a deliberate, reviewed change to this list.
@@ -65,7 +66,7 @@ def record_change(*, actor, entity_type, entity_id, action, old=None, new=None):
             raise ValueError(f"{label} must be a dict of field values or None, not {type(values).__name__}.")
     if not isinstance(actor, User) or actor.pk is None:
         raise ValueError("A configuration change must be recorded against a saved user.")
-    return ConfigAuditEvent.objects.create(
+    event = ConfigAuditEvent.objects.create(
         actor=actor,
         actor_identifier=getattr(actor, "email", "") or "",
         entity_type=entity_type,
@@ -74,3 +75,15 @@ def record_change(*, actor, entity_type, entity_id, action, old=None, new=None):
         old_values=_clean(old),
         new_values=_clean(new),
     )
+    if entity_type != "User":
+        # Role and membership changes record their own ROLE_CHANGED event with the old and new
+        # role; every other master-data change records one consistent security event here, so
+        # F1 and F3 cannot forget it (REQ-SEC-08).
+        record_event(
+            SecurityEvent.EventType.MASTER_DATA_CHANGED,
+            user=actor,
+            identifier=getattr(actor, "email", ""),
+            target=f"{entity_type}#{entity_id}",
+            detail=action,
+        )
+    return event
