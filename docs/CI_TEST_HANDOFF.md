@@ -78,6 +78,11 @@ do not enforce a pre-parsing upload limit. These deployment checks are pending.
 
 ## Acceptance still required from the pipeline owners
 
+Anonymous intake has a separate B12 release checklist in B12_PRIVACY.md. Keep
+ANONYMOUS_INTAKE_ENABLED and ANONYMOUS_PRIVACY_READY False until TLS, upstream
+logging/body/APM capture, campus configuration and affected-module privacy checks
+are verified. The flow requires HTTPS and does not use an authenticated session.
+
 - Retain one genuine successful job showing checks, tests and the coverage gate.
 - Retain a controlled failed job proving a required failure prevents deployment.
 - Review test/coverage integration with Atul and link the job evidence in #19,

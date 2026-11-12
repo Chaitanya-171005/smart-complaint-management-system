@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anonymous complaint - SCMS</title></head>
+<body>
+  <h1>Submit an anonymous complaint</h1>
+  <p>No login is required. This form does not attach your account to the complaint, even if you are signed in.</p>
+  <p>Do not include your name, email, phone number or other identifying details in the complaint or evidence.</p>
+  <p>Evidence filenames and embedded image/PDF metadata are removed. PDF annotations are removed too; visible text and pictures can still identify you. Check the content before uploading.</p>
+  <aside aria-labelledby="emergency-heading"><h2 id="emergency-heading">For emergencies</h2><p>{{ emergency_notice|linebreaksbr }}</p></aside>
+  <form method="post" enctype="multipart/form-data" action="{% url 'complaints:anonymous_submit' %}">
+    {% csrf_token %}
+    <input type="hidden" name="request_token" value="{{ request_token }}">
+    {{ form.as_p }}
+    <p><label for="id_evidence">Evidence (optional)</label><br><input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf"><br>Attach up to three JPEG, PNG or PDF files. Reselect the same files on a retry.</p>
+    <p>A successful submission shows a private tracking reference once. Save it immediately: it cannot be recovered or shown again if you lose it or the response is interrupted.</p>
+    <p>If the response is interrupted, retry this same form and files to avoid a duplicate. Starting a new form creates a different request.</p>
+    <button type="submit"{% if form.configuration_unavailable or not request_token %} disabled{% endif %}>Submit anonymously</button>
+  </form>
+  {% if not form.is_bound or not request_token %}<p><a href="{% url 'complaints:anonymous_submit' %}">Start a new anonymous form</a></p>{% endif %}
+</body>
+</html>

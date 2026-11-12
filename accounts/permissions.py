@@ -217,7 +217,13 @@ def _refuse(user, action, obj=None):
     """Record the refusal (REQ-SEC-08). Never stores request data or secrets."""
     target = ""
     if obj is not None:
-        target = f"{type(obj).__name__}#{getattr(obj, 'pk', '')}"
+        has_owner = hasattr(obj, f"{OWNER_FIELD}_id") or hasattr(obj, OWNER_FIELD)
+        if has_owner and _fk_id(obj, OWNER_FIELD) is None:
+            # Keep the account's security refusal, but no anonymous complaint
+            # identifier/PK that could join it back to that person's request.
+            target = "anonymous complaint"
+        else:
+            target = f"{type(obj).__name__}#{getattr(obj, 'pk', '')}"
     known = user if (user is not None and user.is_authenticated) else None
     record_event(
         SecurityEvent.EventType.AUTHORIZATION_REFUSED,

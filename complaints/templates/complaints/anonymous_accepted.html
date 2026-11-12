@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anonymous complaint accepted - SCMS</title></head>
+<body>
+  <h1>Anonymous complaint accepted</h1>
+  <p>Your complaint identifier is <strong>{{ complaint_id }}</strong>.</p>
+  {% if reference %}
+  <h2>Save your private tracking reference now</h2>
+  <p id="tracking-reference"><strong>{{ reference }}</strong></p>
+  <p>This reference is shown once. It cannot be recovered or displayed again if lost. Save it before leaving or refreshing this page. Keep it private.</p>
+  {% else %}
+  <p>This request was already accepted. No second complaint was created.</p>
+  <p>The original private reference cannot be recovered or shown again, including after an interrupted response.</p>
+  {% endif %}
+  <p>A complaint identifier alone does not grant access to the complaint or its evidence.</p>
+</body>
+</html>

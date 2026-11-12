@@ -1,0 +1,900 @@
+{
+  "repository": "Chaitanya-171005/smart-complaint-management-system",
+  "source_revision": "e91c9a1fe719209ed9fcc235b2a244eedcfc59b8",
+  "application_tree": "026e517d812371650e89011cba97257fd13e60bf",
+  "application_working_tree_dirty": false,
+  "source_pins": {
+    "B11_PR71": "e91c9a1fe719209ed9fcc235b2a244eedcfc59b8"
+  },
+  "included_Main": "5c375e7da1ae43a4bfaf4972528f1ae2e79d928e",
+  "started_at_utc": "2026-11-11T18:44:04.913617+00:00",
+  "harness_sha256": {
+    "q05_checks/__init__.py": "a16bdaf8945431bc5537294033f87fe96d14dfbec96f9713549627f96a76c78c",
+    "q05_checks/expected-cases.json": "cdbe7064a84595a238c2b8a6cfba2fc987d0084393757ce22249e31f38c60773",
+    "q05_checks/run.py": "a0a3353e80d805abac8fde297ea07387d84eefa74ac654f5bc5b1864666b0076",
+    "q05_checks/settings.py": "e399e1015ae5c6229c3661f63451caf796f7716cac4b90d2ea799a35de1d57bd"
+  },
+  "dockerfile_sha256": "f44d00f6f7ea1576908d8b70cc165dc64740c0a56bc4b7dc234e080bd618f9aa",
+  "driver_sha256": "3c4fcda7d4e5f5d0e5be33acdc032b27c5106baa32e85a930b7567983899e140",
+  "runtime": {
+    "database_vendor": "postgresql",
+    "postgresql_version": 170006,
+    "python_version": "3.14.10",
+    "django_version": "6.1.3"
+  },
+  "scope": "Pinned PR71 anonymous intake/privacy/evidence PostgreSQL component checks; not deployed F3/F4 privacy or release acceptance",
+  "status": "PASS_ANONYMOUS_POSTGRESQL_COMPONENT_CHECKS",
+  "pytest_exit_code": 0,
+  "executed_cases": 171,
+  "skipped": 0,
+  "failed_or_errored": 0,
+  "exact_case_ids_match": true,
+  "remaining_acceptance": [
+    "D01_campus_reference_confirmation",
+    "D02_upload_size_convention",
+    "F3_F4_anonymous_safe_application_integration",
+    "real_notification_privacy_and_delivery",
+    "deployed_TLS_proxy_headers_cookies_HSTS_and_log_redaction",
+    "final_combined_release_acceptance"
+  ],
+  "notification_scope": "The anonymous-escalation case uses a controlled locmem Head notification contract, not production F4 delivery.",
+  "release_flags": "Application defaults remain disabled; anonymous HTTP tests use synthetic test-only overrides. No live endpoint is enabled.",
+  "case_results": [
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_actual_supported_content[photo.jpg-JPEG-image/jpeg]",
+      "seconds": "1.067"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_actual_supported_content[photo.JPEG-JPEG-image/jpeg]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_actual_supported_content[photo.PNG-PNG-image/png]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_actual_supported_content[report.pdf-PDF-application/pdf]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_optional_evidence_and_three_file_boundary[0]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_optional_evidence_and_three_file_boundary[1]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_optional_evidence_and_three_file_boundary[3]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_four_files_rejected_before_reading",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.png-]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.png-<script>alert(1)</script>]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.pdf-%PDF-1.7\\nnot a PDF\\n%%EOF]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.jpg-\\xff\\xd8\\xff\\xe0\\x00\\x10JFIF\\x00\\x01\\x01\\x00\\x00\\x01\\x00\\x01\\x00\\x00\\xff\\xdb\\x00C\\x00\\x08\\x06\\x06\\x07\\x06]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.png-\\x89PNG\\r\\n\\x1a\\n\\x00\\x00\\x00\\rIHDR\\x00\\x00\\x00\\x03\\x00\\x00\\x00\\x03\\x08\\x02\\x00\\x00\\x00\\xd9J\"\\xe8\\x00\\x00\\x00\\x17IDATx\\x9ccd`\\xf8\\xcf\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\xc4\\x00\\x03\\x08\\x16\\x00\\x1b]\\x01\\x05\\xd9]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.pdf-%PDF-1.3\\n%\\xe2\\xe3\\xcf\\xd3\\n1 0 obj\\n<<\\n/Producer <627812b98c>\\n>>\\nendobj\\n2 0 obj\\n<<\\n/Type /Pages\\n/Count 1\\n/Kids [ 4 0 R ]\\n>>\\nendobj\\n3 0 obj\\n<<\\n/Type /Catalog\\n/Pages 2 0 R\\n>>\\nendobj\\n4 0 obj\\n<<\\n/Type /Page\\n/Resources <<\\n>>\\n/MediaBox [ 0.0 0.0 72 72 ]\\n/Parent 2 0 R\\n>>\\nendobj\\n5 0 obj\\n<<\\n/V 2\\n/R 3\\n/Length 128\\n/P 4294967292\\n/Filter /Standard\\n/O <542178f96a5aaaf6fe0afc33c55e1c8d4a7649ed68456c4c27b0794de8c4e79c>\\n/U <2b2e2a7ab993d7b725e9ad6472d6e85928bf4e5e4e758a4164004e56fffa0108>\\n>>\\nendobj\\nxref\\n0 6\\n0000000000 65535 f \\n0000000015 00000 n \\n0000000059 00000 n \\n0000000118 00000 n \\n0000000167 00000 n \\n0000000259 00000 n \\ntrailer\\n<<\\n/Size 6\\n/Root 3 0 R\\n/Info 1 0 R\\n/ID [ <6466636166353432373930333230366464313134343164306235626139363162> <6466636166353432373930333230366464313134343164306235626139363162> ]\\n/Encrypt 5 0 R\\n>>\\nstartxref\\n474\\n%%EOF\\n]",
+      "seconds": "0.012"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.pdf-%PDF-1.3\\n%\\xe2\\xe3\\xcf\\xd3\\n1 0 obj\\n<<\\n/Producer (pypdf)\\n>>\\nendobj\\n2 0 obj\\n<<\\n/Type /Pages\\n/Count 0\\n/Kids [ ]\\n>>\\nendobj\\n3 0 obj\\n<<\\n/Type /Catalog\\n/Pages 2 0 R\\n>>\\nendobj\\nxref\\n0 4\\n0000000000 65535 f \\n0000000015 00000 n \\n0000000054 00000 n \\n0000000107 00000 n \\ntrailer\\n<<\\n/Size 4\\n/Root 3 0 R\\n/Info 1 0 R\\n>>\\nstartxref\\n156\\n%%EOF\\n]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_or_unverifiable_content_rejected[bad.png-GIF87a\\x03\\x00\\x03\\x00\\x81\\x00\\x00\\x00\\x00\\xff\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00,\\x00\\x00\\x00\\x00\\x03\\x00\\x03\\x00\\x00\\x08\\x07\\x00\\x01\\x08\\x1c80 \\x00;]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[renamed.png-\\xff\\xd8\\xff\\xe0\\x00\\x10JFIF\\x00\\x01\\x01\\x00\\x00\\x01\\x00\\x01\\x00\\x00\\xff\\xdb\\x00C\\x00\\x08\\x06\\x06\\x07\\x06\\x05\\x08\\x07\\x07\\x07\\t\\t\\x08\\n\\x0c\\x14\\r\\x0c\\x0b\\x0b\\x0c\\x19\\x12\\x13\\x0f\\x14\\x1d\\x1a\\x1f\\x1e\\x1d\\x1a\\x1c\\x1c $.' \",#\\x1c\\x1c(7),01444\\x1f'9=82<.342\\xff\\xdb\\x00C\\x01\\t\\t\\t\\x0c\\x0b\\x0c\\x18\\r\\r\\x182!\\x1c!22222222222222222222222222222222222222222222222222\\xff\\xc0\\x00\\x11\\x08\\x00\\x03\\x00\\x03\\x03\\x01\"\\x00\\x02\\x11\\x01\\x03\\x11\\x01\\xff\\xc4\\x00\\x1f\\x00\\x00\\x01\\x05\\x01\\x01\\x01\\x01\\x01\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\xff\\xc4\\x00\\xb5\\x10\\x00\\x02\\x01\\x03\\x03\\x02\\x04\\x03\\x05\\x05\\x04\\x04\\x00\\x00\\x01}\\x01\\x02\\x03\\x00\\x04\\x11\\x05\\x12!1A\\x06\\x13Qa\\x07\"q\\x142\\x81\\x91\\xa1\\x08#B\\xb1\\xc1\\x15R\\xd1\\xf0$3br\\x82\\t\\n\\x16\\x17\\x18\\x19\\x1a%&'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\\x83\\x84\\x85\\x86\\x87\\x88\\x89\\x8a\\x92\\x93\\x94\\x95\\x96\\x97\\x98\\x99\\x9a\\xa2\\xa3\\xa4\\xa5\\xa6\\xa7\\xa8\\xa9\\xaa\\xb2\\xb3\\xb4\\xb5\\xb6\\xb7\\xb8\\xb9\\xba\\xc2\\xc3\\xc4\\xc5\\xc6\\xc7\\xc8\\xc9\\xca\\xd2\\xd3\\xd4\\xd5\\xd6\\xd7\\xd8\\xd9\\xda\\xe1\\xe2\\xe3\\xe4\\xe5\\xe6\\xe7\\xe8\\xe9\\xea\\xf1\\xf2\\xf3\\xf4\\xf5\\xf6\\xf7\\xf8\\xf9\\xfa\\xff\\xc4\\x00\\x1f\\x01\\x00\\x03\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x01\\x00\\x00\\x00\\x00\\x00\\x00\\x01\\x02\\x03\\x04\\x05\\x06\\x07\\x08\\t\\n\\x0b\\xff\\xc4\\x00\\xb5\\x11\\x00\\x02\\x01\\x02\\x04\\x04\\x03\\x04\\x07\\x05\\x04\\x04\\x00\\x01\\x02w\\x00\\x01\\x02\\x03\\x11\\x04\\x05!1\\x06\\x12AQ\\x07aq\\x13\"2\\x81\\x08\\x14B\\x91\\xa1\\xb1\\xc1\\t#3R\\xf0\\x15br\\xd1\\n\\x16$4\\xe1%\\xf1\\x17\\x18\\x19\\x1a&'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\\x82\\x83\\x84\\x85\\x86\\x87\\x88\\x89\\x8a\\x92\\x93\\x94\\x95\\x96\\x97\\x98\\x99\\x9a\\xa2\\xa3\\xa4\\xa5\\xa6\\xa7\\xa8\\xa9\\xaa\\xb2\\xb3\\xb4\\xb5\\xb6\\xb7\\xb8\\xb9\\xba\\xc2\\xc3\\xc4\\xc5\\xc6\\xc7\\xc8\\xc9\\xca\\xd2\\xd3\\xd4\\xd5\\xd6\\xd7\\xd8\\xd9\\xda\\xe2\\xe3\\xe4\\xe5\\xe6\\xe7\\xe8\\xe9\\xea\\xf2\\xf3\\xf4\\xf5\\xf6\\xf7\\xf8\\xf9\\xfa\\xff\\xda\\x00\\x0c\\x03\\x01\\x00\\x02\\x11\\x03\\x11\\x00?\\x00\\xf1\\xca(\\xa2\\xbfq<\\xc3\\xff\\xd9]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[renamed.jpg-\\x89PNG\\r\\n\\x1a\\n\\x00\\x00\\x00\\rIHDR\\x00\\x00\\x00\\x03\\x00\\x00\\x00\\x03\\x08\\x02\\x00\\x00\\x00\\xd9J\"\\xe8\\x00\\x00\\x00\\x17IDATx\\x9ccd`\\xf8\\xcf\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\xc4\\x00\\x03\\x08\\x16\\x00\\x1b]\\x01\\x05\\xd9\\xb3\\xf7/\\x00\\x00\\x00\\x00IEND\\xaeB`\\x82]",
+      "seconds": "0.012"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[renamed.png-%PDF-1.3\\n%\\xe2\\xe3\\xcf\\xd3\\n1 0 obj\\n<<\\n/Producer (pypdf)\\n>>\\nendobj\\n2 0 obj\\n<<\\n/Type /Pages\\n/Count 1\\n/Kids [ 4 0 R ]\\n>>\\nendobj\\n3 0 obj\\n<<\\n/Type /Catalog\\n/Pages 2 0 R\\n>>\\nendobj\\n4 0 obj\\n<<\\n/Type /Page\\n/Resources <<\\n>>\\n/MediaBox [ 0.0 0.0 72 72 ]\\n/Parent 2 0 R\\n>>\\nendobj\\nxref\\n0 5\\n0000000000 65535 f \\n0000000015 00000 n \\n0000000054 00000 n \\n0000000113 00000 n \\n0000000162 00000 n \\ntrailer\\n<<\\n/Size 5\\n/Root 3 0 R\\n/Info 1 0 R\\n>>\\nstartxref\\n254\\n%%EOF\\n]",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[renamed.pdf-\\x89PNG\\r\\n\\x1a\\n\\x00\\x00\\x00\\rIHDR\\x00\\x00\\x00\\x03\\x00\\x00\\x00\\x03\\x08\\x02\\x00\\x00\\x00\\xd9J\"\\xe8\\x00\\x00\\x00\\x17IDATx\\x9ccd`\\xf8\\xcf\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\xc4\\x00\\x03\\x08\\x16\\x00\\x1b]\\x01\\x05\\xd9\\xb3\\xf7/\\x00\\x00\\x00\\x00IEND\\xaeB`\\x82]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[program.exe-\\x89PNG\\r\\n\\x1a\\n\\x00\\x00\\x00\\rIHDR\\x00\\x00\\x00\\x03\\x00\\x00\\x00\\x03\\x08\\x02\\x00\\x00\\x00\\xd9J\"\\xe8\\x00\\x00\\x00\\x17IDATx\\x9ccd`\\xf8\\xcf\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\xc4\\x00\\x03\\x08\\x16\\x00\\x1b]\\x01\\x05\\xd9\\xb3\\xf7/\\x00\\x00\\x00\\x00IEND\\xaeB`\\x82]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[image.svg-<svg/>]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_extension_and_content_must_agree[photo.png.html-\\x89PNG\\r\\n\\x1a\\n\\x00\\x00\\x00\\rIHDR\\x00\\x00\\x00\\x03\\x00\\x00\\x00\\x03\\x08\\x02\\x00\\x00\\x00\\xd9J\"\\xe8\\x00\\x00\\x00\\x17IDATx\\x9ccd`\\xf8\\xcf\\xc0\\xc0\\xc0\\xc0\\xc0\\xc0\\xc4\\x00\\x03\\x08\\x16\\x00\\x1b]\\x01\\x05\\xd9\\xb3\\xf7/\\x00\\x00\\x00\\x00IEND\\xaeB`\\x82]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_client_mime_does_not_determine_stored_type",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[-1-5000000]",
+      "seconds": "0.576"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[-1-5242880]",
+      "seconds": "0.586"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[0-5000000]",
+      "seconds": "0.553"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[0-5242880]",
+      "seconds": "0.571"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[1-5000000]",
+      "seconds": "0.015"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_both_proposed_d02_exact_byte_boundaries[1-5242880]",
+      "seconds": "0.028"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_limit_fails_as_configuration_error",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_image_processing_limit_is_enforced",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_control_and_format_characters_in_name_rejected[bad\\u202e.png]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_control_and_format_characters_in_name_rejected[bad\\n.png]",
+      "seconds": "0.007"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_control_and_format_characters_in_name_rejected[bad\\u200b.png]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_control_and_format_characters_in_name_rejected[bad\\u2028.png]",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_empty_name_rejected",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_cursor_restored_and_snapshot_not_changed_later",
+      "seconds": "0.005"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_closed_stream_gives_validation_error",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_file_restores_cursor",
+      "seconds": "0.004"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_generated_names_and_private_permissions",
+      "seconds": "0.012"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_second_file_writes_nothing",
+      "seconds": "0.006"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_valid_image_with_trailing_bytes_is_retained_as_attachment[PNG-png]",
+      "seconds": "0.008"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_valid_image_with_trailing_bytes_is_retained_as_attachment[JPEG-jpg]",
+      "seconds": "0.008"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_later_operation_failure_cleans_batch_only",
+      "seconds": "0.016"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_second_storage_failure_cleans_first",
+      "seconds": "0.011"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_partial_file_write_is_removed",
+      "seconds": "0.008"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_cleanup_failure_is_logged_without_hiding_original",
+      "seconds": "0.013"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_storage_collision_does_not_overwrite",
+      "seconds": "0.010"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_database_rollback_cleans_files",
+      "seconds": "0.016"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_authorized_downloads_stream_verified_file[owner]",
+      "seconds": "0.039"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_authorized_downloads_stream_verified_file[STAFF]",
+      "seconds": "0.045"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_authorized_downloads_stream_verified_file[HEAD]",
+      "seconds": "0.045"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[anonymous]",
+      "seconds": "0.044"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[other-owner]",
+      "seconds": "0.035"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[other-staff]",
+      "seconds": "0.035"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[other-head]",
+      "seconds": "0.035"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[admin]",
+      "seconds": "0.035"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_denied_downloads_match_missing_and_never_open_files[inactive]",
+      "seconds": "0.034"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_evidence_uses_its_own_parent",
+      "seconds": "0.029"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_refusal_is_audited",
+      "seconds": "0.015"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_test_adapter_refuses_post",
+      "seconds": "0.026"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_department_reader_can_read_anonymous_complaint",
+      "seconds": "0.028"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_anonymous_complaint_reference_never_grants_access",
+      "seconds": "0.046"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_unsafe_storage_keys_refused_before_open[../secret]",
+      "seconds": "0.011"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_unsafe_storage_keys_refused_before_open[/etc/passwd]",
+      "seconds": "0.011"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_unsafe_storage_keys_refused_before_open[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.html]",
+      "seconds": "0.011"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_unsafe_storage_keys_refused_before_open[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.png/../x]",
+      "seconds": "0.011"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_missing_private_file_returns_404",
+      "seconds": "0.027"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_invalid_mime_metadata_returns_404",
+      "seconds": "0.027"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_no_production_public_file_route",
+      "seconds": "0.059"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_resolution_reuses_same_batch_and_permission_contract",
+      "seconds": "0.014"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_success_commits_anonymous_graph_without_any_account",
+      "seconds": "0.245"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_file_metadata_names_and_embedded_attachments_removed[<lambda>0]",
+      "seconds": "0.131"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_file_metadata_names_and_embedded_attachments_removed[<lambda>1]",
+      "seconds": "0.133"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_file_metadata_names_and_embedded_attachments_removed[pdf_upload]",
+      "seconds": "0.134"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_pdf_resource_metadata_is_removed_from_serialized_bytes",
+      "seconds": "0.130"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_identical_retry_returns_no_reference_or_duplicate_files[<lambda>]",
+      "seconds": "0.227"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_identical_retry_returns_no_reference_or_duplicate_files[pdf_upload]",
+      "seconds": "0.227"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_retry_survives_reference_and_sla_changes",
+      "seconds": "0.330"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_changed_retry_conflicts_and_preserves_original",
+      "seconds": "0.224"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[routing]",
+      "seconds": "0.183"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[sla]",
+      "seconds": "0.188"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[history]",
+      "seconds": "0.214"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[attachment]",
+      "seconds": "0.246"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[receipt]",
+      "seconds": "0.215"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[commit]",
+      "seconds": "0.245"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_required_failure_rolls_back_everything_without_private_diagnostics[storage]",
+      "seconds": "0.180"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_failure_can_retry_same_form_successfully",
+      "seconds": "0.264"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_operation_key_refused_before_storage[None]",
+      "seconds": "0.166"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_operation_key_refused_before_storage[]",
+      "seconds": "0.164"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_operation_key_refused_before_storage[x]",
+      "seconds": "0.166"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_operation_key_refused_before_storage[AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA]",
+      "seconds": "0.201"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_operation_key_refused_before_storage[gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg]",
+      "seconds": "0.176"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[description-short]",
+      "seconds": "0.175"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[title-]",
+      "seconds": "0.210"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[priority-ADMIN]",
+      "seconds": "0.174"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[category-0]",
+      "seconds": "0.179"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[location-bad/code]",
+      "seconds": "0.174"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_shared_input_rules_and_extra_identity_fields_refused_in_service[email-private-person@example.test]",
+      "seconds": "0.180"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_no_identity_or_source_argument_can_be_supplied",
+      "seconds": "0.201"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_outer_transaction_is_refused",
+      "seconds": "0.187"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_concurrent_double_submit_issues_one_reference_and_one_graph",
+      "seconds": "0.258"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_http_has_no_login_requirement_and_displays_reference_only_on_first_post",
+      "seconds": "0.272"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_csrf_enforcement_is_preserved",
+      "seconds": "0.228"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_logged_in_submitter_and_forged_identity_are_not_attached",
+      "seconds": "0.252"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[COMPLAINT_INTAKE_ENABLED-False]",
+      "seconds": "0.169"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[ANONYMOUS_INTAKE_ENABLED-False]",
+      "seconds": "0.168"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[ANONYMOUS_PRIVACY_READY-False]",
+      "seconds": "0.167"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[COMPLAINT_EMERGENCY_NOTICE-]",
+      "seconds": "0.169"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[DEBUG-True]",
+      "seconds": "0.177"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_release_gates_block_get_and_post[CSRF_USE_SESSIONS-True]",
+      "seconds": "0.170"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_deployment_check_requires_privacy_release_gates",
+      "seconds": "0.159"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_privacy_middleware_fails_closed",
+      "seconds": "0.167"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_privacy_middleware_after_session_middleware_fails_closed",
+      "seconds": "0.167"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_forged_token_refused[]",
+      "seconds": "0.185"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_forged_token_refused[bad]",
+      "seconds": "0.175"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_forged_token_refused[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]",
+      "seconds": "0.177"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_authenticated_flow_token_cannot_be_used_for_anonymous_intake",
+      "seconds": "0.178"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_validation_errors_preserve_safe_fields_and_same_form",
+      "seconds": "0.233"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_batch_never_accepts[<lambda>0]",
+      "seconds": "0.187"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_invalid_batch_never_accepts[<lambda>1]",
+      "seconds": "0.191"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_http_conflict_never_creates_another_complaint",
+      "seconds": "0.242"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_http_failure_does_not_log_private_values_or_accept",
+      "seconds": "0.236"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_cleanup_failure_logging_is_generic",
+      "seconds": "0.207"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_cookie_ip_headers_query_and_error_report_are_isolated",
+      "seconds": "0.172"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_privacy_response_headers_and_no_get_recovery_route",
+      "seconds": "0.224"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_reference_or_id_never_grants_full_record_or_evidence",
+      "seconds": "0.279"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_projection_rejects_authenticated_record",
+      "seconds": "0.167"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_submission_works_under_atomic_requests",
+      "seconds": "0.218"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_cross_origin_post_is_refused",
+      "seconds": "0.176"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_active_reference_corruption_and_deactivation_reject_new_intake",
+      "seconds": "0.200"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_reference_collision_never_accepts_another_complaint",
+      "seconds": "0.210"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_receipt_unique_key_and_digest_formats_are_database_enforced",
+      "seconds": "0.252"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_unexpected_http_exception_returns_generic_nonacceptance",
+      "seconds": "0.279"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_http_transport_cannot_accept_anonymous_submission",
+      "seconds": "0.173"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_authorization_refusal_does_not_join_account_to_anonymous_complaint",
+      "seconds": "0.291"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_failure_after_issuance_never_logs_or_exposes_reference",
+      "seconds": "0.232"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[ANONYMOUS_TRANSPORT_VERIFIED-False]",
+      "seconds": "0.182"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SECURE_HSTS_SECONDS-0]",
+      "seconds": "0.177"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SCMS_HTTPS_MODE-]",
+      "seconds": "0.179"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SCMS_HTTPS_MODE-unknown]",
+      "seconds": "0.218"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SECURE_SSL_REDIRECT-False]",
+      "seconds": "0.196"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[CSRF_COOKIE_SECURE-False]",
+      "seconds": "0.177"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SESSION_COOKIE_SECURE-False]",
+      "seconds": "0.173"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_release_settings_are_required[SECURE_PROXY_SSL_HEADER-value7]",
+      "seconds": "0.230"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_tls_requires_security_middleware",
+      "seconds": "0.166"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_trusted_tls_proxy_accepts_post_and_issues_secure_csrf_cookie",
+      "seconds": "0.234"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_insecure_proxy_scheme_cannot_accept_intake[None]",
+      "seconds": "0.191"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_insecure_proxy_scheme_cannot_accept_intake[http]",
+      "seconds": "0.169"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_missing_or_insecure_proxy_scheme_cannot_accept_intake[]",
+      "seconds": "0.166"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_direct_tls_mode_does_not_trust_a_client_forwarded_proto_header",
+      "seconds": "0.166"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_preloaded_request_identity_is_rejected_even_with_first_middleware[session]",
+      "seconds": "0.167"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_preloaded_request_identity_is_rejected_even_with_first_middleware[user]",
+      "seconds": "0.168"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_preloaded_request_identity_is_rejected_even_with_first_middleware[_cached_user]",
+      "seconds": "0.170"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_sad_route_and_login_link_preserve_authenticated_urls",
+      "seconds": "0.168"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_csrf_cookie_is_session_lifetime_with_existing_persistent_cookie[form]",
+      "seconds": "0.172"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_csrf_cookie_is_session_lifetime_with_existing_persistent_cookie[invalid]",
+      "seconds": "0.196"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_anonymous_csrf_cookie_is_session_lifetime_with_existing_persistent_cookie[accepted]",
+      "seconds": "0.259"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_near_limit_jpeg_growth_rejects_entire_batch_before_staging[5000000]",
+      "seconds": "0.576"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_near_limit_jpeg_growth_rejects_entire_batch_before_staging[5242880]",
+      "seconds": "0.517"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_near_limit_jpeg_that_fits_after_sanitizing_is_committed[5000000]",
+      "seconds": "0.461"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_near_limit_jpeg_that_fits_after_sanitizing_is_committed[5242880]",
+      "seconds": "0.365"
+    },
+    {
+      "classname": "complaints.test_anonymous",
+      "name": "test_verified_https_response_sets_hsts",
+      "seconds": "0.180"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_role_changes_apply_on_next_request",
+      "seconds": "0.199"
+    },
+    {
+      "classname": "complaints.test_evidence",
+      "name": "test_department_changes_apply_on_next_request",
+      "seconds": "0.212"
+    },
+    {
+      "classname": "integration_checks.anonymous_recovery",
+      "name": "test_anonymous_sigkill_recovery_and_reference_safe_retry[before]",
+      "seconds": "1.153"
+    },
+    {
+      "classname": "integration_checks.anonymous_recovery",
+      "name": "test_anonymous_sigkill_recovery_and_reference_safe_retry[during]",
+      "seconds": "1.186"
+    },
+    {
+      "classname": "integration_checks.anonymous_recovery",
+      "name": "test_anonymous_sigkill_recovery_and_reference_safe_retry[after]",
+      "seconds": "1.160"
+    },
+    {
+      "classname": "integration_checks.anonymous_recovery",
+      "name": "test_anonymous_writer_holds_recovery_lease_through_commit",
+      "seconds": "1.237"
+    },
+    {
+      "classname": "integration_checks.anonymous_escalation",
+      "name": "test_anonymous_escalation_safe_head_notice_contract",
+      "seconds": "0.504"
+    }
+  ],
+  "junit_sha256": "1c4a44a423a83b06c2155d6bcdd7796e6de046278bfc19a2d81bcf697e5f09ba"
+}
