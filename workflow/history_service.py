@@ -11,6 +11,9 @@ def record_history(
     previous_state="",
     new_state="",
     remarks="",
+    *,
+    actor=None,
+    assignee=None,
 ):
     """
     Append one complaint history event after a successful operation.
@@ -20,6 +23,8 @@ def record_history(
     """
     if actor_kind == ComplaintHistory.ActorKind.ANONYMOUS:
         remarks = ""
+        actor = None
+        assignee = None
 
     return ComplaintHistory.objects.create(
         complaint_ref=str(complaint_ref),
@@ -28,6 +33,8 @@ def record_history(
         previous_state=previous_state or "",
         new_state=new_state or "",
         remarks=remarks or "",
+        actor=actor,
+        assignee=assignee,
     )
 
 

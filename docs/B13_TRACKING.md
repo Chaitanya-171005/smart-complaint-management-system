@@ -272,10 +272,20 @@ and [eviction policies](https://redis.io/docs/latest/develop/reference/eviction/
 [Lua script flags](https://redis.io/docs/latest/develop/programmability/lua-api/).
 
 
-## Merge order
+## Integration after PR71 merge
 
-This review incorporates #71 through its `d9b231e` review-evidence commit. Keep
-#73 draft and based on #71 until #71 is approved and merged. Then update/rebase
-against Main, retarget to Main, confirm the intended diff, rerun verification and
-record new clean-source evidence. Do not claim deployment/history acceptance or
-close #18 from this source change alone.
+PR71 merged into Main. This follow-up integrates Main `777c515`, including the
+B15/B18 and authenticated/anonymous evidence recovery changes. The B12 privacy
+document retains both recovery and tracking integration notes. Application
+evidence staging is identical to merged Main; no recovery lease or commit
+durability logic is replaced. The independent anonymous intake/tracking and
+transport attestation flags remain False by default.
+
+The PR can be retargeted to Main and presented for final review after clean-source
+regression/coverage, Django system/migration checks and the dedicated real
+Redis/nginx TLS integration workflow pass on the published revision. F3/F4
+privacy/history integration, deployed Redis/HTTPS/proxy/logging verification and
+D01/D02 decisions remain release prerequisites; code review does not enable either
+anonymous endpoint or close Issue18. Historical evidence directories are retained;
+new source and validation metadata are recorded in
+`docs/evidence/b13-post-b11-main-integration/`.

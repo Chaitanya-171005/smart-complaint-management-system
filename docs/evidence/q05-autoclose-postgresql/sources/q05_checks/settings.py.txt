@@ -1,0 +1,10 @@
+"""Require the disposable PostgreSQL service; never change app deployment settings."""
+import os
+from scms.settings import *  # noqa: F403
+
+DATABASES = {'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': os.environ['Q05_DB_NAME'], 'USER': os.environ['Q05_DB_USER'],
+    'PASSWORD': os.environ['Q05_DB_PASSWORD'], 'HOST': os.environ['Q05_DB_HOST'],
+    'PORT': os.environ['Q05_DB_PORT'], 'CONN_MAX_AGE': 0,
+}}

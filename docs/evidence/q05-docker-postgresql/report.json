@@ -1,0 +1,165 @@
+{
+  "run_id": "5a1824820786",
+  "started_at_utc": "2026-11-10T18:29:46.222127+00:00",
+  "status": "PASS_COMPONENT_CHECKS",
+  "tested_source": {
+    "repository": "Chaitanya-171005/smart-complaint-management-system",
+    "branch": "feature/E03-docker-jenkins",
+    "revision": "526a0d31ea4a50f666b641839177a87e79c81f6b",
+    "working_tree_dirty": false
+  },
+  "scope": "Pinned E03 snapshot: PostgreSQL intake rollback/retry and named-volume container persistence",
+  "phases": [
+    {
+      "name": "build_and_seed",
+      "status": "PASS",
+      "snapshot": {
+        "counts": {
+          "Complaint": 2,
+          "Attachment": 2,
+          "IntakeReceipt": 2,
+          "RoutingDecision": 2,
+          "ComplaintHistory": 4,
+          "ComplaintIdSequence": 1
+        },
+        "graph_sha256": "112fc69b38b2f2f75905732c61f4e3cf7aba0ad2df1a186aea2e5b7a938af5a1",
+        "verified_evidence_files": 2
+      },
+      "checks": {
+        "successful_intake": true,
+        "concurrent_same_key": true,
+        "history_rollback": true,
+        "receipt_rollback": true,
+        "commit_rollback": true,
+        "storage_refusal": true,
+        "idempotent_retry": true
+      },
+      "runtime": {
+        "database_vendor": "postgresql",
+        "postgresql_version": 170006,
+        "python_version": "3.14.10",
+        "django_version": "6.1.3"
+      }
+    },
+    {
+      "name": "app_restart",
+      "status": "PASS",
+      "snapshot": {
+        "counts": {
+          "Complaint": 2,
+          "Attachment": 2,
+          "IntakeReceipt": 2,
+          "RoutingDecision": 2,
+          "ComplaintHistory": 4,
+          "ComplaintIdSequence": 1
+        },
+        "graph_sha256": "112fc69b38b2f2f75905732c61f4e3cf7aba0ad2df1a186aea2e5b7a938af5a1",
+        "verified_evidence_files": 2
+      },
+      "checks": {
+        "persisted_graph_and_file_hashes": true,
+        "retry_after_restart": true
+      },
+      "runtime": {
+        "database_vendor": "postgresql",
+        "postgresql_version": 170006,
+        "python_version": "3.14.10",
+        "django_version": "6.1.3"
+      }
+    },
+    {
+      "name": "app_container_replacement",
+      "status": "PASS",
+      "snapshot": {
+        "counts": {
+          "Complaint": 2,
+          "Attachment": 2,
+          "IntakeReceipt": 2,
+          "RoutingDecision": 2,
+          "ComplaintHistory": 4,
+          "ComplaintIdSequence": 1
+        },
+        "graph_sha256": "112fc69b38b2f2f75905732c61f4e3cf7aba0ad2df1a186aea2e5b7a938af5a1",
+        "verified_evidence_files": 2
+      },
+      "checks": {
+        "persisted_graph_and_file_hashes": true,
+        "retry_after_restart": true
+      },
+      "runtime": {
+        "database_vendor": "postgresql",
+        "postgresql_version": 170006,
+        "python_version": "3.14.10",
+        "django_version": "6.1.3"
+      }
+    },
+    {
+      "name": "database_restart",
+      "status": "PASS",
+      "snapshot": {
+        "counts": {
+          "Complaint": 2,
+          "Attachment": 2,
+          "IntakeReceipt": 2,
+          "RoutingDecision": 2,
+          "ComplaintHistory": 4,
+          "ComplaintIdSequence": 1
+        },
+        "graph_sha256": "112fc69b38b2f2f75905732c61f4e3cf7aba0ad2df1a186aea2e5b7a938af5a1",
+        "verified_evidence_files": 2
+      },
+      "checks": {
+        "persisted_graph_and_file_hashes": true,
+        "retry_after_restart": true
+      },
+      "runtime": {
+        "database_vendor": "postgresql",
+        "postgresql_version": 170006,
+        "python_version": "3.14.10",
+        "django_version": "6.1.3"
+      }
+    },
+    {
+      "name": "full_stack_replacement",
+      "status": "PASS",
+      "snapshot": {
+        "counts": {
+          "Complaint": 2,
+          "Attachment": 2,
+          "IntakeReceipt": 2,
+          "RoutingDecision": 2,
+          "ComplaintHistory": 4,
+          "ComplaintIdSequence": 1
+        },
+        "graph_sha256": "112fc69b38b2f2f75905732c61f4e3cf7aba0ad2df1a186aea2e5b7a938af5a1",
+        "verified_evidence_files": 2
+      },
+      "checks": {
+        "persisted_graph_and_file_hashes": true,
+        "retry_after_restart": true
+      },
+      "runtime": {
+        "database_vendor": "postgresql",
+        "postgresql_version": 170006,
+        "python_version": "3.14.10",
+        "django_version": "6.1.3"
+      }
+    }
+  ],
+  "remaining_q05": [
+    "final_merged_application",
+    "PR76_crash_reconciliation_on_postgresql",
+    "scheduler_overlap_and_interruption",
+    "auto_close_vs_feedback",
+    "real_notification_outbox_failures"
+  ],
+  "probe_sha256": "99a909021b15ca88483e1175eab5e606caac6fd8adae46b1a539653193bc0efb",
+  "driver_sha256": "75003ec18a64c6c7338263f6b04759231bf394b00f47997076fb5fa3d1b21eb2",
+  "images": {
+    "app": "sha256:341fc2c28a68d01caf6d3c9d5a01bb9e0a65e46dd3cc8f70178431f083dc16e9",
+    "db": "sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929"
+  },
+  "test_project": "scmsq055a1824820786",
+  "named_volumes_retained": true,
+  "finished_at_utc": "2026-11-10T18:31:45.462349+00:00"
+}
