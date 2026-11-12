@@ -1,0 +1,22 @@
+Sanitized result and stage markers extracted from Jenkins build 6; full console is retained by Jenkins.
+Checking out Revision f300552a7f318fe8640296cfa45fbcb4f845e530 (detached)
+[Pipeline] { (Install verification tools)
+[Pipeline] { (Static and security checks)
+[2026-11-12T11:23:11.216Z] + python -m bandit -q -r accounts complaints routing workflow scms manage.py scripts -x **/test_*.py,**/tests.py,scripts/q04_load.py
+[2026-11-12T11:23:12.098Z] + python -m pip_audit -r requirements.txt -r requirements-dev.txt
+[2026-11-12T11:23:20.201Z] No known vulnerabilities found
+[Pipeline] { (Django checks, tests and coverage)
+[2026-11-12T11:23:21.107Z] System check identified no issues (0 silenced).
+[2026-11-12T11:23:21.669Z] No changes detected
+[2026-11-12T11:24:58.163Z] TOTAL                                                   2755     86    692     45  96.14%
+[2026-11-12T11:24:58.163Z] ======================= 1170 passed in 94.87s (0:01:34) ========================
+[2026-11-12T11:24:58.163Z] Coverage gate: PASS
+[Pipeline] { (Build container image)
+[2026-11-12T11:24:58.629Z] + docker build --pull --tag scms-app:f300552a7f318fe8640296cfa45fbcb4f845e530 .
+[2026-11-12T11:26:05.858Z] Successfully built 73396a486d52
+[2026-11-12T11:26:05.858Z] Successfully tagged scms-app:f300552a7f318fe8640296cfa45fbcb4f845e530
+[2026-11-12T11:26:06.417Z] System check identified no issues (0 silenced).
+[Pipeline] { (Deploy to production)
+Stage "Deploy to production" skipped due to when conditional
+[Pipeline] { (Declarative: Post Actions)
+Finished: SUCCESS

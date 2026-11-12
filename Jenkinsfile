@@ -30,15 +30,15 @@ pipeline {
         stage('Install verification tools') {
             steps {
                 sh 'python --version'
-                sh 'python -m pip install --disable-pip-version-check -r requirements-dev.txt bandit==1.9.4 pip-audit==2.9.0'
+                sh 'python -m pip install --disable-pip-version-check -r requirements.txt -r requirements-dev.txt bandit==1.9.4 pip-audit==2.9.0'
             }
         }
 
         stage('Static and security checks') {
             steps {
                 sh 'python -m compileall -q accounts complaints routing workflow scms manage.py scripts'
-                sh 'bandit -q -r accounts complaints routing workflow scms manage.py scripts -x "**/test_*.py,**/tests.py,scripts/q04_load.py"'
-                sh 'pip-audit -r requirements.txt -r requirements-dev.txt'
+                sh 'python -m bandit -q -r accounts complaints routing workflow scms manage.py scripts -x "**/test_*.py,**/tests.py,scripts/q04_load.py"'
+                sh 'python -m pip_audit -r requirements.txt -r requirements-dev.txt'
             }
         }
 
@@ -73,6 +73,7 @@ pipeline {
 
         stage('Deploy to production') {
             when {
+                beforeInput true
                 allOf {
                     branch 'Main'
                     not { changeRequest() }

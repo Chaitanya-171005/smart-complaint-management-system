@@ -15,6 +15,7 @@ def test_jenkins_pipeline_orders_gates_before_deployment():
     ]
     assert [text.index(stage) for stage in stages] == sorted(text.index(stage) for stage in stages)
     deploy = text[text.index(stages[-1]):]
+    assert "beforeInput true" in deploy
     assert "branch 'Main'" in deploy
     assert "params.DEPLOY_TO_PRODUCTION" in deploy
     assert "submitter 'scms-deploy-approvers'" in deploy
@@ -43,11 +44,11 @@ def test_jenkins_pipeline_uses_gated_test_defaults_and_no_inline_secrets():
     assert "DJANGO_SESSION_COOKIE_SECURE = 'False'" in text
     assert "DJANGO_CSRF_COOKIE_SECURE = 'False'" in text
     assert "DJANGO_SECURE_HSTS_SECONDS = '0'" in text
-    assert "pip-audit -r requirements.txt" in text
+    assert "python -m pip_audit -r requirements.txt -r requirements-dev.txt" in text
     assert "bandit==1.9.4 pip-audit==2.9.0" in text
-    assert "-r requirements-dev.txt'" in text
+    assert "-r requirements.txt -r requirements-dev.txt bandit==1.9.4 pip-audit==2.9.0" in text
     assert "python -m compileall -q accounts complaints routing workflow scms manage.py scripts" in text
-    assert 'bandit -q -r accounts complaints routing workflow scms manage.py scripts -x "**/test_*.py,**/tests.py,scripts/q04_load.py"' in text
+    assert 'python -m bandit -q -r accounts complaints routing workflow scms manage.py scripts -x "**/test_*.py,**/tests.py,scripts/q04_load.py"' in text
     assert "DEPLOY_IMAGE =" in text
     assert "password-stdin" in text
     assert not any(line.strip().startswith(("DJANGO_SECRET_KEY=", "REGISTRY_TOKEN="))
