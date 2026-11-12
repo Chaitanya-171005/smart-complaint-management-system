@@ -15,7 +15,8 @@ from .forms import ComplaintForm
 from .intake import HEX_DIGEST, IdempotencyConflict, new_intake_key
 from .views import _form
 
-TOKEN_SALT = "complaints.anonymous-intake"
+# Django signing salts are public domain-separation values; SECRET_KEY authenticates signatures.
+TOKEN_SALT = "complaints.anonymous-intake"  # nosec B105
 
 
 def new_token():

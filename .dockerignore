@@ -13,3 +13,8 @@ __pycache__
 coverage.json
 .coverage*
 docs/evidence
+**/test_*.py
+**/tests.py
+**/conftest.py
+integration_checks
+scripts/q04_load.py

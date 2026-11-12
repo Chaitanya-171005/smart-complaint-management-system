@@ -6,7 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from scms.settings import database_config
 
 
-def test_sqlite_defaults_and_path_override():
+def test_sqlite_defaults_and_path_override(tmp_path):
     root = Path("/example")
     expected = {
         "ENGINE": "django.db.backends.sqlite3", "NAME": root / "db.sqlite3",
@@ -14,8 +14,9 @@ def test_sqlite_defaults_and_path_override():
         "TEST": {"NAME": root / "test_db.sqlite3"},
     }
     assert database_config({}, root) == expected
-    assert database_config({"DJANGO_DB_ENGINE": "sqlite", "DJANGO_DB_PATH": "/tmp/custom.db"}, root) == {
-        **expected, "NAME": "/tmp/custom.db",
+    custom_path = tmp_path / "custom.db"
+    assert database_config({"DJANGO_DB_ENGINE": "sqlite", "DJANGO_DB_PATH": str(custom_path)}, root) == {
+        **expected, "NAME": str(custom_path),
     }
 
 

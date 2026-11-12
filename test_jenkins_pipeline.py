@@ -44,9 +44,10 @@ def test_jenkins_pipeline_uses_gated_test_defaults_and_no_inline_secrets():
     assert "DJANGO_CSRF_COOKIE_SECURE = 'False'" in text
     assert "DJANGO_SECURE_HSTS_SECONDS = '0'" in text
     assert "pip-audit -r requirements.txt" in text
-    assert "bandit==1.8.6 pip-audit==2.9.0" in text
+    assert "bandit==1.9.4 pip-audit==2.9.0" in text
     assert "-r requirements-dev.txt'" in text
-    assert "bandit -q -r" in text
+    assert "python -m compileall -q accounts complaints routing workflow scms manage.py scripts" in text
+    assert 'bandit -q -r accounts complaints routing workflow scms manage.py scripts -x "**/test_*.py,**/tests.py,scripts/q04_load.py"' in text
     assert "DEPLOY_IMAGE =" in text
     assert "password-stdin" in text
     assert not any(line.strip().startswith(("DJANGO_SECRET_KEY=", "REGISTRY_TOKEN="))
@@ -61,3 +62,23 @@ def test_registry_and_ssh_credentials_are_confined_to_gated_deploy_stage():
     assert "not { changeRequest() }" in text[deploy_start:credential_use]
     assert "branch 'Main'" in text[deploy_start:credential_use]
     assert "submitter 'scms-deploy-approvers'" in text[deploy_start:]
+
+
+def test_bandit_suppressions_are_limited_to_public_signing_salts():
+    for name, expected in (
+        ("complaints/anonymous_views.py", 'TOKEN_SALT = "complaints.anonymous-intake"  # nosec B105'),
+        ("complaints/views.py", 'TOKEN_SALT = "complaints.authenticated-intake"  # nosec B105'),
+    ):
+        lines = (ROOT / name).read_text().splitlines()
+        matches = [index for index, line in enumerate(lines) if line == expected]
+        assert len(matches) == 1
+        assert "public domain-separation values" in lines[matches[0] - 1]
+
+
+def test_bandit_subprocess_suppressions_are_limited_to_fixed_ci_runner_calls():
+    lines = (ROOT / "scripts/run_tests.py").read_text().splitlines()
+    import_matches = [index for index, line in enumerate(lines) if line == "import subprocess  # nosec B404"]
+    run_matches = [index for index, line in enumerate(lines) if "subprocess.run(" in line and "# nosec B603" in line]
+    assert len(import_matches) == len(run_matches) == 1
+    assert "fixed argv" in lines[import_matches[0] - 1]
+    assert "repository-controlled" in lines[run_matches[0] - 1]

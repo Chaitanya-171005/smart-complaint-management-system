@@ -47,6 +47,7 @@ def test_compose_security_and_volumes():
 def test_dockerignore_excludes_private_files():
     lines = set(read(".dockerignore").splitlines())
     assert {".env", ".env.*", ".git", "db.sqlite3", "private-evidence"} <= lines
+    assert {"**/test_*.py", "**/tests.py", "**/conftest.py", "integration_checks", "scripts/q04_load.py"} <= lines
 
 
 def test_entrypoint_migrates_before_exec():
