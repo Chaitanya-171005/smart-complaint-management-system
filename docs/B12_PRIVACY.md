@@ -3,7 +3,7 @@
 Owner: Atul (F2); affected integrations require F1/F3/F4/Q03 review. Related to
 #17, REQ-ANON-02, REQ-SEC-06/08 and BR-03. This file distinguishes tested application
 controls from deployment and future-module checks; it is not a blanket anonymity
-certification for unimplemented reports, notifications or tracking.
+certification for unimplemented reports/notifications or deployed tracking.
 
 ## Implemented and tested controls
 
@@ -28,8 +28,8 @@ report/staff-notification integrations: ID, the Anonymous label, category,
 location, status and escalation. It excludes submitter, reference digest,
 free text, evidence names/bytes and all account relations. It is not an access
 check and must never be used to grant public full-record access. F4 should use
-these boundaries as its staff/history/report screens are implemented. B13 will
-need its own restricted history projection and transient tracking throttle.
+these boundaries as its staff/history/report screens are implemented. B13 uses
+its own restricted history projection and transient tracking throttle, described below.
 
 The upstream-preloaded-identity check is separate from middleware ordering: it
 rejects a request that already has session/user/cached-user state, including
@@ -139,4 +139,14 @@ backend/source metadata in `b11-recovery-postgresql-evidence`.
 These checks cover evidence recovery integration; they do not establish all
 anonymous PostgreSQL/privacy acceptance, real F4 delivery, F3/F4 output privacy,
 D01/D02 policy or deployed TLS/log-redaction acceptance. Anonymous intake remains
-disabled pending those prerequisites; PR73 remains a separate draft dependency.
+disabled pending those prerequisites. PR71 is merged; PR73 tracking is verified
+separately and remains disabled until its release requirements are satisfied.
+
+## B13 integration
+
+Reference lookup uses the same first-position privacy middleware. Only a
+transient peer-address HMAC enters a dedicated memory-only limiter; it is never
+attached to a complaint, reference or session. The reference POST is not echoed
+and only permitted fields/history are returned. See [B13_TRACKING.md](B13_TRACKING.md)
+for the independent disabled-by-default release gate and required Redis,
+ingress/logging and F4 acceptance. These checks remain required before release.

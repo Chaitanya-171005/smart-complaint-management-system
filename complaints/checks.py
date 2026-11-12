@@ -48,3 +48,27 @@ def check_anonymous_privacy(app_configs, **kwargs):
              "SSL redirection, HSTS, verified transport and both intake/privacy gates. See docs/B12_PRIVACY.md.",
         id="complaints.E002",
     )]
+
+
+def tracking_release_ready():
+    from .tracking_limits import limiter_configured
+    from .tracking_source import tracking_source_configured
+    middleware = getattr(settings, "MIDDLEWARE", [])
+    return bool(
+        middleware and middleware[0] == "complaints.privacy_middleware.AnonymousPrivacyMiddleware"
+        and not settings.DEBUG and not settings.CSRF_USE_SESSIONS
+        and settings.ANONYMOUS_PRIVACY_READY and settings.ANONYMOUS_TRACKING_ENABLED
+        and limiter_configured() and anonymous_transport_ready() and tracking_source_configured()
+    )
+
+
+@register(Tags.security, deploy=True)
+def check_tracking_privacy(app_configs, **kwargs):
+    if not settings.ANONYMOUS_TRACKING_ENABLED or tracking_release_ready():
+        return []
+    return [Error(
+        "Anonymous tracking is enabled without its complete privacy/limiter configuration.",
+        hint="Keep tracking disabled until HTTPS/peer-address, memory-only Redis and privacy "
+             "checks are verified. See docs/B13_TRACKING.md.",
+        id="complaints.E003",
+    )]

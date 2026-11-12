@@ -3,10 +3,15 @@
 from urllib.parse import urlsplit
 
 from django.conf import settings
+from django.core.exceptions import DisallowedHost
 from django.http import HttpResponse, QueryDict
 from django.utils.cache import patch_cache_control
 from django.utils.deprecation import MiddlewareMixin
 from django.views.debug import ExceptionReporter, SafeExceptionReporterFilter
+
+from .checks import tracking_release_ready
+from .tracking_limits import TrackingUnavailable, consume_attempt
+from .tracking_source import tracking_source
 
 
 class AnonymousReporterFilter(SafeExceptionReporterFilter):
@@ -50,9 +55,11 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        if request.path_info.rstrip("/") != "/anonymous/new":
+        path = request.path_info.rstrip("/")
+        if path not in {"/anonymous/new", "/anonymous/track"}:
             return
         request.anonymous_intake = True
+        request.anonymous_tracking = path == "/anonymous/track"
         # Defense against an upstream request wrapper preloading identity. The
         # first-in-MIDDLEWARE release check is still mandatory independently.
         request.anonymous_privacy_isolated = not any(
@@ -61,6 +68,29 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
         request.exception_reporter_filter = AnonymousReporterFilter()
         request.exception_reporter_class = AnonymousExceptionReporter
         request.sensitive_post_parameters = "__ALL__"
+        refusal = None
+        if (request.anonymous_tracking and request.method == "POST"
+                and request.anonymous_privacy_isolated and request.is_secure()
+                and tracking_release_ready()):
+            # Consume before reading credentials/body or doing a complaint query.
+            # Proxy source headers are accepted only from configured peers and
+            # are removed below before any downstream middleware or view runs.
+            try:
+                allowed, retry = consume_attempt(tracking_source(request))
+                request.tracking_allowed = allowed
+                if not allowed:
+                    refusal = HttpResponse("Too many tracking attempts. Please try again later.", status=429)
+                    refusal["Retry-After"] = str(retry)
+            except TrackingUnavailable:
+                refusal = HttpResponse("Reference tracking is temporarily unavailable. Please try again later.", status=503)
+            if refusal is None:
+                try:
+                    length = int(request.META.get("CONTENT_LENGTH", "0") or "0")
+                except ValueError:
+                    length = -1
+                if (not 0 <= length <= 1024
+                        or (length > 0 and request.content_type != "application/x-www-form-urlencoded")):
+                    refusal = HttpResponse("No matching complaint was found.", status=400)
         # Keep only the anti-CSRF cookie. In particular, auth middleware cannot
         # load an existing account/session and SessionMiddleware cannot refresh it.
         csrf_cookie = request.COOKIES.get(settings.CSRF_COOKIE_NAME)
@@ -73,19 +103,34 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 request.META.pop(name, None)
         if csrf_cookie:
             request.META["HTTP_COOKIE"] = f"{settings.CSRF_COOKIE_NAME}={csrf_cookie}"
+        try:
+            origin = f"{request.scheme}://{request.get_host()}"
+        except DisallowedHost:
+            # Do not let Django's security logger print an attacker-supplied
+            # Host containing a reference or identifying value on this route.
+            refusal = HttpResponse("Invalid anonymous request.", status=400)
+            origin = ""
+        if "HTTP_ORIGIN" in request.META and request.META["HTTP_ORIGIN"] != origin:
+            # Preserve cross-origin refusal without feeding raw header values
+            # into django.security.csrf's reason log. Anonymous forms are self-only.
+            request.META["HTTP_ORIGIN"] = "https://invalid-origin.invalid"
         if "HTTP_REFERER" in request.META:
             try:
                 referer = urlsplit(request.META["HTTP_REFERER"])
-                request.META["HTTP_REFERER"] = f"{referer.scheme}://{referer.netloc}/"
+                base = f"{referer.scheme}://{referer.netloc}"
+                request.META["HTTP_REFERER"] = (
+                    base + "/" if base == origin else "https://invalid-origin.invalid/"
+                )
             except ValueError:
                 request.META.pop("HTTP_REFERER", None)
         request.META["QUERY_STRING"] = ""
         request.GET = QueryDict()
+        return refusal
 
     def process_exception(self, request, exception):
         if getattr(request, "anonymous_intake", False):
             # Do not log exception values or feed them into an APM/error email.
-            return HttpResponse("Anonymous submission could not be completed. Please try again.", status=500)
+            return HttpResponse("Anonymous request could not be completed. Please try again.", status=500)
 
     def process_response(self, request, response):
         if getattr(request, "anonymous_intake", False):

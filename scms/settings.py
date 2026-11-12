@@ -185,6 +185,13 @@ COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").st
 ANONYMOUS_INTAKE_ENABLED = os.environ.get("ANONYMOUS_INTAKE_ENABLED", "False") == "True"
 ANONYMOUS_PRIVACY_READY = os.environ.get("ANONYMOUS_PRIVACY_READY", "False") == "True"
 
+# B13 has an independent release gate: existing references can still be checked
+# when new anonymous submissions are disabled. No local/DB-cache fallback.
+ANONYMOUS_TRACKING_ENABLED = os.environ.get("ANONYMOUS_TRACKING_ENABLED", "False") == "True"
+ANONYMOUS_TRACKING_LIMITER_READY = os.environ.get("ANONYMOUS_TRACKING_LIMITER_READY", "False") == "True"
+ANONYMOUS_TRACKING_REDIS_URL = os.environ.get("ANONYMOUS_TRACKING_REDIS_URL", "")
+ANONYMOUS_TRACKING_SOURCE_SECRET = os.environ.get("ANONYMOUS_TRACKING_SOURCE_SECRET", "")
+
 # Anonymous release requires an explicit HTTPS topology and all secure-cookie /
 # redirect settings. Local authenticated development remains available over HTTP.
 # 'proxy' opts into trust of this header ONLY after the ingress strips client
@@ -196,6 +203,13 @@ SECURE_PROXY_SSL_HEADER = (
 SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
 SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", "False") == "True"
 CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", "False") == "True"
+
+# Proxy mode accepts X-Real-IP only from these exact ingress networks. The
+# ingress MUST overwrite the header; do not add broad/untrusted client networks.
+ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = [
+    value.strip() for value in os.environ.get("ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS", "").split(",")
+    if value.strip()
+]
 
 # E03/Q02 must verify the deployed ingress, Docker env and backend isolation
 # before attesting anonymous transport. Static topology flags alone do not prove it.

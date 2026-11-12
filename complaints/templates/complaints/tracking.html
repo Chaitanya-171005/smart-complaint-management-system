@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Private complaint tracking - SCMS</title></head>
+<body>
+  <h1>Track an anonymous complaint</h1>
+  {% if unavailable %}
+  <p role="alert">Reference tracking is temporarily unavailable. Please try again later.</p>
+  {% else %}
+  <p>Use your private 32-character reference. A complaint identifier does not grant access. Lost references cannot be recovered.</p>
+  <p>Up to 10 lookups are allowed from the same network source in any 10 minutes. People sharing a network may share this limit.</p>
+  {% if searched and not result %}<p role="status">No matching complaint was found.</p>{% endif %}
+  {% if result %}
+  <section aria-labelledby="summary-heading">
+    <h2 id="summary-heading">Complaint status</h2>
+    <dl>
+      <dt>Complaint identifier</dt><dd>{{ result.complaint.complaint_id }}</dd>
+      <dt>Category</dt><dd>{{ result.complaint.category }}</dd>
+      <dt>Location</dt><dd>{{ result.complaint.location }}</dd>
+      <dt>Status</dt><dd>{{ result.complaint.status }}</dd>
+      <dt>Escalated</dt><dd>{{ result.complaint.is_escalated|yesno:"Yes,No" }}</dd>
+    </dl>
+    <h2>Status history</h2>
+    <ol>
+    {% for entry in result.history %}
+      <li><time>{{ entry.occurred_at|date:"c" }}</time>: {{ entry.event }}{% if entry.previous_state %} — {{ entry.previous_state }}{% endif %}{% if entry.new_state %} → {{ entry.new_state }}{% endif %}</li>
+    {% empty %}<li>No permitted status history is available.</li>{% endfor %}
+    </ol>
+    <p>History page {{ result.page }} of {{ result.pages }}. Page 1 contains the newest entries; each page has at most 25 entries.</p>
+  </section>
+  {% endif %}
+  <form method="post" action="{% url 'complaints:track_reference' %}" autocomplete="off">
+    {% csrf_token %}
+    <p><label for="reference">Private tracking reference</label><br><input id="reference" name="reference" type="password" maxlength="32" autocomplete="off" spellcheck="false" autocapitalize="none" required aria-describedby="reference-help"></p>
+    <p id="reference-help">The reference is never filled back into this page. Re-enter it for another lookup or history page. Do not place it in a URL.</p>
+    <p><label for="page">History page</label><br><input id="page" name="page" type="number" min="1" value="1"></p>
+    <button type="submit">Check status</button>
+  </form>
+  {% endif %}
+</body>
+</html>
