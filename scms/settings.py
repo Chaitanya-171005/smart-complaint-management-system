@@ -14,6 +14,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -88,18 +89,32 @@ WSGI_APPLICATION = "scms.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.environ.get("DJANGO_DB_PATH", BASE_DIR / "db.sqlite3"),
-        # Reserve the writer at outer transaction entry, before master-data reads.
-        # This avoids DEFERRED read-to-write lock upgrades during concurrent intake.
-        "OPTIONS": {"transaction_mode": "IMMEDIATE", "timeout": 20},
-        # A file (not shared in-memory) test database: real concurrency tests need it,
-        # because in-memory SQLite raises "table is locked" between threads.
-        "TEST": {"NAME": BASE_DIR / "test_db.sqlite3"},
-    }
-}
+def database_config(env, base_dir):
+    """Build the database settings without mutating the environment."""
+    engine = env.get("DJANGO_DB_ENGINE", "sqlite")
+    if engine == "sqlite":
+        return {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": env.get("DJANGO_DB_PATH", base_dir / "db.sqlite3"),
+            "OPTIONS": {"transaction_mode": "IMMEDIATE", "timeout": 20},
+            "TEST": {"NAME": base_dir / "test_db.sqlite3"},
+        }
+    if engine == "postgresql":
+        password = env.get("DJANGO_DB_PASSWORD")
+        if not password:
+            raise ImproperlyConfigured("DJANGO_DB_PASSWORD is required for PostgreSQL.")
+        return {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env.get("DJANGO_DB_NAME", ""),
+            "USER": env.get("DJANGO_DB_USER", ""),
+            "PASSWORD": password,
+            "HOST": env.get("DJANGO_DB_HOST", ""),
+            "PORT": env.get("DJANGO_DB_PORT", "5432"),
+        }
+    raise ImproperlyConfigured(f"Unknown DJANGO_DB_ENGINE: {engine!r}.")
+
+
+DATABASES = {"default": database_config(os.environ, BASE_DIR)}
 
 
 # Password validation
@@ -130,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = Path(os.environ.get("DJANGO_STATIC_ROOT", BASE_DIR / "staticfiles"))
 
 
 # Email
