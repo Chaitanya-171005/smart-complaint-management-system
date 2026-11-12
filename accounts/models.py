@@ -173,11 +173,20 @@ class LoginThrottle(models.Model):
         return f"throttle:{self.email}"
 
 
-class SecurityEvent(models.Model):
-    """Append-only security event record (REQ-SEC-08).
+class SecurityEventQuerySet(models.QuerySet):
+    def update(self, **kwargs):
+        raise ValidationError("Security events cannot be edited.")
 
-    Never stores passwords, session tokens or anonymous-report references.
-    The final event policy is owned by Q03; this covers authentication events.
+    def delete(self):
+        raise ValidationError("Security events cannot be deleted.")
+
+
+class SecurityEvent(models.Model):
+    """Append-only security event record (REQ-SEC-08, policy in docs/SECURITY_LOGGING.md).
+
+    Records the actor (``user``/``identifier``), the action (``event_type``), the target
+    and the time. Never stores passwords, session tokens or anonymous-report references.
+    Write events only through ``accounts.security_log.record_event``, which enforces the policy.
     """
 
     class EventType(models.TextChoices):
@@ -188,17 +197,29 @@ class SecurityEvent(models.Model):
         AUTHORIZATION_REFUSED = "AUTHORIZATION_REFUSED", "Authorization refused"
         ROLE_CHANGED = "ROLE_CHANGED", "Role or department membership changed"
         ROLE_CHANGE_REFUSED = "ROLE_CHANGE_REFUSED", "Role or membership change refused"
+        MASTER_DATA_CHANGED = "MASTER_DATA_CHANGED", "Master data or configuration changed"
 
     event_type = models.CharField(max_length=30, choices=EventType.choices)
     user = models.ForeignKey(
         User, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
     identifier = models.CharField(max_length=254, blank=True)
+    target = models.CharField(max_length=100, blank=True)
     detail = models.CharField(max_length=255, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = SecurityEventQuerySet.as_manager()
+
     class Meta:
         ordering = ["-created_at", "-id"]
+
+    def save(self, *args, **kwargs):
+        if self.pk:
+            raise ValidationError("Security events cannot be edited.")
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        raise ValidationError("Security events cannot be deleted.")
 
     def __str__(self):
         return f"{self.event_type} {self.identifier}"
@@ -248,6 +269,20 @@ class ConfigAuditEvent(models.Model):
 
     def delete(self, *args, **kwargs):
         raise ValidationError("Configuration audit records cannot be deleted.")
+
+    @staticmethod
+    def _pairs(values):
+        # A plain list of pairs for templates: ``values.items`` in a template would pick a
+        # field NAMED "items" instead of the dict method.
+        return list((values or {}).items())
+
+    @property
+    def old_pairs(self):
+        return self._pairs(self.old_values)
+
+    @property
+    def new_pairs(self):
+        return self._pairs(self.new_values)
 
     def __str__(self):
         return f"{self.action} {self.entity_type}#{self.entity_id}"
