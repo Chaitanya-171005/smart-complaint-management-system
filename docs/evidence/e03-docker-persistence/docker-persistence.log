@@ -1,0 +1,100 @@
+ Image scms-app:local Building
+#1 [internal] load local bake definitions
+#1 reading from stdin 557B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 948B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.14-slim
+#3 DONE 5.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 198B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
+#5 resolve docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 7.73MB 0.2s done
+#6 DONE 0.2s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] COPY requirements.txt /app/requirements.txt
+#8 CACHED
+
+#9 [4/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/7] COPY . /app
+#10 DONE 0.1s
+
+#11 [6/7] RUN useradd --create-home --uid 10001 appuser && mkdir -p /data/private-evidence && chown -R appuser:appuser /app /data/private-evidence && chmod +x /app/scripts/docker-entrypoint.sh
+#11 DONE 0.4s
+
+#12 [7/7] RUN DJANGO_SECRET_KEY=build-only-throwaway python manage.py collectstatic --noinput
+#12 0.593
+#12 0.593 130 static files copied to '/app/staticfiles'.
+#12 DONE 0.7s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.6s done
+#13 exporting manifest sha256:cdfa6f03b2cf71521d271f2476720b6e81768f93fb4fdee8248c7918722cbcef 0.0s done
+#13 exporting config sha256:5f68d8334ed9703c78aa24752c483ca31b5ee5070c6187d1c218aba96b307d6b done
+#13 exporting attestation manifest sha256:bb743fd348fdf8f2dc71d5db99d31c305340ab8e2d4414dc180459d6a5e0febf 0.0s done
+#13 exporting manifest list sha256:f59f97fb1310eda16dd00f5219cfc58a5c5bf4e2933a3cb229ed6e28b6be0ca6 done
+#13 naming to docker.io/library/scms-app:local done
+#13 unpacking to docker.io/library/scms-app:local
+#13 unpacking to docker.io/library/scms-app:local 0.2s done
+#13 DONE 0.9s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image scms-app:local Built
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_private_evidence Creating
+ Network scms-e03-persist-bc8fdc81890c88901b936b012338afe2_default Creating
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_postgres_data Creating
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_postgres_data Creating
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_private_evidence Creating
+ Network scms-e03-persist-bc8fdc81890c88901b936b012338afe2_default Creating
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_private_evidence Created
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_private_evidence Created
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_postgres_data Created
+ Volume scms-e03-persist-bc8fdc81890c88901b936b012338afe2_postgres_data Created
+ Network scms-e03-persist-bc8fdc81890c88901b936b012338afe2_default Created
+ Network scms-e03-persist-bc8fdc81890c88901b936b012338afe2_default Created
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Creating
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Created
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Creating
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Created
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Starting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Started
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Healthy
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Starting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Started
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Healthy
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Healthy
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Recreate
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Recreated
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Recreate
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Recreated
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Starting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Started
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Healthy
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Starting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Started
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Waiting
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-db-1 Healthy
+ Container scms-e03-persist-bc8fdc81890c88901b936b012338afe2-app-1 Healthy
+Disposable PostgreSQL and private-evidence volumes survived app and database container replacement.
