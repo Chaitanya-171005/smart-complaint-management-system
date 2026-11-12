@@ -35,7 +35,7 @@ def audit(entity_type=None):
 def test_admin_creates_a_department_and_it_is_audited(admin):
     dept = svc.create_department(admin, "  Synthetic Maintenance ")
     assert dept.name == "Synthetic Maintenance" and dept.active is True
-    event = audit("department").get()
+    event = audit("Department").get()
     assert event.actor == admin and event.actor_identifier == admin.email
     assert event.action == "CREATE" and event.entity_id == str(dept.pk)
     assert event.old_values == {} and event.new_values == {"name": "Synthetic Maintenance", "active": True}
@@ -64,7 +64,7 @@ def test_rename_records_old_and_new_values(admin):
     svc.rename_department(admin, dept, "Synthetic New")
     dept.refresh_from_db()
     assert dept.name == "Synthetic New"
-    event = audit("department").last()
+    event = audit("Department").last()
     assert event.action == "UPDATE"
     assert event.old_values["name"] == "Synthetic Old" and event.new_values["name"] == "Synthetic New"
 
@@ -94,9 +94,9 @@ def test_deactivate_and_reactivate_a_department(admin):
     svc.set_department_active(admin, dept, True)
     dept.refresh_from_db()
     assert dept.active is True
-    assert [e.action for e in audit("department")] == ["CREATE", "DEACTIVATE", "REACTIVATE"]
+    assert [e.action for e in audit("Department")] == ["CREATE", "DEACTIVATE", "REACTIVATE"]
     svc.set_department_active(admin, dept, True)  # no change, no new record
-    assert audit("department").count() == 3
+    assert audit("Department").count() == 3
 
 
 def test_deactivation_keeps_existing_references(admin, user_factory):
@@ -144,7 +144,7 @@ def test_departments_and_locations_cannot_be_deleted(admin, location, user_facto
 def test_create_location_normalizes_the_code_and_audits(admin):
     loc = svc.create_location(admin, code="  blk-a-101 ", block="Block A", floor="1", room_area="Room 101")
     assert loc.code == "BLK-A-101" and loc.label == "Block A / 1 / Room 101" and loc.active
-    event = audit("location").get()
+    event = audit("Location").get()
     assert event.action == "CREATE" and event.new_values["code"] == "BLK-A-101"
 
 
@@ -185,7 +185,7 @@ def test_update_location_keeps_the_stable_code(admin, location):
     svc.update_location(admin, location, block="Block A", floor="2", room_area="Room 101 renamed")
     location.refresh_from_db()
     assert location.code == "SYN-A-101" and location.floor == "2"
-    event = audit("location").last()
+    event = audit("Location").last()
     assert event.action == "UPDATE"
     assert event.old_values["floor"] == "1" and event.new_values["floor"] == "2"
     assert event.old_values["code"] == event.new_values["code"] == "SYN-A-101"
@@ -203,7 +203,7 @@ def test_deactivate_location_preserves_it(admin, location):
     svc.set_location_active(admin, location, False)
     location.refresh_from_db()
     assert location.active is False and Location.objects.filter(pk=location.pk).exists()
-    assert audit("location").last().action == "DEACTIVATE"
+    assert audit("Location").last().action == "DEACTIVATE"
 
 
 # --- unauthorized changes are refused ---------------------------------------------------------
@@ -292,7 +292,7 @@ def test_audit_records_cannot_be_edited_or_deleted(admin):
 
 def test_sensitive_values_are_never_stored(admin):
     event = record_change(
-        actor=admin, entity_type="user", entity_id=1, action="UPDATE",
+        actor=admin, entity_type="User", entity_id=1, action="UPDATE",
         old={"role": "STAFF", "password": "Campus123", "session_key": "abc"},
         new={"role": "HEAD", "Password_Hash": "pbkdf2$x", "tracking_reference": "REF-1"},
     )
@@ -442,7 +442,7 @@ def test_edit_screens_show_errors_and_unknown_records_are_404(client_for, admin,
 
 def test_audit_redacts_sensitive_keys_at_any_depth(admin):
     event = record_change(
-        actor=admin, entity_type="demo", entity_id=1, action="UPDATE",
+        actor=admin, entity_type="Department", entity_id=1, action="UPDATE",
         old={"nested": {"password": "hunter2", "keep": "yes"}},
         new={"items": [{"token": "abc", "name": "ok"}, ("x", {"secret": "s"})], "plain": 1},
     )
@@ -455,7 +455,7 @@ def test_audit_redacts_sensitive_keys_at_any_depth(admin):
 
 def test_audit_still_redacts_top_level_keys_and_stringifies_odd_values(admin):
     event = record_change(
-        actor=admin, entity_type="demo", entity_id=1, action="UPDATE",
+        actor=admin, entity_type="Department", entity_id=1, action="UPDATE",
         new={"session_key": "k", "when": object, "n": None},
     )
     assert event.new_values["session_key"] == REDACTED

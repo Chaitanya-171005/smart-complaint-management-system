@@ -14,6 +14,9 @@
     </form>
   </header>
   <h1>{{ role_label }} home</h1>
+  {% if user.role == "COMPLAINANT" %}
+  <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
+  {% endif %}
   {% if user.role == "ADMIN" %}
   <nav>
     <ul>
@@ -21,6 +24,7 @@
       <li><a href="{% url 'accounts:admin_departments' %}">Departments</a></li>
       <li><a href="{% url 'accounts:admin_locations' %}">Locations</a></li>
       <li><a href="{% url 'routing:configuration' %}">Routing, SLA and escalation</a></li>
+      <li><a href="{% url 'accounts:admin_audit' %}">Configuration audit log</a></li>
     </ul>
   </nav>
   {% endif %}

@@ -1,0 +1,9 @@
+{
+  "executed_at_utc": "2026-11-10T19:00:13.570141+00:00",
+  "source_revision": "e9d786bed56677865920d77a719fdbbeb5200e9e",
+  "working_tree_dirty": false,
+  "working_tree_status": [],
+  "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
+  "pytest_exit_code": 0,
+  "coverage_gate_exit_code": 0
+}

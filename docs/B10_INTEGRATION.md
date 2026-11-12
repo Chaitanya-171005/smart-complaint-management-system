@@ -84,14 +84,18 @@ migration consistency checks. Tests use synthetic configuration, real persistent
 models/private files, required failure injection, migration backfill, concurrent
 same-key requests and authorized downloads against an actual Attachment.
 
-Before closing the issues, implement and review the authenticated CSRF-protected
-page/POST, reference-option/error handling, confirmed D01 emergency notice,
-post-commit acknowledgement and GET/HEAD-only protected download endpoint.
+The authenticated page/POST, reference/error handling, post-commit acknowledgement
+and protected GET/HEAD download endpoint are implemented in B07_HTTP.md. They
+require review and confirmed D01 references/emergency information before release.
 Keep the original request key on timeout; never present failed input as accepted.
 The endpoint must be non-atomic if ATOMIC_REQUESTS is enabled.
 
-Ordinary exception cleanup does not make filesystem and DB commit atomic against
-process crashes. Durable staging/orphan reconciliation, cleanup-failure recovery,
-notification outbox/delivery, PostgreSQL and restart/container preservation tests
-remain pending with F3/F4. D02 byte-limit confirmation and actual upload performance
+Evidence storage now syncs bytes/directory entries before acceptance and holds a
+writer lease through commit. The `reconcile_evidence` command provides primary-DB
+integrity checks, reversible orphan quarantine, accepted-file restoration and an
+explicit later purge. Cleanup failures remain retryable without deleting accepted
+metadata. See B10_RECOVERY.md for the contract and subprocess crash tests.
+This does not make filesystem/DB writes one hardware transaction. Notification
+outbox/delivery, deployed PostgreSQL, container replacement and scheduled-work
+recovery acceptance remain pending with F3/F4. D02 byte-limit confirmation and actual upload performance
 acceptance remain open. Anonymous intake/privacy/tracking are separate follow-ups.

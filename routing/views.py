@@ -151,3 +151,34 @@ def configuration(request):
             "audit_events": ConfigAuditEvent.objects.filter(entity_type__in=("Category", "RoutingRule", "SLAConfiguration", "EscalationPolicy")).order_by("-created_at", "-pk")[:20],
         },
     )
+
+
+@role_required(User.Role.HEAD, User.Role.STAFF)
+@require_http_methods(["GET"])
+def queue(request):
+    from .queue import department_queue_page
+
+    page = department_queue_page(request.user, request.user.department_id, request.GET.get("page", 1))
+    staff = User.objects.filter(role=User.Role.STAFF, is_active=True, department_id=request.user.department_id)
+    return render(request, "routing/queue.html", {"page": page, "staff": staff})
+
+
+@role_required(User.Role.HEAD)
+@require_http_methods(["POST"])
+def assign(request, complaint_id):
+    from .allocation import AllocationError, allocate_complaint
+
+    try:
+        target = int(request.POST.get("assignee", ""))
+        expected = request.POST.get("expected_assignee", "")
+        expected = int(expected) if expected else None
+        if target <= 0 or (expected is not None and expected <= 0):
+            raise ValueError
+    except ValueError:
+        return HttpResponseBadRequest("Invalid assignee.")
+    try:
+        allocate_complaint(actor=request.user, complaint_id=complaint_id, assignee=target,
+                           expected_assignee_id=expected, reason=request.POST.get("reason", ""))
+    except AllocationError as error:
+        return HttpResponseBadRequest("; ".join(error.messages))
+    return redirect("routing:queue")

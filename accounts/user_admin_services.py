@@ -105,7 +105,7 @@ def set_role_and_membership(actor, target, *, role, department=None):
             target_row.save(update_fields=["role", "department"])
             new = _values(target_row)
             record_change(
-                actor=actor_row, entity_type="user", entity_id=target_row.pk,
+                actor=actor_row, entity_type="User", entity_id=target_row.pk,
                 action=ConfigAuditEvent.Action.UPDATE, old=old, new=new,
             )
             record_event(

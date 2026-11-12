@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "complaints.privacy_middleware.AnonymousPrivacyMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -190,3 +191,29 @@ except ValueError:
     pass
 # Processing safeguard, separate from the SRS compressed-file byte limit.
 EVIDENCE_MAX_IMAGE_PIXELS = 25_000_000
+
+# Authenticated intake remains disabled until D01 campus references and
+# emergency details are confirmed; test fixtures use synthetic values.
+COMPLAINT_INTAKE_ENABLED = os.environ.get("COMPLAINT_INTAKE_ENABLED", "False") == "True"
+COMPLAINT_EMERGENCY_NOTICE = os.environ.get("COMPLAINT_EMERGENCY_NOTICE", "").strip()
+
+# B11/B12: keep disabled until D01 and external logging/privacy checks are verified.
+ANONYMOUS_INTAKE_ENABLED = os.environ.get("ANONYMOUS_INTAKE_ENABLED", "False") == "True"
+ANONYMOUS_PRIVACY_READY = os.environ.get("ANONYMOUS_PRIVACY_READY", "False") == "True"
+
+# Anonymous release requires an explicit HTTPS topology and all secure-cookie /
+# redirect settings. Local authenticated development remains available over HTTP.
+# 'proxy' opts into trust of this header ONLY after the ingress strips client
+# values, overwrites it, and blocks direct access to the application backend.
+SCMS_HTTPS_MODE = os.environ.get("DJANGO_HTTPS_MODE", "").strip()
+SECURE_PROXY_SSL_HEADER = (
+    ("HTTP_X_FORWARDED_PROTO", "https") if SCMS_HTTPS_MODE == "proxy" else None
+)
+SECURE_SSL_REDIRECT = os.environ.get("DJANGO_SECURE_SSL_REDIRECT", "False") == "True"
+SESSION_COOKIE_SECURE = os.environ.get("DJANGO_SESSION_COOKIE_SECURE", "False") == "True"
+CSRF_COOKIE_SECURE = os.environ.get("DJANGO_CSRF_COOKIE_SECURE", "False") == "True"
+
+# E03/Q02 must verify the deployed ingress, Docker env and backend isolation
+# before attesting anonymous transport. Static topology flags alone do not prove it.
+ANONYMOUS_TRANSPORT_VERIFIED = os.environ.get("ANONYMOUS_TRANSPORT_VERIFIED", "False") == "True"
+SECURE_HSTS_SECONDS = int(os.environ.get("DJANGO_SECURE_HSTS_SECONDS", "0"))

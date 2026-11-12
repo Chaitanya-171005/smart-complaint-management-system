@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Department queue</title></head>
+<body><h1>Department queue</h1>
+{% for complaint in page %}
+<article><h2>{{ complaint.complaint_id }}: {{ complaint.title }}</h2>
+<p>{{ complaint.status }} · {{ complaint.priority }}{% if complaint.is_escalated %} · Escalated{% endif %} · {{ complaint.submitted_at }}</p>
+<p>Assignee: {{ complaint.assignee|default:"Unassigned" }}</p>
+{% if request.user.role == 'HEAD' %}
+<form method="post" action="{% url 'assign_complaint' complaint.complaint_id %}">{% csrf_token %}
+<input type="hidden" name="expected_assignee" value="{{ complaint.assignee_id|default_if_none:'' }}">
+<label>Staff <select name="assignee" required>{% for member in staff %}<option value="{{ member.pk }}">{{ member }}</option>{% endfor %}</select></label>
+<label>Reason <input name="reason" maxlength="500"></label><button type="submit">Assign</button></form>
+{% endif %}</article>
+{% empty %}<p>No complaints in the queue.</p>{% endfor %}
+<nav>{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">Previous</a>{% endif %} Page {{ page.number }} of {{ page.paginator.num_pages }} {% if page.has_next %}<a href="?page={{ page.next_page_number }}">Next</a>{% endif %}</nav>
+</body></html>

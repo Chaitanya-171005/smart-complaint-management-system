@@ -67,7 +67,21 @@ job wiring. Actions does not replace Jenkins. The current Django database
 settings use SQLite; PostgreSQL deployment/test configuration remains part of
 E03 and must be verified there rather than inferred from a SQLite result.
 
+For the B07 HTTP release, E03 must explicitly pass `COMPLAINT_INTAKE_ENABLED`
+(only exact `True` enables it) and a confirmed, nonblank
+`COMPLAINT_EMERGENCY_NOTICE` into the Docker/Jenkins application environment.
+Keep intake disabled until D01 approval. Q02/E03 must also configure and test a
+reverse-proxy total request-body limit before Django, allowing the confirmed
+D02 three-file batch plus bounded form overhead and rejecting larger bodies
+with 413. B07_HTTP.md describes why Django's memory thresholds and B09 validation
+do not enforce a pre-parsing upload limit. These deployment checks are pending.
+
 ## Acceptance still required from the pipeline owners
+
+Anonymous intake has a separate B12 release checklist in B12_PRIVACY.md. Keep
+ANONYMOUS_INTAKE_ENABLED and ANONYMOUS_PRIVACY_READY False until TLS, upstream
+logging/body/APM capture, campus configuration and affected-module privacy checks
+are verified. The flow requires HTTPS and does not use an authenticated session.
 
 - Retain one genuine successful job showing checks, tests and the coverage gate.
 - Retain a controlled failed job proving a required failure prevents deployment.

@@ -257,3 +257,26 @@ class Attachment(models.Model):
                 name="attachment_storage_mime_matches",
             ),
         ]
+
+
+class AnonymousIntakeReceipt(models.Model):
+    """Anonymous operation deduplication, with no account/session/source fields.
+
+    This random form-key digest is NOT the tracking-reference digest and cannot
+    recover that reference. No pending receipt is committed independently.
+    """
+
+    key_digest = models.CharField(max_length=64, unique=True, editable=False)
+    payload_digest = models.CharField(max_length=64, editable=False)
+    complaint = models.OneToOneField(
+        Complaint, on_delete=models.PROTECT, related_name="anonymous_receipt", editable=False,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.CheckConstraint(condition=Q(key_digest__regex=r"\A[0-9a-f]{64}\Z"),
+                                   name="anon_receipt_key_digest_format"),
+            models.CheckConstraint(condition=Q(payload_digest__regex=r"\A[0-9a-f]{64}\Z"),
+                                   name="anon_receipt_payload_format"),
+        ]

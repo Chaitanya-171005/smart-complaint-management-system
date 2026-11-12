@@ -2,13 +2,15 @@
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
 from . import reference_services as svc
 from . import user_admin_services as user_svc
-from .models import Department, Location, User
+from .config_audit import ENTITY_TYPES
+from .models import ConfigAuditEvent, Department, Location, User
 from .permissions import role_required
 
 admin_only = role_required(User.Role.ADMIN)
@@ -161,3 +163,50 @@ def user_edit(request, pk):
     return render(request, "accounts/admin_edit.html",
                   {"form": form, "title": f"Role and department: {target.email}",
                    "back": "accounts:admin_users"}, status=400 if form.errors else 200)
+
+
+# --- configuration audit (B29, REQ-ADM-04): read-only ----------------------------------------
+
+
+class AuditFilterForm(forms.Form):
+    entity_type = forms.ChoiceField(required=False)
+    action = forms.ChoiceField(required=False)
+    actor = forms.CharField(required=False, max_length=254)
+    date_from = forms.DateField(required=False)
+    date_to = forms.DateField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["entity_type"].choices = [("", "All entities"), *ENTITY_TYPES.items()]
+        self.fields["action"].choices = [("", "All actions"), *ConfigAuditEvent.Action.choices]
+
+
+@admin_only
+@require_http_methods(["GET"])
+def audit_log(request):
+    """Who changed which configuration, from what to what, and when. Never editable."""
+    form = AuditFilterForm(request.GET or None)
+    events = ConfigAuditEvent.objects.all()
+    if form.is_valid():
+        data = form.cleaned_data
+        if data["entity_type"]:
+            # Older databases may hold lowercase entity names from before the class-name
+            # convention; the table is append-only, so match case-insensitively.
+            events = events.filter(entity_type__iexact=data["entity_type"])
+        if data["action"]:
+            events = events.filter(action=data["action"])
+        if data["actor"]:
+            events = events.filter(actor_identifier__icontains=data["actor"].strip())
+        if data["date_from"]:
+            events = events.filter(created_at__date__gte=data["date_from"])
+        if data["date_to"]:
+            events = events.filter(created_at__date__lte=data["date_to"])
+    page = Paginator(events, 50).get_page(request.GET.get("page"))
+    keep = request.GET.copy()
+    keep.pop("page", None)
+    return render(
+        request,
+        "accounts/admin_audit.html",
+        {"form": form, "page": page, "filter_query": keep.urlencode()},
+        status=400 if form.is_bound and not form.is_valid() else 200,
+    )
