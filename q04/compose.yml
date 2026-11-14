@@ -1,0 +1,46 @@
+# Dedicated Q04 project; project name and secrets are supplied by q04_env.py.
+services:
+  db:
+    image: postgres:17.6
+    environment:
+      POSTGRES_DB: q04
+      POSTGRES_USER: q04
+      POSTGRES_PASSWORD: ${Q04_DB_PASSWORD:?required}
+    volumes:
+      - q04_database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U q04 -d q04"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [q04]
+  app:
+    build:
+      context: ..
+    image: ${Q04_IMAGE:?required}
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DJANGO_SECRET_KEY: ${Q04_SECRET_KEY:?required}
+      DJANGO_DEBUG: "False"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1
+      DJANGO_DB_ENGINE: postgresql
+      DJANGO_DB_NAME: q04
+      DJANGO_DB_USER: q04
+      DJANGO_DB_PASSWORD: ${Q04_DB_PASSWORD:?required}
+      DJANGO_DB_HOST: db
+      DJANGO_DB_PORT: "5432"
+      PRIVATE_EVIDENCE_ROOT: /data/private-evidence
+      COMPLAINT_INTAKE_ENABLED: "False"
+      ANONYMOUS_INTAKE_ENABLED: "False"
+    volumes:
+      - q04_evidence:/data/private-evidence
+    ports:
+      - "127.0.0.1:${Q04_PORT:-55004}:8000"
+    networks: [q04]
+volumes:
+  q04_database:
+  q04_evidence:
+networks:
+  q04:

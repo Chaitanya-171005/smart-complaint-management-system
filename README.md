@@ -82,4 +82,5 @@ The documents describe Release 1.0 as a single-campus, English-language, online 
 ​
 ## Getting Started
 ​
-Start with the Synopsis, then review the SRS, SAD, and Test Plan in `docs/`. The supplied folder does not contain application source code or setup files, so this README does not include installation or run commands.
+Start with the Synopsis, then review the SRS, SAD, and Test Plan in `docs/`. The repository contains the Django application, deployment configuration, and automated tests.
+For the experimental isolated PostgreSQL performance environment, see [Q04 portable setup](docs/Q04_PORTABLE_SETUP.md).
