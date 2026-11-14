@@ -135,6 +135,30 @@ def test_invalid_text_is_escaped_and_can_be_corrected_using_same_key(setup, sett
     assert submit(setup, token).status_code == 303
 
 
+def test_short_description_has_one_inline_error_and_visible_rule(setup, settings):
+    page = setup["client"].get(setup["url"])
+    assert b"At least 20 characters" in page.content
+    token = page.context["request_token"]
+    response = submit(setup, token, description="Bad")
+    errors = response.context["form"].errors["description"]
+    assert response.status_code == 400 and len(errors) == 1
+    assert response.content.decode().count(errors[0]) == 1
+    assert response.context["request_token"] == token
+    assert response.context["form"]["title"].value() == setup["data"]["title"]
+    assert_not_accepted(settings)
+    assert submit(setup, token).status_code == 303
+    assert Complaint.objects.count() == 1
+
+
+def test_service_only_field_error_is_shown_once(setup, settings):
+    failure = ValidationError({"title": ["Choose a different synthetic title."]})
+    with patch("complaints.views.submit_authenticated_complaint", side_effect=failure):
+        response = submit(setup)
+    assert response.status_code == 400
+    assert list(response.context["form"].errors["title"]) == ["Choose a different synthetic title."]
+    assert_not_accepted(settings)
+
+
 @pytest.mark.parametrize("token", ["", "tampered", "a" * 1001])
 def test_unsigned_missing_or_oversized_tokens_refused(setup, settings, token):
     response = setup["client"].post(setup["url"], {**setup["data"], "request_token": token})
