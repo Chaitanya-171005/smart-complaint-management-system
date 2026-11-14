@@ -74,9 +74,9 @@ def anonymous_submission(request):
                 form.is_valid()
                 if hasattr(error, "error_dict"):
                     for name, errors in error.error_dict.items():
-                        form.add_error(name if name in form.fields else None, errors)
+                        form.add_unique_error(name if name in form.fields else None, errors)
                 else:
-                    form.add_error(None, error)
+                    form.add_unique_error(None, error)
             except AnonymousIntakeUnavailable:
                 form, status = _form(data), 503
                 form.is_valid()

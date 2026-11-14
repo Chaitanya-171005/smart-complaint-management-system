@@ -382,6 +382,17 @@ def test_validation_errors_preserve_safe_fields_and_same_form(setup, client, set
     assert post(setup, client, key).status_code == 200
 
 
+def test_anonymous_short_description_has_one_inline_error(setup, client, settings):
+    key = token(client)
+    response = post(setup, client, key, description="Bad")
+    errors = response.context["form"].errors["description"]
+    assert response.status_code == 400 and len(errors) == 1
+    assert response.content.decode().count(errors[0]) == 1
+    assert response.context["request_token"] == key
+    empty(settings)
+    assert post(setup, client, key).status_code == 200
+
+
 @pytest.mark.parametrize("files", [lambda: [upload() for _ in range(4)],
                                    lambda: [SimpleUploadedFile("bad.png", b"invalid")]])
 def test_invalid_batch_never_accepts(setup, client, settings, files):

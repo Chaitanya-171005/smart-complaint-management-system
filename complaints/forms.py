@@ -42,7 +42,8 @@ class ComplaintForm(forms.Form):
     location = forms.ChoiceField(choices=())
     title = SingleLineField(max_length=120)
     description = forms.CharField(
-        min_length=20, max_length=2000, widget=forms.Textarea,
+        max_length=2000, widget=forms.Textarea(attrs={"minlength": 20}),
+        help_text="At least 20 characters. Spaces count; invisible padding does not.",
         validators=[validate_description],
     )
     priority = forms.ChoiceField(choices=Priority.CHOICES, initial=Priority.MEDIUM)
@@ -117,6 +118,16 @@ class ComplaintForm(forms.Form):
 
     def clean_location(self):
         return self._locations[self.cleaned_data["location"]]
+
+    def add_unique_error(self, field, error):
+        """Keep service-only failures without repeating an inline form error."""
+        normalized = error if isinstance(error, forms.ValidationError) else forms.ValidationError(error)
+        seen = set(self.errors.get(field or "__all__", ()))
+        for item in normalized.error_list:
+            for message in item.messages:
+                if message not in seen:
+                    self.add_error(field, forms.ValidationError(message, code=item.code))
+                    seen.add(message)
 
     def clean(self):
         cleaned = super().clean()

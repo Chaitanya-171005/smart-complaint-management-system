@@ -104,9 +104,9 @@ def submit_complaint(request):
         form.is_valid()
         if hasattr(error, "error_dict"):
             for name, errors in error.error_dict.items():
-                form.add_error(name if name in form.fields else None, errors)
+                form.add_unique_error(name if name in form.fields else None, errors)
         else:
-            form.add_error(None, error)
+            form.add_unique_error(None, error)
     except (RoutingConfigurationError, SLAConfigurationError, DatabaseError, OSError):
         logger.warning("Complaint intake could not complete a required operation.")
         form, status = _form(data), 503

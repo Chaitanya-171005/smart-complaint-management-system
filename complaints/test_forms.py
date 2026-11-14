@@ -80,7 +80,7 @@ def test_whitespace_is_trimmed_before_description_minimum(options, payload):
     payload["description"] = "  " + "x" * 19 + "  "
     form = bind(options, payload)
     assert not form.is_valid()
-    assert form.has_error("description", "min_length")
+    assert form.has_error("description", "min_visible_length")
 
 
 @pytest.mark.parametrize("field", ["title", "description"])
