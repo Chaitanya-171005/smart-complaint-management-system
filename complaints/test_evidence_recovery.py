@@ -405,3 +405,47 @@ with staged_evidence([ContentFile(png(), name="synthetic.png")]):
         process.communicate("finish\n", timeout=5)
     assert process.returncode == 0
     assert reconcile_evidence(apply=True).orphaned == 1
+
+
+@pytest.mark.parametrize("command", [False, True], ids=["service", "command"])
+def test_dry_run_missing_root_does_not_create_directories(root, command, settings):
+    settings.PRIVATE_EVIDENCE_ROOT = root / "missing-parent" / "evidence"
+    if command:
+        output = StringIO()
+        call_command("reconcile_evidence", stdout=output)
+        assert "mode=dry-run referenced=0 orphans=0" in output.getvalue()
+    else:
+        result = reconcile_evidence()
+        assert result.referenced == result.orphaned == 0 and not result.applied
+    assert not root.exists()
+
+
+@pytest.mark.parametrize("command", [False, True], ids=["service", "command"])
+def test_missing_root_dry_run_still_refuses_missing_accepted_files(root, complaint_factory, command):
+    path = orphan(root)
+    attachment = metadata(complaint_factory(), path)
+    before = list(Attachment.objects.values())
+    path.unlink()
+    root.rmdir()
+    with pytest.raises(CommandError if command else EvidenceRecoveryUnavailable, match="missing"):
+        if command:
+            call_command("reconcile_evidence")
+        else:
+            reconcile_evidence()
+    assert not root.exists()
+    assert list(Attachment.objects.values()) == before
+    assert Attachment.objects.filter(pk=attachment.pk).exists()
+
+
+def test_missing_root_dry_run_does_not_hide_unavailable_metadata(root):
+    with patch.object(Attachment.objects, "using", side_effect=RuntimeError("private-db-password")):
+        with pytest.raises(EvidenceRecoveryUnavailable) as error:
+            reconcile_evidence()
+    assert "private-db-password" not in str(error.value)
+    assert not root.exists()
+
+
+def test_apply_can_still_initialize_missing_private_root(root):
+    result = reconcile_evidence(apply=True)
+    assert result.applied and result.referenced == result.orphaned == 0
+    assert root.is_dir() and root.stat().st_mode & 0o777 == 0o700
