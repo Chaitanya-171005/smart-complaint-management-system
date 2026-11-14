@@ -111,6 +111,9 @@ def test_csrf_is_required_and_valid_post_commits_before_acknowledgement(setup, s
     assert acknowledgement.status_code == 200
     assert complaint.complaint_id.encode() in acknowledgement.content
     assert token.encode() not in acknowledgement.content
+    assert b'aria-live="polite"' in acknowledgement.content
+    assert b'Copy Complaint ID' in acknowledgement.content
+    assert b'navigator.clipboard.writeText' in acknowledgement.content
 
 
 @pytest.mark.parametrize("field", ["category", "location", "title", "description", "priority"])
@@ -219,6 +222,12 @@ def test_history_failure_never_returns_an_acknowledgement(setup, settings):
 def test_entire_file_batch_is_validated_by_http_flow(setup, settings, files):
     response = submit(setup, evidence=files())
     assert response.status_code == 400
+    assert response.context["evidence_errors"]
+    message = response.context["evidence_errors"][0]
+    assert message not in response.context["form"].non_field_errors()
+    markup = response.content.decode()
+    assert markup.count(message) == 1
+    assert markup.index('id="id_evidence"') < markup.index('id="evidence-errors"') < markup.index('id="evidence-help"')
     assert_not_accepted(settings)
 
 

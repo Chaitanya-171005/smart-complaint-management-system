@@ -55,6 +55,7 @@ def _submission_response(request, form, token, *, status=200):
     return render(request, "complaints/submit.html", {
         "form": form, "request_token": token,
         "emergency_notice": settings.COMPLAINT_EMERGENCY_NOTICE,
+        "evidence_errors": getattr(form, "evidence_errors", ()),
     }, status=status)
 
 
@@ -102,11 +103,20 @@ def submit_complaint(request):
     except ValidationError as error:
         form, status = _form(data), 400
         form.is_valid()
+        evidence_codes = {"unreadable", "too_many", "filename", "type", "size", "content", "mismatch"}
+        form.evidence_errors = []
         if hasattr(error, "error_dict"):
             for name, errors in error.error_dict.items():
-                form.add_error(name if name in form.fields else None, errors)
+                if name == "evidence":
+                    form.evidence_errors.extend(message for item in errors for message in item.messages)
+                else:
+                    form.add_error(name if name in form.fields else None, errors)
         else:
-            form.add_error(None, error)
+            for item in error.error_list:
+                if item.code in evidence_codes:
+                    form.evidence_errors.extend(item.messages)
+                else:
+                    form.add_error(None, item)
     except (RoutingConfigurationError, SLAConfigurationError, DatabaseError, OSError):
         logger.warning("Complaint intake could not complete a required operation.")
         form, status = _form(data), 503
