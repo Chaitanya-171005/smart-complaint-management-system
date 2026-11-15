@@ -42,8 +42,12 @@ class ComplaintForm(forms.Form):
     location = forms.ChoiceField(choices=())
     title = SingleLineField(max_length=120)
     description = forms.CharField(
-        max_length=2000, widget=forms.Textarea(attrs={"minlength": 20}),
-        help_text="At least 20 characters. Spaces count; invisible padding does not.",
+        max_length=2000, widget=forms.Textarea(attrs={"cols": 20, "rows": 6}),
+        help_text=(
+            "At least 20 characters after trimming outer whitespace. Interior spaces "
+            "count; combining marks and invisible characters do not. "
+            "Bidirectional formatting controls are not allowed."
+        ),
         validators=[validate_description],
     )
     priority = forms.ChoiceField(choices=Priority.CHOICES, initial=Priority.MEDIUM)
