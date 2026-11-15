@@ -37,7 +37,8 @@ def _log_refusal(actor, target, reason):
         SecurityEvent.EventType.ROLE_CHANGE_REFUSED,
         user=actor if getattr(actor, "is_authenticated", False) else None,
         identifier=getattr(actor, "email", ""),
-        detail=f"{reason} (target user #{getattr(target, 'pk', '?')})",
+        target=f"User#{getattr(target, 'pk', '?')}",
+        detail=reason,
     )
 
 
@@ -112,8 +113,9 @@ def set_role_and_membership(actor, target, *, role, department=None):
                 SecurityEvent.EventType.ROLE_CHANGED,
                 user=actor_row,
                 identifier=actor_row.email,
+                target=f"User#{target_row.pk}",
                 detail=(
-                    f"user #{target_row.pk}: role {old['role']}->{new['role']}, "
+                    f"role {old['role']}->{new['role']}, "
                     f"department {old['department']}->{new['department']}"
                 ),
             )
@@ -126,6 +128,7 @@ def set_role_and_membership(actor, target, *, role, department=None):
         record_event(
             SecurityEvent.EventType.AUTHORIZATION_REFUSED,
             user=fresh_actor, identifier=fresh_actor.email,
+            target=f"User#{getattr(target, 'pk', '?')}",
             detail="set_role_and_membership: no longer an Administrator",
         )
         raise

@@ -37,8 +37,11 @@ reviewed change.
 ## Sensitive values
 
 Keys containing `password`, `token`, `secret`, `session` or `reference` are replaced with
-`[redacted]` at every depth of a dict or list before storage. Non-JSON values are stored as
-text. User audit records contain only `role` and `department`, never credentials or contact data.
+`[redacted]` at every depth of a dict or list before storage. Every string value, dict key and
+object text also goes through the same `scrub` as the security log
+(`accounts.security_log.scrub`), so a secret hiding in an ordinary field such as a description is
+replaced too: anonymous references, session keys, digests, other 32+ character token-like runs and
+`password=...` style text. Non-JSON values are stored as text. User audit records contain only `role` and `department`, never credentials or contact data.
 
 ## Role and membership changes are also security events
 

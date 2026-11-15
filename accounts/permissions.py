@@ -229,6 +229,8 @@ def _refuse(user, action, obj=None):
         SecurityEvent.EventType.AUTHORIZATION_REFUSED,
         user=known,
         identifier=getattr(known, "email", ""),
+        target=target,
+        # Kept as "action Model#id" so existing consumers of this text keep working.
         detail=f"{action} {target}".strip(),
     )
 

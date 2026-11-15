@@ -1,0 +1,11 @@
+Integration check against latest Main (scratch merge, not committed)
+
+Source revision: ceec65fed63a1ec95d561e6535a8ee657b6f472b (this branch, clean tree)
+Merged with:     Main at 5c375e7 (Merge pull request #76 from feature/B10-Q05-evidence-recovery)
+Merge result:    clean, no conflicts
+
+python manage.py check                          -> System check identified no issues
+python manage.py makemigrations --check         -> No changes detected
+python -m pytest -q                             -> 1092 passed, 2 subtests passed
+
+The branch alone (pytest.txt in this directory): 1062 passed.

@@ -221,6 +221,44 @@ def test_credentials_and_tokens_are_redacted_at_any_depth(admin):
     assert event.old_values["password"] == REDACTED and event.new_values["role"] == "STAFF"
 
 
+def test_secrets_embedded_in_ordinary_values_are_scrubbed_at_any_depth(admin):
+    import hashlib
+    import secrets
+
+    reference = secrets.token_hex(16)
+    digest = hashlib.sha256(reference.encode()).hexdigest()
+    session_key = "a1B2c3D4e5F6g7H8i9J0k1L2m3N4o5P6"
+
+    class Odd:
+        def __str__(self):
+            return f"odd object holding {reference}"
+
+    record_change(
+        actor=admin, entity_type="Category", entity_id=1, action="UPDATE",
+        old={"description": f"see {reference} for details", "name": "Lift",
+             "items": [{"note": "password=hunter2"}, ["plain", f"digest {digest}"]]},
+        new={"meta": {"deep": {"text": session_key, "ok": "short text"}},
+             "weird": Odd(), f"{reference}": "value", "count": 3, "flag": True, "none": None},
+    )
+    event = ConfigAuditEvent.objects.get()
+    dump = str(event.old_values) + str(event.new_values)
+    for secret in (reference, digest, session_key, "hunter2"):
+        assert secret not in dump
+    assert event.old_values["name"] == "Lift" and event.old_values["description"].startswith("see ")
+    assert event.new_values["meta"]["deep"]["ok"] == "short text"
+    assert event.new_values["count"] == 3 and event.new_values["flag"] is True and event.new_values["none"] is None
+    page = login(admin).get(AUDIT_URL).content.decode()
+    for secret in (reference, digest, session_key, "hunter2"):
+        assert secret not in page
+
+
+def test_ordinary_names_and_codes_are_not_mangled(admin):
+    record_change(actor=admin, entity_type="Location", entity_id=2, action="CREATE",
+                  new={"code": "HOSTEL-BLOCK-A-ROOM-101", "block": "Block A", "room_area": "Room 101"})
+    assert ConfigAuditEvent.objects.get().new_values == {
+        "code": "HOSTEL-BLOCK-A-ROOM-101", "block": "Block A", "room_area": "Room 101"}
+
+
 def test_user_role_audit_carries_no_credentials(admin, user_factory, department_factory):
     person = user_factory()
     users.set_role_and_membership(admin, person, role="STAFF", department=department_factory())
