@@ -5,6 +5,7 @@ secure cookies/CSRF. Its test-only gate overrides are not deployment approval.
 """
 
 import http.client
+from concurrent.futures import ThreadPoolExecutor
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import json
 import os
@@ -17,14 +18,17 @@ from urllib.parse import urlsplit
 
 import pytest
 from playwright.sync_api import expect, sync_playwright
+from django.db import close_old_connections, connections
 
 from complaints.models import AnonymousIntakeReceipt, Complaint, IntakeReceipt
 
 pytestmark = pytest.mark.django_db(transaction=True)
 
 
-@pytest.fixture(scope="session")
-def chromium():
+@pytest.fixture
+def chromium(browser_site):
+    # Django's database and fixture writes must finish before Playwright starts
+    # its main-thread event loop. Stop that loop before Django fixture teardown.
     with sync_playwright() as runtime:
         options = {"headless": True}
         if os.environ.get("SCMS_CHROMIUM_EXECUTABLE"):
@@ -40,6 +44,23 @@ def chromium():
             }, indent=2) + "\n")
         yield browser
         browser.close()
+
+
+def database_state():
+    """Read real persistence outside Playwright's active main-thread loop."""
+    def read():
+        close_old_connections()
+        try:
+            return {
+                "complaints": list(Complaint.objects.values("description", "submitted_by_id")),
+                "authenticated_receipts": IntakeReceipt.objects.count(),
+                "anonymous_receipts": AnonymousIntakeReceipt.objects.count(),
+            }
+        finally:
+            connections.close_all()
+
+    with ThreadPoolExecutor(max_workers=1) as pool:
+        return pool.submit(read).result()
 
 
 @pytest.fixture(scope="session")
@@ -165,7 +186,7 @@ def test_normal_submit_shows_accessible_inline_error_at_320(
         assert page.evaluate("document.documentElement.scrollWidth") == 320
         assert page.locator('[name="request_token"]').input_value() == token
         assert page.get_by_label("Title").input_value() == "Synthetic browser complaint"
-        assert Complaint.objects.count() == IntakeReceipt.objects.count() == AnonymousIntakeReceipt.objects.count() == 0
+        assert database_state() == {"complaints": [], "authenticated_receipts": 0, "anonymous_receipts": 0}
         expect(page.locator("#id_description_helptext")).to_contain_text("Interior spaces count")
         if description == "Bad" and os.environ.get("SCMS_BROWSER_EVIDENCE_DIR"):
             folder = Path(os.environ["SCMS_BROWSER_EVIDENCE_DIR"])
@@ -181,10 +202,10 @@ def test_normal_submit_shows_accessible_inline_error_at_320(
         assert pending.value.status == (200 if anonymous else 303)
         expect(page.get_by_role("heading", level=1)).to_have_text(
             "Anonymous complaint accepted" if anonymous else "Your complaint was submitted")
-        complaint = Complaint.objects.get()
-        assert complaint.description == corrected
-        assert complaint.submitted_by_id == (None if anonymous else user.pk)
-        assert (AnonymousIntakeReceipt.objects.count(), IntakeReceipt.objects.count()) == (
+        state = database_state()
+        assert state["complaints"] == [{"description": corrected,
+            "submitted_by_id": None if anonymous else user.pk}]
+        assert (state["anonymous_receipts"], state["authenticated_receipts"]) == (
             (1, 0) if anonymous else (0, 1))
     finally:
         context.close()
