@@ -160,9 +160,15 @@ def test_normal_submit_shows_accessible_inline_error_at_320(
             page.get_by_role("button", name="Sign in", exact=True).click()
             expect(page).to_have_url(origin + "/accounts/landing/complainant/")
         path = "/anonymous/new/" if anonymous else "/complaints/new/"
-        assert page.goto(origin + path).status == 200
+        initial = page.goto(origin + path)
+        assert initial.status == 200
+        if anonymous:
+            assert initial.headers["referrer-policy"] == "same-origin"
         page.locator("#id_category").select_option(str(config["category"].pk))
         page.locator("#id_location").select_option(config["location"].code)
+        # The per-test configuration deliberately supplies LOW's category SLA;
+        # migrated global defaults are removed by transactional test flushes.
+        page.locator("#id_priority").select_option("LOW")
         page.get_by_label("Title").fill("Synthetic browser complaint")
         field = page.get_by_label("Description")
         field.fill(description)
@@ -172,6 +178,7 @@ def test_normal_submit_shows_accessible_inline_error_at_320(
         with page.expect_response(lambda r: r.request.method == "POST" and urlsplit(r.url).path == path) as pending:
             button.click()
         assert pending.value.status == 400
+        assert pending.value.request.headers["origin"] == origin
         error = page.locator("#id_description_error")
         expect(error.locator("li")).to_have_count(1)
         expect(error).to_contain_text("Enter at least 20 characters")
@@ -200,6 +207,9 @@ def test_normal_submit_shows_accessible_inline_error_at_320(
         with page.expect_response(lambda r: r.request.method == "POST" and urlsplit(r.url).path == path) as pending:
             button.click()
         assert pending.value.status == (200 if anonymous else 303)
+        assert pending.value.request.headers["origin"] == origin
+        if anonymous:
+            assert pending.value.headers["referrer-policy"] == "no-referrer"
         expect(page.get_by_role("heading", level=1)).to_have_text(
             "Anonymous complaint accepted" if anonymous else "Your complaint was submitted")
         state = database_state()

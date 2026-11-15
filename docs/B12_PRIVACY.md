@@ -19,7 +19,7 @@ certification for unimplemented reports, notifications or tracking.
 | Unauthorized reads | An account does not become owner merely by using the anonymous page. Anonymous callers/reference/ID holders cannot use authenticated acknowledgements or evidence downloads. Department permissions still govern staff access. |
 | Security refusals | An account's authorization refusal is retained, but the anonymous complaint target is generic, without its PK/ID, preventing an account-to-anonymous-complaint join in SecurityEvent. |
 | Error responses/reports | Generic errors, sensitive POST/local variables, no account/session/cookie/query/file values in anonymous Django exception reports; raw exception values are not emitted by view/cleanup handlers. |
-| Browser response | HTTPS required; no-store/private/no-cache, no-referrer, noindex/noarchive, no external resources/scripts and restrictive CSP on the anonymous route. |
+| Browser response | HTTPS required; no-store/private/no-cache, noindex/noarchive, no external resources/scripts and restrictive CSP on the anonymous route. The submission form uses same-origin referrers for strict CSRF; the accepted private-reference page and other non-form responses use no-referrer. |
 
 `complaints.privacy.complainant_label()` returns exactly `Anonymous` for an
 anonymous record, without guessing identity from assignees/uploaders/sessions.

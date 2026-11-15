@@ -51,3 +51,25 @@ campus label, screen-reader behavior, every browser, unaided testing or final Q0
 PR83 also edits the authenticated view. Its upload-error placement must be
 preserved alongside PR89's `add_unique_error` calls when those branches integrate.
 This follow-up does not replace the view or merge PR83 into PR89.
+
+## Anonymous native-form Origin policy
+
+`Referrer-Policy: no-referrer` makes Chromium send `Origin: null` for ordinary
+HTML form POSTs, which Django correctly rejects. The anonymous submission form
+and its inline-error responses therefore use `same-origin`: referrers are not
+sent to other origins, and same-origin form POSTs retain their actual Origin.
+The accepted page containing the one-response private reference and non-form
+errors retain `no-referrer`. The privacy middleware still strips incoming
+Referer paths/queries before downstream processing. No CSRF exemption, null
+Origin allowlist, disabled origin check or additional trusted origin is added.
+
+This is an intentional, limited update to the documented browser policy and
+requires the normal privacy/security review before anonymous release. Django's
+guidance describes the incompatibility of fully suppressed referrers and strict
+HTTPS CSRF checks: https://docs.djangoproject.com/en/6.1/ref/middleware/#referrer-policy
+
+The browser fixture selects LOW explicitly because its per-test routing setup
+provides that category SLA. Transactional test flushes remove migrated global
+defaults; depending on the initial MEDIUM default made later corrected
+submissions fail for missing fixture configuration. This does not change the
+application's priority default or any deployed SLA policy.

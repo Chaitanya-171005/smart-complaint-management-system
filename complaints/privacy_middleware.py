@@ -108,7 +108,10 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 cookie["max-age"] = ""
                 cookie["expires"] = ""
             patch_cache_control(response, private=True, no_store=True, no_cache=True, max_age=0)
-            response["Referrer-Policy"] = "no-referrer"
+            response["Referrer-Policy"] = (
+                "same-origin" if getattr(response, "_anonymous_intake_form", False)
+                else "no-referrer"
+            )
             response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
             response["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
         return response

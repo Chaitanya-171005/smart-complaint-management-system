@@ -88,7 +88,12 @@ def anonymous_submission(request):
                     "complaint_id": result.complaint_id, "reference": result.reference,
                     "replayed": result.replayed,
                 })
-    return render(request, "complaints/anonymous_submit.html", {
+    response = render(request, "complaints/anonymous_submit.html", {
         "form": form, "request_token": token,
         "emergency_notice": settings.COMPLAINT_EMERGENCY_NOTICE,
     }, status=status)
+    # Native form POSTs need a non-null Origin for Django's CSRF check. Only
+    # this form (never the one-response private-reference page) gets the
+    # same-origin referrer policy applied by the privacy middleware.
+    response._anonymous_intake_form = True
+    return response
