@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.urls import path
 
 from . import views
@@ -7,7 +8,15 @@ from . import dashboard_views
 
 app_name = "workflow"
 
+
+def retired_anonymous_route(request):
+    """Keep retired anonymous entry points out of the authenticated catch-all."""
+    raise Http404
+
+
 urlpatterns = [
+    path("anonymous/", retired_anonymous_route),
+    path("track/", retired_anonymous_route),
     path("dashboard/", dashboard_views.dashboard, name="dashboard"),
     path("departments/<int:department_id>/report/", dashboard_views.dashboard, name="department_report"),
     path("notifications/", notification_views.notification_list, name="notifications"),
