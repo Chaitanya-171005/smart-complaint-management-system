@@ -13,3 +13,5 @@ coverage.json
 .pytest_cache/
 build/evidence/
 private-evidence/
+staticfiles/
+.env.docker

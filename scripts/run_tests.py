@@ -5,7 +5,8 @@ Use --evidence-dir explicitly to refresh a committed evidence directory.
 
 import argparse
 import json
-import subprocess
+# The CI runner invokes a fixed argv list of repository-controlled commands.
+import subprocess  # nosec B404
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -26,7 +27,8 @@ def sanitize(text):
 
 
 def run(command):
-    result = subprocess.run(
+    # Call sites pass fixed repository-controlled Python argv without a shell.
+    result = subprocess.run(  # nosec B603
         command, cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         text=True, encoding="utf-8", errors="replace",
     )

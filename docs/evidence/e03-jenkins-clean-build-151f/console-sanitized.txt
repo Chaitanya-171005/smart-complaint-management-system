@@ -1,0 +1,25 @@
+Sanitized checkout, stage and result markers from Jenkins build 2.
+Checking out Revision 151f235395efaa80bbbdd798a39661290f4571e3 (detached)
+CHECKOUT_CLEAN=true
+CHECKOUT_SHA=151f235395efaa80bbbdd798a39661290f4571e3
+CHECKOUT_CLEAN=true
+[Pipeline] { (Install verification tools)
+[Pipeline] { (Static and security checks)
+[2026-11-12T11:53:52.721Z] + python -m bandit -q -r accounts complaints routing workflow scms manage.py scripts -x **/test_*.py,**/tests.py,scripts/q04_load.py
+[2026-11-12T11:53:53.597Z] + python -m pip_audit -r requirements.txt -r requirements-dev.txt
+[2026-11-12T11:54:03.542Z] No known vulnerabilities found
+[Pipeline] { (Django checks, tests and coverage)
+[2026-11-12T11:54:04.441Z] System check identified no issues (0 silenced).
+[2026-11-12T11:54:05.008Z] No changes detected
+[2026-11-12T11:55:56.511Z] TOTAL                                                   2755     86    692     45  96.14%
+[2026-11-12T11:55:56.511Z] ======================= 1170 passed in 96.93s (0:01:36) ========================
+[2026-11-12T11:55:56.511Z] Coverage gate: PASS
+[Pipeline] { (Build container image)
+[2026-11-12T11:55:56.957Z] + docker build --pull --tag scms-app:151f235395efaa80bbbdd798a39661290f4571e3 .
+[2026-11-12T11:56:37.667Z] Successfully built 1cd3a9b57b57
+[2026-11-12T11:56:37.667Z] Successfully tagged scms-app:151f235395efaa80bbbdd798a39661290f4571e3
+[2026-11-12T11:56:38.228Z] System check identified no issues (0 silenced).
+[Pipeline] { (Deploy to production)
+Stage "Deploy to production" skipped due to when conditional
+[Pipeline] { (Declarative: Post Actions)
+Finished: SUCCESS

@@ -1,0 +1,11 @@
+{
+  "jenkins_job": "SCMS-E03-Clean-151f",
+  "jenkins_build": 2,
+  "result": "SUCCESS",
+  "source_revision": "151f235395efaa80bbbdd798a39661290f4571e3",
+  "working_tree_dirty": false,
+  "deployment_requested": false,
+  "preflight": "Exact commit, empty git status --porcelain --untracked-files=all, and absence of E03-original.Jenkinsfile verified before loading committed Jenkinsfile.",
+  "jenkinsfile_sha256": "e80289fb6e724854a19fdc84e7a0425bb67c2465c3cb00f0a795178196e1301c",
+  "agent_note": "Isolated local job set LD_LIBRARY_PATH=/usr/local/lib for Python virtual environments."
+}

@@ -1,0 +1,12 @@
+{
+  "jenkins_build": 6,
+  "result": "SUCCESS",
+  "checked_out_commit": "f300552a7f318fe8640296cfa45fbcb4f845e530",
+  "source_note": "Jenkinsfile and test_jenkins_pipeline.py were replaced with uncommitted local fixes after checkout; this is not clean-commit validation. The local docs change was not copied into the build workspace.",
+  "deployment_requested": false,
+  "jenkinsfile_sha256": "e80289fb6e724854a19fdc84e7a0425bb67c2465c3cb00f0a795178196e1301c",
+  "pipeline_test_sha256": "1aa662dbdaea75ec767eaa539980aac25248de27f0cff2e08ca7f3848e1a362d",
+  "agent_note": "Local wrapper set LD_LIBRARY_PATH=/usr/local/lib for agent Python virtual environments.",
+  "workspace_untracked_note": "E03-original.Jenkinsfile was already present in the Jenkins workspace and had the same SHA-256 as the committed Jenkinsfile. The Docker build context included this extra copy.",
+  "original_jenkinsfile_sha256": "c71e5c760c32381537df7fd080e65073c36200f91634eea0526ea78f640db8f2"
+}

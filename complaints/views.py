@@ -27,7 +27,8 @@ from .intake import HEX_DIGEST, IdempotencyConflict, IntakeReconciliationRequire
 from .models import Attachment, IntakeReceipt
 from .submission import submit_authenticated_complaint
 
-TOKEN_SALT = "complaints.authenticated-intake"
+# Django signing salts are public domain-separation values; SECRET_KEY authenticates signatures.
+TOKEN_SALT = "complaints.authenticated-intake"  # nosec B105
 logger = logging.getLogger(__name__)
 
 

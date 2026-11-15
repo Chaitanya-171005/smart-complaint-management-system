@@ -1,0 +1,5 @@
+pip-audit version: 2.9.0
+Python version: 3.14.6
+Command: pip-audit -r requirements.txt -r requirements-dev.txt
+Output: No known vulnerabilities found
+Exit code: 0

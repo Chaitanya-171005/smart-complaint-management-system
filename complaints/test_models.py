@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import pytest
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError, transaction
+from django.db import DataError, IntegrityError, transaction
 from django.utils import timezone
 
 from .models import Complaint
@@ -68,7 +68,8 @@ def test_database_rejects_duplicate_reference_digests_and_identifiers(complaint_
 @pytest.mark.parametrize("identifier", ["bad", "SCMS-2026-000001x", "SCMS-2026-ABCDEF"])
 def test_database_rejects_malformed_identifiers(complaint_fields, identifier):
     complaint_fields["complaint_id"] = identifier
-    with pytest.raises(IntegrityError), transaction.atomic():
+    # Backends raise different exception types for the same rejection.
+    with pytest.raises((IntegrityError, DataError)), transaction.atomic():
         Complaint.objects.create(**complaint_fields, reference_digest="a" * 64)
 
 
@@ -83,7 +84,7 @@ def test_database_enforces_text_limits_on_sqlite_too(complaint_fields, field, li
     complaint_fields[field] = ("1" if field == "category_key" else "x") * (limit + 1)
     if field == "routing_rule_key":
         complaint_fields["unrouted"] = False
-    with pytest.raises(IntegrityError), transaction.atomic():
+    with pytest.raises((IntegrityError, DataError)), transaction.atomic():
         Complaint.objects.create(**complaint_fields, reference_digest="a" * 64)
 
 
