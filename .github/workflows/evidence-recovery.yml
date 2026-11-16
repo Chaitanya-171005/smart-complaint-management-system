@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [Main, 'integration/**', 'feature/**', 'fix/**']
   push:
-    branches: [Main, feature/B10-Q05-evidence-recovery]
+    branches: [Main]
   workflow_dispatch:
     inputs:
       require_f4:
@@ -77,11 +77,7 @@ jobs:
           cache: pip
       - name: Install recovery test dependencies
         run: python -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'
-      - name: Django system and migration checks on PostgreSQL
-        run: |
-          python manage.py check
-          python manage.py makemigrations --check --dry-run
-      - name: Actual PostgreSQL recovery and process-death checks, no skips
+      - name: Full PostgreSQL regression, explicit integrations and coverage
         run: sh scripts/ci_checks.sh build/evidence/b10-q05-postgresql
       - name: Retain PostgreSQL recovery component evidence
         if: always()

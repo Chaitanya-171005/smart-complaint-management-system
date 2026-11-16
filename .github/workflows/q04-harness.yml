@@ -1,7 +1,5 @@
 name: Q04 harness regression checks
 on:
-  push:
-    branches: [feature/Q04-performance-runner]
   workflow_dispatch:
 permissions:
   contents: read

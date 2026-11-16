@@ -1,6 +1,7 @@
 """Deterministic CI failure and dependency-gate contracts."""
 from types import SimpleNamespace
 import subprocess
+from pathlib import Path
 
 import pytest
 
@@ -68,3 +69,23 @@ def test_real_pytest_collects_default_and_explicit_checks_exactly_once(tmp_path)
     assert "2 tests collected" in result.stdout
     assert result.stdout.count("::test_default") == 1
     assert result.stdout.count("::test_explicit") == 1
+
+
+def test_automation_uses_canonical_gates_without_failure_suppression():
+    root = Path(__file__).resolve().parent
+    workflow = (root / ".github/workflows/evidence-recovery.yml").read_text()
+    assert "branches: [Main, 'integration/**', 'feature/**', 'fix/**']" in workflow
+    assert "branches: [Main]" in workflow
+    assert "paths:" not in workflow
+    assert workflow.count("sh scripts/ci_checks.sh") == 2
+    assert "postgres:17.6" in workflow
+    assert "SCMS_CI_REQUIRE_F4:" in workflow
+    assert "continue-on-error" not in workflow
+    for name in ("anonymous-recovery.yml", "q04-harness.yml"):
+        specialized = (root / ".github/workflows" / name).read_text()
+        assert "workflow_dispatch:" in specialized
+        assert "pull_request:" not in specialized and "push:" not in specialized
+    jenkins = (root / "Jenkinsfile").read_text()
+    assert "sh scripts/ci_checks.sh" in jenkins
+    assert "SCMS_CI_DATABASE_ISOLATED = '1'" in jenkins
+    assert "${BUILD_NUMBER}.sqlite3" in jenkins

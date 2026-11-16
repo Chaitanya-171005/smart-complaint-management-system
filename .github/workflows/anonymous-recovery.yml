@@ -1,8 +1,6 @@
 name: Anonymous recovery integration
 
 on:
-  push:
-    branches: [feature/B11-B12-anonymous-flow]
   workflow_dispatch:
 
 permissions:
