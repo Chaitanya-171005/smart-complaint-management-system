@@ -13,12 +13,12 @@ class Command(BaseCommand):
         except Exception as exc:
             run = getattr(exc, "escalation_run", None)
             if run is None:
-                raise CommandError("Escalation run could not start.") from exc
+                raise CommandError("Escalation run could not start.") from None
             self.stdout.write(
                 f"run={run.pk} status={run.status} examined={run.examined} "
                 f"escalated={run.escalated} skipped={run.skipped} failed={run.failed}"
             )
-            raise CommandError("Escalation run failed.") from exc
+            raise CommandError("Escalation run failed.") from None
         self.stdout.write(
             f"run={run.pk} status={run.status} examined={run.examined} "
             f"escalated={run.escalated} skipped={run.skipped} failed={run.failed}"
