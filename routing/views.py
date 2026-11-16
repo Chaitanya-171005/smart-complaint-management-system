@@ -157,10 +157,22 @@ def configuration(request):
 @require_http_methods(["GET"])
 def queue(request):
     from .queue import department_queue_page
+    from complaints.privacy import anonymous_summary, complainant_label
 
     page = department_queue_page(request.user, request.user.department_id, request.GET.get("page", 1))
     staff = User.objects.filter(role=User.Role.STAFF, is_active=True, department_id=request.user.department_id)
-    return render(request, "routing/queue.html", {"page": page, "staff": staff})
+    queue_items = []
+    for complaint in page.object_list:
+        summary = anonymous_summary(complaint) if complaint.submitted_by_id is None else None
+        queue_items.append({
+            "complaint": complaint,
+            "summary": summary,
+            "complainant": summary["complainant"] if summary else complainant_label(complaint),
+            # Complaint text is useful in authenticated workflows but can itself
+            # identify an anonymous reporter, so it is never rendered for one.
+            "title": "Anonymous complaint" if summary else complaint.title,
+        })
+    return render(request, "routing/queue.html", {"page": page, "queue_items": queue_items, "staff": staff})
 
 
 @role_required(User.Role.HEAD)

@@ -12,6 +12,7 @@ test_db.sqlite3
 coverage.json
 .pytest_cache/
 build/evidence/
+build/*ci*.sqlite3*
 private-evidence/
 staticfiles/
 .env.docker

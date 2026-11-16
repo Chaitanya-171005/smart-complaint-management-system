@@ -465,7 +465,7 @@ def test_anonymous_reference_or_id_never_grants_full_record_or_evidence(setup, c
     assert permissions.can_view_complaint(staff, complaint)
     assert complainant_label(complaint) == "Anonymous"
     summary = anonymous_summary(complaint)
-    assert set(summary) == {"complaint_id", "complainant", "category", "location", "status", "is_escalated", "escalation_level"}
+    assert set(summary) == {"complaint_id", "complainant", "category", "location", "status", "priority", "is_escalated", "escalation_level"}
     assert not {"submitted_by", "reference_digest", "attachments", "title", "description"} & set(summary)
 
 
