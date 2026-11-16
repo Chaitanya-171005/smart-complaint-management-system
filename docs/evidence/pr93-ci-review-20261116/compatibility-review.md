@@ -12,8 +12,8 @@ Review heads: PR92 43ff72a80eabcd79091e3c7e0f06107c004fb189; PR93 fc8f41a9a3e34b
 - Reviewed anonymous_summary, department queue rendering/authorization, assignment, escalation and the F3/F4 durable notification handoff.
 - Reviewed canonical private-reference paths, CSRF/isolation/rate limiting, feedback projections and current department authorization in the combined candidate.
 - 211 focused SQLite cases passed on PR92 itself. 285 PostgreSQL cases passed on the local combined candidate, including anonymous privacy/tracking, assignment/escalation handoff and reference feedback. Suites overlap.
-- No confirmed blocking F2/F3 privacy/routing defect was found within that reviewed scope. This is not a full independent SMTP/deployment/F4 approval.
-- The published PR93 review names the two CI issues. The chat mentions a privacy issue without an exact route, reproduction or requested change. That separate claim remains unverified; request the precise finding from Chaitanya and do not mark it resolved based on green CI.
+- Correction: the original scoped review missed the case-variant rejection-reason bypass. Chaitanya independently confirmed that uppercase/mixed-case private references and digests could be persisted and displayed to assigned staff. This is a confirmed P1 privacy vulnerability, not an unverified claim.
+- The earlier scoped checks and passing CI did not establish absence of this vulnerability. This note does not approve production SMTP/deployment/F4 or final privacy acceptance.
 
 ## Integration
 The local combined candidate is a compatibility experiment, not a public merge. The only content conflict was .env.docker.example. Both F2 feedback/reopen defaults and F3 SMTP settings were retained; all release gates remain disabled. Chaitanya's chosen merge order and final Main verification are still required.
@@ -28,5 +28,20 @@ The official Q04 queue/assignment benchmark awaits a newly confirmed window on a
 - These local combined results are not hosted CI results for the public PR93 head. Docker Compose preflight and real Redis/nginx/TLS/browser execution were not rerun on this combined candidate here; the Docker CLI is unavailable and browser execution was blocked earlier. The existing Mac/hosted 14-case evidence belongs to the previous source.
 - No Main/PR92 merge was pushed. After the chosen merge order, run the full shared CI entry point and browser/integration jobs on the final source.
 
-## Suggested scoped review text for PR92
-Reviewed the anonymous privacy/routing overlap at 43ff72a80eabcd79091e3c7e0f06107c004fb189. The scoped SQLite review passed 211 cases; local PR92+PR93 PostgreSQL integration passed 285 cases; the clean combined regression passed 1,977 with 96.85% coverage and all module gates. No confirmed blocking finding in the reviewed F2/F3 privacy/routing scope. This does not establish production SMTP/privacy or full F4 acceptance. The local combination needed one .env.docker.example conflict resolution preserving both sets of defaults. Please provide the exact privacy reproduction/line mentioned for PR93; the posted PR93 review currently specifies the two CI issues, which have been corrected in the prepared update.
+## Correction and verification of confirmed P1 disclosure
+
+The confirmed vulnerability was present in PR93 commit `20fd191e4f94a09c1067397557b3410af4387d94` and in the earlier local combined candidate. A rejection reason containing a case variant of the private reference or its SHA-256 digest bypassed the case-sensitive check and could reach protected feedback records and staff HTML. See [the independent finding](https://github.com/Chaitanya-171005/smart-complaint-management-system/pull/93#issuecomment-6920768676). The original scoped review missed this case; its prior “unverified” characterization is withdrawn.
+
+The runtime correction is published in commit `ff26d5416e14be6353fa4dbb87458a5d49af279a`, with evidence in `855d18699f6c10b6856042ac38c662123bcd37fd`. It case-folds the disclosure comparison for rejection text, the private reference and its digest before any complaint/history/feedback/notification changes. Reference authentication remains canonical and case-sensitive.
+
+Twenty-four committed regression cases cover lowercase, uppercase and mixed-case references/digests, both reopening and maximum-reopen Head review, service rejection, CSRF-protected HTTP responses, unchanged database snapshots, and both authorized Staff/Head outputs. Earlier positive-feedback, authorization, rate-limit, CSRF and rollback checks remain covered.
+
+Actual verification of the corrected source (tree `7963144cd5f95eac29aa3d1438485acfab40a354`):
+- Linux: 1,908 full regression tests passed, 96.80% overall coverage, all module coverage gates passed.
+- Linux: 192 focused SQLite checks and the same 192 checks on disposable PostgreSQL 17.6 passed.
+- Mac: 192 focused checks passed, with zero failures, errors or skips.
+- The five hosted CI checks on evidence commit `855d18699f6c10b6856042ac38c662123bcd37fd` passed.
+- Suites overlap; these counts must not be added as unique tests. Evidence is committed under `docs/evidence/pr93-reference-privacy-20261116/`.
+
+The 1,977-test combined run above predates this security correction and is retained only as historical compatibility evidence. It does not prove the P1 fix or final PR92/Main integration acceptance. Final security re-review, the chosen merge order and full verification of the final combined Main source remain required. No Main merge, release activation, official Q04 benchmark or production SMTP/deployment acceptance is claimed by this documentation correction.
+
