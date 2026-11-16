@@ -9,6 +9,7 @@ on:
       - 'requirements*.txt'
       - 'conftest.py'
       - '.github/workflows/b13-redis.yml'
+      - 'test_github_workflows.py'
   push:
     branches: [Main, feature/B13-reference-tracking]
   workflow_dispatch:
@@ -22,6 +23,8 @@ jobs:
     timeout-minutes: 15
     env:
       DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+      DJANGO_SETTINGS_MODULE: scms.settings
+      DJANGO_DB_ENGINE: sqlite
       SCMS_DISPOSABLE_REDIS: 'True'
       SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
     steps:
@@ -46,11 +49,23 @@ jobs:
             sleep 1
           done
           docker exec b13-test-redis redis-cli ping
+      - name: Prepare disposable CI database and evidence storage
+        shell: bash
+        run: |
+          set -euo pipefail
+          ci_data="$(mktemp -d "$RUNNER_TEMP/scms-b13-data.XXXXXX")"
+          mkdir -p "$ci_data/private-evidence"
+          {
+            printf 'DJANGO_DB_PATH=%s/db.sqlite3\n' "$ci_data"
+            printf 'PRIVATE_EVIDENCE_ROOT=%s/private-evidence\n' "$ci_data"
+            printf 'SCMS_CI_DATABASE_ISOLATED=1\n'
+          } >> "$GITHUB_ENV"
       - name: System, migration, full tests and coverage gates
         run: sh scripts/ci_checks.sh build/evidence/b13-review
       - name: Execute real Redis and real TLS proxy checks (no skips)
         shell: bash
         run: |
+          set -euo pipefail
           mkdir -p build/evidence/b13-review
           python -m pytest integration_checks/tracking_redis.py --no-cov -q \
             | tee build/evidence/b13-review/real-redis-proxy.txt
