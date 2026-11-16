@@ -1,0 +1,4 @@
+# D05 PROPOSED policy; team approval required before installing this example.
+# Same protected environment/persistent DB as web and notification worker.
+# Default COMPLAINT_AUTO_CLOSE_DAYS=7; adjust runtime path/user and batch size.
+*/5 * * * * cd /srv/scms && /srv/scms/.venv/bin/python manage.py auto_close_complaints --limit 100
