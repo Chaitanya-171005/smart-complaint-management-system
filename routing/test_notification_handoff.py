@@ -25,7 +25,12 @@ def publisher(monkeypatch, callback):
     monkeypatch.setattr(notifications, "import_module", lambda name: module)
 
 
-def test_missing_f4_preserves_history_without_claiming_delivery(routing_configuration, complaint_factory):
+def test_missing_f4_preserves_history_without_claiming_delivery(routing_configuration, complaint_factory, monkeypatch):
+    # Exercise the unavailable-adapter branch explicitly, including when this
+    # regression is later run in a checkout that has the real F4 publisher.
+    def unavailable(name):
+        raise ModuleNotFoundError(name="workflow.notifications")
+    monkeypatch.setattr(notifications, "import_module", unavailable)
     complaint = overdue(complaint_factory)
     run = run_escalation()
     event = ComplaintHistory.objects.get(complaint_ref=complaint.complaint_id, event_type="ESCALATED")

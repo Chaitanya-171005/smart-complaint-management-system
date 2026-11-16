@@ -72,7 +72,11 @@ def test_small_benchmark_checks_history_controls_repeat_and_interruption():
     result = benchmark.measure(eligible, controls)
     assert result["processed"] == result["new_history"] == 6
     assert result["repeat_processed"] == result["duplicate_history_groups"] == 0
-    assert result["notification_dependency"] == "F4_NOT_INSTALLED"
+    if benchmark.notification_counts() is None:
+        assert result["notification_dependency"] == "F4_NOT_INSTALLED"
+    else:
+        assert result["notification_dependency"] == "F4_OUTBOX_VERIFIED"
+        assert result["notification_delta"]["NotificationEvent"] == 6
     assert result["timed_queries"] > 0 and result["elapsed_seconds"] > 0
     result = benchmark.interruption_check(SimpleNamespace(**options), timezone.now())
     assert result["committed_before_interrupt"] == 3
