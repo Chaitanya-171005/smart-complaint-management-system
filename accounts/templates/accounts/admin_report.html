@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus report - SCMS</title>
+</head>
+<body>
+  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+  <h1>Campus report</h1>
+  <form method="get">
+    {{ form.as_p }}
+    <button type="submit">Show report</button>
+  </form>
+  {% if report %}
+  <p>{{ report.scope_label }}, {{ report.date_from|date:"Y-m-d" }} to {{ report.date_to|date:"Y-m-d" }} (both days included).
+     <a href="?{{ report_query }}&amp;export=csv">Download CSV with these figures</a></p>
+  <p>{{ report.rules_text }}</p>
+  <table>
+    <caption>Summary</caption>
+    <tr><th scope="col">Measure</th><th scope="col">Value</th></tr>
+    <tr><td>Total complaints</td><td>{{ report.total }}</td></tr>
+    <tr><td>Open</td><td>{{ report.open_count }}</td></tr>
+    <tr><td>Overdue</td><td>{{ report.overdue_count }}</td></tr>
+    <tr><td>Escalated</td><td>{{ report.escalated_count }}</td></tr>
+    <tr><td>Reopened (complaints)</td><td>{{ report.reopened_count }}</td></tr>
+    <tr><td>Reopens (total count)</td><td>{{ report.reopen_total }}</td></tr>
+    <tr><td>Complaints measured for resolution time</td><td>{{ report.resolved_measured }}</td></tr>
+    <tr><td>Excluded (non-positive duration)</td><td>{{ report.resolved_excluded }}</td></tr>
+    <tr><td>Mean resolution time (hours)</td><td>{{ report.mean_hours|default_if_none:"-" }}</td></tr>
+    <tr><td>Median resolution time (hours)</td><td>{{ report.median_hours|default_if_none:"-" }}</td></tr>
+  </table>
+  <table>
+    <caption>Complaints by category</caption>
+    <tr><th scope="col">Category</th><th scope="col">Complaints</th></tr>
+    {% for label, count in report.by_category %}<tr><td>{{ label }}</td><td>{{ count }}</td></tr>
+    {% empty %}<tr><td colspan="2">No complaints in this range.</td></tr>{% endfor %}
+  </table>
+  <table>
+    <caption>Complaints by location</caption>
+    <tr><th scope="col">Location</th><th scope="col">Complaints</th></tr>
+    {% for label, count in report.by_location %}<tr><td>{{ label }}</td><td>{{ count }}</td></tr>
+    {% empty %}<tr><td colspan="2">No complaints in this range.</td></tr>{% endfor %}
+  </table>
+  <table>
+    <caption>Complaints by department</caption>
+    <tr><th scope="col">Department</th><th scope="col">Complaints</th></tr>
+    {% for label, count in report.by_department %}<tr><td>{{ label }}</td><td>{{ count }}</td></tr>
+    {% empty %}<tr><td colspan="2">No complaints in this range.</td></tr>{% endfor %}
+  </table>
+  {% endif %}
+</body>
+</html>
