@@ -109,6 +109,31 @@ def test_invalid_or_credential_bearing_rejection_never_persists(case, reason):
     assert snapshot(case[0]) == before
 
 
+def credential_variant(value, variant):
+    if variant == 'upper':
+        return value.upper()
+    if variant == 'mixed':
+        return ''.join(char.upper() if index % 2 else char for index, char in enumerate(value))
+    return value
+
+
+@pytest.mark.parametrize('maximum', [0, 2], ids=['head-review', 'reopen'])
+@pytest.mark.parametrize('secret', ['reference', 'digest'])
+@pytest.mark.parametrize('variant', ['lower', 'upper', 'mixed'])
+def test_case_variant_credentials_are_rejected_atomically(case, settings, maximum, secret, variant):
+    complaint = case[0]
+    settings.COMPLAINT_MAX_REOPENS = maximum
+    value = REFERENCE if secret == 'reference' else complaint.reference_digest
+    reason = REASON + ' Reference material: ' + credential_variant(value, variant)
+    before = snapshot(complaint)
+    with patch('workflow.email_delivery.send_mail') as send:
+        with pytest.raises(ValidationError) as failure:
+            submit(complaint, action='reject', reason=reason)
+    assert failure.value.code == 'invalid_reason'
+    assert snapshot(complaint) == before
+    send.assert_not_called()
+
+
 @pytest.mark.parametrize('value', [-1, 32768, True, '2', None])
 def test_invalid_policy_is_reported_and_rejection_refused(case, settings, value):
     settings.COMPLAINT_MAX_REOPENS = value
@@ -216,6 +241,37 @@ def test_normal_csrf_lookup_then_feedback_never_echoes_reference_or_private_data
     assert REFERENCE.encode() not in response.content
     assert REFERENCE not in json.dumps(list(AnonymousResolutionFeedback.objects.values()), default=str)
     assert 'sessionid' not in response.cookies
+
+
+@pytest.mark.parametrize('maximum', [0, 2], ids=['head-review', 'reopen'])
+@pytest.mark.parametrize('secret', ['reference', 'digest'])
+@pytest.mark.parametrize('variant', ['lower', 'upper', 'mixed'])
+def test_http_case_variant_credentials_never_reach_department_output(case, http, settings, maximum, secret, variant):
+    complaint, head, staff = case
+    settings.COMPLAINT_MAX_REOPENS = maximum
+    client, post = http
+    value = REFERENCE if secret == 'reference' else complaint.reference_digest
+    reason = REASON + ' Reference material: ' + credential_variant(value, variant)
+    lookup = post({'reference': REFERENCE, 'action': 'lookup'})
+    assert lookup.status_code == 200
+    before = snapshot(complaint)
+    response = post({'reference': REFERENCE, 'action': 'reject',
+                     'revision': lookup.context['summary']['revision'], 'reason': reason})
+    assert response.status_code == 400
+    assert snapshot(complaint) == before
+    assert 'no-store' in response['Cache-Control']
+    outputs = [response.content.decode()]
+    for reader in (head, staff):
+        department_client = Client()
+        department_client.force_login(reader)
+        visible = department_client.get(
+            f'/complaints/{complaint.complaint_id}/resolution-feedback/', secure=True)
+        assert visible.status_code == 200
+        outputs.append(visible.content.decode())
+    for output in outputs:
+        assert REFERENCE.casefold() not in output.casefold()
+        assert complaint.reference_digest.casefold() not in output.casefold()
+        assert reason not in output
 
 
 def test_reason_retained_only_for_authorized_department_readers(case, http, user_factory):

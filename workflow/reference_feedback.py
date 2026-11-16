@@ -92,7 +92,11 @@ D04 is unresolved: assignment, due time and overdue escalation are preserved.
             if len(reason) > 2000 or "\x00" in reason:
                 raise ValidationError("Supply a valid rejection reason.", code="invalid_reason")
             validate_description(reason)
-            if reference in reason or complaint.reference_digest in reason or rating is not None:
+            # Free-text privacy checks cover case variants; reference lookup
+            # still requires the original canonical, case-sensitive credential.
+            folded_reason = reason.casefold()
+            if (reference.casefold() in folded_reason
+                    or complaint.reference_digest.casefold() in folded_reason or rating is not None):
                 raise ValidationError("Do not include the private reference or a rating in a rejection.", code="invalid_reason")
             if complaint.reopen_count < maximum_reopens():
                 complaint.reopen_count += 1
