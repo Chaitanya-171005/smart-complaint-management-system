@@ -61,7 +61,8 @@ def test_real_pytest_collects_default_and_explicit_checks_exactly_once(tmp_path)
     folder.mkdir()
     (folder / "anonymous_escalation.py").write_text("def test_explicit(): pass\n")
     command = run_tests.pytest_command(["integration_checks/anonymous_escalation.py"])
-    result = subprocess.run(command + ["--collect-only", "--no-cov", "-q"],
+    # This temporary two-file fixture is not a Django project.
+    result = subprocess.run(command + ["--collect-only", "--no-cov", "-p", "no:django", "-q"],
                             cwd=tmp_path, capture_output=True, text=True)
     assert result.returncode == 0, result.stdout + result.stderr
     assert "2 tests collected" in result.stdout
