@@ -283,7 +283,7 @@ def main(argv=None):
                     django=django.get_version(), platform=platform.platform(),
                     cpu_count=os.cpu_count(), policy={"sla_minutes":options.sla_minutes,
                     "interval_minutes":options.interval_minutes,"maximum_level":options.maximum_level},
-                    source=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),  # nosec B603 - fixed argv
+                    source=subprocess.check_output(["git","rev-parse","HEAD"],cwd=ROOT,text=True).strip(),  # nosec B603,B607 - fixed Git revision lookup via agent PATH
                     benchmark_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
                     acceptance="UNVERIFIED: SQLite diagnostic" if options.database=="sqlite" else
                         "PostgreSQL component only; confirm representative Q04 deployment/resources and F4 acceptance")
