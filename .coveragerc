@@ -5,6 +5,7 @@ source =
     complaints
     routing
     workflow
+    scms.mail_config
 omit =
     */migrations/*
     */tests.py
