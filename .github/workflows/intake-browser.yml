@@ -1,0 +1,49 @@
+name: Intake browser validation
+
+on:
+  pull_request:
+    paths:
+      - 'complaints/**'
+      - 'accounts/**'
+      - 'scms/**'
+      - 'workflow/**'
+      - 'integration_checks/intake_browser.py'
+      - 'integration_checks/reference_feedback_browser.py'
+      - 'requirements*.txt'
+      - 'conftest.py'
+      - 'pytest.ini'
+      - '.github/workflows/intake-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  chromium-intake:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      DJANGO_SECRET_KEY: synthetic-browser-ci-only
+      DJANGO_DB_ENGINE: sqlite
+      SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install browser regression dependencies
+        run: |
+          python -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0
+          python -m playwright install --with-deps chromium
+      - name: Normal submissions and accessible inline errors at 320 pixels
+        run: |
+          mkdir -p build/evidence/intake-browser
+          python -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt
+      - name: Retain synthetic browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: intake-browser-evidence
+          path: build/evidence/intake-browser/
+          if-no-files-found: error

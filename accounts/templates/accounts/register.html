@@ -7,6 +7,7 @@
 </head>
 <body>
   <h1>Create your SCMS account</h1>
+  <p>Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
   <p>Not an emergency channel: for fire, electrical, medical or structural danger, contact the campus emergency numbers.</p>
   <form method="post" novalidate>
     {% csrf_token %}

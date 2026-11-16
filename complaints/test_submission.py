@@ -330,6 +330,7 @@ def test_receipt_migration_preserves_and_links_only_exact_matches(args, complain
     before = set(Complaint.objects.values_list("complaint_id", flat=True))
     old = [("complaints", "0003_complaint")]
     executor = MigrationExecutor(connection)
+    # Restore every dependent application migration after the historical check.
     latest = executor.loader.graph.leaf_nodes()
     executor.migrate(old)
     try:

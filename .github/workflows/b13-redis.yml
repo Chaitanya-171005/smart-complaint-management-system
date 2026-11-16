@@ -1,0 +1,66 @@
+name: B13 real Redis and TLS proxy
+
+on:
+  pull_request:
+    paths:
+      - 'complaints/**'
+      - 'integration_checks/**'
+      - 'scms/**'
+      - 'requirements*.txt'
+      - 'conftest.py'
+      - '.github/workflows/b13-redis.yml'
+  push:
+    branches: [Main, feature/B13-reference-tracking]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  tracking-integration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+      SCMS_DISPOSABLE_REDIS: 'True'
+      SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+      - name: Install test dependencies and real nginx
+        run: |
+          python -m pip install -r requirements.txt -r requirements-dev.txt
+          sudo apt-get update
+          sudo apt-get install -y nginx openssl
+      - name: Start dedicated disposable memory-only Redis
+        run: |
+          docker run --detach --name b13-test-redis --publish 127.0.0.1:6379:6379 \
+            redis:7.4-alpine redis-server \
+            --save "" --appendonly no --maxmemory 64mb --maxmemory-policy noeviction \
+            --slowlog-log-slower-than -1 --notify-keyspace-events ""
+          for attempt in $(seq 1 30); do
+            if docker exec b13-test-redis redis-cli ping; then break; fi
+            sleep 1
+          done
+          docker exec b13-test-redis redis-cli ping
+      - name: System, migration, full tests and coverage gates
+        run: sh scripts/ci_checks.sh build/evidence/b13-review
+      - name: Execute real Redis and real TLS proxy checks (no skips)
+        shell: bash
+        run: |
+          mkdir -p build/evidence/b13-review
+          python -m pytest integration_checks/tracking_redis.py --no-cov -q \
+            | tee build/evidence/b13-review/real-redis-proxy.txt
+      - name: Upload test and integration evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: b13-redis-tls-proxy-evidence
+          path: build/evidence/b13-review/
+          if-no-files-found: error
+      - name: Remove disposable Redis
+        if: always()
+        run: docker rm --force b13-test-redis

@@ -1,0 +1,100 @@
+{
+  "source_junit_sha256": "149794201c04e5d30843776c60c2de6115b431c6ec696aa2bf7e4e52298374d1",
+  "cases": [
+    {
+      "id": "q05_checks.test_smtp_recovery::test_actual_sigkill_worker_recovery_at_durable_boundaries[claimed]",
+      "outcome": "passed",
+      "time_seconds": 2.346
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_actual_sigkill_worker_recovery_at_durable_boundaries[smtp_accepted]",
+      "outcome": "passed",
+      "time_seconds": 1.531
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[disconnect]",
+      "outcome": "passed",
+      "time_seconds": 0.799
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[timeout]",
+      "outcome": "passed",
+      "time_seconds": 0.759
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_connection_refusal_then_new_worker_resumes_persisted_retry",
+      "outcome": "passed",
+      "time_seconds": 1.592
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_permanent_smtp_rejection_does_not_retry_or_undo_closure[data550]",
+      "outcome": "passed",
+      "time_seconds": 0.751
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_permanent_smtp_rejection_does_not_retry_or_undo_closure[rcpt550]",
+      "outcome": "passed",
+      "time_seconds": 0.756
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[0]",
+      "outcome": "passed",
+      "time_seconds": 0.768
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[1]",
+      "outcome": "passed",
+      "time_seconds": 0.907
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[2]",
+      "outcome": "passed",
+      "time_seconds": 0.877
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_real_smtp_retry_boundaries_budget_and_committed_closure[3]",
+      "outcome": "passed",
+      "time_seconds": 0.862
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_real_worker_command_processes_persisted_retry_without_reversing_action",
+      "outcome": "passed",
+      "time_seconds": 0.779
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_recipient_revoked_before_due_retry_is_suppressed",
+      "outcome": "passed",
+      "time_seconds": 0.809
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_smtp_accepted_but_database_finalization_failure_does_not_resend",
+      "outcome": "passed",
+      "time_seconds": 0.738
+    },
+    {
+      "id": "q05_checks.test_smtp_recovery::test_two_actual_workers_reserve_and_send_only_once",
+      "outcome": "passed",
+      "time_seconds": 1.625
+    },
+    {
+      "id": "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[0]",
+      "outcome": "passed",
+      "time_seconds": 2.523
+    },
+    {
+      "id": "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[1]",
+      "outcome": "passed",
+      "time_seconds": 0.781
+    },
+    {
+      "id": "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[2]",
+      "outcome": "passed",
+      "time_seconds": 0.851
+    },
+    {
+      "id": "workflow.test_notification_smtp::test_anonymous_smtp_delivery_retries_and_failure[3]",
+      "outcome": "passed",
+      "time_seconds": 0.829
+    }
+  ]
+}

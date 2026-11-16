@@ -1,0 +1,9 @@
+{
+  "engine": "Chromium",
+  "version": "145.0.7632.6",
+  "viewport": {
+    "width": 320,
+    "height": 740
+  },
+  "scope": "synthetic loopback TLS; not deployed acceptance"
+}

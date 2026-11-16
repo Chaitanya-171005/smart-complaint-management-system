@@ -1,0 +1,6 @@
+{
+  "source_revision": "f65c0d34e7fd8e57cce7336e8e3c69e83e19e74c",
+  "browser_cases": 8,
+  "browser_skipped": 0,
+  "scope": "synthetic local Chromium/SQLite; no deployed or final Q06 acceptance"
+}
