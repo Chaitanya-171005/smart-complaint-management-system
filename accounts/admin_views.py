@@ -83,7 +83,12 @@ def department_edit(request, pk):
 @require_POST
 def department_active(request, pk):
     department = get_object_or_404(Department, pk=pk)
-    svc.set_department_active(request.user, department, _active_flag(request))
+    try:
+        svc.set_department_active(request.user, department, _active_flag(request))
+    except ValidationError as exc:
+        return render(request, "accounts/admin_departments.html",
+                      {"form": DepartmentForm(), "departments": Department.objects.all(),
+                       "action_error": " ".join(exc.messages)}, status=409)
     return redirect("accounts:admin_departments")
 
 
@@ -121,7 +126,12 @@ def location_edit(request, pk):
 @require_POST
 def location_active(request, pk):
     location = get_object_or_404(Location, pk=pk)
-    svc.set_location_active(request.user, location, _active_flag(request))
+    try:
+        svc.set_location_active(request.user, location, _active_flag(request))
+    except ValidationError as exc:
+        return render(request, "accounts/admin_locations.html",
+                      {"form": LocationForm(), "locations": Location.objects.all(),
+                       "action_error": " ".join(exc.messages)}, status=409)
     return redirect("accounts:admin_locations")
 
 
