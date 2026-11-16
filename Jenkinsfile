@@ -8,11 +8,17 @@ pipeline {
     }
 
     parameters {
+        booleanParam(name: 'REQUIRE_F4', defaultValue: false,
+                     description: 'Require F4 acceptance checks; missing dependencies fail verification.')
         booleanParam(name: 'DEPLOY_TO_PRODUCTION', defaultValue: false,
                      description: 'Request a gated deployment from the protected Main branch.')
     }
 
     environment {
+        SCMS_CI_DATABASE_ISOLATED = '1'
+        SCMS_CI_REQUIRE_F4 = "${params.REQUIRE_F4 ? '1' : '0'}"
+        DJANGO_DB_ENGINE = 'sqlite'
+        DJANGO_DB_PATH = "${WORKSPACE}/build/jenkins-ci-${BUILD_NUMBER}.sqlite3"
         DJANGO_DEBUG = 'False'
         DJANGO_ALLOWED_HOSTS = 'localhost,127.0.0.1'
         COMPLAINT_INTAKE_ENABLED = 'False'

@@ -1,15 +1,6 @@
 name: Anonymous recovery integration
 
 on:
-  pull_request:
-    paths:
-      - 'complaints/**'
-      - 'scms/**'
-      - 'requirements*.txt'
-      - 'conftest.py'
-      - 'pytest.ini'
-      - 'integration_checks/**'
-      - '.github/workflows/anonymous-recovery.yml'
   push:
     branches: [feature/B11-B12-anonymous-flow]
   workflow_dispatch:
@@ -47,7 +38,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
           cache: pip
       - name: Install recovery test dependencies
         run: python -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'
