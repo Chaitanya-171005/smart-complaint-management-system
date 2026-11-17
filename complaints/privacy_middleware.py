@@ -3,10 +3,15 @@
 from urllib.parse import urlsplit
 
 from django.conf import settings
+from django.core.exceptions import DisallowedHost
 from django.http import HttpResponse, QueryDict
 from django.utils.cache import patch_cache_control
 from django.utils.deprecation import MiddlewareMixin
 from django.views.debug import ExceptionReporter, SafeExceptionReporterFilter
+
+from .checks import feedback_release_ready, tracking_release_ready
+from .tracking_limits import TrackingUnavailable, consume_attempt
+from .tracking_source import tracking_source
 
 
 class AnonymousReporterFilter(SafeExceptionReporterFilter):
@@ -50,9 +55,12 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
     """
 
     def process_request(self, request):
-        if request.path_info.rstrip("/") != "/anonymous/new":
+        path = request.path_info.rstrip("/")
+        if path not in {"/anonymous/new", "/anonymous/track", "/anonymous/feedback"}:
             return
         request.anonymous_intake = True
+        request.anonymous_tracking = path == "/anonymous/track"
+        request.anonymous_feedback = path == "/anonymous/feedback"
         # Defense against an upstream request wrapper preloading identity. The
         # first-in-MIDDLEWARE release check is still mandatory independently.
         request.anonymous_privacy_isolated = not any(
@@ -61,6 +69,32 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
         request.exception_reporter_filter = AnonymousReporterFilter()
         request.exception_reporter_class = AnonymousExceptionReporter
         request.sensitive_post_parameters = "__ALL__"
+        refusal = None
+        reference_action = request.anonymous_tracking or request.anonymous_feedback
+        ready = feedback_release_ready if request.anonymous_feedback else tracking_release_ready
+        if (reference_action and request.method == "POST"
+                and request.anonymous_privacy_isolated and request.is_secure()
+                and ready()):
+            # Consume before reading credentials/body or doing a complaint query.
+            # Proxy source headers are accepted only from configured peers and
+            # are removed below before any downstream middleware or view runs.
+            try:
+                allowed, retry = consume_attempt(tracking_source(request))
+                request.tracking_allowed = allowed
+                if not allowed:
+                    refusal = HttpResponse("Too many tracking attempts. Please try again later.", status=429)
+                    refusal["Retry-After"] = str(retry)
+            except TrackingUnavailable:
+                refusal = HttpResponse("Reference tracking is temporarily unavailable. Please try again later.", status=503)
+            if refusal is None:
+                try:
+                    length = int(request.META.get("CONTENT_LENGTH", "0") or "0")
+                except ValueError:
+                    length = -1
+                bound = 32768 if request.anonymous_feedback else 1024
+                if (not 0 <= length <= bound
+                        or (length > 0 and request.content_type != "application/x-www-form-urlencoded")):
+                    refusal = HttpResponse("No matching complaint was found.", status=400)
         # Keep only the anti-CSRF cookie. In particular, auth middleware cannot
         # load an existing account/session and SessionMiddleware cannot refresh it.
         csrf_cookie = request.COOKIES.get(settings.CSRF_COOKIE_NAME)
@@ -73,19 +107,34 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 request.META.pop(name, None)
         if csrf_cookie:
             request.META["HTTP_COOKIE"] = f"{settings.CSRF_COOKIE_NAME}={csrf_cookie}"
+        try:
+            origin = f"{request.scheme}://{request.get_host()}"
+        except DisallowedHost:
+            # Do not let Django's security logger print an attacker-supplied
+            # Host containing a reference or identifying value on this route.
+            refusal = HttpResponse("Invalid anonymous request.", status=400)
+            origin = ""
+        if "HTTP_ORIGIN" in request.META and request.META["HTTP_ORIGIN"] != origin:
+            # Preserve cross-origin refusal without feeding raw header values
+            # into django.security.csrf's reason log. Anonymous forms are self-only.
+            request.META["HTTP_ORIGIN"] = "https://invalid-origin.invalid"
         if "HTTP_REFERER" in request.META:
             try:
                 referer = urlsplit(request.META["HTTP_REFERER"])
-                request.META["HTTP_REFERER"] = f"{referer.scheme}://{referer.netloc}/"
+                base = f"{referer.scheme}://{referer.netloc}"
+                request.META["HTTP_REFERER"] = (
+                    base + "/" if base == origin else "https://invalid-origin.invalid/"
+                )
             except ValueError:
                 request.META.pop("HTTP_REFERER", None)
         request.META["QUERY_STRING"] = ""
         request.GET = QueryDict()
+        return refusal
 
     def process_exception(self, request, exception):
         if getattr(request, "anonymous_intake", False):
             # Do not log exception values or feed them into an APM/error email.
-            return HttpResponse("Anonymous submission could not be completed. Please try again.", status=500)
+            return HttpResponse("Anonymous request could not be completed. Please try again.", status=500)
 
     def process_response(self, request, response):
         if getattr(request, "anonymous_intake", False):
@@ -108,7 +157,11 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 cookie["max-age"] = ""
                 cookie["expires"] = ""
             patch_cache_control(response, private=True, no_store=True, no_cache=True, max_age=0)
-            response["Referrer-Policy"] = "no-referrer"
+            response["Referrer-Policy"] = (
+                "same-origin" if (getattr(response, "_anonymous_intake_form", False)
+                                  or getattr(response, "_anonymous_feedback_form", False))
+                else "no-referrer"
+            )
             response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
             response["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
         return response

@@ -1,0 +1,49 @@
+FF
+=================================== FAILURES ===================================
+_ test_case_variant_credentials_are_rejected_atomically[upper-reference-head-review] _
+
+case = (<Complaint: SCMS-2026-000001>, <User: synthetic-e6c1664492bb4fa183b4183c15de2996@example.test>, <User: synthetic-47b901e91fd44b34a84d495866445504@example.test>)
+settings = <pytest_django.fixtures.Settings object at 0x7fb61c2f4830>
+maximum = 0, secret = 'reference', variant = 'upper'
+
+    @pytest.mark.parametrize('maximum', [0, 2], ids=['head-review', 'reopen'])
+    @pytest.mark.parametrize('secret', ['reference', 'digest'])
+    @pytest.mark.parametrize('variant', ['lower', 'upper', 'mixed'])
+    def test_case_variant_credentials_are_rejected_atomically(case, settings, maximum, secret, variant):
+        complaint = case[0]
+        settings.COMPLAINT_MAX_REOPENS = maximum
+        value = REFERENCE if secret == 'reference' else complaint.reference_digest
+        reason = REASON + ' Reference material: ' + credential_variant(value, variant)
+        before = snapshot(complaint)
+        with patch('workflow.email_delivery.send_mail') as send:
+>           with pytest.raises(ValidationError) as failure:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE ValidationError
+
+workflow/test_reference_feedback.py:130: Failed
+_ test_case_variant_credentials_are_rejected_atomically[upper-reference-reopen] _
+
+case = (<Complaint: SCMS-2026-000001>, <User: synthetic-c856982d1ed84d15b51715a9e1089581@example.test>, <User: synthetic-1278f8e4e78742aab595224cb1e7060e@example.test>)
+settings = <pytest_django.fixtures.Settings object at 0x7fb61d1421b0>
+maximum = 2, secret = 'reference', variant = 'upper'
+
+    @pytest.mark.parametrize('maximum', [0, 2], ids=['head-review', 'reopen'])
+    @pytest.mark.parametrize('secret', ['reference', 'digest'])
+    @pytest.mark.parametrize('variant', ['lower', 'upper', 'mixed'])
+    def test_case_variant_credentials_are_rejected_atomically(case, settings, maximum, secret, variant):
+        complaint = case[0]
+        settings.COMPLAINT_MAX_REOPENS = maximum
+        value = REFERENCE if secret == 'reference' else complaint.reference_digest
+        reason = REASON + ' Reference material: ' + credential_variant(value, variant)
+        before = snapshot(complaint)
+        with patch('workflow.email_delivery.send_mail') as send:
+>           with pytest.raises(ValidationError) as failure:
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           Failed: DID NOT RAISE ValidationError
+
+workflow/test_reference_feedback.py:130: Failed
+=========================== short test summary info ============================
+FAILED workflow/test_reference_feedback.py::test_case_variant_credentials_are_rejected_atomically[upper-reference-head-review]
+FAILED workflow/test_reference_feedback.py::test_case_variant_credentials_are_rejected_atomically[upper-reference-reopen]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 2 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+2 failed, 78 deselected in 15.85s
