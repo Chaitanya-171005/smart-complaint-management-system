@@ -1,0 +1,22 @@
+{
+  "settings.py": {
+    "archived_source": "docs/evidence/q05-smtp-postgresql/sources/q05_checks/settings.py.txt",
+    "sha256": "0ff7e9ea3b0858fb162adf854e01d79cfea934544a3d2a14cc46c63eedbd8ad2"
+  },
+  "__init__.py": {
+    "archived_source": "docs/evidence/q05-smtp-postgresql/sources/q05_checks/__init__.py.txt",
+    "sha256": "a16bdaf8945431bc5537294033f87fe96d14dfbec96f9713549627f96a76c78c"
+  },
+  "test_scheduler.py": {
+    "archived_source": "docs/evidence/q05-scheduler-postgresql/sources/q05_checks/test_scheduler.py.txt",
+    "sha256": "ac7f472b4a9e56411522f10ff1ce0ab70ad93a835097ff69e2383af6a939673b"
+  },
+  "test_smtp_recovery.py": {
+    "archived_source": "docs/evidence/q05-smtp-postgresql/sources/q05_checks/test_smtp_recovery.py.txt",
+    "sha256": "9c8bda9c6619c8349fd973805c2c9f6b841cf62f21caf3e2978d1fb122dc9f98"
+  },
+  "test_autoclose_recovery.py": {
+    "archived_source": "docs/evidence/q05-autoclose-postgresql/sources/q05_checks/test_autoclose_recovery.py.txt",
+    "sha256": "6f281b64f835bf4b994eb50bf556eda10a7c8fbfa9846d3e7f194ff99e2316ca"
+  }
+}
