@@ -142,3 +142,61 @@ def test_location_screen_explains_the_refusal(admin, department_factory, categor
     assert b"active routing rules" in response.content
     location.refresh_from_db()
     assert location.active is True
+
+
+# --- authorization and audit rollback ---------------------------------------------------------------
+
+
+@pytest.mark.parametrize("fixture", ["complainant_user", "staff_user", "head_user"])
+def test_only_the_administrator_may_deactivate_even_an_unused_department(request, fixture, department_factory):
+    from django.core.exceptions import PermissionDenied
+
+    unused = department_factory()
+    with pytest.raises(PermissionDenied):
+        svc.set_department_active(request.getfixturevalue(fixture), unused, False)
+    unused.refresh_from_db()
+    assert unused.active is True
+
+
+@pytest.mark.parametrize("fixture", ["complainant_user", "staff_user", "head_user"])
+def test_other_roles_cannot_deactivate_over_http(request, fixture, department_factory, location_factory):
+    client = Client()
+    client.force_login(request.getfixturevalue(fixture))
+    department, location = department_factory(), location_factory()
+    assert client.post(f"/accounts/admin-config/departments/{department.pk}/active/", {"active": "false"}).status_code == 403
+    assert client.post(f"/accounts/admin-config/locations/{location.pk}/active/", {"active": "false"}).status_code == 403
+    department.refresh_from_db(), location.refresh_from_db()
+    assert department.active and location.active
+
+
+def test_a_failed_audit_record_rolls_the_department_deactivation_back(admin, department_factory):
+    from unittest import mock
+
+    unused = department_factory()
+    with mock.patch("accounts.reference_services.record_change", side_effect=RuntimeError("audit down")):
+        with pytest.raises(RuntimeError):
+            svc.set_department_active(admin, unused, False)
+    unused.refresh_from_db()
+    assert unused.active is True
+    assert not ConfigAuditEvent.objects.filter(entity_type="Department", entity_id=str(unused.pk)).exists()
+
+
+def test_a_failed_audit_record_rolls_the_location_deactivation_back(admin, location_factory):
+    from unittest import mock
+
+    location = location_factory()
+    with mock.patch("accounts.reference_services.record_change", side_effect=RuntimeError("audit down")):
+        with pytest.raises(RuntimeError):
+            svc.set_location_active(admin, location, False)
+    location.refresh_from_db()
+    assert location.active is True
+    assert not ConfigAuditEvent.objects.filter(entity_type="Location", entity_id=str(location.pk)).exists()
+
+
+def test_reactivation_is_never_blocked_and_is_audited(admin, department_factory):
+    unused = department_factory()
+    svc.set_department_active(admin, unused, False)
+    svc.set_department_active(admin, unused, True)
+    actions = list(ConfigAuditEvent.objects.filter(entity_type="Department", entity_id=str(unused.pk))
+                   .order_by("id").values_list("action", flat=True))
+    assert actions == ["DEACTIVATE", "REACTIVATE"]
