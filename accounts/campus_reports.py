@@ -16,6 +16,7 @@ decision changes a constant, not the logic. They are printed on the screen and i
 import csv
 import io
 import statistics
+import unicodedata
 from dataclasses import dataclass, field
 from datetime import date, datetime, time, timedelta
 from decimal import ROUND_HALF_UP, Decimal
@@ -160,11 +161,31 @@ def build_report(date_from, date_to, *, department=None, now=None):
     )
 
 
+FORMULA_STARTS = frozenset("=+-@\uff1d\uff0b\uff0d\uff20")  # ASCII and full-width forms
+_IGNORED_CATEGORIES = frozenset({"Cc", "Cf", "Zs", "Zl", "Zp"})
+
+
 def _safe_cell(value):
-    """Stop spreadsheet formula injection: a text cell starting with = + - @ tab or CR is
-    prefixed so Excel and Sheets read it as text."""
-    text = "" if value is None else str(value)
-    return "'" + text if text[:1] in ("=", "+", "-", "@", "\t", "\r") else text
+    """Stop spreadsheet formula injection in text cells.
+
+    A cell is prefixed with an apostrophe (read as text) when its first meaningful character starts
+    a formula. Leading whitespace, control characters and invisible format characters (a space, tab,
+    newline, no-break space, zero-width space, byte-order mark) are skipped first, because some
+    spreadsheet programs trim them before reading the cell, so " =1+1" must be treated like "=1+1".
+    Numbers are written as they are.
+    """
+    if value is None:
+        return ""
+    if isinstance(value, (int, Decimal)) and not isinstance(value, bool):
+        return str(value)
+    text = str(value)
+    meaningful = next(
+        (ch for ch in text if not (ch.isspace() or unicodedata.category(ch) in _IGNORED_CATEGORIES)), ""
+    )
+    leading = text[:1]
+    if meaningful in FORMULA_STARTS or leading in ("\t", "\r", "\n"):
+        return "'" + text
+    return text
 
 
 def report_rows(report):

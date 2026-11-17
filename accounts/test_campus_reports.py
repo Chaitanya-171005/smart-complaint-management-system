@@ -237,16 +237,40 @@ def test_csv_group_totals_equal_the_total(dataset):
         assert sum(int(value) for s, _, value in rows[1:] if s == section) == 9
 
 
-def test_csv_neutralises_spreadsheet_formulas(make, category_factory):
-    pass
+FORMULA_CASES = [
+    "=SUM(A1)", "+cmd", "-1+1", "@user",
+    " =1+1", "   +cmd", "\t=1+1", "\n=1+1", "\r\n@x", " \t -2+3",     # leading whitespace and controls
+    "\u00a0=1+1", "\u2003=1+1", "\u200b=1+1", "\ufeff=1+1", "\u2028=1+1",  # no-break, em, zero-width, BOM, line separator
+    "\uff1d1+1", "\uff0b1", "\uff0d1", "\uff20x",                       # full-width = + - @
+    "\x00=1+1",
+]
+SAFE_CASES = ["Wiring", "A - B", "x=1", "5th floor", "Block A", "e-mail", "", "Room =1", "100%"]
+
+
+def _csv_labels(labels):
     report = reports.CampusReport(
         date_from=date(2026, 11, 10), date_to=date(2026, 11, 10), scope_label="Campus-wide", generated_at=NOW,
-        total=1, by_category=[("=SUM(A1)", 1), ("+cmd", 1), ("-1+1", 1), ("@user", 1)], by_location=[],
-        by_department=[], open_count=0, overdue_count=0, escalated_count=0, reopened_count=0,
+        total=1, by_category=[(label, 1) for label in labels], by_location=[], by_department=[],
+        open_count=0, overdue_count=0, escalated_count=0, reopened_count=0,
         reopen_total=0, resolved_measured=0, resolved_excluded=0,
     )
-    labels = [row[1] for row in parse(reports.report_to_csv(report)) if row[0] == "by_category"]
-    assert labels == ["'=SUM(A1)", "'+cmd", "'-1+1", "'@user"]
+    return [row[1] for row in parse(reports.report_to_csv(report)) if row[0] == "by_category"]
+
+
+@pytest.mark.parametrize("label", FORMULA_CASES, ids=[repr(c) for c in FORMULA_CASES])
+def test_csv_neutralises_formulas_even_after_leading_whitespace_or_invisible_characters(label):
+    (cell,) = _csv_labels([label])
+    assert cell == "'" + label
+
+
+@pytest.mark.parametrize("label", SAFE_CASES, ids=[repr(c) for c in SAFE_CASES])
+def test_csv_leaves_ordinary_text_alone(label):
+    assert _csv_labels([label]) == [label]
+
+
+def test_csv_leaves_numbers_alone():
+    assert reports._safe_cell(7) == "7" and reports._safe_cell(Decimal("4.50")) == "4.50"
+    assert reports._safe_cell(None) == ""
 
 
 # --- privacy -------------------------------------------------------------------------------------
