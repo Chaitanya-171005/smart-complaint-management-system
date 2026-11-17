@@ -5,6 +5,7 @@ Use --evidence-dir explicitly to refresh a committed evidence directory.
 
 import argparse
 import json
+import os
 # The CI runner invokes a fixed argv list of repository-controlled commands.
 import subprocess  # nosec B404
 import sys
@@ -13,6 +14,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_EVIDENCE = Path("build/evidence")
+CURRENT_INTEGRATIONS = ("integration_checks/anonymous_escalation.py",
+                        "integration_checks/anonymous_recovery.py")
+F4_INTEGRATIONS = ("integration_checks/lifecycle_f3.py", "integration_checks/resolution_f3.py",
+                   "integration_checks/f3_f4_handoff.py", "workflow/test_retired_anonymous_routes.py")
+
+
+def integration_selection(root, require_f4=False):
+    installed = (root / "workflow/notifications.py").is_file()
+    enabled = installed or require_f4
+    paths = list(CURRENT_INTEGRATIONS)
+    if enabled:
+        paths.extend(F4_INTEGRATIONS)
+    state = "required" if enabled else "BLOCKED: F4 not installed; this run is not F4 acceptance"
+    return paths, state
+
+
+def pytest_command(integrations):
+    # Pytest directory collection can otherwise discard explicitly supplied
+    # nonstandard filenames when '.' is also requested. Include their patterns.
+    patterns = "tests.py test_*.py " + " ".join(Path(p).name for p in integrations)
+    return [sys.executable, "-m", "pytest", ".", *integrations, "-o", "python_files=" + patterns]
 
 
 def sanitize(text):
@@ -42,6 +64,12 @@ def main(argv=None):
         help="Output directory (default: ignored build/evidence); pass docs/evidence/<task> to refresh committed evidence.",
     )
     args = parser.parse_args(argv)
+    flag = os.environ.get("SCMS_CI_REQUIRE_F4", "0")
+    if flag not in {"0", "1"}:
+        parser.error("SCMS_CI_REQUIRE_F4 must be 0 or 1")
+    integrations, f4_state = integration_selection(ROOT, flag == "1")
+    print("Explicit integration checks: " + ", ".join(integrations), flush=True)
+    print("F4 dependency gate: " + f4_state, flush=True)
     evidence = args.evidence_dir
     if not evidence.is_absolute():
         evidence = ROOT / evidence
@@ -51,7 +79,8 @@ def main(argv=None):
     evidence.mkdir(parents=True, exist_ok=True)
     # Never reuse stale coverage from an earlier successful test execution.
     (ROOT / "coverage.json").unlink(missing_ok=True)
-    test_code, test_output = run([sys.executable, "-m", "pytest"])
+    # Explicit files extend default discovery; they must never replace the suite.
+    test_code, test_output = run(pytest_command(integrations))
     (evidence / "pytest.txt").write_text(test_output, encoding="utf-8")
     print(test_output, end="")
     gate_code, gate_output = run([sys.executable, "scripts/coverage_summary.py"])
@@ -65,6 +94,8 @@ def main(argv=None):
         "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
         "pytest_exit_code": test_code,
         "coverage_gate_exit_code": gate_code,
+        "explicit_integrations": integrations,
+        "f4_dependency_gate": f4_state,
     }
     (evidence / "run.json").write_text(
         json.dumps(metadata, indent=2) + "\n", encoding="utf-8"

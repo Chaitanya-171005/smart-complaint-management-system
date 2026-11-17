@@ -22,6 +22,14 @@ if [ -z "${DJANGO_SECRET_KEY:-}" ]; then
     exit 2
 fi
 
+if [ "${SCMS_CI_DATABASE_ISOLATED:-}" != 1 ]; then
+    printf '%s\n' 'Set SCMS_CI_DATABASE_ISOLATED=1 only for a disposable CI database.' >&2
+    exit 2
+fi
+
+"$ci_python" scripts/ci_environment.py
 "$ci_python" manage.py check
 "$ci_python" manage.py makemigrations --check --dry-run
+"$ci_python" manage.py migrate --noinput
+"$ci_python" manage.py migrate --check
 "$ci_python" scripts/run_tests.py --evidence-dir "$evidence_dir"

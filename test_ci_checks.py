@@ -33,7 +33,7 @@ import sys
 args = sys.argv[1:]
 with Path(os.environ["CI_TEST_LOG"]).open("a") as stream:
     stream.write(json.dumps({"args": args, "cwd": os.getcwd()}) + "\\n")
-stage = args[1] if args[0] == "manage.py" else "runner"
+stage = args[1] if args[0] == "manage.py" else ("preflight" if args[0] == "scripts/ci_environment.py" else "runner")
 if stage == os.environ.get("CI_TEST_FAIL_STAGE"):
     sys.exit(int(os.environ["CI_TEST_FAIL_CODE"]))
 ''')
@@ -44,6 +44,7 @@ if stage == os.environ.get("CI_TEST_FAIL_STAGE"):
         **os.environ,
         "SCMS_CI_PYTHON": str(fake_interpreter),
         "DJANGO_SECRET_KEY": "synthetic-wrapper-test-only",
+        "SCMS_CI_DATABASE_ISOLATED": "1",
         "CI_TEST_REAL_PYTHON": sys.executable,
         "CI_TEST_FAKE_SCRIPT": str(fake_script),
         "CI_TEST_LOG": str(log),
@@ -94,21 +95,24 @@ def test_stages_run_in_order_with_exact_arguments(wrapper):
     result = run(destination)
     assert result.returncode == 0, result.stderr
     assert calls() == [
+        {"cwd": str(root), "args": ["scripts/ci_environment.py"]},
         {"cwd": str(root), "args": ["manage.py", "check"]},
         {"cwd": str(root), "args": ["manage.py", "makemigrations", "--check", "--dry-run"]},
+        {"cwd": str(root), "args": ["manage.py", "migrate", "--noinput"]},
+        {"cwd": str(root), "args": ["manage.py", "migrate", "--check"]},
         {"cwd": str(root), "args": ["scripts/run_tests.py", "--evidence-dir", str(destination)]},
     ]
 
 
-@pytest.mark.parametrize("stage,exit_code,count", [("check", 7, 1), ("makemigrations", 11, 2), ("runner", 13, 3)])
+@pytest.mark.parametrize("stage,exit_code,count", [("preflight", 5, 1), ("check", 7, 2), ("makemigrations", 11, 3), ("migrate", 12, 4), ("runner", 13, 6)])
 def test_failure_stops_later_stages_and_preserves_exit_code(wrapper, stage, exit_code, count):
     root, _, environment, run, calls = wrapper
     result = run(root / "fresh", env={**environment, "CI_TEST_FAIL_STAGE": stage,
                                      "CI_TEST_FAIL_CODE": str(exit_code)})
     assert result.returncode == exit_code
     assert len(calls()) == count
-    assert calls()[-1]["args"][0 if stage == "runner" else 1] == (
-        "scripts/run_tests.py" if stage == "runner" else stage
+    assert calls()[-1]["args"][0 if stage in {"runner", "preflight"} else 1] == (
+        "scripts/run_tests.py" if stage == "runner" else ("scripts/ci_environment.py" if stage == "preflight" else stage)
     )
 
 
@@ -146,3 +150,13 @@ def test_missing_secret_has_clear_diagnostic_and_runs_no_stage(wrapper, secret):
     assert result.returncode == 2
     assert "Export DJANGO_SECRET_KEY with a test-only value" in result.stderr
     assert "Traceback" not in result.stderr and calls() == []
+
+
+def test_no_database_mutation_without_explicit_isolation(wrapper):
+    root, _, environment, run, calls = wrapper
+    env = dict(environment)
+    env.pop("SCMS_CI_DATABASE_ISOLATED")
+    result = run(root / "fresh", env=env)
+    assert result.returncode == 2
+    assert "disposable CI database" in result.stderr
+    assert calls() == []
