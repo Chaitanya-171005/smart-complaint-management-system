@@ -138,7 +138,10 @@ def test_process_death_survives_restart_without_blind_resend(job, crash_phase):
     target = "_begin_send" if crash_phase == "claimed" else "send_mail"
     script = f'''
 import os
+import json
 os.environ["DJANGO_SETTINGS_MODULE"] = "scms.settings"
+from django.conf import settings
+settings.DATABASES = {{"default": json.loads(os.environ["SCMS_TEST_DATABASE"])}}
 import django
 django.setup()
 from unittest.mock import patch
@@ -146,8 +149,14 @@ from workflow.email_delivery import deliver_email
 with patch("workflow.email_delivery.{target}", side_effect=lambda *a, **kw: os._exit(23)):
     deliver_email({job.pk})
 '''
+    # Share pytest's active test database rather than the original database
+    # named by the inherited environment.
+    database = {name: connection.settings_dict[name] for name in (
+        "ENGINE", "NAME", "USER", "PASSWORD", "HOST", "PORT", "OPTIONS",
+    )}
+    database["NAME"] = str(database["NAME"])
     env = dict(os.environ, DJANGO_SECRET_KEY="b27-child-test-only",
-               DJANGO_DB_PATH=str(connection.settings_dict["NAME"]))
+               SCMS_TEST_DATABASE=json.dumps(database))
     result = subprocess.run([sys.executable, "-c", script], env=env, capture_output=True, timeout=20)
     assert result.returncode == 23
     close_old_connections()
