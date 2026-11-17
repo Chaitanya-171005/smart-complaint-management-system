@@ -1,0 +1,196 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.14, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.2, settings: scms.settings (from ini)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: django-4.14.0, cov-7.1.0
+collected 1908 items
+
+accounts/test_config_audit.py .......................................... [  2%]
+                                                                         [  2%]
+accounts/test_foundation.py .........                                    [  2%]
+accounts/test_login.py ................................                  [  4%]
+accounts/test_permissions.py .................................           [  6%]
+accounts/test_reference_data.py ........................................ [  8%]
+............................                                             [  9%]
+accounts/test_registration.py ......................................     [ 11%]
+accounts/test_security_log.py ...........................                [ 13%]
+accounts/test_session.py .................                               [ 13%]
+accounts/test_user_admin.py ........................................     [ 16%]
+complaints/test_evidence.py ............................................ [ 18%]
+............................                                             [ 19%]
+complaints/test_forms.py ..........                                      [ 20%]
+complaints/test_models.py .............................................. [ 22%]
+                                                                         [ 22%]
+complaints/test_tracking.py ............................................ [ 25%]
+.........................................................                [ 28%]
+routing/test_allocation.py .....................                         [ 29%]
+routing/test_b12_privacy.py ....                                         [ 29%]
+routing/test_b15_http.py .........................                       [ 30%]
+routing/test_escalation.py ..........................                    [ 32%]
+routing/test_escalation_outer_transaction.py .                           [ 32%]
+routing/test_queue.py ...                                                [ 32%]
+routing/test_resolver.py ......                                          [ 32%]
+routing/test_sla.py .......                                              [ 32%]
+routing/tests.py .................................                       [ 34%]
+test_domain_fixtures.py ................                                 [ 35%]
+test_fixtures.py ......                                                  [ 35%]
+workflow/test_dashboards.py ..............                               [ 36%]
+workflow/test_history.py ............                                    [ 37%]
+workflow/test_history_actor.py ..                                        [ 37%]
+workflow/test_history_integration.py ........................            [ 38%]
+workflow/test_retired_anonymous_routes.py .............................. [ 40%]
+..                                                                       [ 40%]
+accounts/test_permissions_integration.py ............                    [ 40%]
+accounts/test_registration.py ..                                         [ 40%]
+accounts/test_user_admin.py ......                                       [ 41%]
+complaints/test_anonymous.py ........................................... [ 43%]
+...................................................                      [ 46%]
+complaints/test_evidence.py ..                                           [ 46%]
+complaints/test_evidence_recovery.py ................................... [ 48%]
+.                                                                        [ 48%]
+complaints/test_http_intake.py .....................................     [ 50%]
+complaints/test_identifiers.py .........................                 [ 51%]
+complaints/test_intake.py ......................................         [ 53%]
+complaints/test_submission.py .......................................... [ 55%]
+                                                                         [ 55%]
+complaints/test_tracking.py .                                            [ 55%]
+routing/test_allocation.py ...........                                   [ 56%]
+routing/test_b12_privacy.py ..                                           [ 56%]
+routing/test_b15_http.py .......                                         [ 56%]
+routing/test_escalation.py .....                                         [ 56%]
+routing/test_intake_allocation_integration.py .                          [ 57%]
+routing/test_intake_entrypoint.py ........                               [ 57%]
+routing/test_intake_routing.py ...                                       [ 57%]
+routing/test_resolver.py .                                               [ 57%]
+test_docker_files.py ..                                                  [ 57%]
+workflow/test_autoclose.py ...................................           [ 59%]
+workflow/test_confirmation.py .......................................... [ 61%]
+......                                                                   [ 62%]
+workflow/test_email_retries.py ..........................                [ 63%]
+workflow/test_history_integration.py .                                   [ 63%]
+workflow/test_lifecycle.py ............................................. [ 65%]
+....................................................................     [ 69%]
+workflow/test_notification_smtp.py ....                                  [ 69%]
+workflow/test_notification_ui.py ...........                             [ 70%]
+workflow/test_notifications.py .......................................   [ 72%]
+workflow/test_reference_feedback.py .................................... [ 74%]
+..................................................                       [ 76%]
+workflow/test_reopening.py ...................................           [ 78%]
+workflow/test_resolution_http.py ..................                      [ 79%]
+workflow/test_resolution_integration.py ................................ [ 81%]
+....................                                                     [ 82%]
+workflow/test_tracking.py ..........                                     [ 82%]
+accounts/test_foundation.py ....                                         [ 83%]
+accounts/test_permissions_integration.py .                               [ 83%]
+complaints/test_checks.py ....................                           [ 84%]
+complaints/test_forms.py ............................................... [ 86%]
+.....................................................................    [ 90%]
+complaints/test_models.py ...........                                    [ 90%]
+routing/test_sla.py ..................................                   [ 92%]
+scms/test_database_settings.py .....                                     [ 92%]
+test_ci_checks.py ...........                                            [ 93%]
+test_coverage_summary.py ..............                                  [ 94%]
+test_docker_files.py .....                                               [ 94%]
+test_fixtures.py ....                                                    [ 94%]
+test_github_workflows.py .....                                           [ 94%]
+test_jenkins_pipeline.py .....                                           [ 95%]
+test_q04_environment.py ..............................                   [ 96%]
+test_q04_load.py ....................................                    [ 98%]
+test_run_tests.py ...........                                            [ 99%]
+workflow/test_resolution.py ......                                       [ 99%]
+workflow/tests.py ..........                                             [100%]
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.14-final-0 _______________
+
+Name                                                    Stmts   Miss Branch BrPart   Cover   Missing
+----------------------------------------------------------------------------------------------------
+accounts/admin.py                                           1      0      0      0 100.00%
+accounts/admin_views.py                                   134      0     38      2  98.84%   75->77, 98->100
+accounts/apps.py                                            3      0      0      0 100.00%
+accounts/config_audit.py                                   33      0     20      0 100.00%
+accounts/forms.py                                          34      1      8      1  95.24%   25
+accounts/models.py                                        172      5     10      1  96.70%   85, 93, 173, 225, 288
+accounts/permissions.py                                   140      1     56      1  98.98%   168
+accounts/reference_adapters.py                              4      0      0      0 100.00%
+accounts/reference_services.py                            118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py                                   19      0      4      0 100.00%
+accounts/services.py                                       78      0     18      0 100.00%
+accounts/urls.py                                            4      0      0      0 100.00%
+accounts/user_admin_services.py                            65      0     20      0 100.00%
+accounts/validators.py                                      7      1      2      0  88.89%   15
+accounts/views.py                                          59      0     14      0 100.00%
+complaints/admin.py                                         1      0      0      0 100.00%
+complaints/anonymous.py                                    64      1     10      1  97.30%   84
+complaints/anonymous_views.py                              64      2     14      2  94.87%   32, 51
+complaints/apps.py                                          5      0      0      0 100.00%
+complaints/checks.py                                       37      1      8      1  95.56%   72
+complaints/evidence.py                                    180      1     44      1  99.11%   116
+complaints/evidence_recovery.py                           119      2     52      2  97.66%   42, 121
+complaints/feedback_views.py                               53      3     16      2  92.75%   42, 52, 64
+complaints/forms.py                                        92      0     30      0 100.00%
+complaints/identifiers.py                                  26      0     10      1  97.22%   49->56
+complaints/intake.py                                       88      1     30      1  98.31%   152
+complaints/management/commands/reconcile_evidence.py       15      2      0      0  86.67%   21-22
+complaints/models.py                                       99      0      2      0 100.00%
+complaints/privacy.py                                      59      2     22      0  97.53%   95-96
+complaints/privacy_middleware.py                          101      5     28      0  96.12%   19, 92-93, 128-129
+complaints/reference_data.py                               16      0      0      0 100.00%
+complaints/references.py                                    6      0      2      0 100.00%
+complaints/services.py                                      5      0      0      0 100.00%
+complaints/submission.py                                   71      0     20      0 100.00%
+complaints/tracking.py                                     23      0      2      0 100.00%
+complaints/tracking_limits.py                              84      1     24      2  97.22%   141, 165->169
+complaints/tracking_source.py                              37      2     16      2  92.45%   25, 43
+complaints/tracking_views.py                               27      0      6      0 100.00%
+complaints/transport.py                                     5      0      0      0 100.00%
+complaints/urls.py                                          4      0      0      0 100.00%
+complaints/validators.py                                   14      0      6      0 100.00%
+complaints/views.py                                       108      2     20      2  96.88%   111, 145
+routing/adapters.py                                         4      0      0      0 100.00%
+routing/admin.py                                           12      0      0      0 100.00%
+routing/allocation.py                                      55      0     20      0 100.00%
+routing/apps.py                                             3      0      0      0 100.00%
+routing/escalation.py                                      74      1     16      1  97.78%   108
+routing/intake.py                                          22      0      0      0 100.00%
+routing/management/commands/run_escalation.py              17      1      4      1  90.48%   16
+routing/models.py                                         150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+routing/queue.py                                           10      0      0      0 100.00%
+routing/resolver.py                                        54      0     18      0 100.00%
+routing/services.py                                       245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+routing/sla.py                                             41      0     14      0 100.00%
+routing/urls.py                                             4      0      0      0 100.00%
+routing/views.py                                           84     15     30      7  78.95%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+workflow/admin.py                                          14      0      0      0 100.00%
+workflow/anonymous_feedback_models.py                      31      3      6      2  86.49%   14, 48, 51
+workflow/apps.py                                            5      0      0      0 100.00%
+workflow/autoclose.py                                      43      3     16      3  89.83%   34, 48, 63
+workflow/checks.py                                         10      1      0      0  90.00%   14
+workflow/confirmation_service.py                           12      0      2      0 100.00%
+workflow/dashboard_views.py                                33      0      8      0 100.00%
+workflow/dashboards.py                                     42      1     12      1  96.30%   27
+workflow/email_delivery.py                                139      3     46      1  97.84%   80-82
+workflow/feedback_detail_views.py                          14      0      0      0 100.00%
+workflow/feedback_policy.py                                 7      0      2      0 100.00%
+workflow/forms.py                                          13      0      0      0 100.00%
+workflow/history_service.py                                24      0      4      0 100.00%
+workflow/lifecycle.py                                     136      0     26      0 100.00%
+workflow/management/commands/auto_close_complaints.py      15      0      0      0 100.00%
+workflow/management/commands/deliver_notifications.py      22      0      6      0 100.00%
+workflow/models.py                                         64      0     12      0 100.00%
+workflow/notification_models.py                            68      0      0      0 100.00%
+workflow/notification_views.py                             21      0      0      0 100.00%
+workflow/notifications.py                                  96      3     42      0  96.38%   68-70
+workflow/reference_feedback.py                             78      2     24      2  96.08%   79, 84
+workflow/reopening_service.py                              19      0      4      0 100.00%
+workflow/reopening_views.py                                39      2      6      0  95.56%   47-48
+workflow/resolution_service.py                             40      0     10      0 100.00%
+workflow/services.py                                       23      2      8      0  93.55%   55-56
+workflow/templatetags/notification_tags.py                  7      0      0      0 100.00%
+workflow/urls.py                                           11      0      0      0 100.00%
+workflow/views.py                                         141      2     16      0  98.73%   60-61
+----------------------------------------------------------------------------------------------------
+TOTAL                                                    4216    103   1032     61  96.80%
+Coverage JSON written to file coverage.json
+======================= 1908 passed in 945.10s (0:15:45) =======================

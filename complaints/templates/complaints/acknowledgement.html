@@ -1,10 +1,13 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complaint submitted - SCMS</title></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complaint submitted - SCMS</title>
+<style>@media (max-width: 480px) { body { overflow-wrap: anywhere; } button { max-width: 100%; } }</style></head>
 <body>
   <h1>Your complaint was submitted</h1>
   <dl>
-    <dt>Complaint ID</dt><dd>{{ complaint.complaint_id }}</dd>
+    <dt>Complaint ID</dt><dd><span id="complaint-id">{{ complaint.complaint_id }}</span>
+      <button type="button" id="copy-complaint-id" aria-describedby="copy-complaint-id-status">Copy Complaint ID</button>
+      <span id="copy-complaint-id-status" role="status" aria-live="polite"></span></dd>
     <dt>Submitted</dt><dd>{{ submitted_at|date:"c" }}</dd>
     <dt>Status</dt><dd>{{ complaint.get_status_display }}</dd>
     <dt>Due</dt><dd>{{ complaint.due_at|date:"c" }}</dd>
@@ -17,5 +20,17 @@
   {% endif %}
   <p><a href="{% url 'accounts:home' %}">Home</a></p>
   <p><a href="{% url 'complaints:submit' %}">Start another complaint</a></p>
+  <script>
+    document.getElementById("copy-complaint-id").addEventListener("click", async () => {
+      const status = document.getElementById("copy-complaint-id-status");
+      try {
+        if (!navigator.clipboard || !navigator.clipboard.writeText) throw new Error("Clipboard unavailable");
+        await navigator.clipboard.writeText(document.getElementById("complaint-id").textContent.trim());
+        status.textContent = "Complaint ID copied.";
+      } catch (error) {
+        status.textContent = "Could not copy. Select the Complaint ID and copy it manually.";
+      }
+    });
+  </script>
 </body>
 </html>

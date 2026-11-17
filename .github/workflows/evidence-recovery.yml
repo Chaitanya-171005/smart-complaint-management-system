@@ -1,19 +1,17 @@
-name: Evidence crash recovery
+name: SCMS unified verification
 
 on:
   pull_request:
-    paths:
-      - 'complaints/**'
-      - 'scms/**'
-      - 'requirements*.txt'
-      - 'conftest.py'
-      - 'pytest.ini'
-      - 'scripts/**'
-      - 'integration_checks/**'
-      - '.github/workflows/evidence-recovery.yml'
+    branches: [Main, 'integration/**', 'feature/**', 'fix/**']
   push:
-    branches: [Main, feature/B10-Q05-evidence-recovery]
+    branches: [Main]
   workflow_dispatch:
+    inputs:
+      require_f4:
+        description: 'Require all F4-dependent integration checks (fails if unavailable)'
+        type: boolean
+        default: false
+
 
 permissions:
   contents: read
@@ -23,12 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
+      SCMS_CI_DATABASE_ISOLATED: '1'
+      SCMS_CI_REQUIRE_F4: ${{ inputs.require_f4 && '1' || '0' }}
       DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
           cache: pip
       - name: Install dependencies
         run: python -m pip install -r requirements.txt -r requirements-dev.txt
@@ -60,6 +60,8 @@ jobs:
           --health-timeout 5s
           --health-retries 12
     env:
+      SCMS_CI_DATABASE_ISOLATED: '1'
+      SCMS_CI_REQUIRE_F4: ${{ inputs.require_f4 && '1' || '0' }}
       DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
       DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
       RECOVERY_POSTGRES_NAME: scms_recovery
@@ -71,16 +73,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.13'
+          python-version: '3.14'
           cache: pip
       - name: Install recovery test dependencies
         run: python -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'
-      - name: Django system and migration checks on PostgreSQL
-        run: |
-          python manage.py check
-          python manage.py makemigrations --check --dry-run
-      - name: Actual PostgreSQL recovery and process-death checks, no skips
-        run: python integration_checks/run_recovery_postgresql.py build/evidence/b10-q05-postgresql
+      - name: Full PostgreSQL regression, explicit integrations and coverage
+        run: sh scripts/ci_checks.sh build/evidence/b10-q05-postgresql
       - name: Retain PostgreSQL recovery component evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -1,0 +1,13 @@
+# Host cron example: review absolute paths, runtime user and cadence before installing.
+# Use ONE deployment mode. These jobs do not install cron or start a persistent scheduler.
+# The web app must have applied migrations; use its existing DB and protected env file.
+# --no-deps prevents cron from starting/recreating DB or web services.
+# Review one-minute polling cadence independently of DB-configured SLA durations.
+* * * * * cd /srv/scms && docker compose --env-file /srv/scms/.env.docker --profile scheduled run --rm --no-deps scheduled-task run_escalation
+
+# Alternative native deployment (DO NOT install alongside the Docker line):
+# * * * * * cd /srv/scms && /srv/scms/.venv/bin/python manage.py run_escalation
+
+# F4 delivery ONLY after its publisher/models/worker are accepted and migrated:
+# * * * * * cd /srv/scms && docker compose --env-file /srv/scms/.env.docker --profile scheduled run --rm --no-deps scheduled-task deliver_notifications --limit 100
+# Do not enable auto_close_complaints until the F4 lifecycle and D05 policy are approved.

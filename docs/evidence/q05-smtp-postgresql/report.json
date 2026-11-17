@@ -1,0 +1,140 @@
+{
+  "repository": "Chaitanya-171005/smart-complaint-management-system",
+  "source_revision": "9b163a24985406d4c00f993bbf2b58e8080cd983",
+  "application_tree": "373d40579d5e96f726990b202dd6c5be6ff04056",
+  "application_working_tree_dirty": false,
+  "source_pins": {
+    "F4_PR78": "9b163a24985406d4c00f993bbf2b58e8080cd983"
+  },
+  "dependency_PR77": "cda6fc5e05946d75999ee4f91dd723d571c348a0",
+  "started_at_utc": "2026-11-11T18:30:30.689267+00:00",
+  "harness_sha256": {
+    "q05_checks/__init__.py": "a16bdaf8945431bc5537294033f87fe96d14dfbec96f9713549627f96a76c78c",
+    "q05_checks/run.py": "f5237069c136b62b25ebf4d4869742a8e2d7d61479b956c238f6c1f13e939493",
+    "q05_checks/settings.py": "0ff7e9ea3b0858fb162adf854e01d79cfea934544a3d2a14cc46c63eedbd8ad2",
+    "q05_checks/test_smtp_recovery.py": "9c8bda9c6619c8349fd973805c2c9f6b841cf62f21caf3e2978d1fb122dc9f98"
+  },
+  "dockerfile_sha256": "f44d00f6f7ea1576908d8b70cc165dc64740c0a56bc4b7dc234e080bd618f9aa",
+  "driver_sha256": "4655453da45bfb1863c4904707e7047efb5ea799eca68c5d5452f28b13c03eeb",
+  "runtime": {
+    "database_vendor": "postgresql",
+    "postgresql_version": 170006,
+    "python_version": "3.14.10",
+    "django_version": "6.1.3"
+  },
+  "scope": "Pinned draft F4 PR78 SMTP/outbox component checks; not final Main integration, external mailbox delivery or deployment approval",
+  "status": "PASS_SMTP_RECOVERY_COMPONENT_CHECKS",
+  "pytest_exit_code": 0,
+  "executed_cases": 19,
+  "skipped": 0,
+  "failed_or_errored": 0,
+  "remaining_q05": [
+    "external_SMTP_provider_and_mailbox_delivery_acceptance",
+    "final_F4_Main_and_anonymous_privacy_integration",
+    "deployed_worker_and_scheduler_supervision",
+    "D05_auto_close_policy_approval",
+    "B18_abandoned_run_supervision",
+    "final_deployment_and_power_loss_acceptance"
+  ],
+  "notification_scope": "Real Django SMTP against synthetic loopback relay; actual PostgreSQL row locks, two worker processes, SIGKILL and durable outbox recovery. No external SMTP, mailbox delivery or production TLS/credentials tested.",
+  "clock_scope": "Deterministic overrides verify exact 60/300 second retry boundaries and 5 minute claim expiry without wall-clock waits.",
+  "failure_injection": "Actual relay 451/550 responses, socket refusal/disconnect/timeout, actual child SIGKILL; one controlled database-finalization exception after real relay acceptance.",
+  "case_results": [
+    {
+      "classname": "workflow.test_notification_smtp",
+      "name": "test_anonymous_smtp_delivery_retries_and_failure[0]",
+      "seconds": "2.523"
+    },
+    {
+      "classname": "workflow.test_notification_smtp",
+      "name": "test_anonymous_smtp_delivery_retries_and_failure[1]",
+      "seconds": "0.781"
+    },
+    {
+      "classname": "workflow.test_notification_smtp",
+      "name": "test_anonymous_smtp_delivery_retries_and_failure[2]",
+      "seconds": "0.851"
+    },
+    {
+      "classname": "workflow.test_notification_smtp",
+      "name": "test_anonymous_smtp_delivery_retries_and_failure[3]",
+      "seconds": "0.829"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_real_smtp_retry_boundaries_budget_and_committed_closure[0]",
+      "seconds": "0.768"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_real_smtp_retry_boundaries_budget_and_committed_closure[1]",
+      "seconds": "0.907"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_real_smtp_retry_boundaries_budget_and_committed_closure[2]",
+      "seconds": "0.877"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_real_smtp_retry_boundaries_budget_and_committed_closure[3]",
+      "seconds": "0.862"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_permanent_smtp_rejection_does_not_retry_or_undo_closure[data550]",
+      "seconds": "0.751"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_permanent_smtp_rejection_does_not_retry_or_undo_closure[rcpt550]",
+      "seconds": "0.756"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[disconnect]",
+      "seconds": "0.799"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_ambiguous_real_smtp_acceptance_is_not_blindly_resent[timeout]",
+      "seconds": "0.759"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_connection_refusal_then_new_worker_resumes_persisted_retry",
+      "seconds": "1.592"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_two_actual_workers_reserve_and_send_only_once",
+      "seconds": "1.625"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_actual_sigkill_worker_recovery_at_durable_boundaries[claimed]",
+      "seconds": "2.346"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_actual_sigkill_worker_recovery_at_durable_boundaries[smtp_accepted]",
+      "seconds": "1.531"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_smtp_accepted_but_database_finalization_failure_does_not_resend",
+      "seconds": "0.738"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_real_worker_command_processes_persisted_retry_without_reversing_action",
+      "seconds": "0.779"
+    },
+    {
+      "classname": "q05_checks.test_smtp_recovery",
+      "name": "test_recipient_revoked_before_due_retry_is_suppressed",
+      "seconds": "0.809"
+    }
+  ],
+  "junit_sha256": "149794201c04e5d30843776c60c2de6115b431c6ec696aa2bf7e4e52298374d1"
+}

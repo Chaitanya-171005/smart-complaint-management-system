@@ -1,0 +1,158 @@
+From de470bf549a23b2a71200c59db9b7712026783a0 Mon Sep 17 00:00:00 2001
+From: Atul Suresh <220845332+atul-suresh@users.noreply.github.com>
+Date: Mon, 16 Nov 2026 16:27:54 +0000
+Subject: [PATCH] ci: propagate browser failures and isolate Redis workflow
+ database
+
+---
+ .github/workflows/b13-redis.yml      | 15 ++++++
+ .github/workflows/intake-browser.yml |  3 ++
+ test_github_workflows.py             | 69 ++++++++++++++++++++++++++++
+ 3 files changed, 87 insertions(+)
+ create mode 100644 test_github_workflows.py
+
+diff --git a/.github/workflows/b13-redis.yml b/.github/workflows/b13-redis.yml
+index f40944d..10af1d0 100644
+--- a/.github/workflows/b13-redis.yml
++++ b/.github/workflows/b13-redis.yml
+@@ -9,6 +9,7 @@ on:
+       - 'requirements*.txt'
+       - 'conftest.py'
+       - '.github/workflows/b13-redis.yml'
++      - 'test_github_workflows.py'
+   push:
+     branches: [Main, feature/B13-reference-tracking]
+   workflow_dispatch:
+@@ -22,6 +23,8 @@ jobs:
+     timeout-minutes: 15
+     env:
+       DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
++      DJANGO_SETTINGS_MODULE: scms.settings
++      DJANGO_DB_ENGINE: sqlite
+       SCMS_DISPOSABLE_REDIS: 'True'
+       SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+     steps:
+@@ -46,11 +49,23 @@ jobs:
+             sleep 1
+           done
+           docker exec b13-test-redis redis-cli ping
++      - name: Prepare disposable CI database and evidence storage
++        shell: bash
++        run: |
++          set -euo pipefail
++          ci_data="$(mktemp -d "$RUNNER_TEMP/scms-b13-data.XXXXXX")"
++          mkdir -p "$ci_data/private-evidence"
++          {
++            printf 'DJANGO_DB_PATH=%s/db.sqlite3\n' "$ci_data"
++            printf 'PRIVATE_EVIDENCE_ROOT=%s/private-evidence\n' "$ci_data"
++            printf 'SCMS_CI_DATABASE_ISOLATED=1\n'
++          } >> "$GITHUB_ENV"
+       - name: System, migration, full tests and coverage gates
+         run: sh scripts/ci_checks.sh build/evidence/b13-review
+       - name: Execute real Redis and real TLS proxy checks (no skips)
+         shell: bash
+         run: |
++          set -euo pipefail
+           mkdir -p build/evidence/b13-review
+           python -m pytest integration_checks/tracking_redis.py --no-cov -q \
+             | tee build/evidence/b13-review/real-redis-proxy.txt
+diff --git a/.github/workflows/intake-browser.yml b/.github/workflows/intake-browser.yml
+index f1d09f6..71c4157 100644
+--- a/.github/workflows/intake-browser.yml
++++ b/.github/workflows/intake-browser.yml
+@@ -13,6 +13,7 @@ on:
+       - 'conftest.py'
+       - 'pytest.ini'
+       - '.github/workflows/intake-browser.yml'
++      - 'test_github_workflows.py'
+   workflow_dispatch:
+ 
+ permissions:
+@@ -37,7 +38,9 @@ jobs:
+           python -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0
+           python -m playwright install --with-deps chromium
+       - name: Normal submissions and accessible inline errors at 320 pixels
++        shell: bash
+         run: |
++          set -euo pipefail
+           mkdir -p build/evidence/intake-browser
+           python -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt
+       - name: Retain synthetic browser evidence
+diff --git a/test_github_workflows.py b/test_github_workflows.py
+new file mode 100644
+index 0000000..a008b4e
+--- /dev/null
++++ b/test_github_workflows.py
+@@ -0,0 +1,69 @@
++"""Execute CI shell bodies to guard failure propagation and disposable storage.
++
++The tiny Python stand-in tests shell control flow, not browser/Redis acceptance.
++"""
++import os
++from pathlib import Path
++import re
++import subprocess
++
++import pytest
++
++ROOT = Path(__file__).resolve().parent
++
++
++def step(filename, name):
++    text = (ROOT / '.github/workflows' / filename).read_text()
++    match = re.search(r'^      - name: ' + re.escape(name) + r'\n(.*?)(?=^      - |\Z)',
++                      text, re.MULTILINE | re.DOTALL)
++    assert match, 'Required workflow step is missing.'
++    body = match[1]
++    assert re.search(r'^        shell: bash$', body, re.MULTILINE)
++    script = body.split('        run: |\n', 1)[1]
++    return '\n'.join(line[10:] for line in script.splitlines() if line.strip()) + '\n'
++
++
++@pytest.mark.parametrize('filename,name,log', [
++    ('intake-browser.yml', 'Normal submissions and accessible inline errors at 320 pixels',
++     'build/evidence/intake-browser/pytest.txt'),
++    ('b13-redis.yml', 'Execute real Redis and real TLS proxy checks (no skips)',
++     'build/evidence/b13-review/real-redis-proxy.txt'),
++])
++@pytest.mark.parametrize('exit_code', [0, 7])
++def test_pytest_pipeline_keeps_failure_exit_status(tmp_path, filename, name, log, exit_code):
++    executable = tmp_path / 'python'
++    executable.write_text('#!/bin/sh\nprintf "synthetic shell-control check\\n"\nexit "$WORKFLOW_TEST_EXIT"\n')
++    executable.chmod(0o700)
++    script = tmp_path / 'step.sh'
++    script.write_text(step(filename, name))
++    # Match even bash -e without GitHub's implicit extra flags: the script
++    # itself must prevent tee from hiding a failing pytest process.
++    completed = subprocess.run(['bash', '-e', str(script)], cwd=tmp_path, capture_output=True,
++        text=True, env=dict(os.environ, PATH=str(tmp_path)+os.pathsep+os.environ['PATH'],
++                           WORKFLOW_TEST_EXIT=str(exit_code)), timeout=10)
++    assert completed.returncode == exit_code
++    assert (tmp_path / log).read_text() == 'synthetic shell-control check\n'
++
++
++def test_ci_storage_is_unique_and_does_not_reuse_existing_database(tmp_path):
++    original = tmp_path / 'developer.sqlite3'
++    original.write_bytes(b'original unrelated database')
++    temporary = tmp_path / 'runner temp with spaces'
++    temporary.mkdir()
++    script = tmp_path / 'prepare.sh'
++    script.write_text(step('b13-redis.yml', 'Prepare disposable CI database and evidence storage'))
++    databases = []
++    for attempt in range(2):
++        exported = tmp_path / f'github-env-{attempt}'
++        result = subprocess.run(['bash', '-e', str(script)], cwd=tmp_path, capture_output=True,
++            text=True, env=dict(os.environ, RUNNER_TEMP=str(temporary), GITHUB_ENV=str(exported),
++                               DJANGO_DB_PATH=str(original)), timeout=10)
++        assert result.returncode == 0, result.stderr
++        values = dict(line.split('=', 1) for line in exported.read_text().splitlines())
++        database = Path(values['DJANGO_DB_PATH'])
++        assert database.parent.parent == temporary and not database.exists()
++        assert Path(values['PRIVATE_EVIDENCE_ROOT']).is_dir()
++        assert values['SCMS_CI_DATABASE_ISOLATED'] == '1'
++        databases.append(database)
++    assert databases[0] != databases[1]
++    assert original.read_bytes() == b'original unrelated database'
+-- 
+2.52.0
+

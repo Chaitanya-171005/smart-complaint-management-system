@@ -1,0 +1,21 @@
+{
+  "base_revision": "20fd191e4f94a09c1067397557b3410af4387d94",
+  "tested_revision": "391d5d6e0ff4cbede443dde31a5e98023176ee80",
+  "source_tree": "7963144cd5f95eac29aa3d1438485acfab40a354",
+  "patch_sha256": "a01d37fe3e2f7548e7daf4bde3efc599ddda95c536f1283a0bfbb663c428d430",
+  "focused_test_files": [
+    "workflow/test_reference_feedback.py",
+    "complaints/test_tracking.py",
+    "integration_checks/anonymous_recovery.py"
+  ],
+  "new_regression_cases": 24,
+  "focused_sqlite_passed": 192,
+  "focused_postgresql_passed": 192,
+  "full_tests_passed": 1908,
+  "overall_coverage_percent": 96.8,
+  "overlapping_suites": true,
+  "official_q04_executed": false,
+  "pr92_merged": false,
+  "release_gates_enabled": false,
+  "browser_executed_for_this_change": false
+}

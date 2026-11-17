@@ -1,0 +1,17 @@
+{
+  "pr93_base": "fc8f41a9a3e34b2fdd0d58739d75eca6f6fc05c3",
+  "pr92_head": "43ff72a80eabcd79091e3c7e0f06107c004fb189",
+  "ci_fix_patch_sha256": "99af886fcb95282a385bad7a349d6e382fb529a872f3151a9b327879f1004be5",
+  "ci_fix_tree": "b7e1a3520e4eb017c799404b668891ac8348fc38",
+  "combined_tree": "b42c351c0630a8f642cf83aaa2372dc4453545a0",
+  "instructions": "Apply the CI fix patch to PR93 base, commit locally, merge PR92 head, resolve only .env.docker.example using the complete placeholder content below, and verify the combined tree before testing. This is a local compatibility experiment, not authorization to merge Main.",
+  "environment_resolution": "DJANGO_SECRET_KEY=CHANGE_ME\nDJANGO_ALLOWED_HOSTS=CHANGE_ME\nDJANGO_DB_NAME=CHANGE_ME\nDJANGO_DB_USER=CHANGE_ME\nDJANGO_DB_PASSWORD=CHANGE_ME\nAPP_PORT=8000\nCOMPLAINT_INTAKE_ENABLED=False\nCOMPLAINT_EMERGENCY_NOTICE=\nANONYMOUS_FEEDBACK_ENABLED=False\nCOMPLAINT_MAX_REOPENS=2\n\n# Email: console is safe for local development. See docs/SMTP.md before enabling SMTP.\nDJANGO_MAIL_BACKEND=console\nDJANGO_DEFAULT_FROM_EMAIL=\nDJANGO_SMTP_HOST=\n# Blank selects 587 for STARTTLS or 465 for implicit TLS.\nDJANGO_SMTP_PORT=\nDJANGO_SMTP_USERNAME=\nDJANGO_SMTP_PASSWORD=\nDJANGO_SMTP_TIMEOUT=10\nDJANGO_SMTP_USE_TLS=True\nDJANGO_SMTP_USE_SSL=False\n",
+  "coverage_percent": 96.85,
+  "full_tests_passed": 1977,
+  "focused_sqlite_passed": 211,
+  "combined_postgresql_passed": 285,
+  "overlapping_suites": true,
+  "docker_compose_preflight_executed": false,
+  "combined_browser_executed": false,
+  "official_q04_executed": false
+}

@@ -1,0 +1,12 @@
+{
+  "tested_revision": "59982195c51ca372ac36e2ef1bc7d904df38d626",
+  "source_tree": "b7e1a3520e4eb017c799404b668891ac8348fc38",
+  "focused_shell_control_cases": 5,
+  "skipped": 0,
+  "failures": 0,
+  "scope": "Actual Mac shell control and CI storage regressions; not application browser/performance acceptance",
+  "full_application_tests_rerun_by_this_publisher": false,
+  "pr92_merged": false,
+  "release_gates_enabled": false,
+  "q04_executed": false
+}

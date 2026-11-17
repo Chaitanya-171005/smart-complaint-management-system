@@ -382,6 +382,17 @@ def test_validation_errors_preserve_safe_fields_and_same_form(setup, client, set
     assert post(setup, client, key).status_code == 200
 
 
+def test_anonymous_short_description_has_one_inline_error(setup, client, settings):
+    key = token(client)
+    response = post(setup, client, key, description="Bad")
+    errors = response.context["form"].errors["description"]
+    assert response.status_code == 400 and len(errors) == 1
+    assert response.content.decode().count(errors[0]) == 1
+    assert response.context["request_token"] == key
+    empty(settings)
+    assert post(setup, client, key).status_code == 200
+
+
 @pytest.mark.parametrize("files", [lambda: [upload() for _ in range(4)],
                                    lambda: [SimpleUploadedFile("bad.png", b"invalid")]])
 def test_invalid_batch_never_accepts(setup, client, settings, files):
@@ -451,6 +462,31 @@ def test_privacy_response_headers_and_no_get_recovery_route(setup, client):
     assert client.put(reverse("complaints:anonymous_submit"), data="{}", secure=True).status_code == 405
 
 
+def test_form_referrer_policy_preserves_strict_csrf_and_private_reference_policy(setup, settings):
+    browser = Client(enforce_csrf_checks=True)
+    url = reverse("complaints:anonymous_submit")
+    page = browser.get(url, secure=True)
+    assert page.status_code == 200 and page["Referrer-Policy"] == "same-origin"
+    key = page.context["request_token"]
+    data = {**setup["data"], "request_token": key,
+            "csrfmiddlewaretoken": browser.cookies["csrftoken"].value,
+            "description": "Bad"}
+    for origin in ("null", "https://untrusted.example.test"):
+        response = browser.post(url, data, secure=True, HTTP_ORIGIN=origin)
+        assert response.status_code == 403
+        assert response["Referrer-Policy"] == "no-referrer"
+    missing = {k: v for k, v in data.items() if k != "csrfmiddlewaretoken"}
+    assert browser.post(url, missing, secure=True, HTTP_ORIGIN="https://testserver").status_code == 403
+    response = browser.post(url, data, secure=True, HTTP_ORIGIN="https://testserver")
+    assert response.status_code == 400 and response["Referrer-Policy"] == "same-origin"
+    assert len(response.context["form"].errors["description"]) == 1
+    empty(settings)
+    response = browser.post(url, {**data, "description": setup["data"]["description"]},
+                            secure=True, HTTP_ORIGIN="https://testserver")
+    assert response.status_code == 200 and response["Referrer-Policy"] == "no-referrer"
+    assert response.context["reference"]
+
+
 def test_anonymous_reference_or_id_never_grants_full_record_or_evidence(setup, client, user_factory):
     response = post(setup, client, evidence=upload())
     complaint = Complaint.objects.get()
@@ -465,7 +501,7 @@ def test_anonymous_reference_or_id_never_grants_full_record_or_evidence(setup, c
     assert permissions.can_view_complaint(staff, complaint)
     assert complainant_label(complaint) == "Anonymous"
     summary = anonymous_summary(complaint)
-    assert set(summary) == {"complaint_id", "complainant", "category", "location", "status", "is_escalated", "escalation_level"}
+    assert set(summary) == {"complaint_id", "complainant", "category", "location", "status", "priority", "is_escalated", "escalation_level"}
     assert not {"submitted_by", "reference_digest", "attachments", "title", "description"} & set(summary)
 
 
