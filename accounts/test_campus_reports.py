@@ -97,10 +97,10 @@ def test_groups_are_ordered_by_volume_then_label(dataset):
 
 def test_mean_and_median_resolution_time(dataset):
     report = reports.build_report(date(2026, 11, 10), date(2026, 11, 12), now=NOW)
-    # durations in hours: 2, 4, 6, 8
-    assert report.resolved_measured == 4
-    assert report.mean_hours == Decimal("5.00")
-    assert report.median_hours == Decimal("5.00")
+    # Resolved or Closed now: 2, 4 and 8 hours. The REOPENED complaint (6 hours, stale resolved_at) is not measured.
+    assert report.resolved_measured == 3
+    assert report.mean_hours == Decimal("4.67")
+    assert report.median_hours == Decimal("4.00")
 
 
 def test_median_differs_from_mean_with_an_odd_set(make):
@@ -109,6 +109,16 @@ def test_median_differs_from_mean_with_an_odd_set(make):
     report = reports.build_report(date(2026, 11, 10), date(2026, 11, 10), now=NOW)
     assert report.mean_hours == Decimal("5.00")
     assert report.median_hours == Decimal("2.00")
+
+
+@pytest.mark.parametrize("status", [S.REOPENED, S.IN_PROGRESS, S.ASSIGNED])
+def test_a_complaint_worked_again_after_resolution_is_not_measured(make, status):
+    """F4 keeps resolved_at when a resolution is rejected; that old time must not count."""
+    make(10, status=S.CLOSED, resolved_after_hours=2)
+    make(10, status=status, resolved_after_hours=50, reopen_count=1)
+    report = reports.build_report(date(2026, 11, 10), date(2026, 11, 10), now=NOW)
+    assert report.resolved_measured == 1
+    assert report.mean_hours == Decimal("2.00")
 
 
 def test_non_positive_durations_are_excluded_and_counted(make):
@@ -192,8 +202,8 @@ def test_csv_rows_carry_exactly_the_report_figures(dataset):
     assert rows[("summary", "Escalated")] == "1"
     assert rows[("summary", "Reopened (complaints)")] == "2"
     assert rows[("summary", "Reopens (total count)")] == "3"
-    assert rows[("resolution", "Mean hours")] == "5.00"
-    assert rows[("resolution", "Median hours")] == "5.00"
+    assert rows[("resolution", "Mean hours")] == "4.67"
+    assert rows[("resolution", "Median hours")] == "4.00"
     assert rows[("report", "Scope")] == "Campus-wide"
     assert rows[("report", "Date from")] == "2026-11-10"
     assert rows[("report", "Date to (included)")] == "2026-11-12"

@@ -31,10 +31,13 @@ from complaints.models import Complaint
 #        i.e. submitted_at >= start 00:00 and < the day after the end date, 00:00.
 # Open: still being handled, so not RESOLVED (awaiting the Complainant), CLOSED or REJECTED.
 # Overdue: open and past its due time at the moment the report is generated.
-# Resolution time: resolved_at - submitted_at for complaints that have a resolved_at later than
-#        submitted_at (a missing or non-positive duration is excluded and counted separately).
-#        A reopened complaint is measured to its latest resolved_at.
-RULES_VERSION = "provisional-D03-v1"
+# Resolution time: resolved_at - submitted_at, only for complaints that are RESOLVED or CLOSED now
+#        and whose resolved_at is later than submitted_at (a missing or non-positive duration is
+#        excluded and counted separately). F4 keeps the old resolved_at when a resolution is
+#        rejected, so a complaint that is REOPENED or being worked again is NOT measured until it is
+#        resolved again; a re-resolved complaint is measured to its latest resolved_at.
+RULES_VERSION = "provisional-D03-v2"
+RESOLVED_STATUSES = (Complaint.Status.RESOLVED, Complaint.Status.CLOSED)
 OPEN_STATUSES = (
     Complaint.Status.SUBMITTED,
     Complaint.Status.ASSIGNED,
@@ -44,8 +47,8 @@ OPEN_STATUSES = (
 RULES_TEXT = (
     "Complaints are included by submission date; both selected days are included (whole days, campus "
     "time zone). Open = Submitted, Assigned, In progress or Reopened. Overdue = open and past due when the "
-    "report was generated. Resolution time = resolved time minus submitted time, for complaints with a "
-    "later resolved time. Rules marked provisional until decision D03 is confirmed."
+    "report was generated. Resolution time = resolved time minus submitted time, for complaints that are "
+    "Resolved or Closed now and have a later resolved time. Rules marked provisional until decision D03 is confirmed."
 )
 MAX_RANGE_DAYS = 366
 
@@ -120,7 +123,7 @@ def build_report(date_from, date_to, *, department=None, now=None):
 
     durations = []
     excluded = 0
-    for submitted_at, resolved_at in complaints.filter(resolved_at__isnull=False).values_list(
+    for submitted_at, resolved_at in complaints.filter(resolved_at__isnull=False, status__in=RESOLVED_STATUSES).values_list(
         "submitted_at", "resolved_at"
     ):
         seconds = (resolved_at - submitted_at).total_seconds()
