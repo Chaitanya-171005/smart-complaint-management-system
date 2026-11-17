@@ -12,6 +12,7 @@
 <p>{{ complaint.status }} · {{ complaint.priority }}{% if complaint.is_escalated %} · Escalated{% endif %} · {{ complaint.submitted_at }}</p>
 {% endif %}
 <p>Assignee: {{ complaint.assignee|default:"Unassigned" }}</p>
+{% if not complaint.submitted_by_id %}<p><a href="{% url 'workflow:feedback_detail' complaint.complaint_id %}">Resolution feedback</a></p>{% endif %}
 {% if request.user.role == 'HEAD' %}
 <form method="post" action="{% url 'assign_complaint' complaint.complaint_id %}">{% csrf_token %}
 <input type="hidden" name="expected_assignee" value="{{ complaint.assignee_id|default_if_none:'' }}">

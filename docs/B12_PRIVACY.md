@@ -3,7 +3,7 @@
 Owner: Atul (F2); affected integrations require F1/F3/F4/Q03 review. Related to
 #17, REQ-ANON-02, REQ-SEC-06/08 and BR-03. This file distinguishes tested application
 controls from deployment and future-module checks; it is not a blanket anonymity
-certification for unimplemented reports, notifications or tracking.
+certification for unimplemented reports/notifications or deployed tracking.
 
 ## Implemented and tested controls
 
@@ -19,15 +19,17 @@ certification for unimplemented reports, notifications or tracking.
 | Unauthorized reads | An account does not become owner merely by using the anonymous page. Anonymous callers/reference/ID holders cannot use authenticated acknowledgements or evidence downloads. Department permissions still govern staff access. |
 | Security refusals | An account's authorization refusal is retained, but the anonymous complaint target is generic, without its PK/ID, preventing an account-to-anonymous-complaint join in SecurityEvent. |
 | Error responses/reports | Generic errors, sensitive POST/local variables, no account/session/cookie/query/file values in anonymous Django exception reports; raw exception values are not emitted by view/cleanup handlers. |
-| Browser response | HTTPS required; no-store/private/no-cache, no-referrer, noindex/noarchive, no external resources/scripts and restrictive CSP on the anonymous route. |
+| Browser response | HTTPS required; no-store/private/no-cache, noindex/noarchive, no external resources/scripts and restrictive CSP on anonymous routes. Submission, tracking and feedback forms use same-origin referrers for strict CSRF; the accepted private-reference page and other non-form responses use no-referrer. |
 
 `complaints.privacy.complainant_label()` returns exactly `Anonymous` for an
 anonymous record, without guessing identity from assignees/uploaders/sessions.
 `anonymous_summary()` is an explicit allowlist for authorized display/export/
 report/staff-notification integrations: ID, the Anonymous label, category,
-location, status, priority and escalation. It excludes submitter, reference
-digest, free text, evidence names/bytes and all account relations. It is not an
-access check and must never be used to grant public full-record access.
+location, status and escalation. It excludes submitter, reference digest,
+free text, evidence names/bytes and all account relations. It is not an access
+check and must never be used to grant public full-record access. F4 should use
+these boundaries as its staff/history/report screens are implemented. B13 uses
+its own restricted history projection and transient tracking throttle, described below.
 
 ### F3 consumers (B14/B15/B16/B17/B18)
 
@@ -176,4 +178,14 @@ backend/source metadata in `b11-recovery-postgresql-evidence`.
 These checks cover evidence recovery integration; they do not establish all
 anonymous PostgreSQL/privacy acceptance, real F4 delivery, F3/F4 output privacy,
 D01/D02 policy or deployed TLS/log-redaction acceptance. Anonymous intake remains
-disabled pending those prerequisites; PR73 remains a separate draft dependency.
+disabled pending those prerequisites. PR71 is merged; PR73 tracking is verified
+separately and remains disabled until its release requirements are satisfied.
+
+## B13 integration
+
+Reference lookup uses the same first-position privacy middleware. Only a
+transient peer-address HMAC enters a dedicated memory-only limiter; it is never
+attached to a complaint, reference or session. The reference POST is not echoed
+and only permitted fields/history are returned. See [B13_TRACKING.md](B13_TRACKING.md)
+for the independent disabled-by-default release gate and required Redis,
+ingress/logging and F4 acceptance. These checks remain required before release.

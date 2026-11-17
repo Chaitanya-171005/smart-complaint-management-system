@@ -18,3 +18,8 @@ docs/evidence
 **/conftest.py
 integration_checks
 scripts/q04_load.py
+
+# Keep transient SQLite journals and write-ahead logs out of image builds.
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm

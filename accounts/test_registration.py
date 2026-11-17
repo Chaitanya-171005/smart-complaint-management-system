@@ -401,6 +401,7 @@ def test_acknowledgement_mentions_password_reset_assistance_for_existing_users(c
     # D06 interim: the wording points to assistance, no reset flow exists (docs/DECISIONS.md).
     r = client.get(client.post(URL, valid()).url)
     assert "password-reset assistance" in r.content.decode()
+    assert f'href="{reverse("accounts:login")}"' in r.content.decode()
     from django.urls import NoReverseMatch
 
     for name in ("password_reset", "accounts:password_reset"):

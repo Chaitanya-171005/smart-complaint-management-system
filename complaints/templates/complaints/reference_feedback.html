@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anonymous resolution feedback - SCMS</title></head>
+<body>
+<h1>Anonymous resolution feedback</h1>
+{% if unavailable %}
+<p role="alert">Reference feedback is temporarily unavailable. Please try again later.</p>
+{% else %}
+<p>Use your private reference. Feedback does not provide access to complaint details or evidence.</p>
+<p>Tracking and feedback share a limit of 10 reference attempts per source in 10 minutes.</p>
+{% if error %}<p id="feedback-error" role="alert">{{ error }}</p>{% endif %}
+{% if result %}
+<p role="status">{% if result.decision == 'CONFIRM' %}Resolution confirmed. The complaint is closed.{% elif result.decision == 'REOPEN' %}The complaint was reopened and the department notified.{% else %}The maximum reopen count was reached. The Department Head was notified for review; the complaint remains resolved.{% endif %}</p>
+<p>Complaint {{ result.complaint_id }}: {{ result.status }}.</p>
+{% else %}
+{% if searched and not summary %}<p role="status">No matching complaint was found.</p>{% endif %}
+{% if summary %}
+<dl><dt>Complaint identifier</dt><dd>{{ summary.complaint_id }}</dd><dt>Category</dt><dd>{{ summary.category }}</dd><dt>Location</dt><dd>{{ summary.location }}</dd><dt>Status</dt><dd>{{ summary.status }}</dd></dl>
+{% if not summary.revision %}<p>Feedback is available only while the complaint is resolved.</p>{% endif %}
+{% endif %}
+<form method="post" action="{% url 'complaints:reference_feedback' %}" autocomplete="off">
+{% csrf_token %}
+<p><label for="reference">Private reference</label><br><input id="reference" name="reference" type="password" maxlength="32" size="20" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="reference-help{% if error %} feedback-error{% endif %}"></p>
+<p id="reference-help">Your reference is never filled back into this page. Re-enter it for every check or action.</p>
+{% if summary.revision %}
+<input type="hidden" name="revision" value="{{ summary.revision }}">
+<p><label for="rating">Optional confirmation rating (1–5)</label><br><input id="rating" name="rating" type="number" min="1" max="5"></p>
+<p><label for="reason">Rejection reason</label><br><textarea id="reason" name="reason" rows="6" cols="20" maxlength="2000" aria-describedby="reason-help"></textarea></p>
+<p id="reason-help">For rejection, supply 20–2000 valid characters. Leave rating empty. Do not include your reference or identifying details. For confirmation, leave this reason empty.</p>
+<p><button name="action" value="confirm" type="submit">Confirm resolution and close</button></p>
+<p><button name="action" value="reject" type="submit">Reject resolution and request further work</button></p>
+{% else %}
+<button name="action" value="lookup" type="submit">Check status for feedback</button>
+{% endif %}
+</form>
+{% endif %}
+<p><a href="{% url 'complaints:track_reference' %}">Track status and history</a></p>
+{% endif %}
+</body>
+</html>

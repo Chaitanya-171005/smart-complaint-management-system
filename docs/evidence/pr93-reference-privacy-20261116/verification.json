@@ -1,0 +1,12 @@
+{
+  "tested_revision": "ff26d5416e14be6353fa4dbb87458a5d49af279a",
+  "source_tree": "7963144cd5f95eac29aa3d1438485acfab40a354",
+  "focused_privacy_tracking_recovery_cases": 192,
+  "skipped": 0,
+  "failures": 0,
+  "scope": "Actual Mac Django service/HTTP/privacy/rollback/staff-output tests; not browser/performance acceptance",
+  "full_application_tests_rerun_by_this_publisher": false,
+  "pr92_merged": false,
+  "release_gates_enabled": false,
+  "q04_executed": false
+}
