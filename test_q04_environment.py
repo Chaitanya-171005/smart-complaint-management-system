@@ -79,6 +79,23 @@ def test_service_failure_not_mislabeled_as_release_gate(tmp_path, monkeypatch, c
     assert 'authenticated intake: FAILED (HTTP 503)' in capsys.readouterr().out
 
 
+@pytest.mark.parametrize('name,path', [('tracking','/anonymous/track/'),
+                                     ('feedback','/anonymous/feedback/')])
+@pytest.mark.parametrize('ready,label', [(False,'RELEASE_GATED'),(True,'FAILED'),(None,'FAILED')])
+def test_reference_readiness_distinguishes_known_gate_from_service_failure(
+    tmp_path, monkeypatch, capsys, name, path, ready, label,
+):
+    monkeypatch.setattr(q04_env,'STATE',tmp_path)
+    (tmp_path/'actors.json').write_text(json.dumps({'HEAD':[{'session_cookie':'h'}],
+        'COMPLAINANT':[{'session_cookie':'c'}]}))
+    monkeypatch.setattr(q04_env,'release_gates',lambda _: {
+        'intake':True,'anonymous':True,'tracking':ready,'feedback':ready})
+    monkeypatch.setattr(q04_env,'http',lambda *args:(503,''))
+    monkeypatch.setattr(q04_env,'compose',lambda *args,**kwargs:None)
+    q04_env.check({'port':55004})
+    assert f'{name}: {label} (HTTP 503)' in capsys.readouterr().out
+
+
 def test_conflict_message_has_only_nonsecret_values(tmp_path, monkeypatch):
     monkeypatch.setattr(q04_env,'STATE',tmp_path)
     q04_env.get_settings(True,55017,650,0)
