@@ -1,8 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Private complaint tracking - SCMS</title></head>
-<body>
-  <h1>Track an anonymous complaint</h1>
+{% extends "ui/base.html" %}
+{% block title %}Private complaint tracking - SCMS{% endblock %}
+{% block content %}
+<h1>Track an anonymous complaint</h1>
   {% if feedback_enabled %}<p><a href="{% url 'complaints:reference_feedback' %}">Confirm or reject an anonymous resolution</a></p>{% endif %}
   {% if unavailable %}
   <p role="alert">Reference tracking is temporarily unavailable. Please try again later.</p>
@@ -37,5 +36,4 @@
     <button type="submit">Check status</button>
   </form>
   {% endif %}
-</body>
-</html>
+{% endblock %}

@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Departments - SCMS</title>
-</head>
-<body>
-  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+{% extends "ui/base.html" %}
+{% block title %}Departments - SCMS{% endblock %}
+{% block content %}
+<p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Departments</h1>
   <p>Departments are deactivated, never deleted. Inactive departments keep their existing users and complaints but are not offered to new work.</p>
   <table>
@@ -34,5 +29,4 @@
     {{ form.as_p }}
     <button type="submit">Add</button>
   </form>
-</body>
-</html>
+{% endblock %}

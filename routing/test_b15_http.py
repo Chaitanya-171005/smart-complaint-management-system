@@ -169,7 +169,12 @@ def test_staff_queue_and_pagination(client, staff_user, department, department_f
     assert len(first.context['page']) == 25 and len(second.context['page']) == 1
     assert set(first.context['page'].object_list) | set(second.context['page'].object_list) == set(complaints)
     assert other.complaint_id not in first.content.decode()
-    assert b'<form' not in first.content
+    # The shared shell contains a CSRF-protected logout form. Staff must
+    # still have no assignment form or assignment controls in the queue.
+    assert b'name="assignee"' not in first.content
+    assert b'name="expected_assignee"' not in first.content
+    for complaint in complaints:
+        assert reverse('assign_complaint', args=[complaint.complaint_id]).encode() not in first.content
 
 
 @pytest.mark.django_db(transaction=True)

@@ -1,9 +1,9 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Resolution feedback - SCMS</title>
-<style>pre{white-space:pre-wrap;overflow-wrap:anywhere}</style></head><body>
+{% extends "ui/base.html" %}
+{% block title %}Resolution feedback - SCMS{% endblock %}
+{% block content %}
 <h1>Resolution feedback</h1>
 <p>Complaint {{ complaint.complaint_id }}. Reopen count: {{ complaint.reopen_count }}.</p>
 <p>Reporter: Anonymous</p>
 <ol>{% for entry in feedback_page %}<li><p>{{ entry.created_at }}: {{ entry.get_decision_display }}</p>{% if entry.reason %}<pre>{{ entry.reason }}</pre>{% endif %}{% if entry.rating %}<p>Rating: {{ entry.rating }} / 5</p>{% endif %}</li>{% empty %}<li>No anonymous resolution feedback recorded.</li>{% endfor %}</ol>
 <nav aria-label="Feedback pages">{% if feedback_page.has_previous %}<a href="?page={{ feedback_page.previous_page_number }}">Previous</a>{% endif %} Page {{ feedback_page.number }} of {{ feedback_page.paginator.num_pages }} {% if feedback_page.has_next %}<a href="?page={{ feedback_page.next_page_number }}">Next</a>{% endif %}</nav>
-</body></html>
+{% endblock %}

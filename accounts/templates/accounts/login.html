@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign in - SCMS</title>
-</head>
-<body>
-  <h1>Sign in to SCMS</h1>
+{% extends "ui/base.html" %}
+{% block title %}Sign in - SCMS{% endblock %}
+{% block content %}
+<h1>Sign in to SCMS</h1>
   {% if error %}<p class="error" role="alert">{{ error }}</p>{% endif %}
   <form method="post" novalidate>
     {% csrf_token %}
@@ -17,5 +12,4 @@
   <p><a href="{% url 'accounts:register' %}">Create an account</a></p>
   <p><a href="{% url 'complaints:anonymous_submit' %}">Submit an anonymous complaint without signing in</a></p>
   <p><a href="{% url 'complaints:track_reference' %}">Track an anonymous complaint with a private reference</a></p>
-</body>
-</html>
+{% endblock %}
