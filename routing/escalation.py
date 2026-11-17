@@ -1,4 +1,4 @@
-"""Scheduled escalation, with a no-op notification hook until F4 supplies one."""
+"""Scheduled escalation with atomic F4 publication and an optional legacy hook."""
 
 from datetime import timedelta
 import sys
@@ -10,6 +10,7 @@ from django.utils import timezone
 from complaints.models import Complaint
 from routing.models import EscalationPolicy, EscalationRun
 from routing.resolver import RoutingConfigurationError
+from routing.notifications import publish_escalation_history
 from workflow.history_service import record_history
 from workflow.models import ComplaintHistory
 
@@ -20,7 +21,7 @@ ELIGIBLE_STATUSES = (
 
 
 def _no_notification(complaint, new_level, department):
-    """Placeholder: F4 owns delivery of Head notifications."""
+    """Legacy post-commit hook; durable F4 creation happens inside the transaction."""
 
 
 def _eligible(now, policy):
@@ -70,11 +71,12 @@ def run_escalation(*, now=None, notify=None):
                     complaint.is_escalated = True
                     complaint.escalation_level += 1
                     complaint.save(update_fields=["is_escalated", "escalation_level"])
-                    record_history(
+                    history = record_history(
                         complaint.complaint_id, "ESCALATED", "SYSTEM",
                         previous_state=complaint.status, new_state=complaint.status,
                         remarks=f"Past due; escalated to level {complaint.escalation_level} of {policy.maximum_level}",
                     )
+                    publish_escalation_history(history)
                     department = complaint.department
                     transaction.on_commit(lambda complaint=complaint, department=department:
                                           after_commit(complaint, department))

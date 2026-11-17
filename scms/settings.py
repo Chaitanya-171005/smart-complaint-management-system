@@ -154,13 +154,10 @@ STATIC_ROOT = Path(os.environ.get("DJANGO_STATIC_ROOT", BASE_DIR / "staticfiles"
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
 
-# MAILERS exists only on Django 6.1+, which is why requirements.txt pins 6.1.x.
-# Do not add the old EMAIL_* settings: Django 6.1 refuses them next to MAILERS.
-MAILERS = {
-    "default": {
-        "BACKEND": "django.core.mail.backends.console.EmailBackend",
-    },
-}
+# Django 6.1 supports MAILERS/OPTIONS rather than legacy EMAIL_* settings.
+from .mail_config import mail_config
+
+MAILERS, DEFAULT_FROM_EMAIL = mail_config(os.environ)
 
 AUTH_USER_MODEL = "accounts.User"
 
