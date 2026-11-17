@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Submit a complaint - SCMS</title></head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Submit a complaint - SCMS</title>
+<style>@media (max-width: 480px) { body { overflow-wrap: anywhere; } input, select, textarea, button { box-sizing: border-box; max-width: 100%; } textarea { width: 100%; } }</style></head>
 <body>
   <nav><a href="{% url 'accounts:home' %}">Home</a></nav>
   <h1>Submit a complaint</h1>
@@ -13,8 +14,9 @@
     <input type="hidden" name="request_token" value="{{ request_token }}">
     {{ form.as_p }}
     <p><label for="id_evidence">Evidence (optional)</label><br>
-      <input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf">
-      <br>Attach up to three JPEG, PNG or PDF files. Select the same files again when retrying.
+      <input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf" aria-describedby="evidence-help{% if evidence_errors %} evidence-errors{% endif %}"{% if evidence_errors %} aria-invalid="true"{% endif %}>
+      {% if evidence_errors %}<span id="evidence-errors" role="alert">{% for error in evidence_errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</span>{% endif %}
+      <br><span id="evidence-help">Attach up to three JPEG, PNG or PDF files. Select the same files again when retrying.</span>
     </p>
     <p>Keep this form if the response is interrupted. Retry the same request with the same details and files.</p>
     <button type="submit"{% if form.configuration_unavailable or not request_token %} disabled{% endif %}>Submit complaint</button>

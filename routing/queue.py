@@ -16,7 +16,7 @@ def department_queue(user, department):
     return (
         scope_complaints(user, Complaint.objects.all())
         .filter(department=department, status__in=OPEN_QUEUE_STATUSES)
-        .select_related("assignee")
+        .select_related("assignee", "submitted_by")
         .annotate(priority_rank=Case(
             When(priority=Complaint.Priority.CRITICAL, then=Value(0)),
             When(priority=Complaint.Priority.HIGH, then=Value(1)),

@@ -1,0 +1,61 @@
+"""Require 19 PostgreSQL and real loopback SMTP checks; record component limits."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import platform
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'q05_checks.settings')
+import django
+from django.db import connection
+
+django.setup()
+if connection.vendor != 'postgresql':
+    raise SystemExit('Actual PostgreSQL is required.')
+connection.ensure_connection()
+metadata = json.loads(Path('q05_checks/source.json').read_text())
+for name, expected in metadata['harness_sha256'].items():
+    assert hashlib.sha256(Path(name).read_bytes()).hexdigest() == expected, 'Harness integrity mismatch.'
+output = Path('/evidence') if Path('/evidence').is_dir() else Path('build/evidence/q05-smtp')
+output.mkdir(parents=True, exist_ok=True)
+report = dict(metadata, runtime={'database_vendor': connection.vendor, 'postgresql_version': connection.pg_version,
+    'python_version': platform.python_version(), 'django_version': django.get_version()},
+    scope='Pinned draft F4 PR78 SMTP/outbox component checks; not final Main integration, external mailbox delivery or deployment approval',
+    status='RUNNING')
+connection.close()
+checks = []
+for args in [('manage.py', 'check'), ('manage.py', 'makemigrations', '--check', '--dry-run')]:
+    checked = subprocess.run([sys.executable, *args], capture_output=True, text=True)
+    checks.append(checked.returncode)
+    (output / (args[1] + '.txt')).write_text(checked.stdout + checked.stderr)
+    if checked.returncode:
+        report['status'] = 'FAIL'
+        report['failed_phase'] = args[1]
+        (output / 'report.json').write_text(json.dumps(report, indent=2)+'\n')
+        raise SystemExit(2)
+completed = subprocess.run([sys.executable, '-m', 'pytest', '-o', 'addopts=', '-p', 'no:cacheprovider',
+    'workflow/test_notification_smtp.py', 'q05_checks/test_smtp_recovery.py', '-ra', '--color=no', '--junitxml='+str(output/'junit.xml')],
+    capture_output=True, text=True)
+(output / 'pytest.txt').write_text(completed.stdout + completed.stderr)
+print(completed.stdout, end='', flush=True)
+print(completed.stderr, end='', file=sys.stderr, flush=True)
+cases = list(ET.parse(output/'junit.xml').iter('testcase')) if (output/'junit.xml').is_file() else []
+report.update(pytest_exit_code=completed.returncode, executed_cases=len(cases),
+    skipped=sum(case.find('skipped') is not None for case in cases),
+    failed_or_errored=sum(case.find('failure') is not None or case.find('error') is not None for case in cases))
+report['status'] = 'PASS_SMTP_RECOVERY_COMPONENT_CHECKS' if completed.returncode == 0 and len(cases) == 19 and report['skipped'] == report['failed_or_errored'] == 0 else 'FAIL'
+report['remaining_q05'] = ['external_SMTP_provider_and_mailbox_delivery_acceptance',
+    'final_F4_Main_and_anonymous_privacy_integration', 'deployed_worker_and_scheduler_supervision',
+    'D05_auto_close_policy_approval', 'B18_abandoned_run_supervision', 'final_deployment_and_power_loss_acceptance']
+report['notification_scope'] = 'Real Django SMTP against synthetic loopback relay; actual PostgreSQL row locks, two worker processes, SIGKILL and durable outbox recovery. No external SMTP, mailbox delivery or production TLS/credentials tested.'
+report['clock_scope'] = 'Deterministic overrides verify exact 60/300 second retry boundaries and 5 minute claim expiry without wall-clock waits.'
+report['failure_injection'] = 'Actual relay 451/550 responses, socket refusal/disconnect/timeout, actual child SIGKILL; one controlled database-finalization exception after real relay acceptance.'
+report['case_results'] = [{'classname': c.get('classname'), 'name': c.get('name'), 'seconds': c.get('time')} for c in cases]
+report['junit_sha256'] = hashlib.sha256((output/'junit.xml').read_bytes()).hexdigest() if (output/'junit.xml').exists() else None
+(output/'report.json').write_text(json.dumps(report, indent=2)+'\n')
+print(json.dumps({'status':report['status'], 'executed_cases':len(cases), 'skipped':report['skipped']}), flush=True)
+raise SystemExit(0 if report['status'] == 'PASS_SMTP_RECOVERY_COMPONENT_CHECKS' else 2)

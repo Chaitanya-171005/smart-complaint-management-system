@@ -18,7 +18,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    environment:
+    environment: &app_environment
       DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY}
       DJANGO_DEBUG: "False"
       DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1}
@@ -29,10 +29,21 @@ services:
       DJANGO_DB_HOST: db
       DJANGO_DB_PORT: "5432"
       PRIVATE_EVIDENCE_ROOT: /data/private-evidence
+      DJANGO_MAIL_BACKEND: ${DJANGO_MAIL_BACKEND:-console}
+      DJANGO_DEFAULT_FROM_EMAIL: ${DJANGO_DEFAULT_FROM_EMAIL:-}
+      DJANGO_SMTP_HOST: ${DJANGO_SMTP_HOST:-}
+      DJANGO_SMTP_PORT: ${DJANGO_SMTP_PORT:-}
+      DJANGO_SMTP_USERNAME: ${DJANGO_SMTP_USERNAME:-}
+      DJANGO_SMTP_PASSWORD: ${DJANGO_SMTP_PASSWORD:-}
+      DJANGO_SMTP_TIMEOUT: ${DJANGO_SMTP_TIMEOUT:-10}
+      DJANGO_SMTP_USE_TLS: ${DJANGO_SMTP_USE_TLS:-True}
+      DJANGO_SMTP_USE_SSL: ${DJANGO_SMTP_USE_SSL:-False}
       COMPLAINT_INTAKE_ENABLED: ${COMPLAINT_INTAKE_ENABLED:-False}
       COMPLAINT_EMERGENCY_NOTICE: ${COMPLAINT_EMERGENCY_NOTICE:-}
       ANONYMOUS_INTAKE_ENABLED: ${ANONYMOUS_INTAKE_ENABLED:-False}
       ANONYMOUS_PRIVACY_READY: ${ANONYMOUS_PRIVACY_READY:-False}
+      ANONYMOUS_FEEDBACK_ENABLED: ${ANONYMOUS_FEEDBACK_ENABLED:-False}
+      COMPLAINT_MAX_REOPENS: ${COMPLAINT_MAX_REOPENS:-2}
       ANONYMOUS_TRANSPORT_VERIFIED: ${ANONYMOUS_TRANSPORT_VERIFIED:-False}
       DJANGO_HTTPS_MODE: ${DJANGO_HTTPS_MODE:-}
       DJANGO_SECURE_SSL_REDIRECT: ${DJANGO_SECURE_SSL_REDIRECT:-False}
@@ -44,6 +55,19 @@ services:
     ports:
       - "127.0.0.1:${APP_PORT:-8000}:8000"
     restart: unless-stopped
+  scheduled-task:
+    profiles: [scheduled]
+    build: .
+    image: ${SCMS_IMAGE:-scms-app:local}
+    environment: *app_environment
+    # Run against the already migrated app DB. Never migrate on every cron tick.
+    entrypoint: ["python", "manage.py"]
+    command: ["run_escalation"]
+    healthcheck:
+      disable: true
+    restart: "no"
+    volumes:
+      - private_evidence:/data/private-evidence
 volumes:
   postgres_data:
   private_evidence:

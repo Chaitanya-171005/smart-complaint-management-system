@@ -205,7 +205,7 @@ def test_valid_image_with_trailing_bytes_is_retained_as_attachment(kind, extensi
     # too: format verification is deliberately not document sanitization.
 
 
-def test_later_operation_failure_cleans_batch_only(private_root):
+def test_later_operation_failure_cleans_batch_only(private_root, db):
     with evidence.staged_evidence([upload()]) as previous:
         pass
     with pytest.raises(RuntimeError, match="routing failed"):
@@ -215,7 +215,7 @@ def test_later_operation_failure_cleans_batch_only(private_root):
     assert [path.name for path in private_root.iterdir()] == [previous[0].storage_name]
 
 
-def test_second_storage_failure_cleans_first(private_root, monkeypatch):
+def test_second_storage_failure_cleans_first(private_root, monkeypatch, db):
     original = evidence.PrivateEvidenceStorage._save
     calls = []
 
@@ -243,7 +243,7 @@ def test_partial_file_write_is_removed(private_root):
     assert not list(private_root.iterdir())
 
 
-def test_cleanup_failure_is_logged_without_hiding_original(private_root, monkeypatch, caplog):
+def test_cleanup_failure_is_logged_without_hiding_original(private_root, monkeypatch, caplog, db):
     original = evidence.PrivateEvidenceStorage.delete
     calls = []
 
