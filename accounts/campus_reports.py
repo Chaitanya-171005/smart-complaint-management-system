@@ -17,7 +17,7 @@ import csv
 import io
 import statistics
 from dataclasses import dataclass, field
-from datetime import datetime, time, timedelta
+from datetime import date, datetime, time, timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
 from django.db.models import Count, Q, Sum
@@ -51,6 +51,10 @@ RULES_TEXT = (
     "Resolved or Closed now and have a later resolved time. Rules marked provisional until decision D03 is confirmed."
 )
 MAX_RANGE_DAYS = 366
+# Dates outside this window are refused with a message. Without it, a date such as 9999-12-31 raises
+# OverflowError when the day after the range end is computed (an HTTP 500 instead of a validation error).
+MIN_REPORT_DATE = date(2000, 1, 1)
+MAX_REPORT_DATE = date(2100, 12, 31)
 
 
 def _hours(seconds):
@@ -82,6 +86,9 @@ class CampusReport:
 
 def date_window(date_from, date_to):
     """Return the half-open [start, end) datetimes for two inclusive dates."""
+    for value in (date_from, date_to):
+        if not MIN_REPORT_DATE <= value <= MAX_REPORT_DATE:
+            raise ValueError(f"Dates must be between {MIN_REPORT_DATE} and {MAX_REPORT_DATE}.")
     if date_to < date_from:
         raise ValueError("The end date cannot be before the start date.")
     if (date_to - date_from).days >= MAX_RANGE_DAYS:

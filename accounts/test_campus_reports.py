@@ -164,6 +164,23 @@ def test_inverted_and_overlong_ranges_are_refused():
         reports.build_report(date(2025, 1, 1), date(2026, 11, 10))
 
 
+@pytest.mark.parametrize("date_from, date_to", [
+    (date(9999, 12, 30), date(9999, 12, 31)),   # the reviewed OverflowError case
+    (date(9999, 12, 31), date(9999, 12, 31)),
+    (date(1, 1, 1), date(1, 1, 2)),
+    (date(1999, 12, 31), date(2000, 1, 1)),
+    (date(2100, 12, 31), date(2101, 1, 1)),
+])
+def test_dates_outside_the_supported_window_are_refused_not_crashed(date_from, date_to):
+    with pytest.raises(ValueError):
+        reports.date_window(date_from, date_to)
+
+
+def test_the_supported_window_edges_are_allowed():
+    reports.date_window(date(2000, 1, 1), date(2000, 1, 1))
+    reports.date_window(date(2100, 12, 31), date(2100, 12, 31))
+
+
 def test_a_twelve_month_range_is_allowed():
     reports.date_window(date(2025, 11, 17), date(2026, 11, 16))
 
@@ -317,6 +334,9 @@ def test_empty_range_screen_says_so(scms_admin_user):
     {"date_from": "not-a-date", "date_to": "2026-11-10"},
     {"date_from": "2026-11-10"},
     {"date_from": "2024-01-01", "date_to": "2026-11-10"},
+    {"date_from": "9999-12-30", "date_to": "9999-12-31"},
+    {"date_from": "9999-12-31", "date_to": "9999-12-31"},
+    {"date_from": "0001-01-01", "date_to": "0001-01-02"},
 ])
 def test_bad_ranges_get_an_error_not_a_report(scms_admin_user, params):
     response = login(scms_admin_user).get(URL, params)
