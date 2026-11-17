@@ -1,5 +1,5 @@
 Module         Statements       Line     Branch  Status
-accounts              976     98.67%     97.06%  PASS
+accounts              977     98.67%     97.06%  PASS
 complaints           1098     98.36%     96.59%  PASS
 routing               770     93.90%     85.00%  PASS
 workflow              110     92.73%     95.00%  PASS

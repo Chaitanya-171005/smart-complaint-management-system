@@ -1,6 +1,6 @@
 {
-  "executed_at_utc": "2026-11-16T13:56:02.242711+00:00",
-  "source_revision": "416301f8b323056a0b5558b661dae0767df42a3b",
+  "executed_at_utc": "2026-11-17T02:12:12.772367+00:00",
+  "source_revision": "0ed83ea1fe5164a513087438047b20f9a5735b5a",
   "working_tree_dirty": false,
   "working_tree_status": [],
   "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
