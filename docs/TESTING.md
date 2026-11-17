@@ -160,6 +160,11 @@ test_run_tests.py verifies output-directory isolation, stale-report removal,
 failure exit codes, dirty/unknown source metadata, ignored default output and
 actual subprocess path sanitization.
 
+`complaints/test_tracking.py` exercises B13's restricted HTTP/DB/history lookup
+and runs the production rolling-window Lua in fakeredis with Lua support.
+The emulator is a development-only dependency; deployment Redis, TLS, source
+address and logging acceptance remain separate. See [B13_TRACKING.md](B13_TRACKING.md).
+
 base-commit.txt records this PR's verified merge base, not the current branch head.
 The initial base was confirmed as 8766bf27d4744a0f0221c97742305dc9b59455ea.
 

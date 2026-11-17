@@ -1,0 +1,32 @@
+F
+=================================== FAILURES ===================================
+_ test_http_case_variant_credentials_never_reach_department_output[upper-reference-head-review] _
+
+case = (<Complaint: SCMS-2026-000001>, <User: synthetic-5631b5ac0d6e4749b4da5ef64fe8edee@example.test>, <User: synthetic-ae02c1666e544da18016363247ff62fe@example.test>)
+http = (<django.test.client.Client object at 0x7f628ffdce30>, <function http.<locals>.post at 0x7f628f962f20>)
+settings = <pytest_django.fixtures.Settings object at 0x7f62900fa210>
+maximum = 0, secret = 'reference', variant = 'upper'
+
+    @pytest.mark.parametrize('maximum', [0, 2], ids=['head-review', 'reopen'])
+    @pytest.mark.parametrize('secret', ['reference', 'digest'])
+    @pytest.mark.parametrize('variant', ['lower', 'upper', 'mixed'])
+    def test_http_case_variant_credentials_never_reach_department_output(case, http, settings, maximum, secret, variant):
+        complaint, head, staff = case
+        settings.COMPLAINT_MAX_REOPENS = maximum
+        client, post = http
+        value = REFERENCE if secret == 'reference' else complaint.reference_digest
+        reason = REASON + ' Reference material: ' + credential_variant(value, variant)
+        lookup = post({'reference': REFERENCE, 'action': 'lookup'})
+        assert lookup.status_code == 200
+        before = snapshot(complaint)
+        response = post({'reference': REFERENCE, 'action': 'reject',
+                         'revision': lookup.context['summary']['revision'], 'reason': reason})
+>       assert response.status_code == 400
+E       assert 200 == 400
+E        +  where 200 = <HttpResponse status_code=200, "text/html; charset=utf-8">.status_code
+
+workflow/test_reference_feedback.py:260: AssertionError
+=========================== short test summary info ============================
+FAILED workflow/test_reference_feedback.py::test_http_case_variant_credentials_never_reach_department_output[upper-reference-head-review]
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!
+1 failed, 82 deselected in 5.53s

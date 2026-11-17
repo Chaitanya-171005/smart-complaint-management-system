@@ -111,6 +111,9 @@ def test_csrf_is_required_and_valid_post_commits_before_acknowledgement(setup, s
     assert acknowledgement.status_code == 200
     assert complaint.complaint_id.encode() in acknowledgement.content
     assert token.encode() not in acknowledgement.content
+    assert b'aria-live="polite"' in acknowledgement.content
+    assert b'Copy Complaint ID' in acknowledgement.content
+    assert b'navigator.clipboard.writeText' in acknowledgement.content
 
 
 @pytest.mark.parametrize("field", ["category", "location", "title", "description", "priority"])
@@ -133,6 +136,30 @@ def test_invalid_text_is_escaped_and_can_be_corrected_using_same_key(setup, sett
     assert response.context["request_token"] == token
     assert_not_accepted(settings)
     assert submit(setup, token).status_code == 303
+
+
+def test_short_description_has_one_inline_error_and_visible_rule(setup, settings):
+    page = setup["client"].get(setup["url"])
+    assert b"At least 20 characters" in page.content
+    token = page.context["request_token"]
+    response = submit(setup, token, description="Bad")
+    errors = response.context["form"].errors["description"]
+    assert response.status_code == 400 and len(errors) == 1
+    assert response.content.decode().count(errors[0]) == 1
+    assert response.context["request_token"] == token
+    assert response.context["form"]["title"].value() == setup["data"]["title"]
+    assert_not_accepted(settings)
+    assert submit(setup, token).status_code == 303
+    assert Complaint.objects.count() == 1
+
+
+def test_service_only_field_error_is_shown_once(setup, settings):
+    failure = ValidationError({"title": ["Choose a different synthetic title."]})
+    with patch("complaints.views.submit_authenticated_complaint", side_effect=failure):
+        response = submit(setup)
+    assert response.status_code == 400
+    assert list(response.context["form"].errors["title"]) == ["Choose a different synthetic title."]
+    assert_not_accepted(settings)
 
 
 @pytest.mark.parametrize("token", ["", "tampered", "a" * 1001])
@@ -219,6 +246,12 @@ def test_history_failure_never_returns_an_acknowledgement(setup, settings):
 def test_entire_file_batch_is_validated_by_http_flow(setup, settings, files):
     response = submit(setup, evidence=files())
     assert response.status_code == 400
+    assert response.context["evidence_errors"]
+    message = response.context["evidence_errors"][0]
+    assert message not in response.context["form"].non_field_errors()
+    markup = response.content.decode()
+    assert markup.count(message) == 1
+    assert markup.index('id="id_evidence"') < markup.index('id="evidence-errors"') < markup.index('id="evidence-help"')
     assert_not_accepted(settings)
 
 

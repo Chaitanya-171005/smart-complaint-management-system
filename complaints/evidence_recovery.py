@@ -22,17 +22,26 @@ class EvidenceRecoveryUnavailable(Exception):
 
 
 @contextmanager
-def evidence_lease(*, exclusive=False):
+def evidence_lease(*, exclusive=False, create_root=True):
     """A shared writer lease spans staging through DB commit and error cleanup.
 
     Recovery takes a nonblocking exclusive lease. All writers must use the same
     private directory and staged_evidence contract on a flock-capable filesystem.
     Directory descriptors avoid a persistent lock file or identifying journal.
+    With create_root=False, an absent directory yields None without creating it;
+    callers must not scan that path without a lease if it appears concurrently.
     """
     import fcntl
     root = Path(settings.PRIVATE_EVIDENCE_ROOT)
-    root.mkdir(mode=0o700, parents=True, exist_ok=True)
-    descriptor = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    if create_root:
+        root.mkdir(mode=0o700, parents=True, exist_ok=True)
+    try:
+        descriptor = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    except FileNotFoundError:
+        if create_root:
+            raise
+        yield None
+        return
     try:
         try:
             fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB if exclusive else fcntl.LOCK_SH)
@@ -105,11 +114,15 @@ def reconcile_evidence(*, apply=False, purge_quarantine=False):
     if purge_quarantine and not apply:
         raise EvidenceRecoveryUnavailable("Purging requires explicit apply mode.")
     try:
-        with evidence_lease(exclusive=True) as root:
+        with evidence_lease(exclusive=True, create_root=apply) as root:
             # Query the primary database before classifying or moving any file.
             rows = list(Attachment.objects.using("default").values("storage_name", "size", "sha256"))
             if any(not STORAGE_KEY.fullmatch(row["storage_name"]) for row in rows):
                 raise EvidenceRecoveryUnavailable("Invalid attachment metadata; no changes made.")
+            if root is None:
+                if rows:
+                    raise EvidenceRecoveryUnavailable("Accepted evidence is missing or corrupt; no changes made.")
+                return RecoveryReport()
             accepted = {row["storage_name"]: row for row in rows}
             quarantine = root / QUARANTINE
             if quarantine.is_symlink() or (quarantine.exists() and not quarantine.is_dir()):

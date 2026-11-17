@@ -38,7 +38,7 @@ cases = list(ET.parse(output / 'junit.xml').iter('testcase')) if (output / 'juni
 report['executed_cases'] = len(cases)
 report['skipped'] = sum(case.find('skipped') is not None for case in cases)
 report['failed_or_errored'] = sum(case.find('failure') is not None or case.find('error') is not None for case in cases)
-passed = completed.returncode == 0 and len(cases) == 30 and report['skipped'] == report['failed_or_errored'] == 0
+passed = completed.returncode == 0 and len(cases) == 36 and report['skipped'] == report['failed_or_errored'] == 0
 report['status'] = 'PASS_COMPONENT_CHECKS' if passed else 'FAIL'
 (output / 'run.json').write_text(json.dumps(report, indent=2) + '\n')
 raise SystemExit(0 if passed else 2)

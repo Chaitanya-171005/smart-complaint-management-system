@@ -74,9 +74,9 @@ def anonymous_submission(request):
                 form.is_valid()
                 if hasattr(error, "error_dict"):
                     for name, errors in error.error_dict.items():
-                        form.add_error(name if name in form.fields else None, errors)
+                        form.add_unique_error(name if name in form.fields else None, errors)
                 else:
-                    form.add_error(None, error)
+                    form.add_unique_error(None, error)
             except AnonymousIntakeUnavailable:
                 form, status = _form(data), 503
                 form.is_valid()
@@ -88,7 +88,12 @@ def anonymous_submission(request):
                     "complaint_id": result.complaint_id, "reference": result.reference,
                     "replayed": result.replayed,
                 })
-    return render(request, "complaints/anonymous_submit.html", {
+    response = render(request, "complaints/anonymous_submit.html", {
         "form": form, "request_token": token,
         "emergency_notice": settings.COMPLAINT_EMERGENCY_NOTICE,
     }, status=status)
+    # Native form POSTs need a non-null Origin for Django's CSRF check. Only
+    # this form (never the one-response private-reference page) gets the
+    # same-origin referrer policy applied by the privacy middleware.
+    response._anonymous_intake_form = True
+    return response
