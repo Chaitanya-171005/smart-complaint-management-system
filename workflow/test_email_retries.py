@@ -149,8 +149,8 @@ from workflow.email_delivery import deliver_email
 with patch("workflow.email_delivery.{target}", side_effect=lambda *a, **kw: os._exit(23)):
     deliver_email({job.pk})
 '''
-    # Share pytest's actual connection, including its PostgreSQL test database;
-    # the inherited environment names the original database before test setup.
+    # Share pytest's active test database rather than the original database
+    # named by the inherited environment.
     database = {name: connection.settings_dict[name] for name in (
         "ENGINE", "NAME", "USER", "PASSWORD", "HOST", "PORT", "OPTIONS",
     )}

@@ -75,6 +75,8 @@ def test_compose_security_and_volumes():
     text = read("docker-compose.yml")
     db = text.split("  db:\n", 1)[1].split("  app:\n", 1)[0]
     app = text.split("  app:\n", 1)[1].split("\nvolumes:", 1)[0]
+    # The following one-shot service has its own disabled HTTP healthcheck.
+    app = app.split("\n  scheduled-task:", 1)[0]
     assert "ports:" not in db
     assert "postgres:17.6" in db and "postgres_data:/var/lib/postgresql/data" in db
     assert "${DJANGO_DB_PASSWORD:?" in db and "pg_isready" in db
