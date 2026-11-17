@@ -1,7 +1,6 @@
-"""#75 real B11/B12 + B18 + B26 integration, explicitly invoked.
+"""Real F2 anonymous + F3 escalation + F4 notification integration.
 
-Requires the unmerged F2 anonymous and F3 escalation sources. No skip guard:
-missing dependencies must fail instead of appearing as passing acceptance.
+No skip guard: missing dependencies fail instead of appearing as passing acceptance.
 Run: python -m pytest integration_checks/anonymous_escalation.py --no-cov -q
 """
 
@@ -12,11 +11,13 @@ import pytest
 from django.core import mail
 from django.utils import timezone
 
+from accounts.permissions import can_view_complaint
 from complaints.anonymous import submit_anonymous_complaint
 from complaints.intake import new_intake_key
 from complaints.models import Complaint
+from complaints.privacy import complainant_label
 from workflow.email_delivery import deliver_email
-from workflow.models import EmailDelivery, Notification, NotificationEvent
+from workflow.models import ComplaintHistory, EmailDelivery, Notification, NotificationEvent
 from workflow.notifications import get_notification
 
 
@@ -38,7 +39,12 @@ def test_anonymous_escalation_persists_and_delivers_safe_head_notice(
     Complaint.objects.filter(pk=complaint.pk).update(due_at=timezone.now() - timedelta(minutes=1))
     # No spy notification hook: the real B21 writer publishes B26 atomically.
     result = run_escalation()
+    complaint.refresh_from_db()
     assert result.escalated == 1 and result.failed == 0
+    assert can_view_complaint(head, complaint) and head.department_id == complaint.department_id
+    assert complaint.submitted_by_id is None and complainant_label(complaint) == "Anonymous"
+    assert complaint.is_escalated and complaint.escalation_level == 1
+    assert ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id, event_type="ESCALATED").count() == 1
     notice = Notification.objects.get(recipient=head, event__kind="ESCALATED")
     assert get_notification(head, notice.pk) == notice
     assert notice.event.anonymous

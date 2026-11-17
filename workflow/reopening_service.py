@@ -9,7 +9,6 @@ from workflow.lifecycle import (
 from workflow.models import ComplaintHistory
 from workflow.feedback_policy import maximum_reopens
 
-DEFAULT_MAX_REOPENS = 2
 
 
 def reject_resolution(*, actor, complaint_id, expected_revision, reason):
