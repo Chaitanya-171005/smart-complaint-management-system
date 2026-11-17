@@ -1,0 +1,566 @@
+﻿2026-11-17T04:32:41.4109738Z Current runner version: '2.338.2'
+2026-11-17T04:32:41.4143169Z ##[group]Runner Image Provisioner
+2026-11-17T04:32:41.4144094Z Hosted Compute Agent
+2026-11-17T04:32:41.4144722Z Version: 20261103.629
+2026-11-17T04:32:41.4145475Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T04:32:41.4146250Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T04:32:41.4147468Z Worker ID: {18771746-a818-4cab-81dd-45ef267ed0a6}
+2026-11-17T04:32:41.4148207Z Region: centralus
+2026-11-17T04:32:41.4148800Z Cloud: Azure
+2026-11-17T04:32:41.4149410Z ##[endgroup]
+2026-11-17T04:32:41.4150996Z ##[group]Operating System
+2026-11-17T04:32:41.4151716Z Ubuntu
+2026-11-17T04:32:41.4152277Z 26.04.1
+2026-11-17T04:32:41.4152834Z LTS
+2026-11-17T04:32:41.4153405Z ##[endgroup]
+2026-11-17T04:32:41.4154012Z ##[group]Runner Image
+2026-11-17T04:32:41.4154672Z Image: ubuntu-26.04
+2026-11-17T04:32:41.4155253Z Version: 20261111.196.1
+2026-11-17T04:32:41.4156985Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-17T04:32:41.4158797Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-17T04:32:41.4159853Z ##[endgroup]
+2026-11-17T04:32:41.4161031Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T04:32:41.4163561Z Contents: read
+2026-11-17T04:32:41.4164189Z Metadata: read
+2026-11-17T04:32:41.4164858Z ##[endgroup]
+2026-11-17T04:32:41.4167529Z Secret source: Actions
+2026-11-17T04:32:41.4168640Z Cache mode: write
+2026-11-17T04:32:41.4169375Z Prepare workflow directory
+2026-11-17T04:32:41.4758093Z Prepare all required actions
+2026-11-17T04:32:41.4810570Z Getting action download info
+2026-11-17T04:32:41.7380057Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-17T04:32:41.8578757Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-17T04:32:41.9391819Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-17T04:32:42.1673145Z Complete job name: recovery-tests
+2026-11-17T04:32:42.2514481Z ##[group]Run actions/checkout@v4
+2026-11-17T04:32:42.2515418Z with:
+2026-11-17T04:32:42.2516026Z   repository: Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:42.2520510Z   token: ***
+2026-11-17T04:32:42.2520966Z   ssh-strict: true
+2026-11-17T04:32:42.2521420Z   ssh-user: git
+2026-11-17T04:32:42.2521887Z   persist-credentials: true
+2026-11-17T04:32:42.2522398Z   clean: true
+2026-11-17T04:32:42.2522865Z   sparse-checkout-cone-mode: true
+2026-11-17T04:32:42.2523409Z   fetch-depth: 1
+2026-11-17T04:32:42.2523860Z   fetch-tags: false
+2026-11-17T04:32:42.2524319Z   show-progress: true
+2026-11-17T04:32:42.2524778Z   lfs: false
+2026-11-17T04:32:42.2525195Z   submodules: false
+2026-11-17T04:32:42.2525657Z   set-safe-directory: true
+2026-11-17T04:32:42.2526198Z   allow-unsafe-pr-checkout: false
+2026-11-17T04:32:42.2527133Z env:
+2026-11-17T04:32:42.2527576Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:42.2528126Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:42.2528728Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:42.2529365Z ##[endgroup]
+2026-11-17T04:32:42.5356211Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:42.5359809Z ##[group]Getting Git version info
+2026-11-17T04:32:42.5361588Z Working directory is '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:42.5363898Z [command]/usr/bin/git version
+2026-11-17T04:32:42.5376691Z git version 2.56.1
+2026-11-17T04:32:42.5408599Z ##[endgroup]
+2026-11-17T04:32:42.5421253Z Temporarily overriding HOME='/home/runner/work/_temp/46f98aeb-fc4e-4367-82f2-f865f47e57f6' before making global git config changes
+2026-11-17T04:32:42.5422919Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T04:32:42.5428093Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:42.5498007Z Deleting the contents of '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:42.5528100Z ##[group]Initializing the repository
+2026-11-17T04:32:42.5529331Z [command]/usr/bin/git init /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:42.5640405Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T04:32:42.5641969Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T04:32:42.5643045Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T04:32:42.5643883Z hint: call:
+2026-11-17T04:32:42.5644388Z hint:
+2026-11-17T04:32:42.5645026Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T04:32:42.5645725Z hint:
+2026-11-17T04:32:42.5646659Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T04:32:42.5647826Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T04:32:42.5648674Z hint:
+2026-11-17T04:32:42.5649185Z hint: 	git branch -m <name>
+2026-11-17T04:32:42.5649751Z hint:
+2026-11-17T04:32:42.5650472Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T04:32:42.5654409Z Initialized empty Git repository in /home/runner/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+2026-11-17T04:32:42.5669454Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:42.5737330Z ##[endgroup]
+2026-11-17T04:32:42.5738657Z ##[group]Disabling automatic garbage collection
+2026-11-17T04:32:42.5741996Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T04:32:42.5782292Z ##[endgroup]
+2026-11-17T04:32:42.5783557Z ##[group]Setting up auth
+2026-11-17T04:32:42.5791505Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T04:32:42.5832252Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T04:32:42.6352803Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T04:32:42.6393643Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T04:32:42.6692034Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-17T04:32:42.6731146Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-17T04:32:42.7019617Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T04:32:42.7064562Z ##[endgroup]
+2026-11-17T04:32:42.7065469Z ##[group]Fetching the repository
+2026-11-17T04:32:42.7075465Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a479551c61beb2e2f6e04b93b167084bb7397dcc:refs/remotes/origin/Main
+2026-11-17T04:32:43.2387184Z From https://github.com/Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:43.2389407Z  * [new ref]         a479551c61beb2e2f6e04b93b167084bb7397dcc -> origin/Main
+2026-11-17T04:32:43.2398819Z ##[endgroup]
+2026-11-17T04:32:43.2399670Z ##[group]Determining the checkout info
+2026-11-17T04:32:43.2400583Z ##[endgroup]
+2026-11-17T04:32:43.2404572Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T04:32:43.2468747Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T04:32:43.2512961Z ##[group]Checking out the ref
+2026-11-17T04:32:43.2519404Z [command]/usr/bin/git checkout --progress --force -B Main refs/remotes/origin/Main
+2026-11-17T04:32:43.3010421Z Switched to a new branch 'Main'
+2026-11-17T04:32:43.3014221Z branch 'Main' set up to track 'origin/Main'.
+2026-11-17T04:32:43.3024376Z ##[endgroup]
+2026-11-17T04:32:43.3073038Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T04:32:43.3099446Z a479551c61beb2e2f6e04b93b167084bb7397dcc
+2026-11-17T04:32:43.3599125Z ##[group]Run actions/setup-python@v5
+2026-11-17T04:32:43.3600835Z with:
+2026-11-17T04:32:43.3602114Z   python-version: 3.14
+2026-11-17T04:32:43.3603585Z   cache: pip
+2026-11-17T04:32:43.3604904Z   check-latest: false
+2026-11-17T04:32:43.3619349Z   token: ***
+2026-11-17T04:32:43.3620708Z   update-environment: true
+2026-11-17T04:32:43.3622223Z   allow-prereleases: false
+2026-11-17T04:32:43.3623704Z   freethreaded: false
+2026-11-17T04:32:43.3625074Z env:
+2026-11-17T04:32:43.3626445Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:43.3627960Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:43.3629540Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:43.3631292Z ##[endgroup]
+2026-11-17T04:32:43.5068830Z ##[group]Installed versions
+2026-11-17T04:32:43.5212475Z (node:2422) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:32:43.5216511Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:32:43.5218341Z Successfully set up CPython (3.14.10)
+2026-11-17T04:32:43.5220175Z ##[endgroup]
+2026-11-17T04:32:43.6648417Z [command]/opt/hostedtoolcache/Python/3.14.10/x64/bin/pip cache dir
+2026-11-17T04:32:45.5141457Z /home/runner/.cache/pip
+2026-11-17T04:32:45.6953165Z Cache hit for: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+2026-11-17T04:32:45.7063682Z (node:2422) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T04:32:46.4883847Z Received 25582447 of 25582447 (100.0%), 36.7 MBs/sec
+2026-11-17T04:32:46.4884708Z Cache Size: ~24 MB (25582447 B)
+2026-11-17T04:32:46.4915063Z [command]/usr/bin/tar -xf /home/runner/work/_temp/686ef688-3d98-4912-9241-927d4d4bb16f/cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+2026-11-17T04:32:46.5460094Z Cache restored successfully
+2026-11-17T04:32:46.5477569Z Cache restored from key: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-8fa507bd56ebb14e47bdaf335ad0b06a5f57a5eefd1bfe467b69db27bf8434b9
+2026-11-17T04:32:46.5714767Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt
+2026-11-17T04:32:46.5715445Z [36;1mpython -m pip install -r requirements.txt -r requirements-dev.txt[0m
+2026-11-17T04:32:46.5774133Z shell: /usr/bin/bash -e {0}
+2026-11-17T04:32:46.5774454Z env:
+2026-11-17T04:32:46.5774679Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:46.5774946Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:46.5775266Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:46.5776655Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:46.5777136Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:32:46.5777601Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:46.5778042Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:46.5778450Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:46.5778916Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:32:46.5779273Z ##[endgroup]
+2026-11-17T04:32:48.0097857Z Collecting Django<6.2,>=6.1.2 (from -r requirements.txt (line 1))
+2026-11-17T04:32:48.0112760Z   Using cached django-6.1.3-py3-none-any.whl.metadata (3.9 kB)
+2026-11-17T04:32:48.0388125Z Collecting python-dotenv (from -r requirements.txt (line 2))
+2026-11-17T04:32:48.0400212Z   Using cached python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+2026-11-17T04:32:48.2054518Z Collecting Pillow==13.0.0 (from -r requirements.txt (line 3))
+2026-11-17T04:32:48.2067560Z   Using cached pillow-13.0.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+2026-11-17T04:32:48.2334960Z Collecting pypdf==6.21.4 (from -r requirements.txt (line 4))
+2026-11-17T04:32:48.2348315Z   Using cached pypdf-6.21.4-py3-none-any.whl.metadata (7.6 kB)
+2026-11-17T04:32:48.2574024Z Collecting psycopg==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+2026-11-17T04:32:48.2586852Z   Using cached psycopg-3.3.8-py3-none-any.whl.metadata (4.4 kB)
+2026-11-17T04:32:48.2817965Z Collecting gunicorn==26.2.0 (from -r requirements.txt (line 6))
+2026-11-17T04:32:48.2831723Z   Using cached gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+2026-11-17T04:32:48.3178364Z Collecting redis==8.1.0 (from -r requirements.txt (line 7))
+2026-11-17T04:32:48.3638987Z   Downloading redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+2026-11-17T04:32:48.3978061Z Collecting pytest==9.1.1 (from -r requirements-dev.txt (line 1))
+2026-11-17T04:32:48.3990871Z   Using cached pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+2026-11-17T04:32:48.4211073Z Collecting pytest-django==4.14.0 (from -r requirements-dev.txt (line 2))
+2026-11-17T04:32:48.4224742Z   Using cached pytest_django-4.14.0-py3-none-any.whl.metadata (8.1 kB)
+2026-11-17T04:32:48.4423292Z Collecting pytest-cov==7.1.0 (from -r requirements-dev.txt (line 3))
+2026-11-17T04:32:48.4435856Z   Using cached pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+2026-11-17T04:32:48.4746237Z Collecting fakeredis==2.40.0 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:32:48.4857885Z   Downloading fakeredis-2.40.0-py3-none-any.whl.metadata (9.3 kB)
+2026-11-17T04:32:48.5093678Z Collecting iniconfig>=1.0.1 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:32:48.5106622Z   Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-11-17T04:32:48.5315863Z Collecting packaging>=22 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:32:48.5328253Z   Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-11-17T04:32:48.5499556Z Collecting pluggy<2,>=1.5 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:32:48.5511806Z   Using cached pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-11-17T04:32:48.5742917Z Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:32:48.5756232Z   Using cached pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-11-17T04:32:48.9846068Z Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov==7.1.0->-r requirements-dev.txt (line 3))
+2026-11-17T04:32:48.9859407Z   Using cached coverage-7.17.3-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.3 kB)
+2026-11-17T04:32:49.0067528Z Collecting sortedcontainers>=2 (from fakeredis==2.40.0->fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:32:49.0176666Z   Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+2026-11-17T04:32:49.0948859Z Collecting lupa>=2.1 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:32:49.1061360Z   Downloading lupa-2.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (60 kB)
+2026-11-17T04:32:49.2758905Z Collecting psycopg-binary==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+2026-11-17T04:32:49.2771821Z   Using cached psycopg_binary-3.3.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+2026-11-17T04:32:49.2983201Z Collecting asgiref>=3.9.1 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+2026-11-17T04:32:49.2994258Z   Using cached asgiref-3.13.0-py3-none-any.whl.metadata (12 kB)
+2026-11-17T04:32:49.3296944Z Collecting sqlparse>=0.5.0 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+2026-11-17T04:32:49.3308710Z   Using cached sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+2026-11-17T04:32:49.3370651Z Using cached pillow-13.0.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+2026-11-17T04:32:49.3408718Z Using cached pypdf-6.21.4-py3-none-any.whl (410 kB)
+2026-11-17T04:32:49.3420900Z Using cached psycopg-3.3.8-py3-none-any.whl (216 kB)
+2026-11-17T04:32:49.3432168Z Using cached gunicorn-26.2.0-py3-none-any.whl (228 kB)
+2026-11-17T04:32:49.3553372Z Downloading redis-8.1.0-py3-none-any.whl (560 kB)
+2026-11-17T04:32:49.3802447Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 560.6/560.6 kB 29.0 MB/s  0:00:00
+2026-11-17T04:32:49.3827129Z Using cached pytest-9.1.1-py3-none-any.whl (386 kB)
+2026-11-17T04:32:49.3827854Z Using cached pytest_django-4.14.0-py3-none-any.whl (27 kB)
+2026-11-17T04:32:49.3839180Z Using cached pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+2026-11-17T04:32:49.3947802Z Downloading fakeredis-2.40.0-py3-none-any.whl (204 kB)
+2026-11-17T04:32:49.3984623Z Using cached psycopg_binary-3.3.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+2026-11-17T04:32:49.4015777Z Using cached django-6.1.3-py3-none-any.whl (8.4 MB)
+2026-11-17T04:32:49.4058523Z Using cached pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-11-17T04:32:49.4069823Z Using cached python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+2026-11-17T04:32:49.4081204Z Using cached asgiref-3.13.0-py3-none-any.whl (27 kB)
+2026-11-17T04:32:49.4092781Z Using cached coverage-7.17.3-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (263 kB)
+2026-11-17T04:32:49.4104676Z Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-11-17T04:32:49.4215167Z Downloading lupa-2.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (2.4 MB)
+2026-11-17T04:32:49.4472933Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 93.5 MB/s  0:00:00
+2026-11-17T04:32:49.4483755Z Using cached packaging-26.3-py3-none-any.whl (129 kB)
+2026-11-17T04:32:49.4495191Z Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-11-17T04:32:49.4607273Z Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+2026-11-17T04:32:49.4645045Z Using cached sqlparse-0.6.1-py3-none-any.whl (51 kB)
+2026-11-17T04:32:49.8245960Z Installing collected packages: sortedcontainers, sqlparse, redis, python-dotenv, pypdf, pygments, psycopg-binary, psycopg, pluggy, Pillow, packaging, lupa, iniconfig, gunicorn, coverage, asgiref, pytest, fakeredis, Django, pytest-django, pytest-cov
+2026-11-17T04:32:55.8036956Z 
+2026-11-17T04:32:55.8064267Z Successfully installed Django-6.1.3 Pillow-13.0.0 asgiref-3.13.0 coverage-7.17.3 fakeredis-2.40.0 gunicorn-26.2.0 iniconfig-2.3.1 lupa-2.8 packaging-26.3 pluggy-1.7.0 psycopg-3.3.8 psycopg-binary-3.3.8 pygments-2.21.0 pypdf-6.21.4 pytest-9.1.1 pytest-cov-7.1.0 pytest-django-4.14.0 python-dotenv-1.2.4 redis-8.1.0 sortedcontainers-2.4.0 sqlparse-0.6.1
+2026-11-17T04:32:55.9366966Z ##[group]Run sh scripts/ci_checks.sh build/evidence/b10-q05-recovery
+2026-11-17T04:32:55.9367514Z [36;1msh scripts/ci_checks.sh build/evidence/b10-q05-recovery[0m
+2026-11-17T04:32:55.9419053Z shell: /usr/bin/bash -e {0}
+2026-11-17T04:32:55.9419328Z env:
+2026-11-17T04:32:55.9419547Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:55.9419806Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:55.9420091Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:55.9420505Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:55.9420947Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:32:55.9421379Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:55.9421768Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:55.9422163Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:55.9422592Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:32:55.9422946Z ##[endgroup]
+2026-11-17T04:32:58.0822458Z System check identified some issues:
+2026-11-17T04:32:58.0822842Z 
+2026-11-17T04:32:58.0822969Z WARNINGS:
+2026-11-17T04:32:58.0824898Z ?: (security.W005) You have not set the SECURE_HSTS_INCLUDE_SUBDOMAINS setting to True. Without this, your site is potentially vulnerable to attack via an insecure connection to a subdomain. Only set this to True if you are certain that all subdomains of your domain should be served exclusively via SSL.
+2026-11-17T04:32:58.0829359Z ?: (security.W021) You have not set the SECURE_HSTS_PRELOAD setting to True. Without this, your site cannot be submitted to the browser preload list.
+2026-11-17T04:32:58.0830965Z 
+2026-11-17T04:32:58.0831320Z System check identified 2 issues (0 silenced).
+2026-11-17T04:32:58.6109657Z System check identified no issues (0 silenced).
+2026-11-17T04:32:59.1797609Z No changes detected
+2026-11-17T04:32:59.7873166Z Operations to perform:
+2026-11-17T04:32:59.7874076Z   Apply all migrations: accounts, admin, auth, complaints, contenttypes, routing, sessions, workflow
+2026-11-17T04:32:59.7874962Z Running migrations:
+2026-11-17T04:32:59.7920946Z   Applying contenttypes.0001_initial... OK
+2026-11-17T04:32:59.7981556Z   Applying contenttypes.0002_remove_content_type_name... OK
+2026-11-17T04:32:59.8076217Z   Applying auth.0001_initial... OK
+2026-11-17T04:32:59.8138339Z   Applying auth.0002_alter_permission_name_max_length... OK
+2026-11-17T04:32:59.8183071Z   Applying auth.0003_alter_user_email_max_length... OK
+2026-11-17T04:32:59.8222397Z   Applying auth.0004_alter_user_username_opts... OK
+2026-11-17T04:32:59.8265604Z   Applying auth.0005_alter_user_last_login_null... OK
+2026-11-17T04:32:59.8278939Z   Applying auth.0006_require_contenttypes_0002... OK
+2026-11-17T04:32:59.8315679Z   Applying auth.0007_alter_validators_add_error_messages... OK
+2026-11-17T04:32:59.8355401Z   Applying auth.0008_alter_user_username_max_length... OK
+2026-11-17T04:32:59.8400177Z   Applying auth.0009_alter_user_last_name_max_length... OK
+2026-11-17T04:32:59.8453043Z   Applying auth.0010_alter_group_name_max_length... OK
+2026-11-17T04:32:59.8541146Z   Applying auth.0011_update_proxy_permissions... OK
+2026-11-17T04:32:59.8584448Z   Applying auth.0012_alter_user_first_name_max_length... OK
+2026-11-17T04:32:59.8684356Z   Applying accounts.0001_initial... OK
+2026-11-17T04:32:59.9009252Z   Applying accounts.0002_align_field_limits_email_unique... OK
+2026-11-17T04:32:59.9146922Z   Applying accounts.0003_loginthrottle_securityevent... OK
+2026-11-17T04:32:59.9205902Z   Applying accounts.0004_alter_securityevent_event_type... OK
+2026-11-17T04:32:59.9426222Z   Applying accounts.0005_reference_data_locations_audit... OK
+2026-11-17T04:32:59.9489781Z   Applying accounts.0006_security_event_role_changes... OK
+2026-11-17T04:32:59.9637280Z   Applying accounts.0007_security_event_target_and_master_data... OK
+2026-11-17T04:32:59.9733597Z   Applying admin.0001_initial... OK
+2026-11-17T04:32:59.9840773Z   Applying admin.0002_logentry_remove_auto_add... OK
+2026-11-17T04:32:59.9921175Z   Applying admin.0003_logentry_add_action_flag_choices... OK
+2026-11-17T04:32:59.9959204Z   Applying complaints.0001_initial... OK
+2026-11-17T04:33:00.0063515Z   Applying complaints.0002_intake_receipt... OK
+2026-11-17T04:33:00.0221403Z   Applying complaints.0003_complaint... OK
+2026-11-17T04:33:00.1326793Z   Applying complaints.0004_attachment_intakereceipt_accepted_complaint_and_more... OK
+2026-11-17T04:33:00.1450594Z   Applying complaints.0005_anonymous_intake_receipt... OK
+2026-11-17T04:33:00.2033600Z   Applying routing.0001_initial... OK
+2026-11-17T04:33:00.2293670Z   Applying routing.0002_routing_decision... OK
+2026-11-17T04:33:00.2331951Z   Applying routing.0003_escalationrun... OK
+2026-11-17T04:33:00.2368944Z   Applying sessions.0001_initial... OK
+2026-11-17T04:33:00.2409128Z   Applying workflow.0001_initial... OK
+2026-11-17T04:33:00.2438310Z   Applying workflow.0002_alter_complainthistory_actor_kind... OK
+2026-11-17T04:33:00.3349521Z   Applying workflow.0003_b26_notifications... OK
+2026-11-17T04:33:00.4477850Z   Applying workflow.0004_b27_email_attempts... OK
+2026-11-17T04:33:00.4946557Z   Applying workflow.0003_complainthistory_actor_complainthistory_assignee_and_more... OK
+2026-11-17T04:33:00.4972733Z   Applying workflow.0005_merge_b15_f4... OK
+2026-11-17T04:33:00.5150631Z   Applying workflow.0005_b28_notification_read_at... OK
+2026-11-17T04:33:00.5165596Z   Applying workflow.0006_merge_b15_f4_b28... OK
+2026-11-17T04:33:00.6556445Z   Applying workflow.0007_anonymous_resolution_feedback... OK
+2026-11-17T04:33:01.4402181Z Explicit integration checks: integration_checks/anonymous_escalation.py, integration_checks/anonymous_recovery.py, integration_checks/lifecycle_f3.py, integration_checks/resolution_f3.py, integration_checks/f3_f4_handoff.py, workflow/test_retired_anonymous_routes.py
+2026-11-17T04:33:01.4404564Z F4 dependency gate: required
+2026-11-17T04:35:18.8788956Z ============================= test session starts ==============================
+2026-11-17T04:35:18.8790645Z platform linux -- Python 3.14.10, pytest-9.1.1, pluggy-1.7.0
+2026-11-17T04:35:18.8791710Z django: version: 6.1.3, settings: scms.settings (from ini)
+2026-11-17T04:35:18.8792469Z rootdir: <repo>
+2026-11-17T04:35:18.8792923Z configfile: pytest.ini
+2026-11-17T04:35:18.8793323Z plugins: django-4.14.0, cov-7.1.0
+2026-11-17T04:35:18.8793701Z collected 2001 items
+2026-11-17T04:35:18.8793985Z 
+2026-11-17T04:35:18.8794377Z accounts/test_config_audit.py .......................................... [  2%]
+2026-11-17T04:35:18.8795205Z                                                                          [  2%]
+2026-11-17T04:35:18.8795977Z accounts/test_foundation.py .........                                    [  2%]
+2026-11-17T04:35:18.8797109Z accounts/test_login.py ................................                  [  4%]
+2026-11-17T04:35:18.8797970Z accounts/test_permissions.py .................................           [  5%]
+2026-11-17T04:35:18.8798844Z accounts/test_reference_data.py ........................................ [  7%]
+2026-11-17T04:35:18.8799602Z ............................                                             [  9%]
+2026-11-17T04:35:18.8800352Z accounts/test_registration.py ......................................     [ 11%]
+2026-11-17T04:35:18.8801029Z accounts/test_security_log.py ...........................                [ 12%]
+2026-11-17T04:35:18.8801513Z accounts/test_session.py .................                               [ 13%]
+2026-11-17T04:35:18.8801966Z accounts/test_user_admin.py ........................................     [ 15%]
+2026-11-17T04:35:18.8802434Z complaints/test_evidence.py ............................................ [ 17%]
+2026-11-17T04:35:18.8802844Z ............................                                             [ 18%]
+2026-11-17T04:35:18.8803243Z complaints/test_forms.py ..........                                      [ 19%]
+2026-11-17T04:35:18.8803692Z complaints/test_models.py .............................................. [ 21%]
+2026-11-17T04:35:18.8804409Z                                                                          [ 21%]
+2026-11-17T04:35:18.8804839Z complaints/test_tracking.py ............................................ [ 23%]
+2026-11-17T04:35:18.8805257Z .........................................................                [ 26%]
+2026-11-17T04:35:18.8805671Z routing/test_allocation.py .....................                         [ 27%]
+2026-11-17T04:35:18.8806132Z routing/test_b12_privacy.py ...........                                  [ 28%]
+2026-11-17T04:35:18.8806878Z routing/test_b15_http.py .........................                       [ 29%]
+2026-11-17T04:35:18.8807361Z routing/test_escalation.py ..........................                    [ 30%]
+2026-11-17T04:35:18.8807843Z routing/test_escalation_outer_transaction.py .                           [ 30%]
+2026-11-17T04:35:18.8808315Z routing/test_queue.py ...                                                [ 31%]
+2026-11-17T04:35:18.8808766Z routing/test_resolver.py ......                                          [ 31%]
+2026-11-17T04:35:18.8809203Z routing/test_sla.py .......                                              [ 31%]
+2026-11-17T04:35:18.8809629Z routing/tests.py .................................                       [ 33%]
+2026-11-17T04:35:18.8810253Z test_domain_fixtures.py ................                                 [ 34%]
+2026-11-17T04:35:18.8810678Z test_fixtures.py ......                                                  [ 34%]
+2026-11-17T04:35:18.8811107Z workflow/test_dashboards.py ..............                               [ 35%]
+2026-11-17T04:35:18.8811568Z workflow/test_history.py ............                                    [ 35%]
+2026-11-17T04:35:18.8812037Z workflow/test_history_actor.py ..                                        [ 35%]
+2026-11-17T04:35:18.8812510Z workflow/test_history_integration.py ........................            [ 37%]
+2026-11-17T04:35:18.8812999Z workflow/test_retired_anonymous_routes.py .............................. [ 38%]
+2026-11-17T04:35:18.8813413Z ..                                                                       [ 38%]
+2026-11-17T04:35:18.8813821Z accounts/test_permissions_integration.py ............                    [ 39%]
+2026-11-17T04:35:18.8814302Z accounts/test_registration.py ..                                         [ 39%]
+2026-11-17T04:35:18.8814758Z accounts/test_user_admin.py ......                                       [ 39%]
+2026-11-17T04:35:18.8815219Z complaints/test_anonymous.py ........................................... [ 41%]
+2026-11-17T04:35:18.8815638Z ...................................................                      [ 44%]
+2026-11-17T04:35:18.8816047Z complaints/test_evidence.py ..                                           [ 44%]
+2026-11-17T04:35:18.8817810Z complaints/test_evidence_recovery.py ................................... [ 46%]
+2026-11-17T04:35:18.8818575Z .                                                                        [ 46%]
+2026-11-17T04:35:18.8819129Z complaints/test_http_intake.py .....................................     [ 48%]
+2026-11-17T04:35:18.8819626Z complaints/test_identifiers.py .........................                 [ 49%]
+2026-11-17T04:35:18.8820108Z complaints/test_intake.py ......................................         [ 51%]
+2026-11-17T04:35:18.8820589Z complaints/test_submission.py .......................................... [ 53%]
+2026-11-17T04:35:18.8820997Z                                                                          [ 53%]
+2026-11-17T04:35:18.8821393Z complaints/test_tracking.py .                                            [ 53%]
+2026-11-17T04:35:18.8821878Z integration_checks/anonymous_escalation.py .                             [ 53%]
+2026-11-17T04:35:18.8822377Z integration_checks/anonymous_recovery.py ....                            [ 53%]
+2026-11-17T04:35:18.8822863Z integration_checks/f3_f4_handoff.py ...                                  [ 53%]
+2026-11-17T04:35:18.8823539Z integration_checks/lifecycle_f3.py ....                                  [ 54%]
+2026-11-17T04:35:18.8824042Z integration_checks/resolution_f3.py ....                                 [ 54%]
+2026-11-17T04:35:18.8824522Z routing/test_allocation.py ...........                                   [ 54%]
+2026-11-17T04:35:18.8824983Z routing/test_b12_privacy.py ....                                         [ 54%]
+2026-11-17T04:35:18.8825430Z routing/test_b15_http.py .......                                         [ 55%]
+2026-11-17T04:35:18.8825869Z routing/test_escalation.py .....                                         [ 55%]
+2026-11-17T04:35:18.8826689Z routing/test_intake_allocation_integration.py .                          [ 55%]
+2026-11-17T04:35:18.8827305Z routing/test_intake_entrypoint.py ........                               [ 56%]
+2026-11-17T04:35:18.8827781Z routing/test_intake_routing.py ...                                       [ 56%]
+2026-11-17T04:35:18.8828250Z routing/test_notification_handoff.py ........                            [ 56%]
+2026-11-17T04:35:18.8828720Z routing/test_resolver.py .                                               [ 56%]
+2026-11-17T04:35:18.8829183Z routing/test_scheduler_deployment.py ..                                  [ 56%]
+2026-11-17T04:35:18.8829785Z test_docker_files.py ..                                                  [ 56%]
+2026-11-17T04:35:18.8830198Z test_q04_escalation.py .                                                 [ 56%]
+2026-11-17T04:35:18.8830641Z workflow/test_autoclose.py ...................................           [ 58%]
+2026-11-17T04:35:18.8831105Z workflow/test_confirmation.py .......................................... [ 60%]
+2026-11-17T04:35:18.8831506Z ......                                                                   [ 61%]
+2026-11-17T04:35:18.8831909Z workflow/test_email_retries.py ..........................                [ 62%]
+2026-11-17T04:35:18.8832381Z workflow/test_history_integration.py .                                   [ 62%]
+2026-11-17T04:35:18.8832850Z workflow/test_lifecycle.py ............................................. [ 64%]
+2026-11-17T04:35:18.8833266Z ....................................................................     [ 68%]
+2026-11-17T04:35:18.8833789Z workflow/test_notification_smtp.py ....                                  [ 68%]
+2026-11-17T04:35:18.8834266Z workflow/test_notification_ui.py ...........                             [ 68%]
+2026-11-17T04:35:18.8834738Z workflow/test_notifications.py .......................................   [ 70%]
+2026-11-17T04:35:18.8835218Z workflow/test_reference_feedback.py .................................... [ 72%]
+2026-11-17T04:35:18.8835647Z ..................................................                       [ 75%]
+2026-11-17T04:35:18.8836062Z workflow/test_reopening.py ...................................           [ 76%]
+2026-11-17T04:35:18.8836759Z workflow/test_resolution_http.py ..................                      [ 77%]
+2026-11-17T04:35:18.8837272Z workflow/test_resolution_integration.py ................................ [ 79%]
+2026-11-17T04:35:18.8837711Z ....................                                                     [ 80%]
+2026-11-17T04:35:18.8838145Z workflow/test_tracking.py ..........                                     [ 80%]
+2026-11-17T04:35:18.8838611Z accounts/test_foundation.py ....                                         [ 80%]
+2026-11-17T04:35:18.8839095Z accounts/test_permissions_integration.py .                               [ 81%]
+2026-11-17T04:35:18.8839575Z complaints/test_checks.py ....................                           [ 82%]
+2026-11-17T04:35:18.8840028Z complaints/test_forms.py ............................................... [ 84%]
+2026-11-17T04:35:18.8840437Z .....................................................................    [ 87%]
+2026-11-17T04:35:18.8840865Z complaints/test_models.py ...........                                    [ 88%]
+2026-11-17T04:35:18.8862141Z routing/test_scheduler_deployment.py ...                                 [ 88%]
+2026-11-17T04:35:18.8863126Z routing/test_sla.py ..................................                   [ 90%]
+2026-11-17T04:35:18.8863640Z scms/test_database_settings.py .....                                     [ 90%]
+2026-11-17T04:35:18.8864121Z scms/test_mail_config.py .....................................           [ 92%]
+2026-11-17T04:35:18.8864565Z test_ci_checks.py ..............                                         [ 93%]
+2026-11-17T04:35:18.8864988Z test_ci_environment.py .........                                         [ 93%]
+2026-11-17T04:35:18.8865441Z test_coverage_summary.py ..............                                  [ 94%]
+2026-11-17T04:35:18.8865884Z test_docker_files.py .....                                               [ 94%]
+2026-11-17T04:35:18.8866524Z test_fixtures.py ....                                                    [ 94%]
+2026-11-17T04:35:18.8867122Z test_github_workflows.py .....                                           [ 94%]
+2026-11-17T04:35:18.8867572Z test_jenkins_pipeline.py .....                                           [ 95%]
+2026-11-17T04:35:18.8868047Z test_q04_environment.py ..............................                   [ 96%]
+2026-11-17T04:35:18.8868484Z test_q04_escalation.py .....                                             [ 96%]
+2026-11-17T04:35:18.8869215Z test_q04_load.py ....................................                    [ 98%]
+2026-11-17T04:35:18.8869651Z test_run_tests.py ...........                                            [ 99%]
+2026-11-17T04:35:18.8870104Z workflow/test_resolution.py ......                                       [ 99%]
+2026-11-17T04:35:18.8870547Z workflow/tests.py ..........                                             [100%]
+2026-11-17T04:35:18.8870844Z 
+2026-11-17T04:35:18.8871000Z ================================ tests coverage ================================
+2026-11-17T04:35:18.8871470Z _______________ coverage: platform linux, python 3.14.10-final-0 _______________
+2026-11-17T04:35:18.8871772Z 
+2026-11-17T04:35:18.8871965Z Name                                                    Stmts   Miss Branch BrPart   Cover   Missing
+2026-11-17T04:35:18.8872465Z ----------------------------------------------------------------------------------------------------
+2026-11-17T04:35:18.8872981Z accounts/admin.py                                           1      0      0      0 100.00%
+2026-11-17T04:35:18.8873497Z accounts/admin_views.py                                   134      0     38      2  98.84%   75->77, 98->100
+2026-11-17T04:35:18.8873989Z accounts/apps.py                                            3      0      0      0 100.00%
+2026-11-17T04:35:18.8874444Z accounts/config_audit.py                                   33      0     20      0 100.00%
+2026-11-17T04:35:18.8874914Z accounts/forms.py                                          34      1      8      1  95.24%   25
+2026-11-17T04:35:18.8875405Z accounts/models.py                                        172      5     10      1  96.70%   85, 93, 173, 225, 288
+2026-11-17T04:35:18.8875941Z accounts/permissions.py                                   140      1     56      1  98.98%   168
+2026-11-17T04:35:18.8876591Z accounts/reference_adapters.py                              4      0      0      0 100.00%
+2026-11-17T04:35:18.8877158Z accounts/reference_services.py                            118      4     28      2  95.89%   79-80, 188, 199
+2026-11-17T04:35:18.8877682Z accounts/security_log.py                                   19      0      4      0 100.00%
+2026-11-17T04:35:18.8878139Z accounts/services.py                                       77      0     18      0 100.00%
+2026-11-17T04:35:18.8878569Z accounts/urls.py                                            4      0      0      0 100.00%
+2026-11-17T04:35:18.8879023Z accounts/user_admin_services.py                            65      0     20      0 100.00%
+2026-11-17T04:35:18.8879528Z accounts/validators.py                                      7      1      2      0  88.89%   15
+2026-11-17T04:35:18.8880107Z accounts/views.py                                          59      0     14      0 100.00%
+2026-11-17T04:35:18.8880552Z complaints/admin.py                                         1      0      0      0 100.00%
+2026-11-17T04:35:18.8881018Z complaints/anonymous.py                                    58      1     10      1  97.06%   84
+2026-11-17T04:35:18.8881541Z complaints/anonymous_views.py                              64      2     14      2  94.87%   32, 51
+2026-11-17T04:35:18.8882027Z complaints/apps.py                                          5      0      0      0 100.00%
+2026-11-17T04:35:18.8882480Z complaints/checks.py                                       37      1      8      1  95.56%   72
+2026-11-17T04:35:18.8882961Z complaints/evidence.py                                    171      1     44      1  99.07%   116
+2026-11-17T04:35:18.8883500Z complaints/evidence_recovery.py                           119      2     52      2  97.66%   42, 121
+2026-11-17T04:35:18.8884049Z complaints/feedback_views.py                               53      3     16      2  92.75%   42, 52, 64
+2026-11-17T04:35:18.8884548Z complaints/forms.py                                        92      0     30      0 100.00%
+2026-11-17T04:35:18.8885048Z complaints/identifiers.py                                  26      0     10      1  97.22%   49->56
+2026-11-17T04:35:18.8885673Z complaints/intake.py                                       81      1     30      1  98.20%   152
+2026-11-17T04:35:18.8886234Z complaints/management/commands/reconcile_evidence.py       15      2      0      0  86.67%   21-22
+2026-11-17T04:35:18.8886981Z complaints/models.py                                       99      0      2      0 100.00%
+2026-11-17T04:35:18.8887857Z complaints/privacy.py                                      59      2     22      0  97.53%   95-96
+2026-11-17T04:35:18.8888826Z complaints/privacy_middleware.py                          101      5     28      0  96.12%   19, 92-93, 128-129
+2026-11-17T04:35:18.8889578Z complaints/reference_data.py                               11      0      0      0 100.00%
+2026-11-17T04:35:18.8890082Z complaints/references.py                                    6      0      2      0 100.00%
+2026-11-17T04:35:18.8890564Z complaints/services.py                                      5      0      0      0 100.00%
+2026-11-17T04:35:18.8891037Z complaints/submission.py                                   71      0     20      0 100.00%
+2026-11-17T04:35:18.8891526Z complaints/tracking.py                                     23      0      2      0 100.00%
+2026-11-17T04:35:18.8892041Z complaints/tracking_limits.py                              84      1     24      2  97.22%   141, 165->169
+2026-11-17T04:35:18.8892585Z complaints/tracking_source.py                              37      2     16      2  92.45%   25, 43
+2026-11-17T04:35:18.8893096Z complaints/tracking_views.py                               27      0      6      0 100.00%
+2026-11-17T04:35:18.8893582Z complaints/transport.py                                     5      0      0      0 100.00%
+2026-11-17T04:35:18.8894042Z complaints/urls.py                                          4      0      0      0 100.00%
+2026-11-17T04:35:18.8894493Z complaints/validators.py                                   14      0      6      0 100.00%
+2026-11-17T04:35:18.8894986Z complaints/views.py                                       108      2     20      2  96.88%   111, 145
+2026-11-17T04:35:18.8895454Z routing/adapters.py                                         4      0      0      0 100.00%
+2026-11-17T04:35:18.8895888Z routing/admin.py                                           12      0      0      0 100.00%
+2026-11-17T04:35:18.8896550Z routing/allocation.py                                      55      0     20      0 100.00%
+2026-11-17T04:35:18.8897031Z routing/apps.py                                             3      0      0      0 100.00%
+2026-11-17T04:35:18.8897491Z routing/escalation.py                                      76      1     16      1  97.83%   110
+2026-11-17T04:35:18.8898115Z routing/intake.py                                          15      0      0      0 100.00%
+2026-11-17T04:35:18.8898634Z routing/management/commands/run_escalation.py              17      0      4      0 100.00%
+2026-11-17T04:35:18.8899294Z routing/models.py                                         150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+2026-11-17T04:35:18.8899903Z routing/notifications.py                                   17      0      6      0 100.00%
+2026-11-17T04:35:18.8900355Z routing/queue.py                                           10      0      0      0 100.00%
+2026-11-17T04:35:18.8900798Z routing/resolver.py                                        47      0     18      0 100.00%
+2026-11-17T04:35:18.8901421Z routing/services.py                                       245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+2026-11-17T04:35:18.8902028Z routing/sla.py                                             34      0     14      0 100.00%
+2026-11-17T04:35:18.8902472Z routing/urls.py                                             4      0      0      0 100.00%
+2026-11-17T04:35:18.8902994Z routing/views.py                                           84     15     30      7  78.95%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+2026-11-17T04:35:18.8903644Z scms/mail_config.py                                        45      0     20      0 100.00%
+2026-11-17T04:35:18.8904087Z workflow/admin.py                                          14      0      0      0 100.00%
+2026-11-17T04:35:18.8904609Z workflow/anonymous_feedback_models.py                      31      3      6      2  86.49%   14, 48, 51
+2026-11-17T04:35:18.8905113Z workflow/apps.py                                            5      0      0      0 100.00%
+2026-11-17T04:35:18.8905572Z workflow/autoclose.py                                      43      3     16      3  89.83%   34, 48, 63
+2026-11-17T04:35:18.8906048Z workflow/checks.py                                         10      0      0      0 100.00%
+2026-11-17T04:35:18.8906794Z workflow/confirmation_service.py                           12      0      2      0 100.00%
+2026-11-17T04:35:18.8907304Z workflow/dashboard_views.py                                33      0      8      0 100.00%
+2026-11-17T04:35:18.8907795Z workflow/dashboards.py                                     42      1     12      1  96.30%   27
+2026-11-17T04:35:18.8908305Z workflow/email_delivery.py                                139      3     46      1  97.84%   80-82
+2026-11-17T04:35:18.8908823Z workflow/feedback_detail_views.py                          14      0      0      0 100.00%
+2026-11-17T04:35:18.8909319Z workflow/feedback_policy.py                                 7      0      2      0 100.00%
+2026-11-17T04:35:18.8909777Z workflow/forms.py                                          13      0      0      0 100.00%
+2026-11-17T04:35:18.8910229Z workflow/history_service.py                                24      0      4      0 100.00%
+2026-11-17T04:35:18.8910706Z workflow/lifecycle.py                                     129      0     26      0 100.00%
+2026-11-17T04:35:18.8911226Z workflow/management/commands/auto_close_complaints.py      15      0      0      0 100.00%
+2026-11-17T04:35:18.8911812Z workflow/management/commands/deliver_notifications.py      22      0      6      0 100.00%
+2026-11-17T04:35:18.8912318Z workflow/models.py                                         64      0     12      0 100.00%
+2026-11-17T04:35:18.8912792Z workflow/notification_models.py                            68      0      0      0 100.00%
+2026-11-17T04:35:18.8913317Z workflow/notification_views.py                             21      0      0      0 100.00%
+2026-11-17T04:35:18.8913824Z workflow/notifications.py                                  96      3     42      0  96.38%   68-70
+2026-11-17T04:35:18.8914344Z workflow/reference_feedback.py                             78      2     24      2  96.08%   79, 84
+2026-11-17T04:35:18.8914987Z workflow/reopening_service.py                              18      0      4      0 100.00%
+2026-11-17T04:35:18.8915506Z workflow/reopening_views.py                                39      2      6      0  95.56%   47-48
+2026-11-17T04:35:18.8916011Z workflow/resolution_service.py                             40      0     10      0 100.00%
+2026-11-17T04:35:18.8916614Z workflow/services.py                                       23      2      8      0  93.55%   55-56
+2026-11-17T04:35:18.8917133Z workflow/templatetags/notification_tags.py                  7      0      0      0 100.00%
+2026-11-17T04:35:18.8917632Z workflow/urls.py                                           11      0      0      0 100.00%
+2026-11-17T04:35:18.8918074Z workflow/views.py                                         141      2     16      0  98.73%   60-61
+2026-11-17T04:35:18.8918555Z ----------------------------------------------------------------------------------------------------
+2026-11-17T04:35:18.8919015Z TOTAL                                                    4223    101   1058     60  96.88%
+2026-11-17T04:35:18.8919374Z Coverage JSON written to file coverage.json
+2026-11-17T04:35:18.8919730Z ======================= 2001 passed in 135.60s (0:02:15) =======================
+2026-11-17T04:35:18.8920243Z Module         Statements       Line     Branch  Status
+2026-11-17T04:35:18.8920593Z accounts              870     98.62%     96.79%  PASS
+2026-11-17T04:35:18.8920927Z complaints           1376     98.18%     95.30%  PASS
+2026-11-17T04:35:18.8921247Z routing               773     94.44%     86.06%  PASS
+2026-11-17T04:35:18.8921552Z workflow             1159     98.19%     95.60%  PASS
+2026-11-17T04:35:18.8921757Z 
+2026-11-17T04:35:18.8921880Z Targets: line >= 70%; branch >= 60% per module.
+2026-11-17T04:35:18.8922297Z Fewer than 10 statements: PLACEHOLDER (heuristic, not feature acceptance).
+2026-11-17T04:35:18.8922691Z Coverage gate: PASS
+2026-11-17T04:35:18.8988774Z ##[group]Run actions/upload-artifact@v4
+2026-11-17T04:35:18.8989094Z with:
+2026-11-17T04:35:18.8989317Z   name: b10-q05-recovery-evidence
+2026-11-17T04:35:18.8989592Z   path: build/evidence/b10-q05-recovery/
+2026-11-17T04:35:18.8989878Z   if-no-files-found: error
+2026-11-17T04:35:18.8990116Z   compression-level: 6
+2026-11-17T04:35:18.8990345Z   overwrite: false
+2026-11-17T04:35:18.8990583Z   include-hidden-files: false
+2026-11-17T04:35:18.8990821Z env:
+2026-11-17T04:35:18.8991017Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:35:18.8991256Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:35:18.8991533Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:35:18.8991916Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:35:18.8992348Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:35:18.8992781Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:35:18.8993200Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:35:18.8993583Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:35:18.8993969Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:35:18.8994320Z ##[endgroup]
+2026-11-17T04:35:19.0723765Z (node:2962) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:35:19.0725130Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:35:19.0791826Z With the provided path, there will be 3 files uploaded
+2026-11-17T04:35:19.0799490Z Artifact name is valid!
+2026-11-17T04:35:19.0800504Z Root directory input is valid!
+2026-11-17T04:35:19.3846507Z Beginning upload of artifact content to blob storage
+2026-11-17T04:35:19.4131246Z (node:2962) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T04:35:19.6058133Z Uploaded bytes 3938
+2026-11-17T04:35:19.6591030Z Finished uploading artifact content to blob storage!
+2026-11-17T04:35:19.6591852Z SHA256 digest of uploaded artifact zip is e04c2b86be417b2315944016cb0e8fcf6f10a963e055cb98a321a21d597aadb2
+2026-11-17T04:35:19.6594102Z Finalizing artifact upload
+2026-11-17T04:35:20.0159992Z Artifact b10-q05-recovery-evidence.zip successfully finalized. Artifact ID 14299178791
+2026-11-17T04:35:20.0161290Z Artifact b10-q05-recovery-evidence has been successfully uploaded! Final size is 3938 bytes. Artifact ID is 14299178791
+2026-11-17T04:35:20.0167310Z Artifact download URL: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44017903692/artifacts/14299178791
+2026-11-17T04:35:20.0368555Z Post job cleanup.
+2026-11-17T04:35:20.1631957Z (node:2974) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:35:20.1632840Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:35:20.1875493Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --files-from manifest.txt --use-compress-program zstdmt
+2026-11-17T04:35:20.4692530Z (node:2974) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T04:35:21.2389862Z Sent 28974586 of 28974586 (100.0%), 35.5 MBs/sec
+2026-11-17T04:35:21.3928969Z Cache saved with the key: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+2026-11-17T04:35:21.4151095Z Post job cleanup.
+2026-11-17T04:35:21.5055907Z [command]/usr/bin/git version
+2026-11-17T04:35:21.5106717Z git version 2.56.1
+2026-11-17T04:35:21.5146504Z Temporarily overriding HOME='/home/runner/work/_temp/46638198-070f-4d3a-8604-5e82880ae090' before making global git config changes
+2026-11-17T04:35:21.5147839Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T04:35:21.5153570Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:35:21.5205236Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T04:35:21.5265602Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T04:35:21.5635833Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T04:35:21.5669778Z http.https://github.com/.extraheader
+2026-11-17T04:35:21.5682280Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T04:35:21.5732040Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T04:35:21.6073930Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-17T04:35:21.6131018Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-17T04:35:21.6569141Z Cleaning up orphan processes
+2026-11-17T04:35:21.6928686Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

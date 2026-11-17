@@ -1,0 +1,1027 @@
+﻿2026-11-17T04:32:41.4110754Z Current runner version: '2.338.2'
+2026-11-17T04:32:41.4150363Z ##[group]Runner Image Provisioner
+2026-11-17T04:32:41.4151921Z Hosted Compute Agent
+2026-11-17T04:32:41.4152962Z Version: 20261103.629
+2026-11-17T04:32:41.4154227Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-17T04:32:41.4155652Z Build Date: 2026-11-03T17:26:59Z
+2026-11-17T04:32:41.4156846Z Worker ID: {a7713c63-8e45-4ec1-8d49-372cd84cdab0}
+2026-11-17T04:32:41.4158267Z Region: southcentralus
+2026-11-17T04:32:41.4159342Z Cloud: Azure
+2026-11-17T04:32:41.4160842Z ##[endgroup]
+2026-11-17T04:32:41.4163246Z ##[group]Operating System
+2026-11-17T04:32:41.4164366Z Ubuntu
+2026-11-17T04:32:41.4165454Z 26.04.1
+2026-11-17T04:32:41.4166373Z LTS
+2026-11-17T04:32:41.4167373Z ##[endgroup]
+2026-11-17T04:32:41.4168416Z ##[group]Runner Image
+2026-11-17T04:32:41.4169470Z Image: ubuntu-26.04
+2026-11-17T04:32:41.4170807Z Version: 20261111.196.1
+2026-11-17T04:32:41.4173034Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-17T04:32:41.4176078Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+2026-11-17T04:32:41.4178103Z ##[endgroup]
+2026-11-17T04:32:41.4180390Z ##[group]GITHUB_TOKEN Permissions
+2026-11-17T04:32:41.4183299Z Contents: read
+2026-11-17T04:32:41.4184463Z Metadata: read
+2026-11-17T04:32:41.4185328Z ##[endgroup]
+2026-11-17T04:32:41.4188617Z Secret source: Actions
+2026-11-17T04:32:41.4190313Z Cache mode: write
+2026-11-17T04:32:41.4191685Z Prepare workflow directory
+2026-11-17T04:32:41.4837690Z Prepare all required actions
+2026-11-17T04:32:41.4886099Z Getting action download info
+2026-11-17T04:32:41.7480307Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+2026-11-17T04:32:41.8879979Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+2026-11-17T04:32:41.9578395Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-17T04:32:42.1387823Z Complete job name: postgresql-recovery
+2026-11-17T04:32:42.2022619Z ##[group]Checking docker version
+2026-11-17T04:32:42.2035408Z ##[command]/usr/bin/docker version --format '{{.Server.APIVersion}}'
+2026-11-17T04:32:42.3392760Z '1.54'
+2026-11-17T04:32:42.3417700Z Docker daemon API version: '1.54'
+2026-11-17T04:32:42.3418487Z ##[command]/usr/bin/docker version --format '{{.Client.APIVersion}}'
+2026-11-17T04:32:42.3615041Z '1.54'
+2026-11-17T04:32:42.3632817Z Docker client API version: '1.54'
+2026-11-17T04:32:42.3638870Z ##[endgroup]
+2026-11-17T04:32:42.3642096Z ##[group]Clean up resources from previous jobs
+2026-11-17T04:32:42.3647671Z ##[command]/usr/bin/docker ps --all --quiet --no-trunc --filter "label=93953a"
+2026-11-17T04:32:42.3826061Z ##[command]/usr/bin/docker network prune --force --filter "label=93953a"
+2026-11-17T04:32:42.4014203Z ##[endgroup]
+2026-11-17T04:32:42.4014787Z ##[group]Create local container network
+2026-11-17T04:32:42.4025416Z ##[command]/usr/bin/docker network create --label 93953a github_network_b3dde2f0fc3e49e9bdacfe4188f4998c
+2026-11-17T04:32:42.4536460Z 2dbbbe0f423f0d482ffcccc58d0116da10d5025ea6c9b55c1ab99ec922d348fe
+2026-11-17T04:32:42.4567298Z ##[endgroup]
+2026-11-17T04:32:42.4593029Z ##[group]Starting postgres service container
+2026-11-17T04:32:42.4614591Z ##[command]/usr/bin/docker pull postgres:17.6
+2026-11-17T04:32:43.0210663Z 17.6: Pulling from library/postgres
+2026-11-17T04:32:43.2734773Z 5df7a8bf57f1: Pulling fs layer
+2026-11-17T04:32:43.2736321Z d7ecded7702a: Pulling fs layer
+2026-11-17T04:32:43.2738634Z d95a46ea6a60: Pulling fs layer
+2026-11-17T04:32:43.2740182Z df684e12be42: Pulling fs layer
+2026-11-17T04:32:43.2741487Z baf316c053aa: Pulling fs layer
+2026-11-17T04:32:43.2742818Z 0424836d8a95: Pulling fs layer
+2026-11-17T04:32:43.2744213Z b3ec056f36c4: Pulling fs layer
+2026-11-17T04:32:43.2745553Z 4b0b164c9bcd: Pulling fs layer
+2026-11-17T04:32:43.2746748Z f9f6c3699755: Pulling fs layer
+2026-11-17T04:32:43.2747540Z 36b8b7af114e: Pulling fs layer
+2026-11-17T04:32:43.2748680Z 30854ed26966: Pulling fs layer
+2026-11-17T04:32:43.2750163Z 5d95d2afb8ab: Pulling fs layer
+2026-11-17T04:32:43.2751386Z 639bc10553ca: Pulling fs layer
+2026-11-17T04:32:43.2752654Z 36e0cf935aa6: Pulling fs layer
+2026-11-17T04:32:43.3817852Z 36b8b7af114e: Download complete
+2026-11-17T04:32:43.3821253Z 0424836d8a95: Download complete
+2026-11-17T04:32:43.3823184Z 36e0cf935aa6: Download complete
+2026-11-17T04:32:43.4835777Z f9f6c3699755: Download complete
+2026-11-17T04:32:43.4839792Z 30854ed26966: Download complete
+2026-11-17T04:32:43.4844233Z 639bc10553ca: Download complete
+2026-11-17T04:32:43.4846128Z 5df7a8bf57f1: Download complete
+2026-11-17T04:32:43.4849713Z d95a46ea6a60: Download complete
+2026-11-17T04:32:43.4858859Z 4b0b164c9bcd: Download complete
+2026-11-17T04:32:43.5866425Z 2f23c8294b8a: Download complete
+2026-11-17T04:32:43.5970296Z b3ec056f36c4: Download complete
+2026-11-17T04:32:43.5996174Z baf316c053aa: Download complete
+2026-11-17T04:32:43.6828643Z df684e12be42: Download complete
+2026-11-17T04:32:43.6843452Z 8945b056055b: Download complete
+2026-11-17T04:32:43.7822628Z d7ecded7702a: Download complete
+2026-11-17T04:32:44.1823447Z 5d95d2afb8ab: Download complete
+2026-11-17T04:32:44.6921815Z d95a46ea6a60: Pull complete
+2026-11-17T04:32:44.6998501Z d7ecded7702a: Pull complete
+2026-11-17T04:32:44.7949021Z baf316c053aa: Pull complete
+2026-11-17T04:32:44.7964520Z df684e12be42: Pull complete
+2026-11-17T04:32:44.9929821Z b3ec056f36c4: Pull complete
+2026-11-17T04:32:45.0868195Z f9f6c3699755: Pull complete
+2026-11-17T04:32:45.0883641Z 30854ed26966: Pull complete
+2026-11-17T04:32:45.0898967Z 639bc10553ca: Pull complete
+2026-11-17T04:32:46.8825781Z 0424836d8a95: Pull complete
+2026-11-17T04:32:46.8879487Z 5d95d2afb8ab: Pull complete
+2026-11-17T04:32:46.9311888Z 36b8b7af114e: Pull complete
+2026-11-17T04:32:46.9330854Z 36e0cf935aa6: Pull complete
+2026-11-17T04:32:46.9345955Z 5df7a8bf57f1: Pull complete
+2026-11-17T04:32:46.9362679Z 4b0b164c9bcd: Pull complete
+2026-11-17T04:32:46.9364625Z Digest: sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929
+2026-11-17T04:32:46.9365877Z Status: Downloaded newer image for postgres:17.6
+2026-11-17T04:32:46.9372792Z docker.io/library/postgres:17.6
+2026-11-17T04:32:46.9467266Z ##[command]/usr/bin/docker create --name 82c72cf9fcc64c619c53e060d8cf4554_postgres176_0036b1 --label 93953a --network github_network_b3dde2f0fc3e49e9bdacfe4188f4998c --network-alias postgres -p 5432:5432 --health-cmd "pg_isready -U scms_recovery -d scms_recovery" --health-interval 5s --health-timeout 5s --health-retries 12 -e "POSTGRES_DB=scms_recovery" -e "POSTGRES_USER=scms_recovery" -e "POSTGRES_PASSWORD=synthetic-isolated-ci-only" -e GITHUB_ACTIONS=true -e CI=true postgres:17.6
+2026-11-17T04:32:48.5181669Z 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:48.5209484Z ##[command]/usr/bin/docker start 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:48.7594876Z 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:48.7625914Z ##[command]/usr/bin/docker ps --all --filter id=3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002 --filter status=running --no-trunc --format "{{.ID}} {{.Status}}"
+2026-11-17T04:32:48.7976927Z 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002 Up Less than a second (health: starting)
+2026-11-17T04:32:48.8006718Z ##[command]/usr/bin/docker port 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:48.8173419Z 5432/tcp -> 0.0.0.0:5432
+2026-11-17T04:32:48.8174356Z 5432/tcp -> [::]:5432
+2026-11-17T04:32:48.8226099Z ##[endgroup]
+2026-11-17T04:32:48.8237332Z ##[group]Waiting for all services to be ready
+2026-11-17T04:32:48.8252627Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:48.8412198Z starting
+2026-11-17T04:32:48.8437438Z postgres service is starting, waiting 2 seconds before checking again.
+2026-11-17T04:32:50.8437607Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:50.8589964Z starting
+2026-11-17T04:32:50.8606873Z postgres service is starting, waiting 3 seconds before checking again.
+2026-11-17T04:32:54.7739150Z ##[command]/usr/bin/docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:32:54.7880899Z healthy
+2026-11-17T04:32:54.7901981Z postgres service is healthy.
+2026-11-17T04:32:54.7902763Z ##[endgroup]
+2026-11-17T04:32:54.8271552Z ##[group]Run actions/checkout@v4
+2026-11-17T04:32:54.8272160Z with:
+2026-11-17T04:32:54.8272471Z   repository: Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:54.8274943Z   token: ***
+2026-11-17T04:32:54.8275158Z   ssh-strict: true
+2026-11-17T04:32:54.8275389Z   ssh-user: git
+2026-11-17T04:32:54.8275612Z   persist-credentials: true
+2026-11-17T04:32:54.8275849Z   clean: true
+2026-11-17T04:32:54.8276059Z   sparse-checkout-cone-mode: true
+2026-11-17T04:32:54.8276315Z   fetch-depth: 1
+2026-11-17T04:32:54.8276517Z   fetch-tags: false
+2026-11-17T04:32:54.8276725Z   show-progress: true
+2026-11-17T04:32:54.8276935Z   lfs: false
+2026-11-17T04:32:54.8277127Z   submodules: false
+2026-11-17T04:32:54.8277332Z   set-safe-directory: true
+2026-11-17T04:32:54.8277577Z   allow-unsafe-pr-checkout: false
+2026-11-17T04:32:54.8278033Z env:
+2026-11-17T04:32:54.8278246Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:54.8278495Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:54.8278809Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:54.8279198Z   DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
+2026-11-17T04:32:54.8279725Z   RECOVERY_POSTGRES_NAME: scms_recovery
+2026-11-17T04:32:54.8280011Z   RECOVERY_POSTGRES_USER: scms_recovery
+2026-11-17T04:32:54.8280350Z   RECOVERY_POSTGRES_PASSWORD: synthetic-isolated-ci-only
+2026-11-17T04:32:54.8280680Z   RECOVERY_POSTGRES_HOST: 127.0.0.1
+2026-11-17T04:32:54.8280940Z   RECOVERY_POSTGRES_PORT: 5432
+2026-11-17T04:32:54.8281177Z ##[endgroup]
+2026-11-17T04:32:55.1329384Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:55.1331270Z ##[group]Getting Git version info
+2026-11-17T04:32:55.1331898Z Working directory is '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:55.1332691Z [command]/usr/bin/git version
+2026-11-17T04:32:55.1353195Z git version 2.56.1
+2026-11-17T04:32:55.1376019Z ##[endgroup]
+2026-11-17T04:32:55.1393128Z Temporarily overriding HOME='/home/runner/work/_temp/b0ce34fa-b90e-4f40-b5a1-41f7365c6e08' before making global git config changes
+2026-11-17T04:32:55.1394862Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T04:32:55.1400248Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:55.1485426Z Deleting the contents of '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:55.1499078Z ##[group]Initializing the repository
+2026-11-17T04:32:55.1501919Z [command]/usr/bin/git init /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:55.1622184Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-17T04:32:55.1623196Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-17T04:32:55.1624332Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-17T04:32:55.1624986Z hint: call:
+2026-11-17T04:32:55.1625283Z hint:
+2026-11-17T04:32:55.1625713Z hint: 	git config --global init.defaultBranch <name>
+2026-11-17T04:32:55.1626039Z hint:
+2026-11-17T04:32:55.1626343Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-17T04:32:55.1627376Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-17T04:32:55.1627848Z hint:
+2026-11-17T04:32:55.1628051Z hint: 	git branch -m <name>
+2026-11-17T04:32:55.1628278Z hint:
+2026-11-17T04:32:55.1628590Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-17T04:32:55.1634905Z Initialized empty Git repository in /home/runner/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+2026-11-17T04:32:55.1649077Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:55.1702768Z ##[endgroup]
+2026-11-17T04:32:55.1703229Z ##[group]Disabling automatic garbage collection
+2026-11-17T04:32:55.1708225Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-17T04:32:55.1743164Z ##[endgroup]
+2026-11-17T04:32:55.1743748Z ##[group]Setting up auth
+2026-11-17T04:32:55.1752408Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T04:32:55.1789978Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T04:32:55.2295631Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T04:32:55.2333248Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T04:32:55.2620509Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-17T04:32:55.2657052Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-17T04:32:55.2936073Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-17T04:32:55.2980298Z ##[endgroup]
+2026-11-17T04:32:55.2980984Z ##[group]Fetching the repository
+2026-11-17T04:32:55.2992187Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +a479551c61beb2e2f6e04b93b167084bb7397dcc:refs/remotes/origin/Main
+2026-11-17T04:32:55.9315280Z From https://github.com/Chaitanya-171005/smart-complaint-management-system
+2026-11-17T04:32:55.9315972Z  * [new ref]         a479551c61beb2e2f6e04b93b167084bb7397dcc -> origin/Main
+2026-11-17T04:32:55.9321071Z ##[endgroup]
+2026-11-17T04:32:55.9321738Z ##[group]Determining the checkout info
+2026-11-17T04:32:55.9323639Z ##[endgroup]
+2026-11-17T04:32:55.9330568Z [command]/usr/bin/git sparse-checkout disable
+2026-11-17T04:32:55.9396410Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-17T04:32:55.9427605Z ##[group]Checking out the ref
+2026-11-17T04:32:55.9433445Z [command]/usr/bin/git checkout --progress --force -B Main refs/remotes/origin/Main
+2026-11-17T04:32:55.9913468Z Switched to a new branch 'Main'
+2026-11-17T04:32:55.9918252Z branch 'Main' set up to track 'origin/Main'.
+2026-11-17T04:32:55.9928053Z ##[endgroup]
+2026-11-17T04:32:55.9978347Z [command]/usr/bin/git log -1 --format=%H
+2026-11-17T04:32:56.0004998Z a479551c61beb2e2f6e04b93b167084bb7397dcc
+2026-11-17T04:32:56.0303232Z ##[group]Run actions/setup-python@v5
+2026-11-17T04:32:56.0303534Z with:
+2026-11-17T04:32:56.0303733Z   python-version: 3.14
+2026-11-17T04:32:56.0303952Z   cache: pip
+2026-11-17T04:32:56.0304152Z   check-latest: false
+2026-11-17T04:32:56.0306530Z   token: ***
+2026-11-17T04:32:56.0306754Z   update-environment: true
+2026-11-17T04:32:56.0307000Z   allow-prereleases: false
+2026-11-17T04:32:56.0307223Z   freethreaded: false
+2026-11-17T04:32:56.0307426Z env:
+2026-11-17T04:32:56.0307614Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:56.0307853Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:56.0308113Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:56.0308666Z   DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
+2026-11-17T04:32:56.0309000Z   RECOVERY_POSTGRES_NAME: scms_recovery
+2026-11-17T04:32:56.0309267Z   RECOVERY_POSTGRES_USER: scms_recovery
+2026-11-17T04:32:56.0309704Z   RECOVERY_POSTGRES_PASSWORD: synthetic-isolated-ci-only
+2026-11-17T04:32:56.0310059Z   RECOVERY_POSTGRES_HOST: 127.0.0.1
+2026-11-17T04:32:56.0310316Z   RECOVERY_POSTGRES_PORT: 5432
+2026-11-17T04:32:56.0310541Z ##[endgroup]
+2026-11-17T04:32:56.1733521Z ##[group]Installed versions
+2026-11-17T04:32:56.1851393Z (node:2777) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:32:56.1852666Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:32:56.1853459Z Successfully set up CPython (3.14.10)
+2026-11-17T04:32:56.1854320Z ##[endgroup]
+2026-11-17T04:32:56.3445797Z [command]/opt/hostedtoolcache/Python/3.14.10/x64/bin/pip cache dir
+2026-11-17T04:32:57.6759101Z /home/runner/.cache/pip
+2026-11-17T04:32:57.8614047Z Cache hit for: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+2026-11-17T04:32:57.8726126Z (node:2777) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T04:32:58.6847365Z Received 25582447 of 25582447 (100.0%), 38.9 MBs/sec
+2026-11-17T04:32:58.6848104Z Cache Size: ~24 MB (25582447 B)
+2026-11-17T04:32:58.6876384Z [command]/usr/bin/tar -xf /home/runner/work/_temp/79c74bdf-30ec-406a-9eb1-e13db4f1fc83/cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+2026-11-17T04:32:58.7527962Z Cache restored successfully
+2026-11-17T04:32:58.7544275Z Cache restored from key: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-8fa507bd56ebb14e47bdaf335ad0b06a5f57a5eefd1bfe467b69db27bf8434b9
+2026-11-17T04:32:58.7755919Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'
+2026-11-17T04:32:58.7756734Z [36;1mpython -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'[0m
+2026-11-17T04:32:58.7813717Z shell: /usr/bin/bash -e {0}
+2026-11-17T04:32:58.7813984Z env:
+2026-11-17T04:32:58.7814192Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:32:58.7814453Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:32:58.7814745Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:32:58.7815143Z   DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
+2026-11-17T04:32:58.7815511Z   RECOVERY_POSTGRES_NAME: scms_recovery
+2026-11-17T04:32:58.7815792Z   RECOVERY_POSTGRES_USER: scms_recovery
+2026-11-17T04:32:58.7816119Z   RECOVERY_POSTGRES_PASSWORD: synthetic-isolated-ci-only
+2026-11-17T04:32:58.7816456Z   RECOVERY_POSTGRES_HOST: 127.0.0.1
+2026-11-17T04:32:58.7816722Z   RECOVERY_POSTGRES_PORT: 5432
+2026-11-17T04:32:58.7817074Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:58.7817518Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:32:58.7817951Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:58.7818340Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:58.7818729Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:32:58.7819116Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:32:58.7819443Z ##[endgroup]
+2026-11-17T04:33:00.1440675Z Collecting psycopg==3.3.8 (from psycopg[binary]==3.3.8)
+2026-11-17T04:33:00.1454984Z   Using cached psycopg-3.3.8-py3-none-any.whl.metadata (4.4 kB)
+2026-11-17T04:33:00.1972176Z Collecting Django<6.2,>=6.1.2 (from -r requirements.txt (line 1))
+2026-11-17T04:33:00.1985305Z   Using cached django-6.1.3-py3-none-any.whl.metadata (3.9 kB)
+2026-11-17T04:33:00.2247602Z Collecting python-dotenv (from -r requirements.txt (line 2))
+2026-11-17T04:33:00.2259726Z   Using cached python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+2026-11-17T04:33:00.3906669Z Collecting Pillow==13.0.0 (from -r requirements.txt (line 3))
+2026-11-17T04:33:00.3920619Z   Using cached pillow-13.0.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+2026-11-17T04:33:00.4190301Z Collecting pypdf==6.21.4 (from -r requirements.txt (line 4))
+2026-11-17T04:33:00.4202095Z   Using cached pypdf-6.21.4-py3-none-any.whl.metadata (7.6 kB)
+2026-11-17T04:33:00.4443927Z Collecting gunicorn==26.2.0 (from -r requirements.txt (line 6))
+2026-11-17T04:33:00.4456082Z   Using cached gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+2026-11-17T04:33:00.4830455Z Collecting redis==8.1.0 (from -r requirements.txt (line 7))
+2026-11-17T04:33:00.5396873Z   Downloading redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+2026-11-17T04:33:00.5733004Z Collecting pytest==9.1.1 (from -r requirements-dev.txt (line 1))
+2026-11-17T04:33:00.5744410Z   Using cached pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+2026-11-17T04:33:00.5996456Z Collecting pytest-django==4.14.0 (from -r requirements-dev.txt (line 2))
+2026-11-17T04:33:00.6008209Z   Using cached pytest_django-4.14.0-py3-none-any.whl.metadata (8.1 kB)
+2026-11-17T04:33:00.6211200Z Collecting pytest-cov==7.1.0 (from -r requirements-dev.txt (line 3))
+2026-11-17T04:33:00.6223250Z   Using cached pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+2026-11-17T04:33:00.6545734Z Collecting fakeredis==2.40.0 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:33:00.6689015Z   Downloading fakeredis-2.40.0-py3-none-any.whl.metadata (9.3 kB)
+2026-11-17T04:33:00.6937277Z Collecting iniconfig>=1.0.1 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:33:00.6948429Z   Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+2026-11-17T04:33:00.7188143Z Collecting packaging>=22 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:33:00.7200317Z   Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+2026-11-17T04:33:00.7363589Z Collecting pluggy<2,>=1.5 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:33:00.7374874Z   Using cached pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+2026-11-17T04:33:00.7595309Z Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+2026-11-17T04:33:00.7606468Z   Using cached pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+2026-11-17T04:33:01.1726932Z Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov==7.1.0->-r requirements-dev.txt (line 3))
+2026-11-17T04:33:01.1740681Z   Using cached coverage-7.17.3-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.3 kB)
+2026-11-17T04:33:01.1952294Z Collecting sortedcontainers>=2 (from fakeredis==2.40.0->fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:33:01.2098803Z   Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+2026-11-17T04:33:01.2905804Z Collecting lupa>=2.1 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+2026-11-17T04:33:01.3070493Z   Downloading lupa-2.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (60 kB)
+2026-11-17T04:33:01.4898480Z Collecting psycopg-binary==3.3.8 (from psycopg[binary]==3.3.8)
+2026-11-17T04:33:01.4912679Z   Using cached psycopg_binary-3.3.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+2026-11-17T04:33:01.5141801Z Collecting asgiref>=3.9.1 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+2026-11-17T04:33:01.5154410Z   Using cached asgiref-3.13.0-py3-none-any.whl.metadata (12 kB)
+2026-11-17T04:33:01.5337363Z Collecting sqlparse>=0.5.0 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+2026-11-17T04:33:01.5349092Z   Using cached sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+2026-11-17T04:33:01.5414271Z Using cached psycopg-3.3.8-py3-none-any.whl (216 kB)
+2026-11-17T04:33:01.5426736Z Using cached pillow-13.0.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+2026-11-17T04:33:01.5463682Z Using cached pypdf-6.21.4-py3-none-any.whl (410 kB)
+2026-11-17T04:33:01.5476643Z Using cached gunicorn-26.2.0-py3-none-any.whl (228 kB)
+2026-11-17T04:33:01.5618431Z Downloading redis-8.1.0-py3-none-any.whl (560 kB)
+2026-11-17T04:33:01.5942885Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 560.6/560.6 kB 22.6 MB/s  0:00:00
+2026-11-17T04:33:01.5955612Z Using cached pytest-9.1.1-py3-none-any.whl (386 kB)
+2026-11-17T04:33:01.6003651Z Using cached pytest_django-4.14.0-py3-none-any.whl (27 kB)
+2026-11-17T04:33:01.6004539Z Using cached pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+2026-11-17T04:33:01.6136432Z Downloading fakeredis-2.40.0-py3-none-any.whl (204 kB)
+2026-11-17T04:33:01.6178285Z Using cached psycopg_binary-3.3.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.3 MB)
+2026-11-17T04:33:01.6212601Z Using cached django-6.1.3-py3-none-any.whl (8.4 MB)
+2026-11-17T04:33:01.6257845Z Using cached pluggy-1.7.0-py3-none-any.whl (27 kB)
+2026-11-17T04:33:01.6270011Z Using cached python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+2026-11-17T04:33:01.6281684Z Using cached asgiref-3.13.0-py3-none-any.whl (27 kB)
+2026-11-17T04:33:01.6293578Z Using cached coverage-7.17.3-cp314-cp314-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (263 kB)
+2026-11-17T04:33:01.6305528Z Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+2026-11-17T04:33:01.6492769Z Downloading lupa-2.8-cp314-cp314-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (2.4 MB)
+2026-11-17T04:33:01.6799833Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 76.7 MB/s  0:00:00
+2026-11-17T04:33:01.6812170Z Using cached packaging-26.3-py3-none-any.whl (129 kB)
+2026-11-17T04:33:01.6824908Z Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+2026-11-17T04:33:01.6979334Z Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+2026-11-17T04:33:01.7016538Z Using cached sqlparse-0.6.1-py3-none-any.whl (51 kB)
+2026-11-17T04:33:02.0808698Z Installing collected packages: sortedcontainers, sqlparse, redis, python-dotenv, pypdf, pygments, psycopg-binary, psycopg, pluggy, Pillow, packaging, lupa, iniconfig, gunicorn, coverage, asgiref, pytest, fakeredis, Django, pytest-django, pytest-cov
+2026-11-17T04:33:07.8696756Z 
+2026-11-17T04:33:07.8723994Z Successfully installed Django-6.1.3 Pillow-13.0.0 asgiref-3.13.0 coverage-7.17.3 fakeredis-2.40.0 gunicorn-26.2.0 iniconfig-2.3.1 lupa-2.8 packaging-26.3 pluggy-1.7.0 psycopg-3.3.8 psycopg-binary-3.3.8 pygments-2.21.0 pypdf-6.21.4 pytest-9.1.1 pytest-cov-7.1.0 pytest-django-4.14.0 python-dotenv-1.2.4 redis-8.1.0 sortedcontainers-2.4.0 sqlparse-0.6.1
+2026-11-17T04:33:08.0041122Z ##[group]Run sh scripts/ci_checks.sh build/evidence/b10-q05-postgresql
+2026-11-17T04:33:08.0041694Z [36;1msh scripts/ci_checks.sh build/evidence/b10-q05-postgresql[0m
+2026-11-17T04:33:08.0093187Z shell: /usr/bin/bash -e {0}
+2026-11-17T04:33:08.0093447Z env:
+2026-11-17T04:33:08.0093652Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:33:08.0093918Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:33:08.0094201Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:33:08.0094610Z   DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
+2026-11-17T04:33:08.0094966Z   RECOVERY_POSTGRES_NAME: scms_recovery
+2026-11-17T04:33:08.0095249Z   RECOVERY_POSTGRES_USER: scms_recovery
+2026-11-17T04:33:08.0095583Z   RECOVERY_POSTGRES_PASSWORD: synthetic-isolated-ci-only
+2026-11-17T04:33:08.0095912Z   RECOVERY_POSTGRES_HOST: 127.0.0.1
+2026-11-17T04:33:08.0096174Z   RECOVERY_POSTGRES_PORT: 5432
+2026-11-17T04:33:08.0096496Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:33:08.0096953Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:33:08.0097424Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:33:08.0097805Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:33:08.0098193Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:33:08.0098789Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:33:08.0099113Z ##[endgroup]
+2026-11-17T04:33:11.1788209Z System check identified some issues:
+2026-11-17T04:33:11.1788576Z 
+2026-11-17T04:33:11.1788703Z WARNINGS:
+2026-11-17T04:33:11.1790633Z ?: (security.W005) You have not set the SECURE_HSTS_INCLUDE_SUBDOMAINS setting to True. Without this, your site is potentially vulnerable to attack via an insecure connection to a subdomain. Only set this to True if you are certain that all subdomains of your domain should be served exclusively via SSL.
+2026-11-17T04:33:11.1792992Z ?: (security.W021) You have not set the SECURE_HSTS_PRELOAD setting to True. Without this, your site cannot be submitted to the browser preload list.
+2026-11-17T04:33:11.1793811Z 
+2026-11-17T04:33:11.1794005Z System check identified 2 issues (0 silenced).
+2026-11-17T04:33:11.8021648Z System check identified no issues (0 silenced).
+2026-11-17T04:33:12.4398203Z No changes detected
+2026-11-17T04:33:13.0632576Z Operations to perform:
+2026-11-17T04:33:13.0633119Z   Apply all migrations: accounts, admin, auth, complaints, contenttypes, routing, sessions, workflow
+2026-11-17T04:33:13.0633596Z Running migrations:
+2026-11-17T04:33:13.0688805Z   Applying contenttypes.0001_initial... OK
+2026-11-17T04:33:13.0726633Z   Applying contenttypes.0002_remove_content_type_name... OK
+2026-11-17T04:33:13.0917950Z   Applying auth.0001_initial... OK
+2026-11-17T04:33:13.0951349Z   Applying auth.0002_alter_permission_name_max_length... OK
+2026-11-17T04:33:13.0987151Z   Applying auth.0003_alter_user_email_max_length... OK
+2026-11-17T04:33:13.1023214Z   Applying auth.0004_alter_user_username_opts... OK
+2026-11-17T04:33:13.1060438Z   Applying auth.0005_alter_user_last_login_null... OK
+2026-11-17T04:33:13.1069948Z   Applying auth.0006_require_contenttypes_0002... OK
+2026-11-17T04:33:13.1102515Z   Applying auth.0007_alter_validators_add_error_messages... OK
+2026-11-17T04:33:13.1136358Z   Applying auth.0008_alter_user_username_max_length... OK
+2026-11-17T04:33:13.1175093Z   Applying auth.0009_alter_user_last_name_max_length... OK
+2026-11-17T04:33:13.1214611Z   Applying auth.0010_alter_group_name_max_length... OK
+2026-11-17T04:33:13.1248440Z   Applying auth.0011_update_proxy_permissions... OK
+2026-11-17T04:33:13.1286860Z   Applying auth.0012_alter_user_first_name_max_length... OK
+2026-11-17T04:33:13.1481204Z   Applying accounts.0001_initial... OK
+2026-11-17T04:33:13.1792825Z   Applying accounts.0002_align_field_limits_email_unique... OK
+2026-11-17T04:33:13.1910439Z   Applying accounts.0003_loginthrottle_securityevent... OK
+2026-11-17T04:33:13.1966805Z   Applying accounts.0004_alter_securityevent_event_type... OK
+2026-11-17T04:33:13.2227684Z   Applying accounts.0005_reference_data_locations_audit... OK
+2026-11-17T04:33:13.2285693Z   Applying accounts.0006_security_event_role_changes... OK
+2026-11-17T04:33:13.2413891Z   Applying accounts.0007_security_event_target_and_master_data... OK
+2026-11-17T04:33:13.2526028Z   Applying admin.0001_initial... OK
+2026-11-17T04:33:13.2650967Z   Applying admin.0002_logentry_remove_auto_add... OK
+2026-11-17T04:33:13.2718953Z   Applying admin.0003_logentry_add_action_flag_choices... OK
+2026-11-17T04:33:13.2753455Z   Applying complaints.0001_initial... OK
+2026-11-17T04:33:13.2888436Z   Applying complaints.0002_intake_receipt... OK
+2026-11-17T04:33:13.3107477Z   Applying complaints.0003_complaint... OK
+2026-11-17T04:33:13.3981867Z   Applying complaints.0004_attachment_intakereceipt_accepted_complaint_and_more... OK
+2026-11-17T04:33:13.4195222Z   Applying complaints.0005_anonymous_intake_receipt... OK
+2026-11-17T04:33:13.4946596Z   Applying routing.0001_initial... OK
+2026-11-17T04:33:13.5136990Z   Applying routing.0002_routing_decision... OK
+2026-11-17T04:33:13.5184061Z   Applying routing.0003_escalationrun... OK
+2026-11-17T04:33:13.5225563Z   Applying sessions.0001_initial... OK
+2026-11-17T04:33:13.5278671Z   Applying workflow.0001_initial... OK
+2026-11-17T04:33:13.5302891Z   Applying workflow.0002_alter_complainthistory_actor_kind... OK
+2026-11-17T04:33:13.6301051Z   Applying workflow.0003_b26_notifications... OK
+2026-11-17T04:33:13.7054508Z   Applying workflow.0004_b27_email_attempts... OK
+2026-11-17T04:33:13.7940940Z   Applying workflow.0003_complainthistory_actor_complainthistory_assignee_and_more... OK
+2026-11-17T04:33:13.7950326Z   Applying workflow.0005_merge_b15_f4... OK
+2026-11-17T04:33:13.8070816Z   Applying workflow.0005_b28_notification_read_at... OK
+2026-11-17T04:33:13.8080784Z   Applying workflow.0006_merge_b15_f4_b28... OK
+2026-11-17T04:33:13.8917361Z   Applying workflow.0007_anonymous_resolution_feedback... OK
+2026-11-17T04:33:14.7310288Z Explicit integration checks: integration_checks/anonymous_escalation.py, integration_checks/anonymous_recovery.py, integration_checks/lifecycle_f3.py, integration_checks/resolution_f3.py, integration_checks/f3_f4_handoff.py, workflow/test_retired_anonymous_routes.py
+2026-11-17T04:33:14.7311912Z F4 dependency gate: required
+2026-11-17T04:36:45.0198907Z ============================= test session starts ==============================
+2026-11-17T04:36:45.0199466Z platform linux -- Python 3.14.10, pytest-9.1.1, pluggy-1.7.0
+2026-11-17T04:36:45.0200473Z django: version: 6.1.3, settings: scms.recovery_postgresql_settings (from env)
+2026-11-17T04:36:45.0201109Z rootdir: <repo>
+2026-11-17T04:36:45.0201482Z configfile: pytest.ini
+2026-11-17T04:36:45.0201862Z plugins: django-4.14.0, cov-7.1.0
+2026-11-17T04:36:45.0202227Z collected 2001 items
+2026-11-17T04:36:45.0202446Z 
+2026-11-17T04:36:45.0202762Z accounts/test_config_audit.py .......................................... [  2%]
+2026-11-17T04:36:45.0203442Z                                                                          [  2%]
+2026-11-17T04:36:45.0204073Z accounts/test_foundation.py .........                                    [  2%]
+2026-11-17T04:36:45.0204820Z accounts/test_login.py ................................                  [  4%]
+2026-11-17T04:36:45.0205654Z accounts/test_permissions.py .................................           [  5%]
+2026-11-17T04:36:45.0206535Z accounts/test_reference_data.py ........................................ [  7%]
+2026-11-17T04:36:45.0207241Z ............................                                             [  9%]
+2026-11-17T04:36:45.0207966Z accounts/test_registration.py ......................................     [ 11%]
+2026-11-17T04:36:45.0208878Z accounts/test_security_log.py ...........................                [ 12%]
+2026-11-17T04:36:45.0209966Z accounts/test_session.py .................                               [ 13%]
+2026-11-17T04:36:45.0211188Z accounts/test_user_admin.py ........................................     [ 15%]
+2026-11-17T04:36:45.0212068Z complaints/test_evidence.py ............................................ [ 17%]
+2026-11-17T04:36:45.0212824Z ............................                                             [ 18%]
+2026-11-17T04:36:45.0213524Z complaints/test_forms.py ..........                                      [ 19%]
+2026-11-17T04:36:45.0214047Z complaints/test_models.py .............................................. [ 21%]
+2026-11-17T04:36:45.0214447Z                                                                          [ 21%]
+2026-11-17T04:36:45.0214850Z complaints/test_tracking.py ............................................ [ 23%]
+2026-11-17T04:36:45.0215265Z .........................................................                [ 26%]
+2026-11-17T04:36:45.0215716Z routing/test_allocation.py .....................                         [ 27%]
+2026-11-17T04:36:45.0216194Z routing/test_b12_privacy.py ...........                                  [ 28%]
+2026-11-17T04:36:45.0216679Z routing/test_b15_http.py .........................                       [ 29%]
+2026-11-17T04:36:45.0217154Z routing/test_escalation.py ..........................                    [ 30%]
+2026-11-17T04:36:45.0217623Z routing/test_escalation_outer_transaction.py .                           [ 30%]
+2026-11-17T04:36:45.0218321Z routing/test_queue.py ...                                                [ 31%]
+2026-11-17T04:36:45.0218744Z routing/test_resolver.py ......                                          [ 31%]
+2026-11-17T04:36:45.0219174Z routing/test_sla.py .......                                              [ 31%]
+2026-11-17T04:36:45.0220013Z routing/tests.py .................................                       [ 33%]
+2026-11-17T04:36:45.0220549Z test_domain_fixtures.py ................                                 [ 34%]
+2026-11-17T04:36:45.0221003Z test_fixtures.py ......                                                  [ 34%]
+2026-11-17T04:36:45.0221455Z workflow/test_dashboards.py ..............                               [ 35%]
+2026-11-17T04:36:45.0221920Z workflow/test_history.py ............                                    [ 35%]
+2026-11-17T04:36:45.0222372Z workflow/test_history_actor.py ..                                        [ 35%]
+2026-11-17T04:36:45.0222845Z workflow/test_history_integration.py ........................            [ 37%]
+2026-11-17T04:36:45.0223327Z workflow/test_retired_anonymous_routes.py .............................. [ 38%]
+2026-11-17T04:36:45.0223734Z ..                                                                       [ 38%]
+2026-11-17T04:36:45.0224140Z accounts/test_permissions_integration.py ............                    [ 39%]
+2026-11-17T04:36:45.0224621Z accounts/test_registration.py ..                                         [ 39%]
+2026-11-17T04:36:45.0225089Z accounts/test_user_admin.py ......                                       [ 39%]
+2026-11-17T04:36:45.0225556Z complaints/test_anonymous.py ........................................... [ 41%]
+2026-11-17T04:36:45.0225980Z ...................................................                      [ 44%]
+2026-11-17T04:36:45.0226394Z complaints/test_evidence.py ..                                           [ 44%]
+2026-11-17T04:36:45.0226860Z complaints/test_evidence_recovery.py ................................... [ 46%]
+2026-11-17T04:36:45.0227268Z .                                                                        [ 46%]
+2026-11-17T04:36:45.0227687Z complaints/test_http_intake.py .....................................     [ 48%]
+2026-11-17T04:36:45.0228166Z complaints/test_identifiers.py .........................                 [ 49%]
+2026-11-17T04:36:45.0228631Z complaints/test_intake.py ......................................         [ 51%]
+2026-11-17T04:36:45.0229112Z complaints/test_submission.py .......................................... [ 53%]
+2026-11-17T04:36:45.0229519Z                                                                          [ 53%]
+2026-11-17T04:36:45.0230386Z complaints/test_tracking.py .                                            [ 53%]
+2026-11-17T04:36:45.0230870Z integration_checks/anonymous_escalation.py .                             [ 53%]
+2026-11-17T04:36:45.0231362Z integration_checks/anonymous_recovery.py ....                            [ 53%]
+2026-11-17T04:36:45.0231849Z integration_checks/f3_f4_handoff.py ...                                  [ 53%]
+2026-11-17T04:36:45.0232345Z integration_checks/lifecycle_f3.py ....                                  [ 54%]
+2026-11-17T04:36:45.0232831Z integration_checks/resolution_f3.py ....                                 [ 54%]
+2026-11-17T04:36:45.0233300Z routing/test_allocation.py ...........                                   [ 54%]
+2026-11-17T04:36:45.0233752Z routing/test_b12_privacy.py ....                                         [ 54%]
+2026-11-17T04:36:45.0234184Z routing/test_b15_http.py .......                                         [ 55%]
+2026-11-17T04:36:45.0234623Z routing/test_escalation.py .....                                         [ 55%]
+2026-11-17T04:36:45.0235159Z routing/test_intake_allocation_integration.py .                          [ 55%]
+2026-11-17T04:36:45.0235646Z routing/test_intake_entrypoint.py ........                               [ 56%]
+2026-11-17T04:36:45.0236111Z routing/test_intake_routing.py ...                                       [ 56%]
+2026-11-17T04:36:45.0236709Z routing/test_notification_handoff.py ........                            [ 56%]
+2026-11-17T04:36:45.0237161Z routing/test_resolver.py .                                               [ 56%]
+2026-11-17T04:36:45.0237612Z routing/test_scheduler_deployment.py ..                                  [ 56%]
+2026-11-17T04:36:45.0238052Z test_docker_files.py ..                                                  [ 56%]
+2026-11-17T04:36:45.0238468Z test_q04_escalation.py .                                                 [ 56%]
+2026-11-17T04:36:45.0238901Z workflow/test_autoclose.py ...................................           [ 58%]
+2026-11-17T04:36:45.0239372Z workflow/test_confirmation.py .......................................... [ 60%]
+2026-11-17T04:36:45.0240125Z ......                                                                   [ 61%]
+2026-11-17T04:36:45.0240550Z workflow/test_email_retries.py ..........................                [ 62%]
+2026-11-17T04:36:45.0241027Z workflow/test_history_integration.py .                                   [ 62%]
+2026-11-17T04:36:45.0241495Z workflow/test_lifecycle.py ............................................. [ 64%]
+2026-11-17T04:36:45.0242397Z ....................................................................     [ 68%]
+2026-11-17T04:36:45.0243222Z workflow/test_notification_smtp.py ....                                  [ 68%]
+2026-11-17T04:36:45.0244037Z workflow/test_notification_ui.py ...........                             [ 68%]
+2026-11-17T04:36:45.0244533Z workflow/test_notifications.py .......................................   [ 70%]
+2026-11-17T04:36:45.0245066Z workflow/test_reference_feedback.py .................................... [ 72%]
+2026-11-17T04:36:45.0245499Z ..................................................                       [ 75%]
+2026-11-17T04:36:45.0245916Z workflow/test_reopening.py ...................................           [ 76%]
+2026-11-17T04:36:45.0246382Z workflow/test_resolution_http.py ..................                      [ 77%]
+2026-11-17T04:36:45.0246866Z workflow/test_resolution_integration.py ................................ [ 79%]
+2026-11-17T04:36:45.0247278Z ....................                                                     [ 80%]
+2026-11-17T04:36:45.0247674Z workflow/test_tracking.py ..........                                     [ 80%]
+2026-11-17T04:36:45.0248146Z accounts/test_foundation.py ....                                         [ 80%]
+2026-11-17T04:36:45.0248631Z accounts/test_permissions_integration.py .                               [ 81%]
+2026-11-17T04:36:45.0249105Z complaints/test_checks.py ....................                           [ 82%]
+2026-11-17T04:36:45.0250425Z complaints/test_forms.py ............................................... [ 84%]
+2026-11-17T04:36:45.0251288Z .....................................................................    [ 87%]
+2026-11-17T04:36:45.0251992Z complaints/test_models.py ...........                                    [ 88%]
+2026-11-17T04:36:45.0252486Z routing/test_scheduler_deployment.py ...                                 [ 88%]
+2026-11-17T04:36:45.0252941Z routing/test_sla.py ..................................                   [ 90%]
+2026-11-17T04:36:45.0253402Z scms/test_database_settings.py .....                                     [ 90%]
+2026-11-17T04:36:45.0253854Z scms/test_mail_config.py .....................................           [ 92%]
+2026-11-17T04:36:45.0254274Z test_ci_checks.py ..............                                         [ 93%]
+2026-11-17T04:36:45.0254724Z test_ci_environment.py .........                                         [ 93%]
+2026-11-17T04:36:45.0255166Z test_coverage_summary.py ..............                                  [ 94%]
+2026-11-17T04:36:45.0255600Z test_docker_files.py .....                                               [ 94%]
+2026-11-17T04:36:45.0256001Z test_fixtures.py ....                                                    [ 94%]
+2026-11-17T04:36:45.0256418Z test_github_workflows.py .....                                           [ 94%]
+2026-11-17T04:36:45.0257424Z test_jenkins_pipeline.py .....                                           [ 95%]
+2026-11-17T04:36:45.0257897Z test_q04_environment.py ..............................                   [ 96%]
+2026-11-17T04:36:45.0258351Z test_q04_escalation.py .....                                             [ 96%]
+2026-11-17T04:36:45.0258777Z test_q04_load.py ....................................                    [ 98%]
+2026-11-17T04:36:45.0259180Z test_run_tests.py ...........                                            [ 99%]
+2026-11-17T04:36:45.0259892Z workflow/test_resolution.py ......                                       [ 99%]
+2026-11-17T04:36:45.0260365Z workflow/tests.py ..........                                             [100%]
+2026-11-17T04:36:45.0260633Z 
+2026-11-17T04:36:45.0260784Z ================================ tests coverage ================================
+2026-11-17T04:36:45.0261220Z _______________ coverage: platform linux, python 3.14.10-final-0 _______________
+2026-11-17T04:36:45.0261516Z 
+2026-11-17T04:36:45.0261700Z Name                                                    Stmts   Miss Branch BrPart   Cover   Missing
+2026-11-17T04:36:45.0262189Z ----------------------------------------------------------------------------------------------------
+2026-11-17T04:36:45.0262676Z accounts/admin.py                                           1      0      0      0 100.00%
+2026-11-17T04:36:45.0263169Z accounts/admin_views.py                                   134      0     38      2  98.84%   75->77, 98->100
+2026-11-17T04:36:45.0263661Z accounts/apps.py                                            3      0      0      0 100.00%
+2026-11-17T04:36:45.0264110Z accounts/config_audit.py                                   33      0     20      0 100.00%
+2026-11-17T04:36:45.0264571Z accounts/forms.py                                          34      1      8      1  95.24%   25
+2026-11-17T04:36:45.0265062Z accounts/models.py                                        172      5     10      1  96.70%   85, 93, 173, 225, 288
+2026-11-17T04:36:45.0265586Z accounts/permissions.py                                   140      1     56      1  98.98%   168
+2026-11-17T04:36:45.0266085Z accounts/reference_adapters.py                              4      0      0      0 100.00%
+2026-11-17T04:36:45.0266611Z accounts/reference_services.py                            118      4     28      2  95.89%   79-80, 188, 199
+2026-11-17T04:36:45.0267120Z accounts/security_log.py                                   19      0      4      0 100.00%
+2026-11-17T04:36:45.0267725Z accounts/services.py                                       77      0     18      0 100.00%
+2026-11-17T04:36:45.0268170Z accounts/urls.py                                            4      0      0      0 100.00%
+2026-11-17T04:36:45.0268620Z accounts/user_admin_services.py                            65      0     20      0 100.00%
+2026-11-17T04:36:45.0269113Z accounts/validators.py                                      7      1      2      0  88.89%   15
+2026-11-17T04:36:45.0269804Z accounts/views.py                                          59      0     14      0 100.00%
+2026-11-17T04:36:45.0270309Z complaints/admin.py                                         1      0      0      0 100.00%
+2026-11-17T04:36:45.0270811Z complaints/anonymous.py                                    58      1     10      1  97.06%   84
+2026-11-17T04:36:45.0271324Z complaints/anonymous_views.py                              64      2     14      2  94.87%   32, 51
+2026-11-17T04:36:45.0271836Z complaints/apps.py                                          5      0      0      0 100.00%
+2026-11-17T04:36:45.0272327Z complaints/checks.py                                       37      1      8      1  95.56%   72
+2026-11-17T04:36:45.0272806Z complaints/evidence.py                                    171      1     44      1  99.07%   116
+2026-11-17T04:36:45.0273340Z complaints/evidence_recovery.py                           119      2     52      2  97.66%   42, 121
+2026-11-17T04:36:45.0274047Z complaints/feedback_views.py                               53      3     16      2  92.75%   42, 52, 64
+2026-11-17T04:36:45.0274532Z complaints/forms.py                                        92      0     30      0 100.00%
+2026-11-17T04:36:45.0275015Z complaints/identifiers.py                                  26      0     10      0 100.00%
+2026-11-17T04:36:45.0275511Z complaints/intake.py                                       81      1     30      1  98.20%   152
+2026-11-17T04:36:45.0276063Z complaints/management/commands/reconcile_evidence.py       15      2      0      0  86.67%   21-22
+2026-11-17T04:36:45.0276623Z complaints/models.py                                       99      0      2      0 100.00%
+2026-11-17T04:36:45.0277092Z complaints/privacy.py                                      59      2     22      0  97.53%   95-96
+2026-11-17T04:36:45.0277630Z complaints/privacy_middleware.py                          101      5     28      0  96.12%   19, 92-93, 128-129
+2026-11-17T04:36:45.0278178Z complaints/reference_data.py                               11      0      0      0 100.00%
+2026-11-17T04:36:45.0278652Z complaints/references.py                                    6      0      2      0 100.00%
+2026-11-17T04:36:45.0279115Z complaints/services.py                                      5      0      0      0 100.00%
+2026-11-17T04:36:45.0279708Z complaints/submission.py                                   71      0     20      0 100.00%
+2026-11-17T04:36:45.0280175Z complaints/tracking.py                                     23      0      2      0 100.00%
+2026-11-17T04:36:45.0280731Z complaints/tracking_limits.py                              84      1     24      2  97.22%   141, 165->169
+2026-11-17T04:36:45.0281273Z complaints/tracking_source.py                              37      2     16      2  92.45%   25, 43
+2026-11-17T04:36:45.0281773Z complaints/tracking_views.py                               27      0      6      0 100.00%
+2026-11-17T04:36:45.0282260Z complaints/transport.py                                     5      0      0      0 100.00%
+2026-11-17T04:36:45.0282708Z complaints/urls.py                                          4      0      0      0 100.00%
+2026-11-17T04:36:45.0283156Z complaints/validators.py                                   14      0      6      0 100.00%
+2026-11-17T04:36:45.0283644Z complaints/views.py                                       108      2     20      2  96.88%   111, 145
+2026-11-17T04:36:45.0284106Z routing/adapters.py                                         4      0      0      0 100.00%
+2026-11-17T04:36:45.0284667Z routing/admin.py                                           12      0      0      0 100.00%
+2026-11-17T04:36:45.0285110Z routing/allocation.py                                      55      0     20      0 100.00%
+2026-11-17T04:36:45.0285548Z routing/apps.py                                             3      0      0      0 100.00%
+2026-11-17T04:36:45.0286212Z routing/escalation.py                                      76      1     16      1  97.83%   110
+2026-11-17T04:36:45.0286992Z routing/intake.py                                          15      0      0      0 100.00%
+2026-11-17T04:36:45.0287876Z routing/management/commands/run_escalation.py              17      0      4      0 100.00%
+2026-11-17T04:36:45.0288716Z routing/models.py                                         150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+2026-11-17T04:36:45.0289310Z routing/notifications.py                                   17      0      6      0 100.00%
+2026-11-17T04:36:45.0290000Z routing/queue.py                                           10      0      0      0 100.00%
+2026-11-17T04:36:45.0290436Z routing/resolver.py                                        47      0     18      0 100.00%
+2026-11-17T04:36:45.0291147Z routing/services.py                                       245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+2026-11-17T04:36:45.0292443Z routing/sla.py                                             34      0     14      0 100.00%
+2026-11-17T04:36:45.0293160Z routing/urls.py                                             4      0      0      0 100.00%
+2026-11-17T04:36:45.0293857Z routing/views.py                                           84     15     30      7  78.95%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+2026-11-17T04:36:45.0294468Z scms/mail_config.py                                        45      0     20      0 100.00%
+2026-11-17T04:36:45.0294928Z workflow/admin.py                                          14      0      0      0 100.00%
+2026-11-17T04:36:45.0295453Z workflow/anonymous_feedback_models.py                      31      3      6      2  86.49%   14, 48, 51
+2026-11-17T04:36:45.0295971Z workflow/apps.py                                            5      0      0      0 100.00%
+2026-11-17T04:36:45.0296442Z workflow/autoclose.py                                      43      3     16      3  89.83%   34, 48, 63
+2026-11-17T04:36:45.0296921Z workflow/checks.py                                         10      0      0      0 100.00%
+2026-11-17T04:36:45.0297399Z workflow/confirmation_service.py                           12      0      2      0 100.00%
+2026-11-17T04:36:45.0297885Z workflow/dashboard_views.py                                33      0      8      0 100.00%
+2026-11-17T04:36:45.0298375Z workflow/dashboards.py                                     42      1     12      1  96.30%   27
+2026-11-17T04:36:45.0298872Z workflow/email_delivery.py                                139      3     46      1  97.84%   80-82
+2026-11-17T04:36:45.0299384Z workflow/feedback_detail_views.py                          14      0      0      0 100.00%
+2026-11-17T04:36:45.0300217Z workflow/feedback_policy.py                                 7      0      2      0 100.00%
+2026-11-17T04:36:45.0300683Z workflow/forms.py                                          13      0      0      0 100.00%
+2026-11-17T04:36:45.0301141Z workflow/history_service.py                                24      0      4      0 100.00%
+2026-11-17T04:36:45.0301604Z workflow/lifecycle.py                                     129      0     26      0 100.00%
+2026-11-17T04:36:45.0302126Z workflow/management/commands/auto_close_complaints.py      15      0      0      0 100.00%
+2026-11-17T04:36:45.0302715Z workflow/management/commands/deliver_notifications.py      22      0      6      0 100.00%
+2026-11-17T04:36:45.0303224Z workflow/models.py                                         64      0     12      0 100.00%
+2026-11-17T04:36:45.0303849Z workflow/notification_models.py                            68      0      0      0 100.00%
+2026-11-17T04:36:45.0304383Z workflow/notification_views.py                             21      0      0      0 100.00%
+2026-11-17T04:36:45.0304886Z workflow/notifications.py                                  96      3     42      0  96.38%   68-70
+2026-11-17T04:36:45.0305418Z workflow/reference_feedback.py                             78      2     24      2  96.08%   79, 84
+2026-11-17T04:36:45.0305932Z workflow/reopening_service.py                              18      0      4      0 100.00%
+2026-11-17T04:36:45.0306430Z workflow/reopening_views.py                                39      2      6      0  95.56%   47-48
+2026-11-17T04:36:45.0306939Z workflow/resolution_service.py                             40      0     10      0 100.00%
+2026-11-17T04:36:45.0307422Z workflow/services.py                                       23      2      8      0  93.55%   55-56
+2026-11-17T04:36:45.0307940Z workflow/templatetags/notification_tags.py                  7      0      0      0 100.00%
+2026-11-17T04:36:45.0308430Z workflow/urls.py                                           11      0      0      0 100.00%
+2026-11-17T04:36:45.0308878Z workflow/views.py                                         141      2     16      0  98.73%   60-61
+2026-11-17T04:36:45.0309365Z ----------------------------------------------------------------------------------------------------
+2026-11-17T04:36:45.0310225Z TOTAL                                                    4223    101   1058     59  96.89%
+2026-11-17T04:36:45.0310596Z Coverage JSON written to file coverage.json
+2026-11-17T04:36:45.0310961Z ======================= 2001 passed in 208.45s (0:03:28) =======================
+2026-11-17T04:36:45.0311348Z Module         Statements       Line     Branch  Status
+2026-11-17T04:36:45.0311690Z accounts              870     98.62%     96.79%  PASS
+2026-11-17T04:36:45.0312031Z complaints           1376     98.18%     95.58%  PASS
+2026-11-17T04:36:45.0312341Z routing               773     94.44%     86.06%  PASS
+2026-11-17T04:36:45.0312646Z workflow             1159     98.19%     95.60%  PASS
+2026-11-17T04:36:45.0312850Z 
+2026-11-17T04:36:45.0312966Z Targets: line >= 70%; branch >= 60% per module.
+2026-11-17T04:36:45.0313381Z Fewer than 10 statements: PLACEHOLDER (heuristic, not feature acceptance).
+2026-11-17T04:36:45.0313771Z Coverage gate: PASS
+2026-11-17T04:36:45.0366161Z ##[group]Run actions/upload-artifact@v4
+2026-11-17T04:36:45.0366477Z with:
+2026-11-17T04:36:45.0366689Z   name: b10-q05-postgresql-evidence
+2026-11-17T04:36:45.0366993Z   path: build/evidence/b10-q05-postgresql/
+2026-11-17T04:36:45.0367280Z   if-no-files-found: error
+2026-11-17T04:36:45.0367514Z   compression-level: 6
+2026-11-17T04:36:45.0367727Z   overwrite: false
+2026-11-17T04:36:45.0367943Z   include-hidden-files: false
+2026-11-17T04:36:45.0368173Z env:
+2026-11-17T04:36:45.0368361Z   SCMS_CI_DATABASE_ISOLATED: 1
+2026-11-17T04:36:45.0368596Z   SCMS_CI_REQUIRE_F4: 0
+2026-11-17T04:36:45.0368865Z   DJANGO_SECRET_KEY: synthetic-ci-recovery-test-only
+2026-11-17T04:36:45.0369239Z   DJANGO_SETTINGS_MODULE: scms.recovery_postgresql_settings
+2026-11-17T04:36:45.0369856Z   RECOVERY_POSTGRES_NAME: scms_recovery
+2026-11-17T04:36:45.0370205Z   RECOVERY_POSTGRES_USER: scms_recovery
+2026-11-17T04:36:45.0370550Z   RECOVERY_POSTGRES_PASSWORD: synthetic-isolated-ci-only
+2026-11-17T04:36:45.0370923Z   RECOVERY_POSTGRES_HOST: 127.0.0.1
+2026-11-17T04:36:45.0371190Z   RECOVERY_POSTGRES_PORT: 5432
+2026-11-17T04:36:45.0371501Z   pythonLocation: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:36:45.0371924Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib/pkgconfig
+2026-11-17T04:36:45.0372386Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:36:45.0372758Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:36:45.0373126Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.14.10/x64
+2026-11-17T04:36:45.0373499Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.14.10/x64/lib
+2026-11-17T04:36:45.0373825Z ##[endgroup]
+2026-11-17T04:36:45.2052806Z (node:5331) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:36:45.2054471Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:36:45.2118612Z With the provided path, there will be 3 files uploaded
+2026-11-17T04:36:45.2124340Z Artifact name is valid!
+2026-11-17T04:36:45.2125086Z Root directory input is valid!
+2026-11-17T04:36:45.5004489Z Beginning upload of artifact content to blob storage
+2026-11-17T04:36:45.5272350Z (node:5331) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-17T04:36:45.7016986Z Uploaded bytes 3949
+2026-11-17T04:36:45.7512225Z Finished uploading artifact content to blob storage!
+2026-11-17T04:36:45.7513733Z SHA256 digest of uploaded artifact zip is 37d2d082c8a5583cb507ce7fea60db65907e725180a25419b0b84176e94347c3
+2026-11-17T04:36:45.7514646Z Finalizing artifact upload
+2026-11-17T04:36:46.1227073Z Artifact b10-q05-postgresql-evidence.zip successfully finalized. Artifact ID 14300026275
+2026-11-17T04:36:46.1228402Z Artifact b10-q05-postgresql-evidence has been successfully uploaded! Final size is 3949 bytes. Artifact ID is 14300026275
+2026-11-17T04:36:46.1234823Z Artifact download URL: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44017903692/artifacts/14300026275
+2026-11-17T04:36:46.1431025Z Post job cleanup.
+2026-11-17T04:36:46.2661357Z (node:5343) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-17T04:36:46.2662943Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-17T04:36:46.2918488Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --files-from manifest.txt --use-compress-program zstdmt
+2026-11-17T04:36:46.5515520Z Failed to save: Unable to reserve cache with key setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3, another job may be creating this cache.
+2026-11-17T04:36:46.5692897Z Post job cleanup.
+2026-11-17T04:36:46.6557398Z [command]/usr/bin/git version
+2026-11-17T04:36:46.6606548Z git version 2.56.1
+2026-11-17T04:36:46.6650516Z Temporarily overriding HOME='/home/runner/work/_temp/b9c270cb-0680-4b40-9cc5-115173a46733' before making global git config changes
+2026-11-17T04:36:46.6652341Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-17T04:36:46.6657785Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:36:46.6703267Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-17T04:36:46.6743096Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-17T04:36:46.7063960Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-17T04:36:46.7101152Z http.https://github.com/.extraheader
+2026-11-17T04:36:46.7120767Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-17T04:36:46.7155334Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-17T04:36:46.7493219Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-17T04:36:46.7529387Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-17T04:36:46.7942769Z Print service container logs: 82c72cf9fcc64c619c53e060d8cf4554_postgres176_0036b1
+2026-11-17T04:36:46.7947684Z ##[command]/usr/bin/docker logs --details 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:36:46.8091295Z  The files belonging to this database system will be owned by user "postgres".
+2026-11-17T04:36:46.8092199Z  This user must also own the server process.
+2026-11-17T04:36:46.8093400Z  
+2026-11-17T04:36:46.8094315Z  The database cluster will be initialized with locale "en_US.utf8".
+2026-11-17T04:36:46.8095144Z  The default database encoding has accordingly been set to "UTF8".
+2026-11-17T04:36:46.8095888Z  The default text search configuration will be set to "english".
+2026-11-17T04:36:46.8096452Z  
+2026-11-17T04:36:46.8096785Z  Data page checksums are disabled.
+2026-11-17T04:36:46.8097208Z  
+2026-11-17T04:36:46.8097714Z  fixing permissions on existing directory /var/lib/postgresql/data ... ok
+2026-11-17T04:36:46.8099916Z  initdb: warning: enabling "trust" authentication for local connections
+2026-11-17T04:36:46.8101217Z  initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-11-17T04:36:46.8102875Z  2026-11-17 04:32:49.709 UTC [1] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-17T04:36:46.8104513Z  2026-11-17 04:32:49.709 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-17T04:36:46.8105351Z  2026-11-17 04:32:49.709 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-17T04:36:46.8106262Z  2026-11-17 04:32:49.710 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-17T04:36:46.8107257Z  2026-11-17 04:32:49.713 UTC [64] LOG:  database system was shut down at 2026-11-17 04:32:49 UTC
+2026-11-17T04:36:46.8108150Z  2026-11-17 04:32:49.717 UTC [1] LOG:  database system is ready to accept connections
+2026-11-17T04:36:46.8109199Z  2026-11-17 04:33:22.204 UTC [120] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8110411Z  2026-11-17 04:33:22.204 UTC [120] DETAIL:  Key (email)=(x@y.com) already exists.
+2026-11-17T04:36:46.8113729Z  2026-11-17 04:33:22.204 UTC [120] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('pbkdf2_sha256$1500000$omJlmHQNoSlq74EcMAR3Wq$qIprWUPdysVIm/mT8hkVC6QgUTA7AauHm9sKXICT62M=', NULL, false, '', '', false, true, '2026-11-17 04:33:21.960600+00:00'::timestamptz, 'x@y.com', 'Y', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8117236Z  2026-11-17 04:33:26.007 UTC [120] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8118183Z  2026-11-17 04:33:26.007 UTC [120] DETAIL:  Key (email)=(dup@pes.edu) already exists.
+2026-11-17T04:36:46.8120665Z  2026-11-17 04:33:26.007 UTC [120] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('x', NULL, false, '', '', false, true, '2026-11-17 04:33:26.006655+00:00'::timestamptz, 'dup@pes.edu', 'B', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8122419Z  2026-11-17 04:33:26.008 UTC [120] ERROR:  duplicate key value violates unique constraint "accounts_user_email_ci_unique"
+2026-11-17T04:36:46.8123107Z  2026-11-17 04:33:26.008 UTC [120] DETAIL:  Key (lower(email::text))=(dup@pes.edu) already exists.
+2026-11-17T04:36:46.8125007Z  2026-11-17 04:33:26.008 UTC [120] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('x', NULL, false, '', '', false, true, '2026-11-17 04:33:26.008112+00:00'::timestamptz, 'DUP@pes.edu', 'C', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8126712Z  2026-11-17 04:33:26.015 UTC [120] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8127334Z  2026-11-17 04:33:26.015 UTC [120] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8129147Z  2026-11-17 04:33:26.015 UTC [120] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$OLnVMJ3euIhSHavXlGoBKk$54cc60db1e4ffaeed76e9714542698bf', NULL, false, '', '', false, true, '2026-11-17 04:33:26.015431+00:00'::timestamptz, 'race@pes.edu', 'Second', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8132789Z  2026-11-17 04:33:29.947 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_submitter_or_reference_digest"
+2026-11-17T04:36:46.8135426Z  2026-11-17 04:33:29.947 UTC [142] DETAIL:  Failing row contains (3, SCMS-2026-000001, null, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.945561+00, 2026-11-18 04:33:29.945561+00, null, , f, 0, 0, , null, null, null, null, 178, null).
+2026-11-17T04:36:46.8141940Z  2026-11-17 04:33:29.947 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, NULL, '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 178, NULL, 'SUBMITTED', '2026-11-17 04:33:29.945561+00:00'::timestamptz, '2026-11-18 04:33:29.945561+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8147100Z  2026-11-17 04:33:29.952 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_submitter_or_reference_digest"
+2026-11-17T04:36:46.8150022Z  2026-11-17 04:33:29.952 UTC [142] DETAIL:  Failing row contains (4, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.95082+00, 2026-11-18 04:33:29.95082+00, null, , f, 0, 0, , null, null, null, null, 179, null).
+2026-11-17T04:36:46.8156040Z  2026-11-17 04:33:29.952 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 179, NULL, 'SUBMITTED', '2026-11-17 04:33:29.950820+00:00'::timestamptz, '2026-11-18 04:33:29.950820+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8159800Z  2026-11-17 04:33:29.958 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_submitter_or_reference_digest"
+2026-11-17T04:36:46.8161647Z  2026-11-17 04:33:29.958 UTC [142] DETAIL:  Failing row contains (5, SCMS-2026-000001, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.955909+00, 2026-11-18 04:33:29.955909+00, null, , f, 0, 0, , null, null, null, null, 180, null).
+2026-11-17T04:36:46.8165759Z  2026-11-17 04:33:29.958 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 180, NULL, 'SUBMITTED', '2026-11-17 04:33:29.955909+00:00'::timestamptz, '2026-11-18 04:33:29.955909+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8169126Z  2026-11-17 04:33:29.963 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_submitter_or_reference_digest"
+2026-11-17T04:36:46.8171050Z  2026-11-17 04:33:29.963 UTC [142] DETAIL:  Failing row contains (6, SCMS-2026-000001, gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.961497+00, 2026-11-18 04:33:29.961497+00, null, , f, 0, 0, , null, null, null, null, 181, null).
+2026-11-17T04:36:46.8175059Z  2026-11-17 04:33:29.963 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 181, NULL, 'SUBMITTED', '2026-11-17 04:33:29.961497+00:00'::timestamptz, '2026-11-18 04:33:29.961497+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8178303Z  2026-11-17 04:33:29.970 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_submitter_or_reference_digest"
+2026-11-17T04:36:46.8180182Z  2026-11-17 04:33:29.970 UTC [142] DETAIL:  Failing row contains (7, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.96736+00, 2026-11-18 04:33:29.96736+00, null, , f, 0, 0, , null, null, null, null, 182, 587).
+2026-11-17T04:36:46.8184316Z  2026-11-17 04:33:29.970 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', 587, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 182, NULL, 'SUBMITTED', '2026-11-17 04:33:29.967360+00:00'::timestamptz, '2026-11-18 04:33:29.967360+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8187538Z  2026-11-17 04:33:29.977 UTC [142] ERROR:  duplicate key value violates unique constraint "complaints_complaint_reference_digest_key"
+2026-11-17T04:36:46.8188471Z  2026-11-17 04:33:29.977 UTC [142] DETAIL:  Key (reference_digest)=(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) already exists.
+2026-11-17T04:36:46.8192194Z  2026-11-17 04:33:29.977 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000002', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 183, NULL, 'SUBMITTED', '2026-11-17 04:33:29.974007+00:00'::timestamptz, '2026-11-18 04:33:29.974007+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8195563Z  2026-11-17 04:33:29.984 UTC [142] ERROR:  duplicate key value violates unique constraint "complaints_complaint_complaint_id_key"
+2026-11-17T04:36:46.8196249Z  2026-11-17 04:33:29.984 UTC [142] DETAIL:  Key (complaint_id)=(SCMS-2026-000001) already exists.
+2026-11-17T04:36:46.8199295Z  2026-11-17 04:33:29.984 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 184, NULL, 'SUBMITTED', '2026-11-17 04:33:29.981217+00:00'::timestamptz, '2026-11-18 04:33:29.981217+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8202768Z  2026-11-17 04:33:29.989 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_identifier_format"
+2026-11-17T04:36:46.8204428Z  2026-11-17 04:33:29.989 UTC [142] DETAIL:  Failing row contains (12, bad, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.987422+00, 2026-11-18 04:33:29.987422+00, null, , f, 0, 0, , null, null, null, null, 185, null).
+2026-11-17T04:36:46.8205817Z  creating subdirectories ... ok
+2026-11-17T04:36:46.8206143Z  selecting dynamic shared memory implementation ... posix
+2026-11-17T04:36:46.8206512Z  selecting default "max_connections" ... 100
+2026-11-17T04:36:46.8206821Z  selecting default "shared_buffers" ... 128MB
+2026-11-17T04:36:46.8207129Z  selecting default time zone ... Etc/UTC
+2026-11-17T04:36:46.8207544Z  creating configuration files ... ok
+2026-11-17T04:36:46.8207837Z  running bootstrap script ... ok
+2026-11-17T04:36:46.8208142Z  performing post-bootstrap initialization ... ok
+2026-11-17T04:36:46.8208465Z  syncing data to disk ... ok
+2026-11-17T04:36:46.8208699Z  
+2026-11-17T04:36:46.8208872Z  
+2026-11-17T04:36:46.8209107Z  Success. You can now start the database server using:
+2026-11-17T04:36:46.8209410Z  
+2026-11-17T04:36:46.8209836Z      pg_ctl -D /var/lib/postgresql/data -l logfile start
+2026-11-17T04:36:46.8210151Z  
+2026-11-17T04:36:46.8210804Z  waiting for server to start....2026-11-17 04:32:49.400 UTC [48] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-17T04:36:46.8211696Z  2026-11-17 04:32:49.401 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-17T04:36:46.8212282Z  2026-11-17 04:32:49.404 UTC [51] LOG:  database system was shut down at 2026-11-17 04:32:49 UTC
+2026-11-17T04:36:46.8212803Z  2026-11-17 04:32:49.408 UTC [48] LOG:  database system is ready to accept connections
+2026-11-17T04:36:46.8213176Z   done
+2026-11-17T04:36:46.8213365Z  server started
+2026-11-17T04:36:46.8213563Z  CREATE DATABASE
+2026-11-17T04:36:46.8213776Z  
+2026-11-17T04:36:46.8213945Z  
+2026-11-17T04:36:46.8214269Z  /usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+2026-11-17T04:36:46.8214812Z  
+2026-11-17T04:36:46.8215184Z  waiting for server to shut down...2026-11-17 04:32:49.588 UTC [48] LOG:  received fast shutdown request
+2026-11-17T04:36:46.8215724Z  .2026-11-17 04:32:49.589 UTC [48] LOG:  aborting any active transactions
+2026-11-17T04:36:46.8216315Z  2026-11-17 04:32:49.590 UTC [48] LOG:  background worker "logical replication launcher" (PID 54) exited with exit code 1
+2026-11-17T04:36:46.8216854Z  2026-11-17 04:32:49.591 UTC [49] LOG:  shutting down
+2026-11-17T04:36:46.8217262Z  2026-11-17 04:32:49.592 UTC [49] LOG:  checkpoint starting: shutdown immediate
+2026-11-17T04:36:46.8218358Z  2026-11-17 04:32:49.614 UTC [49] LOG:  checkpoint complete: wrote 925 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.003 s, total=0.023 s; sync files=301, longest=0.002 s, average=0.001 s; distance=4256 kB, estimate=4256 kB; lsn=0/1915968, redo lsn=0/1915968
+2026-11-17T04:36:46.8219421Z  2026-11-17 04:32:49.621 UTC [48] LOG:  database system is shut down
+2026-11-17T04:36:46.8220001Z   done
+2026-11-17T04:36:46.8220209Z  server stopped
+2026-11-17T04:36:46.8220408Z  
+2026-11-17T04:36:46.8220649Z  PostgreSQL init process complete; ready for start up.
+2026-11-17T04:36:46.8220964Z  
+2026-11-17T04:36:46.8223827Z  2026-11-17 04:33:29.989 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('bad', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 185, NULL, 'SUBMITTED', '2026-11-17 04:33:29.987422+00:00'::timestamptz, '2026-11-18 04:33:29.987422+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8226815Z  2026-11-17 04:33:29.994 UTC [142] ERROR:  value too long for type character varying(16)
+2026-11-17T04:36:46.8230298Z  2026-11-17 04:33:29.994 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001x', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 186, NULL, 'SUBMITTED', '2026-11-17 04:33:29.992545+00:00'::timestamptz, '2026-11-18 04:33:29.992545+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8233563Z  2026-11-17 04:33:29.999 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_identifier_format"
+2026-11-17T04:36:46.8235286Z  2026-11-17 04:33:29.999 UTC [142] DETAIL:  Failing row contains (13, SCMS-2026-ABCDEF, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:29.997551+00, 2026-11-18 04:33:29.997551+00, null, , f, 0, 0, , null, null, null, null, 187, null).
+2026-11-17T04:36:46.8239326Z  2026-11-17 04:33:29.999 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-ABCDEF', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 187, NULL, 'SUBMITTED', '2026-11-17 04:33:29.997551+00:00'::timestamptz, '2026-11-18 04:33:29.997551+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8242668Z  2026-11-17 04:33:30.004 UTC [142] ERROR:  value too long for type character varying(100)
+2026-11-17T04:36:46.8246035Z  2026-11-17 04:33:30.004 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 188, NULL, 'SUBMITTED', '2026-11-17 04:33:30.002755+00:00'::timestamptz, '2026-11-18 04:33:30.002755+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8249686Z  2026-11-17 04:33:30.009 UTC [142] ERROR:  value too long for type character varying(50)
+2026-11-17T04:36:46.8253005Z  2026-11-17 04:33:30.009 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 189, NULL, 'SUBMITTED', '2026-11-17 04:33:30.007862+00:00'::timestamptz, '2026-11-18 04:33:30.007862+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8256221Z  2026-11-17 04:33:30.015 UTC [142] ERROR:  value too long for type character varying(50)
+2026-11-17T04:36:46.8259473Z  2026-11-17 04:33:30.015 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 190, NULL, 'SUBMITTED', '2026-11-17 04:33:30.013170+00:00'::timestamptz, '2026-11-18 04:33:30.013170+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8263002Z  2026-11-17 04:33:30.020 UTC [142] ERROR:  value too long for type character varying(100)
+2026-11-17T04:36:46.8266532Z  2026-11-17 04:33:30.020 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 191, NULL, 'SUBMITTED', '2026-11-17 04:33:30.018369+00:00'::timestamptz, '2026-11-18 04:33:30.018369+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8270078Z  2026-11-17 04:33:30.026 UTC [142] ERROR:  value too long for type character varying(20)
+2026-11-17T04:36:46.8273155Z  2026-11-17 04:33:30.026 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'xxxxxxxxxxxxxxxxxxxxx', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 192, NULL, 'SUBMITTED', '2026-11-17 04:33:30.024130+00:00'::timestamptz, '2026-11-18 04:33:30.024130+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8276216Z  2026-11-17 04:33:30.030 UTC [142] ERROR:  value too long for type character varying(10)
+2026-11-17T04:36:46.8279383Z  2026-11-17 04:33:30.030 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', 'xxxxxxxxxxx', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 193, NULL, 'SUBMITTED', '2026-11-17 04:33:30.029062+00:00'::timestamptz, '2026-11-18 04:33:30.029062+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8282541Z  2026-11-17 04:33:30.035 UTC [142] ERROR:  value too long for type character varying(30)
+2026-11-17T04:36:46.8285664Z  2026-11-17 04:33:30.035 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 194, NULL, 'SUBMITTED', '2026-11-17 04:33:30.033906+00:00'::timestamptz, '2026-11-18 04:33:30.033906+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8288906Z  2026-11-17 04:33:30.040 UTC [142] ERROR:  value too long for type character varying(120)
+2026-11-17T04:36:46.8292571Z  2026-11-17 04:33:30.040 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'The light in the test room no longer turns on.', 'LOW', 195, NULL, 'SUBMITTED', '2026-11-17 04:33:30.038795+00:00'::timestamptz, '2026-11-18 04:33:30.038795+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8296531Z  2026-11-17 04:33:30.045 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_text_within_limits"
+2026-11-17T04:36:46.8298387Z  2026-11-17 04:33:30.045 UTC [142] DETAIL:  Failing row contains (14, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., LOW, SUBMITTED, 2026-11-17 04:33:30.043518+00, 2026-11-18 04:33:30.043518+00, null, , f, 0, 0, , null, null, null, null, 196, null).
+2026-11-17T04:36:46.8341379Z  2026-11-17 04:33:30.045 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'LOW', 196, NULL, 'SUBMITTED', '2026-11-17 04:33:30.043518+00:00'::timestamptz, '2026-11-18 04:33:30.043518+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8383191Z  2026-11-17 04:33:30.050 UTC [142] ERROR:  value too long for type character varying(100)
+2026-11-17T04:36:46.8386712Z  2026-11-17 04:33:30.050 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 197, NULL, 'SUBMITTED', '2026-11-17 04:33:30.048458+00:00'::timestamptz, '2026-11-18 04:33:30.048458+00:00'::timestamptz, false, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8390682Z  2026-11-17 04:33:30.055 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_text_within_limits"
+2026-11-17T04:36:46.8392826Z  2026-11-17 04:33:30.055 UTC [142] DETAIL:  Failing row contains (15, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.053265+00, 2026-11-18 04:33:30.053265+00, null, , f, 0, 0, xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx..., null, null, null, null, 198, null).
+2026-11-17T04:36:46.8435750Z  2026-11-17 04:33:30.055 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 198, NULL, 'SUBMITTED', '2026-11-17 04:33:30.053265+00:00'::timestamptz, '2026-11-18 04:33:30.053265+00:00'::timestamptz, NULL, '', false, 0, 0, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8477932Z  2026-11-17 04:33:30.063 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_rating_in_range"
+2026-11-17T04:36:46.8479698Z  2026-11-17 04:33:30.063 UTC [142] DETAIL:  Failing row contains (16, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.058348+00, 2026-11-18 04:33:30.058348+00, null, , f, 0, 0, , 0, null, null, null, 199, null).
+2026-11-17T04:36:46.8483833Z  2026-11-17 04:33:30.063 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 199, NULL, 'SUBMITTED', '2026-11-17 04:33:30.058348+00:00'::timestamptz, '2026-11-18 04:33:30.058348+00:00'::timestamptz, NULL, '', false, 0, 0, '', 0, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8487032Z  2026-11-17 04:33:30.068 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_rating_in_range"
+2026-11-17T04:36:46.8488715Z  2026-11-17 04:33:30.068 UTC [142] DETAIL:  Failing row contains (17, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.066543+00, 2026-11-18 04:33:30.066543+00, null, , f, 0, 0, , 6, null, null, null, 200, null).
+2026-11-17T04:36:46.8492910Z  2026-11-17 04:33:30.068 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 200, NULL, 'SUBMITTED', '2026-11-17 04:33:30.066543+00:00'::timestamptz, '2026-11-18 04:33:30.066543+00:00'::timestamptz, NULL, '', false, 0, 0, '', 6, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8496266Z  2026-11-17 04:33:30.088 UTC [142] ERROR:  null value in column "category_key" of relation "complaints_complaint" violates not-null constraint
+2026-11-17T04:36:46.8498000Z  2026-11-17 04:33:30.088 UTC [142] DETAIL:  Failing row contains (19, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, null, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.086876+00, 2026-11-18 04:33:30.086876+00, null, , f, 0, 0, , null, null, null, null, 204, null).
+2026-11-17T04:36:46.8502209Z  2026-11-17 04:33:30.088 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', NULL, 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 204, NULL, 'SUBMITTED', '2026-11-17 04:33:30.086876+00:00'::timestamptz, '2026-11-18 04:33:30.086876+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8505466Z  2026-11-17 04:33:30.093 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_category_key_format"
+2026-11-17T04:36:46.8507286Z  2026-11-17 04:33:30.093 UTC [142] DETAIL:  Failing row contains (20, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, , Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.091582+00, 2026-11-18 04:33:30.091582+00, null, , f, 0, 0, , null, null, null, null, 205, null).
+2026-11-17T04:36:46.8511428Z  2026-11-17 04:33:30.093 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 205, NULL, 'SUBMITTED', '2026-11-17 04:33:30.091582+00:00'::timestamptz, '2026-11-18 04:33:30.091582+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8514650Z  2026-11-17 04:33:30.098 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_category_key_format"
+2026-11-17T04:36:46.8516471Z  2026-11-17 04:33:30.098 UTC [142] DETAIL:  Failing row contains (21, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,  , Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.096294+00, 2026-11-18 04:33:30.096294+00, null, , f, 0, 0, , null, null, null, null, 206, null).
+2026-11-17T04:36:46.8520598Z  2026-11-17 04:33:30.098 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', ' ', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 206, NULL, 'SUBMITTED', '2026-11-17 04:33:30.096294+00:00'::timestamptz, '2026-11-18 04:33:30.096294+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8523830Z  2026-11-17 04:33:30.103 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_category_key_format"
+2026-11-17T04:36:46.8525538Z  2026-11-17 04:33:30.103 UTC [142] DETAIL:  Failing row contains (22, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 0, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.101228+00, 2026-11-18 04:33:30.101228+00, null, , f, 0, 0, , null, null, null, null, 207, null).
+2026-11-17T04:36:46.8529764Z  2026-11-17 04:33:30.103 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '0', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 207, NULL, 'SUBMITTED', '2026-11-17 04:33:30.101228+00:00'::timestamptz, '2026-11-18 04:33:30.101228+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8532998Z  2026-11-17 04:33:30.108 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_category_key_format"
+2026-11-17T04:36:46.8534722Z  2026-11-17 04:33:30.108 UTC [142] DETAIL:  Failing row contains (23, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, scope:1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.106211+00, 2026-11-18 04:33:30.106211+00, null, , f, 0, 0, , null, null, null, null, 208, null).
+2026-11-17T04:36:46.8538810Z  2026-11-17 04:33:30.108 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', 'scope:1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 208, NULL, 'SUBMITTED', '2026-11-17 04:33:30.106211+00:00'::timestamptz, '2026-11-18 04:33:30.106211+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8542250Z  2026-11-17 04:33:30.113 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_category_key_format"
+2026-11-17T04:36:46.8543960Z  2026-11-17 04:33:30.113 UTC [142] DETAIL:  Failing row contains (24, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, , Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.111832+00, 2026-11-18 04:33:30.111832+00, null, , f, 0, 0, , null, null, null, null, 209, null).
+2026-11-17T04:36:46.8548002Z  2026-11-17 04:33:30.113 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 209, NULL, 'SUBMITTED', '2026-11-17 04:33:30.111832+00:00'::timestamptz, '2026-11-18 04:33:30.111832+00:00'::timestamptz, NULL, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8551316Z  2026-11-17 04:33:30.118 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_escalation_consistent"
+2026-11-17T04:36:46.8553029Z  2026-11-17 04:33:30.118 UTC [142] DETAIL:  Failing row contains (25, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.11652+00, 2026-11-18 04:33:30.11652+00, null, , t, 0, 0, , null, null, null, null, 210, null).
+2026-11-17T04:36:46.8557168Z  2026-11-17 04:33:30.118 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 210, NULL, 'SUBMITTED', '2026-11-17 04:33:30.116520+00:00'::timestamptz, '2026-11-18 04:33:30.116520+00:00'::timestamptz, NULL, '', true, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8560510Z  2026-11-17 04:33:30.123 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_escalation_consistent"
+2026-11-17T04:36:46.8562243Z  2026-11-17 04:33:30.123 UTC [142] DETAIL:  Failing row contains (26, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.121311+00, 2026-11-18 04:33:30.121311+00, null, , f, 1, 0, , null, null, null, null, 211, null).
+2026-11-17T04:36:46.8566436Z  2026-11-17 04:33:30.123 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 211, NULL, 'SUBMITTED', '2026-11-17 04:33:30.121311+00:00'::timestamptz, '2026-11-18 04:33:30.121311+00:00'::timestamptz, NULL, '', false, 1, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8569758Z  2026-11-17 04:33:30.143 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_routing_consistent"
+2026-11-17T04:36:46.8571456Z  2026-11-17 04:33:30.143 UTC [142] DETAIL:  Failing row contains (30, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.141586+00, 2026-11-18 04:33:30.141586+00, f, , f, 0, 0, , null, null, null, null, 215, null).
+2026-11-17T04:36:46.8575491Z  2026-11-17 04:33:30.143 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 215, NULL, 'SUBMITTED', '2026-11-17 04:33:30.141586+00:00'::timestamptz, '2026-11-18 04:33:30.141586+00:00'::timestamptz, false, '', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8578832Z  2026-11-17 04:33:30.148 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_routing_consistent"
+2026-11-17T04:36:46.8580633Z  2026-11-17 04:33:30.148 UTC [142] DETAIL:  Failing row contains (31, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.146426+00, 2026-11-18 04:33:30.146426+00, t, 1, f, 0, 0, , null, null, null, null, 216, null).
+2026-11-17T04:36:46.8584689Z  2026-11-17 04:33:30.148 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 216, NULL, 'SUBMITTED', '2026-11-17 04:33:30.146426+00:00'::timestamptz, '2026-11-18 04:33:30.146426+00:00'::timestamptz, true, '1', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8588021Z  2026-11-17 04:33:30.153 UTC [142] ERROR:  new row for relation "complaints_complaint" violates check constraint "complaint_routing_consistent"
+2026-11-17T04:36:46.8589870Z  2026-11-17 04:33:30.153 UTC [142] DETAIL:  Failing row contains (32, SCMS-2026-000001, aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, 1, Maintenance, , TEST-BLOCK, Test block, , Test room, Faulty light, The light in the test room no longer turns on., LOW, SUBMITTED, 2026-11-17 04:33:30.151396+00, 2026-11-18 04:33:30.151396+00, null, 1, f, 0, 0, , null, null, null, null, 217, null).
+2026-11-17T04:36:46.8593922Z  2026-11-17 04:33:30.153 UTC [142] STATEMENT:  INSERT INTO "complaints_complaint" ("complaint_id", "submitted_by_id", "reference_digest", "category_key", "category", "sub_category", "location_code", "block", "floor", "room_area", "title", "description", "priority", "department_id", "assignee_id", "status", "submitted_at", "due_at", "unrouted", "routing_rule_key", "is_escalated", "escalation_level", "reopen_count", "resolution_remarks", "rating", "resolved_at", "closed_at") VALUES ('SCMS-2026-000001', NULL, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', '1', 'Maintenance', '', 'TEST-BLOCK', 'Test block', '', 'Test room', 'Faulty light', 'The light in the test room no longer turns on.', 'LOW', 217, NULL, 'SUBMITTED', '2026-11-17 04:33:30.151396+00:00'::timestamptz, '2026-11-18 04:33:30.151396+00:00'::timestamptz, NULL, '1', false, 0, 0, '', NULL, NULL, NULL) RETURNING "complaints_complaint"."id"
+2026-11-17T04:36:46.8597205Z  2026-11-17 04:33:35.762 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_status_finished_consistent"
+2026-11-17T04:36:46.8598131Z  2026-11-17 04:33:35.762 UTC [142] DETAIL:  Failing row contains (25, 2026-11-17 04:33:35.762279+00, 2026-11-17 04:33:35.761913+00, RUNNING, 0, 0, 0, 0, ).
+2026-11-17T04:36:46.8599658Z  2026-11-17 04:33:35.762 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.762279+00:00'::timestamptz, '2026-11-17 04:33:35.761913+00:00'::timestamptz, 'RUNNING', 0, 0, 0, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8601160Z  2026-11-17 04:33:35.766 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_status_finished_consistent"
+2026-11-17T04:36:46.8602148Z  2026-11-17 04:33:35.766 UTC [142] DETAIL:  Failing row contains (26, 2026-11-17 04:33:35.766448+00, null, COMPLETED, 0, 0, 0, 0, ).
+2026-11-17T04:36:46.8603434Z  2026-11-17 04:33:35.766 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.766448+00:00'::timestamptz, NULL, 'COMPLETED', 0, 0, 0, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8604825Z  2026-11-17 04:33:35.770 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_status_finished_consistent"
+2026-11-17T04:36:46.8605679Z  2026-11-17 04:33:35.770 UTC [142] DETAIL:  Failing row contains (27, 2026-11-17 04:33:35.770493+00, null, FAILED, 0, 0, 0, 0, ).
+2026-11-17T04:36:46.8606940Z  2026-11-17 04:33:35.770 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.770493+00:00'::timestamptz, NULL, 'FAILED', 0, 0, 0, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8608288Z  2026-11-17 04:33:35.777 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_counts_nonnegative"
+2026-11-17T04:36:46.8609193Z  2026-11-17 04:33:35.777 UTC [142] DETAIL:  Failing row contains (28, 2026-11-17 04:33:35.777116+00, null, RUNNING, -1, 0, 0, 0, ).
+2026-11-17T04:36:46.8610691Z  2026-11-17 04:33:35.777 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.777116+00:00'::timestamptz, NULL, 'RUNNING',  -1, 0, 0, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8612043Z  2026-11-17 04:33:35.781 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_counts_nonnegative"
+2026-11-17T04:36:46.8612872Z  2026-11-17 04:33:35.781 UTC [142] DETAIL:  Failing row contains (29, 2026-11-17 04:33:35.781162+00, null, RUNNING, 0, -1, 0, 0, ).
+2026-11-17T04:36:46.8614146Z  2026-11-17 04:33:35.781 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.781162+00:00'::timestamptz, NULL, 'RUNNING', 0,  -1, 0, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8615498Z  2026-11-17 04:33:35.785 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_counts_nonnegative"
+2026-11-17T04:36:46.8616327Z  2026-11-17 04:33:35.785 UTC [142] DETAIL:  Failing row contains (30, 2026-11-17 04:33:35.78515+00, null, RUNNING, 0, 0, -1, 0, ).
+2026-11-17T04:36:46.8617580Z  2026-11-17 04:33:35.785 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.785150+00:00'::timestamptz, NULL, 'RUNNING', 0, 0,  -1, 0, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8618941Z  2026-11-17 04:33:35.789 UTC [142] ERROR:  new row for relation "routing_escalationrun" violates check constraint "escalation_run_counts_nonnegative"
+2026-11-17T04:36:46.8619861Z  2026-11-17 04:33:35.789 UTC [142] DETAIL:  Failing row contains (31, 2026-11-17 04:33:35.789128+00, null, RUNNING, 0, 0, 0, -1, ).
+2026-11-17T04:36:46.8621147Z  2026-11-17 04:33:35.789 UTC [142] STATEMENT:  INSERT INTO "routing_escalationrun" ("started_at", "finished_at", "status", "examined", "escalated", "skipped", "failed", "error") VALUES ('2026-11-17 04:33:35.789128+00:00'::timestamptz, NULL, 'RUNNING', 0, 0, 0,  -1, '') RETURNING "routing_escalationrun"."id"
+2026-11-17T04:36:46.8622451Z  2026-11-17 04:33:54.525 UTC [142] ERROR:  duplicate key value violates unique constraint "routing_routingdecision_complaint_id_key"
+2026-11-17T04:36:46.8623150Z  2026-11-17 04:33:54.525 UTC [142] DETAIL:  Key (complaint_id)=(SCMS-2026-000001) already exists.
+2026-11-17T04:36:46.8624624Z  2026-11-17 04:33:54.525 UTC [142] STATEMENT:  INSERT INTO "routing_routingdecision" ("complaint_id", "department_id", "rule_id", "basis", "unrouted", "reason", "decided_at") VALUES ('SCMS-2026-000001', 332, 29, 'CATEGORY', false, 'category rule #29 (precedence 100)', '2026-11-17 04:33:54.523713+00:00'::timestamptz) RETURNING "routing_routingdecision"."id"
+2026-11-17T04:36:46.8626168Z  2026-11-17 04:33:54.527 UTC [142] ERROR:  new row for relation "routing_routingdecision" violates check constraint "routing_decision_consistent_basis"
+2026-11-17T04:36:46.8627076Z  2026-11-17 04:33:54.527 UTC [142] DETAIL:  Failing row contains (3, SCMS-2026-000002, DEFAULT, t, test, 2026-11-17 04:33:54.526892+00, 332, 29).
+2026-11-17T04:36:46.8628481Z  2026-11-17 04:33:54.527 UTC [142] STATEMENT:  INSERT INTO "routing_routingdecision" ("complaint_id", "department_id", "rule_id", "basis", "unrouted", "reason", "decided_at") VALUES ('SCMS-2026-000002', 332, 29, 'DEFAULT', true, 'test', '2026-11-17 04:33:54.526892+00:00'::timestamptz) RETURNING "routing_routingdecision"."id"
+2026-11-17T04:36:46.8630033Z  2026-11-17 04:33:54.528 UTC [142] ERROR:  new row for relation "routing_routingdecision" violates check constraint "routing_decision_consistent_basis"
+2026-11-17T04:36:46.8630946Z  2026-11-17 04:33:54.528 UTC [142] DETAIL:  Failing row contains (4, SCMS-2026-000002, CATEGORY, f, test, 2026-11-17 04:33:54.528244+00, 332, null).
+2026-11-17T04:36:46.8632523Z  2026-11-17 04:33:54.528 UTC [142] STATEMENT:  INSERT INTO "routing_routingdecision" ("complaint_id", "department_id", "rule_id", "basis", "unrouted", "reason", "decided_at") VALUES ('SCMS-2026-000002', 332, NULL, 'CATEGORY', false, 'test', '2026-11-17 04:33:54.528244+00:00'::timestamptz) RETURNING "routing_routingdecision"."id"
+2026-11-17T04:36:46.8633960Z  2026-11-17 04:33:58.699 UTC [176] ERROR:  new row for relation "routing_slaconfiguration" violates check constraint "sla_duration_must_be_positive"
+2026-11-17T04:36:46.8634699Z  2026-11-17 04:33:58.699 UTC [176] DETAIL:  Failing row contains (31, LOW, 0, 0:LOW, t, null).
+2026-11-17T04:36:46.8635704Z  2026-11-17 04:33:58.699 UTC [176] STATEMENT:  INSERT INTO "routing_slaconfiguration" ("category_id", "priority", "duration_minutes", "scope_key", "active") VALUES (NULL, 'LOW', 0, '0:LOW', true) RETURNING "routing_slaconfiguration"."id"
+2026-11-17T04:36:46.8636917Z  2026-11-17 04:33:58.700 UTC [176] ERROR:  new row for relation "routing_escalationpolicy" violates check constraint "escalation_interval_must_be_positive"
+2026-11-17T04:36:46.8637676Z  2026-11-17 04:33:58.700 UTC [176] DETAIL:  Failing row contains (28, invalid, 0, 1, 351).
+2026-11-17T04:36:46.8638645Z  2026-11-17 04:33:58.700 UTC [176] STATEMENT:  INSERT INTO "routing_escalationpolicy" ("key", "default_department_id", "interval_minutes", "maximum_level") VALUES ('invalid', 351, 0, 1) RETURNING "routing_escalationpolicy"."id"
+2026-11-17T04:36:46.8639825Z  2026-11-17 04:33:59.193 UTC [176] ERROR:  duplicate key value violates unique constraint "routing_rule_unique_active_scope"
+2026-11-17T04:36:46.8640473Z  2026-11-17 04:33:59.193 UTC [176] DETAIL:  Key (scope_key)=(6:HOSTEL-A) already exists.
+2026-11-17T04:36:46.8641513Z  2026-11-17 04:33:59.193 UTC [176] STATEMENT:  INSERT INTO "routing_routingrule" ("category_id", "location_code", "scope_key", "department_id", "precedence", "active") VALUES (6, 'HOSTEL-A', '6:HOSTEL-A', 353, 100, true) RETURNING "routing_routingrule"."id"
+2026-11-17T04:36:46.8642640Z  2026-11-17 04:33:59.682 UTC [176] ERROR:  duplicate key value violates unique constraint "category_name_ci_unique"
+2026-11-17T04:36:46.8643274Z  2026-11-17 04:33:59.682 UTC [176] DETAIL:  Key (lower(name::text))=(electrical) already exists.
+2026-11-17T04:36:46.8644119Z  2026-11-17 04:33:59.682 UTC [176] STATEMENT:  INSERT INTO "routing_category" ("name", "minimum_priority", "active") VALUES ('electrical', 'LOW', true) RETURNING "routing_category"."id"
+2026-11-17T04:36:46.8645026Z  2026-11-17 04:33:59.684 UTC [176] ERROR:  duplicate key value violates unique constraint "sla_unique_active_scope"
+2026-11-17T04:36:46.8645728Z  2026-11-17 04:33:59.684 UTC [176] DETAIL:  Key (scope_key)=(1:LOW) already exists.
+2026-11-17T04:36:46.8646681Z  2026-11-17 04:33:59.684 UTC [176] STATEMENT:  INSERT INTO "routing_slaconfiguration" ("category_id", "priority", "duration_minutes", "scope_key", "active") VALUES (1, 'LOW', 120, '1:LOW', true) RETURNING "routing_slaconfiguration"."id"
+2026-11-17T04:36:46.8647884Z  2026-11-17 04:34:11.116 UTC [212] ERROR:  new row for relation "workflow_complainthistory" violates check constraint "history_anonymous_has_no_account_refs"
+2026-11-17T04:36:46.8648805Z  2026-11-17 04:34:11.116 UTC [212] DETAIL:  Failing row contains (595, one, SUBMITTED, ANONYMOUS, , , 2026-11-17 04:34:11.11254+00, , 1461, null).
+2026-11-17T04:36:46.8649662Z  2026-11-17 04:34:11.116 UTC [212] STATEMENT:  UPDATE workflow_complainthistory SET actor_id = 1461 WHERE id = 595
+2026-11-17T04:36:46.8650355Z  2026-11-17 04:34:14.558 UTC [233] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8650944Z  2026-11-17 04:34:14.558 UTC [233] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8652772Z  2026-11-17 04:34:14.558 UTC [233] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$Wt33fv0906GCUnzyAarAqg$3616b90e166644916087338524f5af11', NULL, false, '', '', false, true, '2026-11-17 04:34:14.549858+00:00'::timestamptz, 'race@pes.edu', 'Racer 7', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8654784Z  2026-11-17 04:34:14.558 UTC [227] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8655383Z  2026-11-17 04:34:14.558 UTC [227] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8657182Z  2026-11-17 04:34:14.558 UTC [227] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$oYDOOUkwggHlsIYldW0pVK$906c23cf05b16a6892fca626b8395e05', NULL, false, '', '', false, true, '2026-11-17 04:34:14.553937+00:00'::timestamptz, 'race@pes.edu', 'Racer 4', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8659227Z  2026-11-17 04:34:14.559 UTC [228] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8659915Z  2026-11-17 04:34:14.559 UTC [228] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8661729Z  2026-11-17 04:34:14.559 UTC [228] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$pNUh34TnSTvPO2t3Lt7P2M$9cc0eaeaf6b477a160533cf579562264', NULL, false, '', '', false, true, '2026-11-17 04:34:14.549605+00:00'::timestamptz, 'race@pes.edu', 'Racer 9', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8663659Z  2026-11-17 04:34:14.559 UTC [224] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8664246Z  2026-11-17 04:34:14.559 UTC [224] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8666161Z  2026-11-17 04:34:14.559 UTC [224] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$Bj7F6650ZPmjiZG2GydQmR$637cf0d04b64be37a7025ede2fb46950', NULL, false, '', '', false, true, '2026-11-17 04:34:14.549274+00:00'::timestamptz, 'race@pes.edu', 'Racer 11', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8668047Z  2026-11-17 04:34:14.560 UTC [234] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8668982Z  2026-11-17 04:34:14.560 UTC [234] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8671020Z  2026-11-17 04:34:14.560 UTC [234] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$OU6QMOmWWwALgoJm6bI5Ez$8e1d814d769ca42ea9bfee4c089f3259', NULL, false, '', '', false, true, '2026-11-17 04:34:14.553746+00:00'::timestamptz, 'race@pes.edu', 'Racer 0', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8673041Z  2026-11-17 04:34:14.561 UTC [226] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8673867Z  2026-11-17 04:34:14.561 UTC [226] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8675746Z  2026-11-17 04:34:14.561 UTC [226] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$QD1w1GGg21hjDyrtgR66PH$a0921f1d1c74add82ee11b9cb974ed84', NULL, false, '', '', false, true, '2026-11-17 04:34:14.552798+00:00'::timestamptz, 'race@pes.edu', 'Racer 2', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8692872Z  2026-11-17 04:34:14.564 UTC [229] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8693586Z  2026-11-17 04:34:14.564 UTC [229] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8695451Z  2026-11-17 04:34:14.564 UTC [229] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$4HnFHwwax5Np0fN1H1Vk3r$b0b7f2dd3206f8bb3101d13b864d0a5c', NULL, false, '', '', false, true, '2026-11-17 04:34:14.553536+00:00'::timestamptz, 'race@pes.edu', 'Racer 5', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8697409Z  2026-11-17 04:34:14.567 UTC [231] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8698026Z  2026-11-17 04:34:14.567 UTC [231] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8699992Z  2026-11-17 04:34:14.567 UTC [231] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$MNKggIWQp4o5mWV26Glov1$b10578f044b548a30d984d3c48cf1a4d', NULL, false, '', '', false, true, '2026-11-17 04:34:14.554215+00:00'::timestamptz, 'race@pes.edu', 'Racer 6', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8701885Z  2026-11-17 04:34:14.568 UTC [225] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8702488Z  2026-11-17 04:34:14.568 UTC [225] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8704455Z  2026-11-17 04:34:14.568 UTC [225] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$99IWZv2YxHfBlpCdrHwFHR$4461549c49fbb076b906a7b6d1c81889', NULL, false, '', '', false, true, '2026-11-17 04:34:14.550531+00:00'::timestamptz, 'race@pes.edu', 'Racer 1', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8706353Z  2026-11-17 04:34:14.569 UTC [235] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8706935Z  2026-11-17 04:34:14.569 UTC [235] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8708719Z  2026-11-17 04:34:14.569 UTC [235] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$BEwAkzI6KSckdPkD3tXx1v$1524a2be070a6dad232ded12d044e35b', NULL, false, '', '', false, true, '2026-11-17 04:34:14.553276+00:00'::timestamptz, 'race@pes.edu', 'Racer 8', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8710742Z  2026-11-17 04:34:14.574 UTC [230] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8711331Z  2026-11-17 04:34:14.574 UTC [230] DETAIL:  Key (email)=(race@pes.edu) already exists.
+2026-11-17T04:36:46.8713168Z  2026-11-17 04:34:14.574 UTC [230] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$3yflVkncyVW0OMTcyorx6m$cb44667b44e4f5989814d83b0445acca', NULL, false, '', '', false, true, '2026-11-17 04:34:14.553121+00:00'::timestamptz, 'race@pes.edu', 'Racer 3', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8715182Z  2026-11-17 04:34:14.707 UTC [243] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8715792Z  2026-11-17 04:34:14.707 UTC [243] DETAIL:  Key (email)=(view-race@pes.edu) already exists.
+2026-11-17T04:36:46.8717645Z  2026-11-17 04:34:14.707 UTC [243] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$NvwaPAj3bCydiCbELUleFT$519258f38b0cafa6b4b40d39462be44d', NULL, false, '', '', false, true, '2026-11-17 04:34:14.704137+00:00'::timestamptz, 'view-race@pes.edu', 'Racer 0', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8719657Z  2026-11-17 04:34:14.709 UTC [237] ERROR:  duplicate key value violates unique constraint "accounts_user_email_key"
+2026-11-17T04:36:46.8720275Z  2026-11-17 04:34:14.709 UTC [237] DETAIL:  Key (email)=(view-race@pes.edu) already exists.
+2026-11-17T04:36:46.8722110Z  2026-11-17 04:34:14.709 UTC [237] STATEMENT:  INSERT INTO "accounts_user" ("password", "last_login", "is_superuser", "first_name", "last_name", "is_staff", "is_active", "date_joined", "email", "full_name", "user_type", "hostel_block", "hostel_room", "role", "department_id") VALUES ('md5$Vm5HJv35eKENEdrjAT7nGR$8b7a2fd700b6ef99481dd7ed92856331', NULL, false, '', '', false, true, '2026-11-17 04:34:14.703649+00:00'::timestamptz, 'view-race@pes.edu', 'Racer 7', 'STUDENT', '', '', 'COMPLAINANT', NULL) RETURNING "accounts_user"."id"
+2026-11-17T04:36:46.8724063Z  2026-11-17 04:34:22.353 UTC [313] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8724706Z  2026-11-17 04:34:22.353 UTC [313] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8725349Z  2026-11-17 04:34:22.353 UTC [313] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8726276Z  2026-11-17 04:34:27.049 UTC [354] ERROR:  new row for relation "complaints_anonymousintakereceipt" violates check constraint "anon_receipt_key_digest_format"
+2026-11-17T04:36:46.8727728Z  2026-11-17 04:34:27.049 UTC [354] DETAIL:  Failing row contains (20, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, 1dbe92c5e33e859661c26a75110fb46dcf548f4eaf647e58f9660b2fe2f83c12, 2026-11-17 04:34:27.046941+00, 830).
+2026-11-17T04:36:46.8729356Z  2026-11-17 04:34:27.049 UTC [354] STATEMENT:  UPDATE "complaints_anonymousintakereceipt" SET "key_digest" = 'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' WHERE "complaints_anonymousintakereceipt"."id" = 20
+2026-11-17T04:36:46.8730748Z  2026-11-17 04:34:27.050 UTC [354] ERROR:  new row for relation "complaints_anonymousintakereceipt" violates check constraint "anon_receipt_payload_format"
+2026-11-17T04:36:46.8732070Z  2026-11-17 04:34:27.050 UTC [354] DETAIL:  Failing row contains (20, 8c8bb6f6f6827dd87f88ba9d19b3a8b27dab31472b828c75d8af677139760e4f, gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg, 2026-11-17 04:34:27.046941+00, 830).
+2026-11-17T04:36:46.8733700Z  2026-11-17 04:34:27.050 UTC [354] STATEMENT:  UPDATE "complaints_anonymousintakereceipt" SET "payload_digest" = 'gggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg' WHERE "complaints_anonymousintakereceipt"."id" = 20
+2026-11-17T04:36:46.8734959Z  2026-11-17 04:34:27.088 UTC [354] ERROR:  duplicate key value violates unique constraint "complaints_anonymousintakereceipt_key_digest_key"
+2026-11-17T04:36:46.8735860Z  2026-11-17 04:34:27.088 UTC [354] DETAIL:  Key (key_digest)=(8c8bb6f6f6827dd87f88ba9d19b3a8b27dab31472b828c75d8af677139760e4f) already exists.
+2026-11-17T04:36:46.8737743Z  2026-11-17 04:34:27.088 UTC [354] STATEMENT:  UPDATE "complaints_anonymousintakereceipt" SET "key_digest" = '8c8bb6f6f6827dd87f88ba9d19b3a8b27dab31472b828c75d8af677139760e4f' WHERE "complaints_anonymousintakereceipt"."id" IN (SELECT "U0"."id" FROM "complaints_anonymousintakereceipt" "U0" INNER JOIN "complaints_complaint" "U1" ON ("U0"."complaint_id" = "U1"."id") WHERE "U1"."complaint_id" = 'SCMS-2026-000002')
+2026-11-17T04:36:46.8739363Z  2026-11-17 04:34:35.345 UTC [431] LOG:  unexpected EOF on client connection with an open transaction
+2026-11-17T04:36:46.8740197Z  2026-11-17 04:34:44.794 UTC [508] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8740840Z  2026-11-17 04:34:44.794 UTC [508] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8741464Z  2026-11-17 04:34:44.794 UTC [508] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8742350Z  2026-11-17 04:34:44.893 UTC [509] ERROR:  new row for relation "complaints_complaintidsequence" violates check constraint "complaint_id_year_in_range"
+2026-11-17T04:36:46.8743037Z  2026-11-17 04:34:44.893 UTC [509] DETAIL:  Failing row contains (0, 0).
+2026-11-17T04:36:46.8743646Z  2026-11-17 04:34:44.893 UTC [509] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (0, 0)
+2026-11-17T04:36:46.8744508Z  2026-11-17 04:34:44.983 UTC [510] ERROR:  new row for relation "complaints_complaintidsequence" violates check constraint "complaint_id_year_in_range"
+2026-11-17T04:36:46.8745210Z  2026-11-17 04:34:44.983 UTC [510] DETAIL:  Failing row contains (10000, 0).
+2026-11-17T04:36:46.8745837Z  2026-11-17 04:34:44.983 UTC [510] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (10000, 0)
+2026-11-17T04:36:46.8746737Z  2026-11-17 04:34:45.076 UTC [511] ERROR:  new row for relation "complaints_complaintidsequence" violates check constraint "complaint_id_sequence_in_range"
+2026-11-17T04:36:46.8747454Z  2026-11-17 04:34:45.076 UTC [511] DETAIL:  Failing row contains (2026, -1).
+2026-11-17T04:36:46.8748084Z  2026-11-17 04:34:45.076 UTC [511] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026,  -1)
+2026-11-17T04:36:46.8748987Z  2026-11-17 04:34:45.166 UTC [512] ERROR:  new row for relation "complaints_complaintidsequence" violates check constraint "complaint_id_sequence_in_range"
+2026-11-17T04:36:46.8749815Z  2026-11-17 04:34:45.166 UTC [512] DETAIL:  Failing row contains (2026, 1000000).
+2026-11-17T04:36:46.8750651Z  2026-11-17 04:34:45.166 UTC [512] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1000000)
+2026-11-17T04:36:46.8751487Z  2026-11-17 04:34:45.258 UTC [513] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8752100Z  2026-11-17 04:34:45.258 UTC [513] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8752733Z  2026-11-17 04:34:45.258 UTC [513] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 2)
+2026-11-17T04:36:46.8753519Z  2026-11-17 04:34:45.487 UTC [526] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8754140Z  2026-11-17 04:34:45.487 UTC [526] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8754752Z  2026-11-17 04:34:45.487 UTC [526] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8755555Z  2026-11-17 04:34:45.487 UTC [525] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8756159Z  2026-11-17 04:34:45.487 UTC [525] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8756774Z  2026-11-17 04:34:45.487 UTC [525] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8757670Z  2026-11-17 04:34:45.488 UTC [524] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8758277Z  2026-11-17 04:34:45.488 UTC [524] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8758882Z  2026-11-17 04:34:45.488 UTC [524] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8759765Z  2026-11-17 04:34:45.488 UTC [523] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8760379Z  2026-11-17 04:34:45.488 UTC [523] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8760997Z  2026-11-17 04:34:45.488 UTC [523] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8761782Z  2026-11-17 04:34:45.493 UTC [527] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8762439Z  2026-11-17 04:34:45.493 UTC [527] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8763047Z  2026-11-17 04:34:45.493 UTC [527] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8763833Z  2026-11-17 04:34:45.782 UTC [543] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8764436Z  2026-11-17 04:34:45.782 UTC [543] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8765050Z  2026-11-17 04:34:45.782 UTC [543] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8765828Z  2026-11-17 04:34:45.782 UTC [544] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8766429Z  2026-11-17 04:34:45.782 UTC [544] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8767039Z  2026-11-17 04:34:45.782 UTC [544] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8767828Z  2026-11-17 04:34:45.782 UTC [548] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8768429Z  2026-11-17 04:34:45.782 UTC [548] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8769038Z  2026-11-17 04:34:45.782 UTC [548] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8770033Z  2026-11-17 04:34:45.782 UTC [542] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8770649Z  2026-11-17 04:34:45.782 UTC [542] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8771259Z  2026-11-17 04:34:45.782 UTC [542] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8772039Z  2026-11-17 04:34:45.782 UTC [545] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8772652Z  2026-11-17 04:34:45.782 UTC [545] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8773262Z  2026-11-17 04:34:45.782 UTC [545] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8774041Z  2026-11-17 04:34:45.782 UTC [547] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8774647Z  2026-11-17 04:34:45.782 UTC [547] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8775262Z  2026-11-17 04:34:45.782 UTC [547] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8776073Z  2026-11-17 04:34:45.783 UTC [549] ERROR:  duplicate key value violates unique constraint "complaints_complaintidsequence_pkey"
+2026-11-17T04:36:46.8776680Z  2026-11-17 04:34:45.783 UTC [549] DETAIL:  Key (year)=(2026) already exists.
+2026-11-17T04:36:46.8777415Z  2026-11-17 04:34:45.783 UTC [549] STATEMENT:  INSERT INTO "complaints_complaintidsequence" ("year", "last_value") VALUES (2026, 1)
+2026-11-17T04:36:46.8778181Z  2026-11-17 04:34:49.719 UTC [610] ERROR:  duplicate key value violates unique constraint "intake_receipt_user_key_unique"
+2026-11-17T04:36:46.8779036Z  2026-11-17 04:34:49.719 UTC [610] DETAIL:  Key (user_id, key_digest)=(1728, 30964220d3f1a9c1027a06099d31835bb580a054de027b41837e6fba0001371e) already exists.
+2026-11-17T04:36:46.8781226Z  2026-11-17 04:34:49.719 UTC [610] STATEMENT:  INSERT INTO "complaints_intakereceipt" ("user_id", "key_digest", "payload_digest", "complaint_id", "accepted_complaint_id", "submitted_at", "created_at") VALUES (1728, '30964220d3f1a9c1027a06099d31835bb580a054de027b41837e6fba0001371e', '5ab2b2f8d48786fe7889a722b9f065d2df35c1666e7674061b0bf8b7eac03577', 'SCMS-2026-999999', NULL, '2026-11-17 04:34:49.708498+00:00'::timestamptz, '2026-11-17 04:34:49.718740+00:00'::timestamptz) RETURNING "complaints_intakereceipt"."id"
+2026-11-17T04:36:46.8783303Z  2026-11-17 04:34:55.711 UTC [670] ERROR:  new row for relation "complaints_intakereceipt" violates check constraint "intake_receipt_complaint_matches"
+2026-11-17T04:36:46.8784746Z  2026-11-17 04:34:55.711 UTC [670] DETAIL:  Failing row contains (64, 3cbe954109764f871959780017f157b18f33b6df1539ba3ed71d4d1c41f0d214, 27fdc173ab54463a24b3f845fe6c5bd5edd0bca4e804bc919d62829655002893, SCMS-2026-000001, 2026-11-17 04:34:55.649583+00, 2026-11-17 04:34:55.688923+00, 1770, SCMS-2026-000002).
+2026-11-17T04:36:46.8786104Z  2026-11-17 04:34:55.711 UTC [670] STATEMENT:  UPDATE "complaints_intakereceipt" SET "accepted_complaint_id" = 'SCMS-2026-000002'
+2026-11-17T04:36:46.8786812Z  2026-11-17 04:34:59.040 UTC [681] LOG:  unexpected EOF on client connection with an open transaction
+2026-11-17T04:36:46.8787469Z  2026-11-17 04:35:26.982 UTC [925] ERROR:  duplicate key value violates unique constraint "email_attempt_number_unique"
+2026-11-17T04:36:46.8788114Z  2026-11-17 04:35:26.982 UTC [925] DETAIL:  Key (delivery_id, number)=(255, 1) already exists.
+2026-11-17T04:36:46.8789435Z  2026-11-17 04:35:26.982 UTC [925] STATEMENT:  INSERT INTO "workflow_emailattempt" ("delivery_id", "number", "status", "started_at", "lease_expires_at", "finished_at", "diagnostic_code") VALUES (255, 1, 'CLAIMED', '2026-11-17 04:35:26.981432+00:00'::timestamptz, '2026-11-17 04:35:26.975707+00:00'::timestamptz, NULL, '') RETURNING "workflow_emailattempt"."id"
+2026-11-17T04:36:46.8791015Z  2026-11-17 04:35:26.983 UTC [925] ERROR:  new row for relation "workflow_emailattempt" violates check constraint "email_attempt_number_limit"
+2026-11-17T04:36:46.8791998Z  2026-11-17 04:35:26.983 UTC [925] DETAIL:  Failing row contains (32, 4, CLAIMED, 2026-11-17 04:35:26.98253+00, 2026-11-17 04:35:26.975707+00, null, , 255).
+2026-11-17T04:36:46.8793482Z  2026-11-17 04:35:26.983 UTC [925] STATEMENT:  INSERT INTO "workflow_emailattempt" ("delivery_id", "number", "status", "started_at", "lease_expires_at", "finished_at", "diagnostic_code") VALUES (255, 4, 'CLAIMED', '2026-11-17 04:35:26.982530+00:00'::timestamptz, '2026-11-17 04:35:26.975707+00:00'::timestamptz, NULL, '') RETURNING "workflow_emailattempt"."id"
+2026-11-17T04:36:46.8794976Z  2026-11-17 04:35:26.984 UTC [925] ERROR:  new row for relation "workflow_emaildelivery" violates check constraint "email_delivery_attempt_limit"
+2026-11-17T04:36:46.8795883Z  2026-11-17 04:35:26.984 UTC [925] DETAIL:  Failing row contains (255, SENDING, 2026-11-17 04:35:26.973011+00, 2026-11-17 04:35:26.975707+00, null, , 271, 4, null).
+2026-11-17T04:36:46.8796799Z  2026-11-17 04:35:26.984 UTC [925] STATEMENT:  UPDATE "workflow_emaildelivery" SET "attempt_count" = 4 WHERE "workflow_emaildelivery"."id" = 255
+2026-11-17T04:36:46.8797615Z  2026-11-17 04:35:50.588 UTC [1116] ERROR:  duplicate key value violates unique constraint "notice_event_recipient_unique"
+2026-11-17T04:36:46.8798282Z  2026-11-17 04:35:50.588 UTC [1116] DETAIL:  Key (event_id, recipient_id)=(288, 2660) already exists.
+2026-11-17T04:36:46.8799417Z  2026-11-17 04:35:50.588 UTC [1116] STATEMENT:  INSERT INTO "workflow_notification" ("event_id", "recipient_id", "created_at", "read_at") VALUES (288, 2660, '2026-11-17 04:35:50.588279+00:00'::timestamptz, NULL) RETURNING "workflow_notification"."id"
+2026-11-17T04:36:46.8800641Z  2026-11-17 04:35:50.590 UTC [1116] ERROR:  duplicate key value violates unique constraint "workflow_emaildelivery_notice_id_key"
+2026-11-17T04:36:46.8801268Z  2026-11-17 04:35:50.590 UTC [1116] DETAIL:  Key (notice_id)=(482) already exists.
+2026-11-17T04:36:46.8802622Z  2026-11-17 04:35:50.590 UTC [1116] STATEMENT:  INSERT INTO "workflow_emaildelivery" ("notice_id", "status", "created_at", "started_at", "sent_at", "failure_code", "attempt_count", "next_attempt_at") VALUES (482, 'PENDING', '2026-11-17 04:35:50.590329+00:00'::timestamptz, NULL, NULL, '', 0, '2026-11-17 04:35:50.590218+00:00'::timestamptz) RETURNING "workflow_emaildelivery"."id"
+2026-11-17T04:36:46.8803989Z  2026-11-17 04:36:39.549 UTC [62] LOG:  checkpoint starting: immediate force wait
+2026-11-17T04:36:46.8805115Z  2026-11-17 04:36:39.576 UTC [62] LOG:  checkpoint complete: wrote 314 buffers (1.9%); 0 WAL file(s) added, 0 removed, 9 recycled; write=0.005 s, sync=0.015 s, total=0.027 s; sync files=301, longest=0.001 s, average=0.001 s; distance=151830 kB, estimate=151830 kB; lsn=0/AD5B4B0, redo lsn=0/AD5B458
+2026-11-17T04:36:46.8813191Z Stop and remove container: 82c72cf9fcc64c619c53e060d8cf4554_postgres176_0036b1
+2026-11-17T04:36:46.8818448Z ##[command]/usr/bin/docker rm --force 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:36:47.1712053Z 3630269a61bc475ce1f72d5faa4d42cde1bc77bcc8d719ca760f71c719d34002
+2026-11-17T04:36:47.1751666Z Remove container network: github_network_b3dde2f0fc3e49e9bdacfe4188f4998c
+2026-11-17T04:36:47.1756226Z ##[command]/usr/bin/docker network rm github_network_b3dde2f0fc3e49e9bdacfe4188f4998c
+2026-11-17T04:36:47.2345031Z github_network_b3dde2f0fc3e49e9bdacfe4188f4998c
+2026-11-17T04:36:47.2424790Z Cleaning up orphan processes
+2026-11-17T04:36:47.3029849Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
