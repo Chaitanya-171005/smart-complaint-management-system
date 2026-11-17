@@ -18,7 +18,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,te
 .nav-label{font-size:11px;letter-spacing:2px;color:#c1d4ee;margin:0 12px 14px}
 .sidebar nav{display:grid;gap:6px}
 .sidebar a{color:#f4f8ff;text-decoration:none;border-radius:8px;padding:12px;line-height:1.4}
-.sidebar a:hover,.sidebar a:focus-visible{background:#29496f}
+/* Keep text readable in every interactive state on the dark navigation. */
+.sidebar a:hover,.sidebar a:active,.sidebar a[aria-current="page"],.sidebar a:focus-visible{color:#f4f8ff;background:#29496f}
+.sidebar a:focus-visible{outline-color:#ffcb66}
 main{min-width:0;width:100%;max-width:1250px;padding:36px 40px 64px;margin:auto;align-self:start;overflow-wrap:anywhere}
 main>h1:first-child{margin-top:0}
 .public-layout{display:block}
@@ -36,7 +38,7 @@ button:disabled{background:#e3e9f0;color:#596a7e;border-color:#bdc9d7;cursor:not
 form{background:white;border:1px solid var(--line);border-radius:12px;padding:24px;margin:20px 0;max-width:900px}
 form p{margin:0 0 20px}
 label{display:block;font-weight:600;margin:0 0 7px}
-input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea{display:block;width:100%;min-height:44px;max-width:100%;border:1px solid #91a2b8;background:white;color:#172b45;border-radius:6px;padding:10px 12px;font:inherit;margin:6px 0 16px}
+input:not([type=hidden]):not([type=checkbox]):not([type=radio]),select,textarea{display:block;width:100%;min-height:44px;max-width:100%;border:1px solid #64748b;background:white;color:#172b45;border-radius:6px;padding:10px 12px;font:inherit;margin:6px 0 16px}
 input[type=checkbox],input[type=radio]{width:20px;height:20px;accent-color:var(--blue)}
 textarea{min-height:140px;resize:vertical}
 input[type=file]{font-size:14px}
@@ -96,9 +98,8 @@ button:disabled{background:#e2e8f0;border-color:#b3c1d2;color:#52647a;cursor:not
 .errorlist,[role=alert]{padding:12px 16px;background:#fff0f0;border-left:4px solid #a32028;border-radius:4px}
 .alert.success,[role=status]{padding:12px 16px;background:#e9f6ef;border-left:4px solid #26734a}
 .helptext{display:block;color:var(--muted);font-size:14px}
-.nav-label{font-size:11px;color:var(--muted);letter-spacing:2px;padding-left:12px}
-.sidebar a{display:block;padding:10px 12px;border-radius:6px;color:var(--navy);text-decoration:none}
-.sidebar a:hover{background:#e1ebf8}
+.nav-label{font-size:11px;letter-spacing:2px;padding-left:12px}
+.sidebar a{display:block;padding:10px 12px;border-radius:6px;text-decoration:none}
 .sidebar{border-right:1px solid var(--line);padding:24px 12px}
 main{min-width:0;padding:32px;max-width:1400px}
 h1{font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.25;letter-spacing:-.025em}
@@ -128,3 +129,8 @@ dd{margin-bottom:12px}
 
 [role=status]:empty{display:none}
 .account span{min-width:0;overflow-wrap:anywhere}
+
+/* Disabled controls retain visible boundaries; invalid controls add a red border.
+   Focus keeps the shared three-pixel outline and the normal strong boundary. */
+input:not([type=hidden]):not([type=checkbox]):not([type=radio]):disabled,select:disabled,textarea:disabled{border-color:#64748b;background:#e2e8f0;color:#52647a;opacity:1}
+input:not([type=hidden]):not([type=checkbox]):not([type=radio])[aria-invalid="true"],select[aria-invalid="true"],textarea[aria-invalid="true"]{border-color:#a32028}
