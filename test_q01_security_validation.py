@@ -25,6 +25,7 @@ pytestmark = pytest.mark.django_db
 # a signed-out visitor can open is a defect or a conscious change to this list.
 PUBLIC_ROUTES = {
     "register", "register_done", "login", "logout", "home", "anonymous_submit",
+    "track_reference", "reference_feedback",  # anonymous reference lookup and feedback; privacy checked by F2's tests
 }
 # Route names that exist only to be reached by one role and must refuse the others.
 ADMIN_ONLY_PREFIX = "admin_"
