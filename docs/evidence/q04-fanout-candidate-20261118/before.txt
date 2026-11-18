@@ -1,0 +1,80 @@
+{"heads": 3, "notice_inserts": 5, "email_inserts": 5, "total_statements": 20}
+F{"heads": 50, "notice_inserts": 52, "email_inserts": 52, "total_statements": 114}
+F
+=================================== FAILURES ===================================
+_______ test_notice_fanout_has_two_inserts_and_complete_durable_graph[3] _______
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x1070b1a60>
+user_factory = <function user_factory.<locals>.create_user at 0x10703e610>
+department_factory = <function department_factory.<locals>.create_department at 0x10703fb60>
+head_count = 3
+
+    @pytest.mark.parametrize('head_count', [3, 50])
+    def test_notice_fanout_has_two_inserts_and_complete_durable_graph(complaint_factory, user_factory, department_factory, head_count):
+        complaint = complaint_factory()
+        staff = user_factory(role='STAFF', department=complaint.department)
+        complaint.assignee = staff
+        complaint.save(update_fields=['assignee'])
+        heads = [user_factory(role='HEAD', department=complaint.department) for _ in range(head_count)]
+        user_factory(role='HEAD', department=department_factory())
+        user_factory(role='HEAD', department=complaint.department, is_active=False)
+        user_factory(role='STAFF', department=complaint.department)
+        with CaptureQueriesContext(connection) as queries:
+            history = record_history(complaint.complaint_id, 'ALLOCATED', 'HEAD', 'ASSIGNED', 'ASSIGNED')
+        notice_inserts = [q['sql'] for q in queries if q['sql'].startswith('INSERT INTO "workflow_notification"')]
+        email_inserts = [q['sql'] for q in queries if q['sql'].startswith('INSERT INTO "workflow_emaildelivery"')]
+        print(json.dumps({'heads': head_count, 'notice_inserts':len(notice_inserts), 'email_inserts':len(email_inserts), 'total_statements':len(queries)}))
+        event = NotificationEvent.objects.get(history=history)
+        expected = {complaint.submitted_by_id, staff.pk, *(h.pk for h in heads)}
+        assert set(Notification.objects.filter(event=event).values_list('recipient_id',flat=True)) == expected
+        jobs = EmailDelivery.objects.filter(notice__event=event)
+        assert set(jobs.values_list('notice__recipient_id',flat=True)) == expected
+        assert jobs.filter(status='PENDING', attempt_count=0).count() == len(expected)
+        before = list(event.notices.order_by('pk').values_list('pk',flat=True))
+        assert publish_history_event(history).pk == event.pk
+        assert list(event.notices.order_by('pk').values_list('pk',flat=True)) == before
+>       assert len(notice_inserts) == len(email_inserts) == 1
+E       assert 5 == 1
+E        +  where 5 = len(['INSERT INTO "workflow_emaildelivery" ("notice_id", "status", "created_at", "started_at", "sent_at", "failure_code", ...11-18 17:50:31.575051\', NULL, NULL, \'\', 0, \'2026-11-18 17:50:31.574898\') RETURNING "workflow_emaildelivery"."id"'])
+
+workflow/test_notification_fanout.py:37: AssertionError
+______ test_notice_fanout_has_two_inserts_and_complete_durable_graph[50] _______
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x106c137f0>
+user_factory = <function user_factory.<locals>.create_user at 0x1070b1430>
+department_factory = <function department_factory.<locals>.create_department at 0x1070b1d20>
+head_count = 50
+
+    @pytest.mark.parametrize('head_count', [3, 50])
+    def test_notice_fanout_has_two_inserts_and_complete_durable_graph(complaint_factory, user_factory, department_factory, head_count):
+        complaint = complaint_factory()
+        staff = user_factory(role='STAFF', department=complaint.department)
+        complaint.assignee = staff
+        complaint.save(update_fields=['assignee'])
+        heads = [user_factory(role='HEAD', department=complaint.department) for _ in range(head_count)]
+        user_factory(role='HEAD', department=department_factory())
+        user_factory(role='HEAD', department=complaint.department, is_active=False)
+        user_factory(role='STAFF', department=complaint.department)
+        with CaptureQueriesContext(connection) as queries:
+            history = record_history(complaint.complaint_id, 'ALLOCATED', 'HEAD', 'ASSIGNED', 'ASSIGNED')
+        notice_inserts = [q['sql'] for q in queries if q['sql'].startswith('INSERT INTO "workflow_notification"')]
+        email_inserts = [q['sql'] for q in queries if q['sql'].startswith('INSERT INTO "workflow_emaildelivery"')]
+        print(json.dumps({'heads': head_count, 'notice_inserts':len(notice_inserts), 'email_inserts':len(email_inserts), 'total_statements':len(queries)}))
+        event = NotificationEvent.objects.get(history=history)
+        expected = {complaint.submitted_by_id, staff.pk, *(h.pk for h in heads)}
+        assert set(Notification.objects.filter(event=event).values_list('recipient_id',flat=True)) == expected
+        jobs = EmailDelivery.objects.filter(notice__event=event)
+        assert set(jobs.values_list('notice__recipient_id',flat=True)) == expected
+        assert jobs.filter(status='PENDING', attempt_count=0).count() == len(expected)
+        before = list(event.notices.order_by('pk').values_list('pk',flat=True))
+        assert publish_history_event(history).pk == event.pk
+        assert list(event.notices.order_by('pk').values_list('pk',flat=True)) == before
+>       assert len(notice_inserts) == len(email_inserts) == 1
+E       assert 52 == 1
+E        +  where 52 = len(['INSERT INTO "workflow_emaildelivery" ("notice_id", "status", "created_at", "started_at", "sent_at", "failure_code", ... 17:50:31.755412\', NULL, NULL, \'\', 0, \'2026-11-18 17:50:31.755260\') RETURNING "workflow_emaildelivery"."id"', ...])
+
+workflow/test_notification_fanout.py:37: AssertionError
+=========================== short test summary info ============================
+FAILED workflow/test_notification_fanout.py::test_notice_fanout_has_two_inserts_and_complete_durable_graph[3]
+FAILED workflow/test_notification_fanout.py::test_notice_fanout_has_two_inserts_and_complete_durable_graph[50]
+2 failed in 1.79s
