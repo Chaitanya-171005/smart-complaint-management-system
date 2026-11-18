@@ -127,7 +127,11 @@ def _action(request, complaint_id, *, resolution):
             form = form_class(initial={"revision": revision})
         else:
             valid = form.is_valid()
-            if (set(request.POST) - {"csrfmiddlewaretoken", "revision", "remarks"}
+            # Browsers include an empty multipart field for an unselected optional file.
+            unexpected_post = set(request.POST) - {"csrfmiddlewaretoken", "revision", "remarks"}
+            if resolution and request.POST.getlist("evidence") == [""]:
+                unexpected_post.discard("evidence")
+            if (unexpected_post
                     or set(request.FILES) - ({"evidence"} if resolution else set())):
                 form.add_error(None, "Unsupported action fields.")
                 valid = False
