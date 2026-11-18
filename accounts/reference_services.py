@@ -12,6 +12,7 @@ from django.db import IntegrityError, transaction
 from django.db.models.functions import Lower
 
 from .config_audit import record_change
+from .configuration_lock import lock_configuration
 from .models import ConfigAuditEvent, Department, Location
 from .permissions import can_manage_configuration, require_permission
 
@@ -29,6 +30,7 @@ def admin_action(fn):
     def wrapper(actor, *args, **kwargs):
         require_permission(can_manage_configuration, actor)
         with transaction.atomic():
+            lock_configuration()
             return fn(actor, *args, **kwargs)
 
     return wrapper
