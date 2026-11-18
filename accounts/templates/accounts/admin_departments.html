@@ -8,6 +8,7 @@
 <body>
   <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Departments</h1>
+  {% if action_error %}<p role="alert">{{ action_error }}</p>{% endif %}
   <p>Departments are deactivated, never deleted. Inactive departments keep their existing users and complaints but are not offered to new work.</p>
   <table>
     <tr><th>Name</th><th>Status</th><th>Actions</th></tr>
