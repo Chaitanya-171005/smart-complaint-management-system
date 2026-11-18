@@ -1,0 +1,7 @@
+{
+  "__init__.py": "a16bdaf8945431bc5537294033f87fe96d14dfbec96f9713549627f96a76c78c",
+  "settings.py": "0ff7e9ea3b0858fb162adf854e01d79cfea934544a3d2a14cc46c63eedbd8ad2",
+  "test_scheduler.py": "ac7f472b4a9e56411522f10ff1ce0ab70ad93a835097ff69e2383af6a939673b",
+  "test_smtp_recovery.py": "d081ad788ee741c5e56a377fe35b9f47cbafc8c28b662009dbdeeb9262779e17",
+  "test_autoclose_recovery.py": "6f281b64f835bf4b994eb50bf556eda10a7c8fbfa9846d3e7f194ff99e2316ca"
+}

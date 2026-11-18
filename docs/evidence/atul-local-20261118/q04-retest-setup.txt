@@ -1,0 +1,94 @@
+ Image q0400883db8f64c:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 520B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.08kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.14-slim
+#3 DONE 1.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 399B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
+#5 resolve docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 32.76kB 0.1s done
+#6 DONE 0.1s
+
+#7 [4/7] RUN pip install --no-cache-dir -r requirements.txt
+#7 CACHED
+
+#8 [5/7] COPY . /app
+#8 CACHED
+
+#9 [2/7] WORKDIR /app
+#9 CACHED
+
+#10 [6/7] RUN useradd --create-home --uid 10001 appuser && mkdir -p /data/private-evidence && chown -R appuser:appuser /app /data/private-evidence && chmod +x /app/scripts/docker-entrypoint.sh
+#10 CACHED
+
+#11 [3/7] COPY requirements.txt /app/requirements.txt
+#11 CACHED
+
+#12 [7/7] RUN DJANGO_SECRET_KEY=build-only-throwaway python manage.py collectstatic --noinput
+#12 CACHED
+
+#13 exporting to image
+#13 exporting layers done
+#13 exporting manifest sha256:34d2403a80bd8e6a540b85896a3ccbaacfbe8d37e9d3a6b792aec5385a8d99ce 0.0s done
+#13 exporting config sha256:1d0d569049c595179f569fc4f83a1595a886895617d047d0a2101da863c2f0ee 0.0s done
+#13 exporting attestation manifest sha256:481f490eed5b2462b950123cc4a5a19da2fe13d470595423239f39c12bb20d7b 0.0s done
+#13 exporting manifest list sha256:a91cef3d3424e0069a902da694009b15a2027075a06f13a29b456666667674d0 0.0s done
+#13 naming to docker.io/library/q0400883db8f64c:local done
+#13 unpacking to docker.io/library/q0400883db8f64c:local 0.0s done
+#13 DONE 0.2s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image q0400883db8f64c:local Built 
+ Volume q0400883db8f64c_q04_evidence Creating 
+ Network q0400883db8f64c_q04 Creating 
+ Volume q0400883db8f64c_q04_database Creating 
+ Network q0400883db8f64c_q04 Creating 
+ Volume q0400883db8f64c_q04_database Creating 
+ Volume q0400883db8f64c_q04_evidence Creating 
+ Volume q0400883db8f64c_q04_database Created 
+ Volume q0400883db8f64c_q04_database Created 
+ Volume q0400883db8f64c_q04_evidence Created 
+ Volume q0400883db8f64c_q04_evidence Created 
+ Network q0400883db8f64c_q04 Created 
+ Network q0400883db8f64c_q04 Created 
+ Container q0400883db8f64c-db-1 Creating 
+ Container q0400883db8f64c-db-1 Created 
+ Container q0400883db8f64c-app-1 Creating 
+ Container q0400883db8f64c-app-1 Created 
+ Container q0400883db8f64c-db-1 Starting 
+ Container q0400883db8f64c-db-1 Started 
+ Container q0400883db8f64c-db-1 Waiting 
+ Container q0400883db8f64c-db-1 Healthy 
+ Container q0400883db8f64c-app-1 Starting 
+ Container q0400883db8f64c-app-1 Started 
+ Container q0400883db8f64c-db-1 Waiting 
+ Container q0400883db8f64c-app-1 Waiting 
+ Container q0400883db8f64c-db-1 Healthy 
+ Container q0400883db8f64c-app-1 Healthy 
+System check identified no issues (0 silenced).
+Seeded: 50 complainants, 50 heads, 2 staff, 650 complaints; 550 targets available.
+queue: READY (HTTP 200, rows=25)
+queue page 2: READY (HTTP 200, rows=25)
+authenticated intake: RELEASE_GATED (HTTP 503)
+anonymous intake: RELEASE_GATED (HTTP 503)
+tracking: RELEASE_GATED (HTTP 503)
+feedback: RELEASE_GATED (HTTP 503)
+reporting: ROUTE_UNAVAILABLE (HTTP 404)
+acknowledgement (no receipt): NOT_VERIFIED (HTTP 404)
+assignment form: NOT_VERIFIED; evidence upload/download: NOT_VERIFIED
+escalation command: NOT_VERIFIED (command exists; not executed)
+Local test URL: http://127.0.0.1:55068; private data: <home>/.scms-q04/ab4bebddbbca/environments/atul-20261118-retest
