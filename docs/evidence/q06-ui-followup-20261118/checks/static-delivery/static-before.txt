@@ -1,0 +1,384 @@
+FF...FFF                                                                 [100%]
+=================================== FAILURES ===================================
+_ test_collected_assets_are_served_without_debug_or_identity[scms.css-text/css] _
+
+self = <django.contrib.sessions.backends.db.SessionStore object at 0x10654f770>
+no_load = False
+
+    def _get_session(self, no_load=False):
+        """
+        Lazily load session from storage (unless "no_load" is True, when only
+        an empty dict is stored) and store it in the current instance.
+        """
+        self.accessed = True
+        try:
+>           return self._session_cache
+                   ^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:249: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are_serv0/private'))
+asset = 'scms.css', content_type = 'text/css'
+
+    @pytest.mark.parametrize('asset,content_type',[('scms.css','text/css'),('forms.js','javascript')])
+    def test_collected_assets_are_served_without_debug_or_identity(roots,asset,content_type):
+>       response=Client().get('/static/ui/'+asset,HTTP_COOKIE='sessionid=untrusted-ambient-cookie')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+accounts/test_static_delivery.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:1128: in get
+    response = super().get(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:475: in get
+    return self.generic(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:671: in generic
+    return self.request(**r)
+           ^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:1091: in request
+    self.check_exception(response)
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:805: in check_exception
+    raise exc_value
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/core/handlers/exception.py:56: in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/utils/deprecation.py:444: in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/middleware.py:49: in process_response
+    if request.session.get_expire_at_browser_close():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:408: in get_expire_at_browser_close
+    if (expiry := self.get("_session_expiry")) is None:
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:77: in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:254: in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py:55: in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py:34: in _get_session_from_db
+    return self.model.objects.get(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/manager.py:87: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:718: in get
+    num = len(clone)
+          ^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:455: in __len__
+    self._fetch_all()
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:2287: in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:131: in __iter__
+    results = compiler.execute_sql(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/sql/compiler.py:1641: in execute_sql
+    cursor = self.connection.cursor()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/utils/asyncio.py:26: in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/backends/base/base.py:320: in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <DatabaseWrapper vendor='sqlite' alias='default'>, name = None
+
+    def _cursor(self, name=None):
+        self.close_if_health_check_failed()
+>       self.ensure_connection()
+E       RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/backends/base/base.py:296: RuntimeError
+------------------------------ Captured log call -------------------------------
+ERROR    django.request:log.py:283 Internal Server Error: /static/ui/scms.css
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "[venv]/lib/python3.14/site-packages/django/utils/deprecation.py", line 444, in __call__
+    response = self.process_response(request, response)
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/middleware.py", line 49, in process_response
+    if request.session.get_expire_at_browser_close():
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 408, in get_expire_at_browser_close
+    if (expiry := self.get("_session_expiry")) is None:
+                  ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 77, in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 254, in _get_session
+    self._session_cache = self.load()
+                          ~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        session_key=self.session_key, expire_date__gt=timezone.now()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 718, in get
+    num = len(clone)
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 455, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 2287, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 131, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "[venv]/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1641, in execute_sql
+    cursor = self.connection.cursor()
+  File "[venv]/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "[venv]/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/pytest_django/plugin.py", line 908, in _blocking_wrapper
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+_ test_collected_assets_are_served_without_debug_or_identity[forms.js-javascript] _
+
+self = <django.contrib.sessions.backends.db.SessionStore object at 0x107154f50>
+no_load = False
+
+    def _get_session(self, no_load=False):
+        """
+        Lazily load session from storage (unless "no_load" is True, when only
+        an empty dict is stored) and store it in the current instance.
+        """
+        self.accessed = True
+        try:
+>           return self._session_cache
+                   ^^^^^^^^^^^^^^^^^^^
+E           AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:249: AttributeError
+
+During handling of the above exception, another exception occurred:
+
+roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are_serv1/private'))
+asset = 'forms.js', content_type = 'javascript'
+
+    @pytest.mark.parametrize('asset,content_type',[('scms.css','text/css'),('forms.js','javascript')])
+    def test_collected_assets_are_served_without_debug_or_identity(roots,asset,content_type):
+>       response=Client().get('/static/ui/'+asset,HTTP_COOKIE='sessionid=untrusted-ambient-cookie')
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+accounts/test_static_delivery.py:26: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:1128: in get
+    response = super().get(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:475: in get
+    return self.generic(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:671: in generic
+    return self.request(**r)
+           ^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:1091: in request
+    self.check_exception(response)
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/test/client.py:805: in check_exception
+    raise exc_value
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/core/handlers/exception.py:56: in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/utils/deprecation.py:444: in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/middleware.py:49: in process_response
+    if request.session.get_expire_at_browser_close():
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:408: in get_expire_at_browser_close
+    if (expiry := self.get("_session_expiry")) is None:
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:77: in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py:254: in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py:55: in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py:34: in _get_session_from_db
+    return self.model.objects.get(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/manager.py:87: in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:718: in get
+    num = len(clone)
+          ^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:455: in __len__
+    self._fetch_all()
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:2287: in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/query.py:131: in __iter__
+    results = compiler.execute_sql(
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/models/sql/compiler.py:1641: in execute_sql
+    cursor = self.connection.cursor()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/utils/asyncio.py:26: in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/backends/base/base.py:320: in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <DatabaseWrapper vendor='sqlite' alias='default'>, name = None
+
+    def _cursor(self, name=None):
+        self.close_if_health_check_failed()
+>       self.ensure_connection()
+E       RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+
+../scms-atul-venv-20261118/lib/python3.14/site-packages/django/db/backends/base/base.py:296: RuntimeError
+------------------------------ Captured log call -------------------------------
+ERROR    django.request:log.py:283 Internal Server Error: /static/ui/forms.js
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 249, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "[venv]/lib/python3.14/site-packages/django/utils/deprecation.py", line 444, in __call__
+    response = self.process_response(request, response)
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/middleware.py", line 49, in process_response
+    if request.session.get_expire_at_browser_close():
+       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 408, in get_expire_at_browser_close
+    if (expiry := self.get("_session_expiry")) is None:
+                  ~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 77, in get
+    return self._session.get(key, default)
+           ^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/base.py", line 254, in _get_session
+    self._session_cache = self.load()
+                          ~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py", line 55, in load
+    s = self._get_session_from_db()
+  File "[venv]/lib/python3.14/site-packages/django/contrib/sessions/backends/db.py", line 34, in _get_session_from_db
+    return self.model.objects.get(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        session_key=self.session_key, expire_date__gt=timezone.now()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 718, in get
+    num = len(clone)
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 455, in __len__
+    self._fetch_all()
+    ~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 2287, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[venv]/lib/python3.14/site-packages/django/db/models/query.py", line 131, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "[venv]/lib/python3.14/site-packages/django/db/models/sql/compiler.py", line 1641, in execute_sql
+    cursor = self.connection.cursor()
+  File "[venv]/lib/python3.14/site-packages/django/utils/asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+  File "[venv]/lib/python3.14/site-packages/django/db/backends/base/base.py", line 320, in cursor
+    return self._cursor()
+           ~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/django/db/backends/base/base.py", line 296, in _cursor
+    self.ensure_connection()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "[venv]/lib/python3.14/site-packages/pytest_django/plugin.py", line 908, in _blocking_wrapper
+    raise RuntimeError(
+    ...<3 lines>...
+    )
+RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
+_____ test_static_and_private_root_overlap_refuses_application_start[same] _____
+
+roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o0/private'))
+settings = <pytest_django.fixtures.Settings object at 0x10700b890>
+relation = 'same'
+
+    @pytest.mark.parametrize('relation',['same','private_inside_static','static_inside_private'])
+    def test_static_and_private_root_overlap_refuses_application_start(roots,settings,relation):
+        public,private=roots
+        settings.STATIC_ROOT=private if relation in ('same','static_inside_private') else public
+        settings.PRIVATE_EVIDENCE_ROOT=(public/'evidence') if relation=='private_inside_static' else private
+        if relation=='static_inside_private':settings.STATIC_ROOT=private/'static'
+>       with pytest.raises(ImproperlyConfigured,match='must be separate'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ImproperlyConfigured
+
+accounts/test_static_delivery.py:48: Failed
+_ test_static_and_private_root_overlap_refuses_application_start[private_inside_static] _
+
+roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o1/private'))
+settings = <pytest_django.fixtures.Settings object at 0x107bbd8c0>
+relation = 'private_inside_static'
+
+    @pytest.mark.parametrize('relation',['same','private_inside_static','static_inside_private'])
+    def test_static_and_private_root_overlap_refuses_application_start(roots,settings,relation):
+        public,private=roots
+        settings.STATIC_ROOT=private if relation in ('same','static_inside_private') else public
+        settings.PRIVATE_EVIDENCE_ROOT=(public/'evidence') if relation=='private_inside_static' else private
+        if relation=='static_inside_private':settings.STATIC_ROOT=private/'static'
+>       with pytest.raises(ImproperlyConfigured,match='must be separate'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ImproperlyConfigured
+
+accounts/test_static_delivery.py:48: Failed
+_ test_static_and_private_root_overlap_refuses_application_start[static_inside_private] _
+
+roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o2/private'))
+settings = <pytest_django.fixtures.Settings object at 0x107bbfac0>
+relation = 'static_inside_private'
+
+    @pytest.mark.parametrize('relation',['same','private_inside_static','static_inside_private'])
+    def test_static_and_private_root_overlap_refuses_application_start(roots,settings,relation):
+        public,private=roots
+        settings.STATIC_ROOT=private if relation in ('same','static_inside_private') else public
+        settings.PRIVATE_EVIDENCE_ROOT=(public/'evidence') if relation=='private_inside_static' else private
+        if relation=='static_inside_private':settings.STATIC_ROOT=private/'static'
+>       with pytest.raises(ImproperlyConfigured,match='must be separate'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ImproperlyConfigured
+
+accounts/test_static_delivery.py:48: Failed
+=========================== short test summary info ============================
+FAILED accounts/test_static_delivery.py::test_collected_assets_are_served_without_debug_or_identity[scms.css-text/css]
+FAILED accounts/test_static_delivery.py::test_collected_assets_are_served_without_debug_or_identity[forms.js-javascript]
+FAILED accounts/test_static_delivery.py::test_static_and_private_root_overlap_refuses_application_start[same]
+FAILED accounts/test_static_delivery.py::test_static_and_private_root_overlap_refuses_application_start[private_inside_static]
+FAILED accounts/test_static_delivery.py::test_static_and_private_root_overlap_refuses_application_start[static_inside_private]
+5 failed, 3 passed in 1.54s

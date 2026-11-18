@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "complaints.privacy_middleware.AnonymousPrivacyMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "scms.static_middleware.PublicStaticMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -149,6 +150,11 @@ COMPLAINT_AUTO_CLOSE_DAYS = os.environ.get("COMPLAINT_AUTO_CLOSE_DAYS", "7")
 
 STATIC_URL = "static/"
 STATIC_ROOT = Path(os.environ.get("DJANGO_STATIC_ROOT", BASE_DIR / "staticfiles"))
+# Serve only collected public assets. Private anonymous pages remain inline and
+# script-free, and private evidence is never a static or media URL alias.
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_USE_FINDERS = False
+WHITENOISE_ALLOW_ALL_ORIGINS = False
 
 
 # Email
