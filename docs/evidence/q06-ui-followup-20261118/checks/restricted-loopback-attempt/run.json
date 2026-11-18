@@ -1,0 +1,38 @@
+{
+  "executed_at_utc": "2026-11-18T17:53:17.972423+00:00",
+  "source_revision": "68cd6fafe59c49b21d99a0b4ec889579883b2b84",
+  "working_tree_dirty": true,
+  "working_tree_status": [
+    " M .github/workflows/intake-browser.yml",
+    " M accounts/static/ui/forms.js",
+    " M accounts/templates/accounts/landing.html",
+    " M accounts/templates/accounts/register.html",
+    " M accounts/templates/accounts/register_done.html",
+    " M accounts/templates/ui/base.html",
+    " M accounts/test_registration.py",
+    " M accounts/test_ui_phase1.py",
+    " M accounts/views.py",
+    " M complaints/privacy_middleware.py",
+    " M complaints/templates/complaints/anonymous_submit.html",
+    " M complaints/templates/complaints/submit.html",
+    " M complaints/views.py",
+    "?? accounts/templates/403.html",
+    "?? accounts/templatetags/__init__.py",
+    "?? accounts/templatetags/ui_assets.py",
+    "?? accounts/test_q06_flow.py",
+    "?? complaints/templates/complaints/_intake_panel.html",
+    "?? integration_checks/q06_four_screen_browser.py"
+  ],
+  "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
+  "pytest_exit_code": 1,
+  "coverage_gate_exit_code": 0,
+  "explicit_integrations": [
+    "integration_checks/anonymous_escalation.py",
+    "integration_checks/anonymous_recovery.py",
+    "integration_checks/lifecycle_f3.py",
+    "integration_checks/resolution_f3.py",
+    "integration_checks/f3_f4_handoff.py",
+    "workflow/test_retired_anonymous_routes.py"
+  ],
+  "f4_dependency_gate": "required"
+}

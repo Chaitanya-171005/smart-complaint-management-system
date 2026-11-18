@@ -1,0 +1,1555 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.14.8, pytest-9.1.1, pluggy-1.7.0
+django: version: 6.1.3, settings: scms.settings (from ini)
+rootdir: <repo>
+configfile: pytest.ini
+plugins: cov-7.1.0, django-4.14.0
+collected 2038 items
+
+accounts/test_config_audit.py .......................................... [  2%]
+                                                                         [  2%]
+accounts/test_foundation.py .........                                    [  2%]
+accounts/test_login.py ................................                  [  4%]
+accounts/test_permissions.py .................................           [  5%]
+accounts/test_q06_flow.py ............                                   [  6%]
+accounts/test_reference_data.py ........................................ [  8%]
+............................                                             [  9%]
+accounts/test_registration.py ......................................     [ 11%]
+accounts/test_security_log.py ...........................                [ 12%]
+accounts/test_session.py .................                               [ 13%]
+accounts/test_ui_phase1.py .................                             [ 14%]
+accounts/test_user_admin.py ........................................     [ 16%]
+complaints/test_evidence.py ............................................ [ 18%]
+............................                                             [ 19%]
+complaints/test_forms.py ..........                                      [ 20%]
+complaints/test_models.py .............................................. [ 22%]
+                                                                         [ 22%]
+complaints/test_tracking.py ............................................ [ 24%]
+.........................................................                [ 27%]
+routing/test_allocation.py .....................                         [ 28%]
+routing/test_b12_privacy.py ...........                                  [ 29%]
+routing/test_b15_http.py .........................                       [ 30%]
+routing/test_escalation.py ..........................                    [ 31%]
+routing/test_escalation_outer_transaction.py .                           [ 31%]
+routing/test_queue.py ...                                                [ 31%]
+routing/test_resolver.py ......                                          [ 32%]
+routing/test_sla.py .......                                              [ 32%]
+routing/tests.py .................................                       [ 34%]
+test_domain_fixtures.py ................                                 [ 34%]
+test_fixtures.py ......                                                  [ 35%]
+workflow/test_dashboards.py ..............                               [ 35%]
+workflow/test_history.py ............                                    [ 36%]
+workflow/test_history_actor.py ..                                        [ 36%]
+workflow/test_history_integration.py ........................            [ 37%]
+workflow/test_retired_anonymous_routes.py .............................. [ 39%]
+..                                                                       [ 39%]
+accounts/test_permissions_integration.py ............                    [ 39%]
+accounts/test_registration.py ..                                         [ 40%]
+accounts/test_user_admin.py ......                                       [ 40%]
+complaints/test_anonymous.py ........................................... [ 42%]
+...................................................                      [ 44%]
+complaints/test_evidence.py ..                                           [ 45%]
+complaints/test_evidence_recovery.py ................................... [ 46%]
+.                                                                        [ 46%]
+complaints/test_http_intake.py .....................................     [ 48%]
+complaints/test_identifiers.py .........................                 [ 49%]
+complaints/test_intake.py ......................................         [ 51%]
+complaints/test_submission.py .......................................... [ 53%]
+                                                                         [ 53%]
+complaints/test_tracking.py .                                            [ 53%]
+integration_checks/anonymous_escalation.py .                             [ 53%]
+integration_checks/anonymous_recovery.py ....                            [ 54%]
+integration_checks/f3_f4_handoff.py ...                                  [ 54%]
+integration_checks/lifecycle_f3.py ....                                  [ 54%]
+integration_checks/resolution_f3.py ....                                 [ 54%]
+routing/test_allocation.py ...........                                   [ 55%]
+routing/test_b12_privacy.py ....                                         [ 55%]
+routing/test_b15_http.py .......                                         [ 55%]
+routing/test_escalation.py .....                                         [ 55%]
+routing/test_intake_allocation_integration.py .                          [ 56%]
+routing/test_intake_entrypoint.py ........                               [ 56%]
+routing/test_intake_routing.py ...                                       [ 56%]
+routing/test_notification_handoff.py ........                            [ 56%]
+routing/test_resolver.py .                                               [ 57%]
+routing/test_scheduler_deployment.py ..                                  [ 57%]
+test_docker_files.py FF                                                  [ 57%]
+test_q04_escalation.py .                                                 [ 57%]
+workflow/test_autoclose.py ...................................           [ 58%]
+workflow/test_confirmation.py .......................................... [ 61%]
+......                                                                   [ 61%]
+workflow/test_email_retries.py ..........................                [ 62%]
+workflow/test_history_integration.py .                                   [ 62%]
+workflow/test_lifecycle.py ............................................. [ 64%]
+....................................................................     [ 68%]
+workflow/test_notification_smtp.py FFFF                                  [ 68%]
+workflow/test_notification_ui.py ...........                             [ 68%]
+workflow/test_notifications.py .......................................   [ 70%]
+workflow/test_reference_feedback.py .................................... [ 72%]
+..................................................                       [ 75%]
+workflow/test_reopening.py ...................................           [ 76%]
+workflow/test_resolution_http.py ....................                    [ 77%]
+workflow/test_resolution_integration.py ................................ [ 79%]
+....................                                                     [ 80%]
+workflow/test_tracking.py ..........                                     [ 80%]
+accounts/test_foundation.py ....                                         [ 81%]
+accounts/test_permissions_integration.py .                               [ 81%]
+accounts/test_ui_contrast.py ......                                      [ 81%]
+complaints/test_checks.py ....................                           [ 82%]
+complaints/test_forms.py ............................................... [ 84%]
+.....................................................................    [ 88%]
+complaints/test_models.py ...........                                    [ 88%]
+routing/test_scheduler_deployment.py ...                                 [ 88%]
+routing/test_sla.py ..................................                   [ 90%]
+scms/test_database_settings.py .....                                     [ 90%]
+scms/test_mail_config.py .....................................           [ 92%]
+test_ci_checks.py ..............                                         [ 93%]
+test_ci_environment.py .........                                         [ 93%]
+test_coverage_summary.py ..............                                  [ 94%]
+test_docker_files.py .....                                               [ 94%]
+test_fixtures.py ....                                                    [ 94%]
+test_github_workflows.py .....                                           [ 94%]
+test_jenkins_pipeline.py .....                                           [ 95%]
+test_q04_environment.py ..............................                   [ 96%]
+test_q04_escalation.py .....                                             [ 96%]
+test_q04_load.py ....EEEEEEEE.............EE....EEE..                    [ 98%]
+test_run_tests.py ...........                                            [ 99%]
+workflow/test_resolution.py ......                                       [ 99%]
+workflow/tests.py ..........                                             [100%]
+
+==================================== ERRORS ====================================
+___________ ERROR at setup of test_bad_response_is_never_a_fast_pass ___________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x112aba900>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____ ERROR at setup of test_no_match_is_not_a_successful_tracking_benchmark ____
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x111e474d0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_login_redirect_is_not_followed_or_counted_as_success __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x111e45310>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_login_redirect_cannot_be_declared_an_accepted_action __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113b57e10>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____________ ERROR at setup of test_pagination_failure_is_reported _____________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113bd8510>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____________ ERROR at setup of test_valid_detail_has_measured_time _____________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x11288e570>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+__ ERROR at setup of test_form_tokens_and_csrf_are_obtained_for_each_new_post __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113ba16a0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_reused_intake_token_never_benchmarks_an_idempotent_replay _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113ba1150>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____ ERROR at setup of test_real_worker_pool_samples_and_excludes_warmup ______
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x114355b50>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+__________ ERROR at setup of test_response_secrets_are_not_in_result ___________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x114356350>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_optional_source_address_uses_real_socket_without_forwarding_headers _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113b9f7a0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+___ ERROR at setup of test_invalid_source_address_is_refused_before_network ____
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113b9dd60>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_tracking_can_budget_nine_measured_attempts_plus_warmup _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x113bcb930>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+=================================== FAILURES ===================================
+_____________ test_image_health_command_with_https_redirect[False] _____________
+
+settings = <pytest_django.fixtures.Settings object at 0x112ff4460>
+proxy_https = False
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("proxy_https", [False, True])
+    def test_image_health_command_with_https_redirect(settings, proxy_https):
+        settings.SECURE_SSL_REDIRECT = proxy_https
+        settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if proxy_https else None
+        settings.ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+        line = next(line for line in read("Dockerfile").splitlines() if line.startswith("HEALTHCHECK "))
+        command = json.loads(line.split(" CMD ", 1)[1])
+        env = {**os.environ, "DJANGO_ALLOWED_HOSTS": "localhost,127.0.0.1",
+               "DJANGO_HTTPS_MODE": "proxy" if proxy_https else ""}
+        application = WSGIHandler()
+        forwarded = []
+    
+        def capture(environ, start_response):
+            forwarded.append(environ.get("HTTP_X_FORWARDED_PROTO"))
+            return application(environ, start_response)
+    
+>       with make_server("127.0.0.1", 0, capture) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_docker_files.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/wsgiref/simple_server.py:150: in make_server
+    server = server_class((host, port), handler_class)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/wsgiref/simple_server.py:50: in server_bind
+    HTTPServer.server_bind(self)
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <wsgiref.simple_server.WSGIServer object at 0x112ab9a90>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____________ test_image_health_command_with_https_redirect[True] ______________
+
+settings = <pytest_django.fixtures.Settings object at 0x111feb4d0>
+proxy_https = True
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("proxy_https", [False, True])
+    def test_image_health_command_with_https_redirect(settings, proxy_https):
+        settings.SECURE_SSL_REDIRECT = proxy_https
+        settings.SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if proxy_https else None
+        settings.ALLOWED_HOSTS = ["localhost", "127.0.0.1", "testserver"]
+        line = next(line for line in read("Dockerfile").splitlines() if line.startswith("HEALTHCHECK "))
+        command = json.loads(line.split(" CMD ", 1)[1])
+        env = {**os.environ, "DJANGO_ALLOWED_HOSTS": "localhost,127.0.0.1",
+               "DJANGO_HTTPS_MODE": "proxy" if proxy_https else ""}
+        application = WSGIHandler()
+        forwarded = []
+    
+        def capture(environ, start_response):
+            forwarded.append(environ.get("HTTP_X_FORWARDED_PROTO"))
+            return application(environ, start_response)
+    
+>       with make_server("127.0.0.1", 0, capture) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_docker_files.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/wsgiref/simple_server.py:150: in make_server
+    server = server_class((host, port), handler_class)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/wsgiref/simple_server.py:50: in server_bind
+    HTTPServer.server_bind(self)
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <wsgiref.simple_server.WSGIServer object at 0x111b860d0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____________ test_anonymous_smtp_delivery_retries_and_failure[0] ______________
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x11299fed0>
+user_factory = <function user_factory.<locals>.create_user at 0x112ec50c0>
+settings = <pytest_django.fixtures.Settings object at 0x112b54e60>
+temporary_failures = 0
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("temporary_failures", [0, 1, 2, 3])
+    def test_anonymous_smtp_delivery_retries_and_failure(complaint_factory, user_factory, settings, temporary_failures):
+        envelopes, messages, attempted = [], [], []
+    
+        class Relay(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.connection.settimeout(5)
+                self.wfile.write(b"220 synthetic.local ESMTP\r\n")
+                while line := self.rfile.readline():
+                    command = line.split(b" ", 1)[0].strip().upper()
+                    if command in (b"EHLO", b"HELO"):
+                        self.wfile.write(b"250 synthetic.local\r\n")
+                    elif command == b"RCPT":
+                        envelopes.append(line.decode("ascii").strip())
+                        self.wfile.write(b"250 OK\r\n")
+                    elif command == b"DATA":
+                        self.wfile.write(b"354 Send message\r\n")
+                        data = []
+                        while (part := self.rfile.readline()) != b".\r\n":
+                            if not part:
+                                return
+                            data.append(part)
+                        attempted.append(b"".join(data))
+                        if len(attempted) <= temporary_failures:
+                            self.wfile.write(b"451 Synthetic temporary refusal SECRET\r\n")
+                        else:
+                            messages.append(b"".join(data))
+                            self.wfile.write(b"250 Accepted\r\n")
+                    elif command == b"QUIT":
+                        self.wfile.write(b"221 Bye\r\n")
+                        return
+                    else:
+                        self.wfile.write(b"250 OK\r\n")
+    
+        complaint = complaint_factory(anonymous=True)
+        head = user_factory(role="HEAD", department=complaint.department)
+        record_history(complaint.complaint_id, "ESCALATED", "SYSTEM", remarks="SECRET-SESSION")
+        notice = Notification.objects.get(recipient=head)
+>       with socketserver.TCPServer(("127.0.0.1", 0), Relay) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+workflow/test_notification_smtp.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.TCPServer object at 0x111f09d30>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____________ test_anonymous_smtp_delivery_retries_and_failure[1] ______________
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x11299ef00>
+user_factory = <function user_factory.<locals>.create_user at 0x113384eb0>
+settings = <pytest_django.fixtures.Settings object at 0x112b8ab20>
+temporary_failures = 1
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("temporary_failures", [0, 1, 2, 3])
+    def test_anonymous_smtp_delivery_retries_and_failure(complaint_factory, user_factory, settings, temporary_failures):
+        envelopes, messages, attempted = [], [], []
+    
+        class Relay(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.connection.settimeout(5)
+                self.wfile.write(b"220 synthetic.local ESMTP\r\n")
+                while line := self.rfile.readline():
+                    command = line.split(b" ", 1)[0].strip().upper()
+                    if command in (b"EHLO", b"HELO"):
+                        self.wfile.write(b"250 synthetic.local\r\n")
+                    elif command == b"RCPT":
+                        envelopes.append(line.decode("ascii").strip())
+                        self.wfile.write(b"250 OK\r\n")
+                    elif command == b"DATA":
+                        self.wfile.write(b"354 Send message\r\n")
+                        data = []
+                        while (part := self.rfile.readline()) != b".\r\n":
+                            if not part:
+                                return
+                            data.append(part)
+                        attempted.append(b"".join(data))
+                        if len(attempted) <= temporary_failures:
+                            self.wfile.write(b"451 Synthetic temporary refusal SECRET\r\n")
+                        else:
+                            messages.append(b"".join(data))
+                            self.wfile.write(b"250 Accepted\r\n")
+                    elif command == b"QUIT":
+                        self.wfile.write(b"221 Bye\r\n")
+                        return
+                    else:
+                        self.wfile.write(b"250 OK\r\n")
+    
+        complaint = complaint_factory(anonymous=True)
+        head = user_factory(role="HEAD", department=complaint.department)
+        record_history(complaint.complaint_id, "ESCALATED", "SYSTEM", remarks="SECRET-SESSION")
+        notice = Notification.objects.get(recipient=head)
+>       with socketserver.TCPServer(("127.0.0.1", 0), Relay) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+workflow/test_notification_smtp.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.TCPServer object at 0x113003c50>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____________ test_anonymous_smtp_delivery_retries_and_failure[2] ______________
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x112aab950>
+user_factory = <function user_factory.<locals>.create_user at 0x1133859b0>
+settings = <pytest_django.fixtures.Settings object at 0x112a0d680>
+temporary_failures = 2
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("temporary_failures", [0, 1, 2, 3])
+    def test_anonymous_smtp_delivery_retries_and_failure(complaint_factory, user_factory, settings, temporary_failures):
+        envelopes, messages, attempted = [], [], []
+    
+        class Relay(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.connection.settimeout(5)
+                self.wfile.write(b"220 synthetic.local ESMTP\r\n")
+                while line := self.rfile.readline():
+                    command = line.split(b" ", 1)[0].strip().upper()
+                    if command in (b"EHLO", b"HELO"):
+                        self.wfile.write(b"250 synthetic.local\r\n")
+                    elif command == b"RCPT":
+                        envelopes.append(line.decode("ascii").strip())
+                        self.wfile.write(b"250 OK\r\n")
+                    elif command == b"DATA":
+                        self.wfile.write(b"354 Send message\r\n")
+                        data = []
+                        while (part := self.rfile.readline()) != b".\r\n":
+                            if not part:
+                                return
+                            data.append(part)
+                        attempted.append(b"".join(data))
+                        if len(attempted) <= temporary_failures:
+                            self.wfile.write(b"451 Synthetic temporary refusal SECRET\r\n")
+                        else:
+                            messages.append(b"".join(data))
+                            self.wfile.write(b"250 Accepted\r\n")
+                    elif command == b"QUIT":
+                        self.wfile.write(b"221 Bye\r\n")
+                        return
+                    else:
+                        self.wfile.write(b"250 OK\r\n")
+    
+        complaint = complaint_factory(anonymous=True)
+        head = user_factory(role="HEAD", department=complaint.department)
+        record_history(complaint.complaint_id, "ESCALATED", "SYSTEM", remarks="SECRET-SESSION")
+        notice = Notification.objects.get(recipient=head)
+>       with socketserver.TCPServer(("127.0.0.1", 0), Relay) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+workflow/test_notification_smtp.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.TCPServer object at 0x113003b10>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____________ test_anonymous_smtp_delivery_retries_and_failure[3] ______________
+
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x112b2e820>
+user_factory = <function user_factory.<locals>.create_user at 0x1133856f0>
+settings = <pytest_django.fixtures.Settings object at 0x1133f6e90>
+temporary_failures = 3
+
+    @pytest.mark.django_db(transaction=True)
+    @pytest.mark.parametrize("temporary_failures", [0, 1, 2, 3])
+    def test_anonymous_smtp_delivery_retries_and_failure(complaint_factory, user_factory, settings, temporary_failures):
+        envelopes, messages, attempted = [], [], []
+    
+        class Relay(socketserver.StreamRequestHandler):
+            def handle(self):
+                self.connection.settimeout(5)
+                self.wfile.write(b"220 synthetic.local ESMTP\r\n")
+                while line := self.rfile.readline():
+                    command = line.split(b" ", 1)[0].strip().upper()
+                    if command in (b"EHLO", b"HELO"):
+                        self.wfile.write(b"250 synthetic.local\r\n")
+                    elif command == b"RCPT":
+                        envelopes.append(line.decode("ascii").strip())
+                        self.wfile.write(b"250 OK\r\n")
+                    elif command == b"DATA":
+                        self.wfile.write(b"354 Send message\r\n")
+                        data = []
+                        while (part := self.rfile.readline()) != b".\r\n":
+                            if not part:
+                                return
+                            data.append(part)
+                        attempted.append(b"".join(data))
+                        if len(attempted) <= temporary_failures:
+                            self.wfile.write(b"451 Synthetic temporary refusal SECRET\r\n")
+                        else:
+                            messages.append(b"".join(data))
+                            self.wfile.write(b"250 Accepted\r\n")
+                    elif command == b"QUIT":
+                        self.wfile.write(b"221 Bye\r\n")
+                        return
+                    else:
+                        self.wfile.write(b"250 OK\r\n")
+    
+        complaint = complaint_factory(anonymous=True)
+        head = user_factory(role="HEAD", department=complaint.department)
+        record_history(complaint.complaint_id, "ESCALATED", "SYSTEM", remarks="SECRET-SESSION")
+        notice = Notification.objects.get(recipient=head)
+>       with socketserver.TCPServer(("127.0.0.1", 0), Relay) as server:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+workflow/test_notification_smtp.py:55: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <socketserver.TCPServer object at 0x112539e00>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+================================ tests coverage ================================
+_______________ coverage: platform darwin, python 3.14.8-final-0 _______________
+
+Name                                                    Stmts   Miss Branch BrPart   Cover   Missing
+----------------------------------------------------------------------------------------------------
+accounts/admin.py                                           1      0      0      0 100.00%
+accounts/admin_views.py                                   134      0     38      2  98.84%   75->77, 98->100
+accounts/apps.py                                            3      0      0      0 100.00%
+accounts/config_audit.py                                   33      0     20      0 100.00%
+accounts/forms.py                                          34      1      8      1  95.24%   25
+accounts/models.py                                        172      5     10      1  96.70%   85, 93, 173, 225, 288
+accounts/permissions.py                                   140      1     56      1  98.98%   168
+accounts/reference_adapters.py                              4      0      0      0 100.00%
+accounts/reference_services.py                            118      4     28      2  95.89%   79-80, 188, 199
+accounts/security_log.py                                   19      0      4      0 100.00%
+accounts/services.py                                       77      0     18      0 100.00%
+accounts/templatetags/ui_assets.py                         13      1      2      1  86.67%   19
+accounts/urls.py                                            4      0      0      0 100.00%
+accounts/user_admin_services.py                            65      0     20      0 100.00%
+accounts/validators.py                                      7      1      2      0  88.89%   15
+accounts/views.py                                          69      0     18      0 100.00%
+complaints/admin.py                                         1      0      0      0 100.00%
+complaints/anonymous.py                                    58      1     10      1  97.06%   84
+complaints/anonymous_views.py                              64      2     14      2  94.87%   32, 51
+complaints/apps.py                                          5      0      0      0 100.00%
+complaints/checks.py                                       37      1      8      1  95.56%   72
+complaints/evidence.py                                    171      1     44      1  99.07%   116
+complaints/evidence_recovery.py                           119      2     52      2  97.66%   42, 121
+complaints/feedback_views.py                               53      3     16      2  92.75%   42, 52, 64
+complaints/forms.py                                        92      0     30      0 100.00%
+complaints/identifiers.py                                  26      0     10      1  97.22%   49->56
+complaints/intake.py                                       81      1     30      1  98.20%   152
+complaints/management/commands/reconcile_evidence.py       15      2      0      0  86.67%   21-22
+complaints/models.py                                       99      0      2      0 100.00%
+complaints/privacy.py                                      59      2     22      0  97.53%   95-96
+complaints/privacy_middleware.py                          101      5     28      0  96.12%   19, 92-93, 128-129
+complaints/reference_data.py                               11      0      0      0 100.00%
+complaints/references.py                                    6      0      2      0 100.00%
+complaints/services.py                                      5      0      0      0 100.00%
+complaints/submission.py                                   71      0     20      0 100.00%
+complaints/tracking.py                                     23      0      2      0 100.00%
+complaints/tracking_limits.py                              84      1     24      2  97.22%   141, 165->169
+complaints/tracking_source.py                              37      2     16      2  92.45%   25, 43
+complaints/tracking_views.py                               27      0      6      0 100.00%
+complaints/transport.py                                     5      0      0      0 100.00%
+complaints/urls.py                                          4      0      0      0 100.00%
+complaints/validators.py                                   14      0      6      0 100.00%
+complaints/views.py                                       114      2     22      2  97.06%   124, 158
+routing/adapters.py                                         4      0      0      0 100.00%
+routing/admin.py                                           12      0      0      0 100.00%
+routing/allocation.py                                      55      0     20      0 100.00%
+routing/apps.py                                             3      0      0      0 100.00%
+routing/escalation.py                                      76      1     16      1  97.83%   110
+routing/intake.py                                          15      0      0      0 100.00%
+routing/management/commands/run_escalation.py              17      0      4      0 100.00%
+routing/models.py                                         150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+routing/notifications.py                                   17      0      6      0 100.00%
+routing/queue.py                                           10      0      0      0 100.00%
+routing/resolver.py                                        47      0     18      0 100.00%
+routing/services.py                                       245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+routing/sla.py                                             34      0     14      0 100.00%
+routing/urls.py                                             4      0      0      0 100.00%
+routing/views.py                                           84     15     30      7  78.95%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+scms/mail_config.py                                        45      0     20      0 100.00%
+workflow/admin.py                                          14      0      0      0 100.00%
+workflow/anonymous_feedback_models.py                      31      3      6      2  86.49%   14, 48, 51
+workflow/apps.py                                            5      0      0      0 100.00%
+workflow/autoclose.py                                      43      3     16      3  89.83%   34, 48, 63
+workflow/checks.py                                         10      0      0      0 100.00%
+workflow/confirmation_service.py                           12      0      2      0 100.00%
+workflow/dashboard_views.py                                33      0      8      0 100.00%
+workflow/dashboards.py                                     42      1     12      1  96.30%   27
+workflow/email_delivery.py                                139      3     46      1  97.84%   80-82
+workflow/feedback_detail_views.py                          14      0      0      0 100.00%
+workflow/feedback_policy.py                                 7      0      2      0 100.00%
+workflow/forms.py                                          13      0      0      0 100.00%
+workflow/history_service.py                                24      0      4      0 100.00%
+workflow/lifecycle.py                                     129      0     26      0 100.00%
+workflow/management/commands/auto_close_complaints.py      15      0      0      0 100.00%
+workflow/management/commands/deliver_notifications.py      22      0      6      0 100.00%
+workflow/models.py                                         64      0     12      0 100.00%
+workflow/notification_models.py                            68      0      0      0 100.00%
+workflow/notification_views.py                             21      0      0      0 100.00%
+workflow/notifications.py                                  96      3     42      0  96.38%   68-70
+workflow/reference_feedback.py                             78      2     24      2  96.08%   79, 84
+workflow/reopening_service.py                              18      0      4      0 100.00%
+workflow/reopening_views.py                                39      2      6      0  95.56%   47-48
+workflow/resolution_service.py                             40      0     10      0 100.00%
+workflow/services.py                                       23      2      8      0  93.55%   55-56
+workflow/templatetags/notification_tags.py                  7      0      0      0 100.00%
+workflow/urls.py                                           11      0      0      0 100.00%
+workflow/views.py                                         144      2     18      0  98.77%   60-61
+----------------------------------------------------------------------------------------------------
+TOTAL                                                    4255    102   1068     61  96.86%
+Coverage JSON written to file coverage.json
+=========================== short test summary info ============================
+ERROR test_q04_load.py::test_bad_response_is_never_a_fast_pass - PermissionEr...
+ERROR test_q04_load.py::test_no_match_is_not_a_successful_tracking_benchmark
+ERROR test_q04_load.py::test_login_redirect_is_not_followed_or_counted_as_success
+ERROR test_q04_load.py::test_login_redirect_cannot_be_declared_an_accepted_action
+ERROR test_q04_load.py::test_pagination_failure_is_reported - PermissionError...
+ERROR test_q04_load.py::test_valid_detail_has_measured_time - PermissionError...
+ERROR test_q04_load.py::test_form_tokens_and_csrf_are_obtained_for_each_new_post
+ERROR test_q04_load.py::test_reused_intake_token_never_benchmarks_an_idempotent_replay
+ERROR test_q04_load.py::test_real_worker_pool_samples_and_excludes_warmup - P...
+ERROR test_q04_load.py::test_response_secrets_are_not_in_result - PermissionE...
+ERROR test_q04_load.py::test_optional_source_address_uses_real_socket_without_forwarding_headers
+ERROR test_q04_load.py::test_invalid_source_address_is_refused_before_network
+ERROR test_q04_load.py::test_tracking_can_budget_nine_measured_attempts_plus_warmup
+FAILED test_docker_files.py::test_image_health_command_with_https_redirect[False]
+FAILED test_docker_files.py::test_image_health_command_with_https_redirect[True]
+FAILED workflow/test_notification_smtp.py::test_anonymous_smtp_delivery_retries_and_failure[0]
+FAILED workflow/test_notification_smtp.py::test_anonymous_smtp_delivery_retries_and_failure[1]
+FAILED workflow/test_notification_smtp.py::test_anonymous_smtp_delivery_retries_and_failure[2]
+FAILED workflow/test_notification_smtp.py::test_anonymous_smtp_delivery_retries_and_failure[3]
+============ 6 failed, 2019 passed, 13 errors in 258.47s (0:04:18) =============

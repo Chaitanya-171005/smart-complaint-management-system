@@ -1,0 +1,35 @@
+{
+  "case": "test_work_queue_responsive_controls[mobile320-STAFF]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "queue_ui": {
+      "role": "STAFF",
+      "layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 345.140625
+          }
+        ]
+      },
+      "assign_buttons": 0
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

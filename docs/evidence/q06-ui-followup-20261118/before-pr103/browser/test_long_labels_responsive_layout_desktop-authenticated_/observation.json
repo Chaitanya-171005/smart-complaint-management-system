@@ -1,0 +1,33 @@
+{
+  "case": "test_long_labels_responsive_layout[desktop-authenticated]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "long_labels": {
+      "anonymous": false,
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      },
+      "category_length": 50,
+      "location_lengths": [
+        20,
+        10,
+        30
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

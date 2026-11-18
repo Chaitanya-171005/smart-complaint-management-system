@@ -1,0 +1,26 @@
+{
+  "case": "test_intake_errors_announce_or_focus_after_server_refusal[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "server_error_announcement": {
+      "focus": "",
+      "alerts": 0,
+      "invalidFocus": false
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

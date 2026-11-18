@@ -1,0 +1,5 @@
+/accounts/register/
+/accounts/register/done/
+/accounts/landing/complainant/
+/complaints/SCMS-2026-000001/submitted/
+Automated path; genuine human acceptance not assessed.

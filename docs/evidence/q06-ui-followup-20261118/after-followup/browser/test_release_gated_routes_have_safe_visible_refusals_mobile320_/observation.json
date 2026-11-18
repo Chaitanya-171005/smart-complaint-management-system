@@ -1,0 +1,89 @@
+{
+  "case": "test_release_gated_routes_have_safe_visible_refusals[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "default_release_gates": [
+      {
+        "route": "/complaints/new/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nComplainant\nLog out\nOverview\nSubmit complaint\nMy complaints\nDashboard\nNotifications\nNotifications \u2014 0 unread\nComplaint submission is currently unavailable\n\nPlease contact campus administration for assistance.\n\nHome\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 320,
+          "clientWidth": 320,
+          "scrollWidth": 320,
+          "visualWidth": 320,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": [
+            {
+              "tag": "A",
+              "id": "",
+              "text": "My complaints",
+              "right": 366.796875
+            },
+            {
+              "tag": "A",
+              "id": "",
+              "text": "Dashboard",
+              "right": 469.234375
+            },
+            {
+              "tag": "A",
+              "id": "",
+              "text": "Notifications",
+              "right": 582.890625
+            }
+          ]
+        }
+      },
+      {
+        "route": "/anonymous/new/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSign in\nRegister\nComplaint submission is currently unavailable\n\nPlease contact campus administration for assistance.\n\nHome\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 320,
+          "clientWidth": 320,
+          "scrollWidth": 320,
+          "visualWidth": 320,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": []
+        }
+      },
+      {
+        "route": "/anonymous/track/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSign in\nRegister\nTrack an anonymous complaint\n\nReference tracking is temporarily unavailable. Please try again later.\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 320,
+          "clientWidth": 320,
+          "scrollWidth": 320,
+          "visualWidth": 320,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": []
+        }
+      }
+    ],
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

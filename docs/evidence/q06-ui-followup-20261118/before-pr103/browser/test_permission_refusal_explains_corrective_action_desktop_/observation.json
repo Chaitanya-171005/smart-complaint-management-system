@@ -1,0 +1,25 @@
+{
+  "case": "test_permission_refusal_explains_corrective_action[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "permission_guidance": {
+      "text": "403 Forbidden",
+      "links": 0
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

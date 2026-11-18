@@ -1,0 +1,51 @@
+{
+  "case": "test_configuration_unavailable_is_explained_and_disabled[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "configuration_refusal": {
+      "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nComplainant\nLog out\nOverview\nSubmit complaint\nMy complaints\nDashboard\nNotifications\nNotifications \u2014 0 unread\nHome\nSubmit a complaint\nFor emergencies\n\nSYNTHETIC Q06 TEST ONLY. SCMS is not an emergency channel. For fire, electrical, medical or structural danger contact the test campus desk. Not campus-confirmed.\n\nCategory:\nSelect category\nComplaint intake is temporarily unavailable because category or location configuration needs correction. Please contact an administrator.\n\nSub-category:\n\nLocation:\nSelect location\nTest / 1 / Room\n\nTitle:\n\nDescription:\nAt least 20 characters after trimming outer whitespace. Interior spaces count; combining marks and invisible characters do not. Bidirectional formatting controls are not allowed.\n\nPriority:\nLow\nMedium\nHigh\nCritical\n\nEvidence (optional)\n\n\n\nAttach up to three JPEG, PNG or PDF files. Select the same files again when retrying.\n\nKeep this form if the response is interrupted. Retry the same request with the same details and files.\n\nSubmit complaint\n\nStart a new form\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+      "layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "My complaints",
+            "right": 366.796875
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Dashboard",
+            "right": 469.234375
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 582.890625
+          }
+        ]
+      }
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      }
+    ],
+    "failed_requests": []
+  }
+}
