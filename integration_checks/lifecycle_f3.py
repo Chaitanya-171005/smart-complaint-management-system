@@ -70,7 +70,7 @@ def test_lifecycle_rollback_preserves_committed_f3_assignment(case, user_factory
     allocate_complaint(actor=head, complaint_id=complaint.complaint_id, assignee=replacement,
                        expected_assignee_id=staff.pk, reason='Synthetic reassignment')
     token = revision(complaint, head)
-    with patch('workflow.notifications.Notification.objects.create', side_effect=RuntimeError('controlled')):
+    with patch('workflow.notifications.Notification.objects.bulk_create', side_effect=RuntimeError('controlled')):
         with pytest.raises(RuntimeError):
             act(complaint, head, token)
     complaint.refresh_from_db()

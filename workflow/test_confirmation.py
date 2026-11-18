@@ -105,7 +105,7 @@ def test_duplicate_and_stale_actions_leave_no_extra_events(case):
 
 
 @pytest.mark.parametrize('target', ['workflow.lifecycle.record_history',
-                                 'workflow.notifications.Notification.objects.create'])
+                                 'workflow.notifications.Notification.objects.bulk_create'])
 def test_required_failure_rolls_back_closure_metadata_and_notices(case, target):
     args = arguments(case)
     before = snapshot(case[0])

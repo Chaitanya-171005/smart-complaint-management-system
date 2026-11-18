@@ -1,0 +1,18 @@
+Error response from daemon: Docker Desktop is manually paused. Unpause it through the Whale menu or Dashboard.
+Traceback (most recent call last):
+  File "<stdin>", line 6, in <module>
+  File "[repo]/scripts/q04_env.py", line 172, in main
+    execute(args)
+    ~~~~~~~^^^^^^
+  File "[repo]/scripts/q04_env.py", line 183, in execute
+    compose(data,'up','-d','--build','--wait', '--wait-timeout','180')
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "[repo]/scripts/q04_env.py", line 54, in compose
+    return invoke(['docker','compose','-p',data['project'],'-f',str(COMPOSE),*args],cwd=ROOT,env=env,**kwargs)
+  File "[repo]/scripts/q04_env.py", line 32, in invoke
+    return subprocess.run(args, check=True, **kwargs)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['docker', 'compose', '-p', 'q049f3f783f9966', '-f', '[repo]/q04/compose.yml', 'up', '-d', '--build', '--wait', '--wait-timeout', '180']' returned non-zero exit status 1.

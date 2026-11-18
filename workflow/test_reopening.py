@@ -109,8 +109,8 @@ def test_wrong_actor_leaves_aggregate_unchanged(case, user_factory, kind):
 @pytest.mark.parametrize('count,target', [
     (0, 'workflow.lifecycle.record_history'),
     (2, 'workflow.reopening_service.record_history'),
-    (0, 'workflow.notifications.Notification.objects.create'),
-    (2, 'workflow.notifications.Notification.objects.create'),
+    (0, 'workflow.notifications.Notification.objects.bulk_create'),
+    (2, 'workflow.notifications.Notification.objects.bulk_create'),
 ])
 def test_rollback_including_maximum_escalation(case, count, target):
     complaint = case[0]

@@ -32,6 +32,9 @@ services:
       DJANGO_DB_HOST: db
       DJANGO_DB_PORT: "5432"
       PRIVATE_EVIDENCE_ROOT: /data/private-evidence
+      # Local Q04 candidate only: exercise concurrency rather than one sync worker.
+      # This is a recorded resource change, not a production sizing decision.
+      GUNICORN_CMD_ARGS: "--workers 4 --threads 1"
       COMPLAINT_INTAKE_ENABLED: "False"
       ANONYMOUS_INTAKE_ENABLED: "False"
     volumes:

@@ -95,7 +95,7 @@ def test_repeated_runs_do_not_duplicate_and_preserve_metadata(case):
 
 
 @pytest.mark.parametrize('target', ['workflow.lifecycle.record_history',
-                                  'workflow.notifications.Notification.objects.create'])
+                                  'workflow.notifications.Notification.objects.bulk_create'])
 def test_history_or_notice_failure_rolls_back_closure(case, target):
     now = expired(case)
     before = snapshot(case[0])

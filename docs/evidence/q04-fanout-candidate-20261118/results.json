@@ -1,0 +1,35 @@
+{
+  "source_commit": "3ace587ca046080f30fa2a554362048237bcb100",
+  "focused": {
+    "passed": 414,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "regression_before": {
+    "failed": 2,
+    "passed": 0
+  },
+  "single_action_statement_counts": {
+    "heads_3": {
+      "before_total": 20,
+      "after_total": 13,
+      "before_notification_inserts": 5,
+      "before_email_inserts": 5,
+      "after_notification_inserts": 1,
+      "after_email_inserts": 1
+    },
+    "heads_50": {
+      "before_total": 114,
+      "after_total": 13,
+      "before_notification_inserts": 52,
+      "before_email_inserts": 52,
+      "after_notification_inserts": 1,
+      "after_email_inserts": 1
+    }
+  },
+  "new_load_run": false,
+  "docker_candidate_built": false,
+  "blocker": "Docker Desktop manually paused; attempted preparation failed before image build.",
+  "Q04_pass": false
+}

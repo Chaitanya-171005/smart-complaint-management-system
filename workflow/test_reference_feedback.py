@@ -181,7 +181,7 @@ def test_stale_or_replayed_action_cannot_duplicate(case):
     assert snapshot(complaint) == before
 
 
-@pytest.mark.parametrize('target', ['workflow.notifications.Notification.objects.create',
+@pytest.mark.parametrize('target', ['workflow.notifications.Notification.objects.bulk_create',
                                   'workflow.reference_feedback.AnonymousResolutionFeedback.objects.create'])
 def test_required_feedback_or_notification_failure_rolls_back_complete_graph(case, target):
     before = snapshot(case[0])
