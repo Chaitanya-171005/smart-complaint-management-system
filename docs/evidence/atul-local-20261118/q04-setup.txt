@@ -1,0 +1,98 @@
+ Image q0484286891847f:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 520B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.08kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.14-slim
+#3 DONE 2.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 399B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
+#5 resolve docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 10.47MB 0.3s done
+#6 DONE 0.4s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] COPY requirements.txt /app/requirements.txt
+#8 CACHED
+
+#9 [4/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/7] COPY . /app
+#10 DONE 0.2s
+
+#11 [6/7] RUN useradd --create-home --uid 10001 appuser && mkdir -p /data/private-evidence && chown -R appuser:appuser /app /data/private-evidence && chmod +x /app/scripts/docker-entrypoint.sh
+#11 DONE 1.0s
+
+#12 [7/7] RUN DJANGO_SECRET_KEY=build-only-throwaway python manage.py collectstatic --noinput
+#12 1.516 
+#12 1.516 130 static files copied to '/app/staticfiles'.
+#12 DONE 1.6s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.6s done
+#13 exporting manifest sha256:07f294cc12e2f07d098f1531cec5308c19d22572f42073c511e066f148cc367c 0.0s done
+#13 exporting config sha256:b5c4e80b80fbc73094923a6b588b49ad1f01bd199b9c9fd1d65eaf68ce867581 0.0s done
+#13 exporting attestation manifest sha256:9e2a192b1dbe3a5f95236047ec78add4d75947bd51e5dad37c94db59e2e5c877 0.0s done
+#13 exporting manifest list sha256:edb272296f2efe8003a71659401a7e88f91fecd41766abeb3c80bddce597b5d9 0.0s done
+#13 naming to docker.io/library/q0484286891847f:local done
+#13 unpacking to docker.io/library/q0484286891847f:local
+#13 unpacking to docker.io/library/q0484286891847f:local 0.5s done
+#13 DONE 1.3s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image q0484286891847f:local Built 
+ Volume q0484286891847f_q04_database Creating 
+ Network q0484286891847f_q04 Creating 
+ Volume q0484286891847f_q04_evidence Creating 
+ Volume q0484286891847f_q04_evidence Creating 
+ Network q0484286891847f_q04 Creating 
+ Volume q0484286891847f_q04_database Creating 
+ Volume q0484286891847f_q04_evidence Created 
+ Volume q0484286891847f_q04_evidence Created 
+ Volume q0484286891847f_q04_database Created 
+ Volume q0484286891847f_q04_database Created 
+ Network q0484286891847f_q04 Created 
+ Network q0484286891847f_q04 Created 
+ Container q0484286891847f-db-1 Creating 
+ Container q0484286891847f-db-1 Created 
+ Container q0484286891847f-app-1 Creating 
+ Container q0484286891847f-app-1 Created 
+ Container q0484286891847f-db-1 Starting 
+ Container q0484286891847f-db-1 Started 
+ Container q0484286891847f-db-1 Waiting 
+ Container q0484286891847f-db-1 Healthy 
+ Container q0484286891847f-app-1 Starting 
+ Container q0484286891847f-app-1 Started 
+ Container q0484286891847f-db-1 Waiting 
+ Container q0484286891847f-app-1 Waiting 
+ Container q0484286891847f-db-1 Healthy 
+ Container q0484286891847f-app-1 Healthy 
+System check identified no issues (0 silenced).
+Seeded: 50 complainants, 50 heads, 2 staff, 650 complaints; 550 targets available.
+queue: READY (HTTP 200, rows=25)
+queue page 2: READY (HTTP 200, rows=25)
+authenticated intake: RELEASE_GATED (HTTP 503)
+anonymous intake: RELEASE_GATED (HTTP 503)
+tracking: RELEASE_GATED (HTTP 503)
+feedback: RELEASE_GATED (HTTP 503)
+reporting: ROUTE_UNAVAILABLE (HTTP 404)
+acknowledgement (no receipt): NOT_VERIFIED (HTTP 404)
+assignment form: NOT_VERIFIED; evidence upload/download: NOT_VERIFIED
+escalation command: NOT_VERIFIED (command exists; not executed)
+Local test URL: http://127.0.0.1:55067; private data: <home>/.scms-q04/ab4bebddbbca/environments/atul-20261118

@@ -74,6 +74,34 @@ def test_real_subprocess_output_is_sanitized():
     assert output.splitlines() == ["<repo>", "<venv>", "<home>"]
 
 
+def test_sanitizer_covers_symlink_spellings_and_nested_paths(tmp_path, monkeypatch):
+    home = tmp_path / "home"
+    repo = home / "repo"
+    venv = repo / ".venv"
+    venv.mkdir(parents=True)
+    alias = tmp_path / "linked-home"
+    alias.symlink_to(home, target_is_directory=True)
+    monkeypatch.setattr(run_tests, "ROOT", alias / "repo")
+    monkeypatch.setattr(run_tests.sys, "prefix", str(alias / "repo/.venv"))
+    monkeypatch.setattr(run_tests.Path, "home", classmethod(lambda cls: alias))
+    output = "\n".join(str(p) for p in (
+        repo / "test.py", alias / "repo/test.py",
+        venv / "bin/python", alias / "repo/.venv/bin/python",
+        home / "private.txt", alias / "private.txt"))
+    assert run_tests.sanitize(output).splitlines() == [
+        "<repo>/test.py", "<repo>/test.py", "<venv>/bin/python",
+        "<venv>/bin/python", "<home>/private.txt", "<home>/private.txt"]
+
+
+def test_real_subprocess_with_symlinked_interpreter_prefix(tmp_path, monkeypatch):
+    alias = tmp_path / "interpreter-prefix"
+    alias.symlink_to(Path(sys.prefix), target_is_directory=True)
+    monkeypatch.setattr(run_tests.sys, "prefix", str(alias))
+    code, output = run_tests.run([sys.executable, "-c", f"print({str(alias)!r})"])
+    assert code == 0
+    assert output == "<venv>\n"
+
+
 def test_default_evidence_directory_is_ignored_by_git():
     result = subprocess.run(["git", "check-ignore", "build/evidence/run.json"],
                             cwd=Path(__file__).resolve().parent, capture_output=True, text=True)

@@ -1,0 +1,10 @@
+queue: READY (HTTP 200, rows=25)
+queue page 2: READY (HTTP 200, rows=25)
+authenticated intake: RELEASE_GATED (HTTP 503)
+anonymous intake: RELEASE_GATED (HTTP 503)
+tracking: RELEASE_GATED (HTTP 503)
+feedback: RELEASE_GATED (HTTP 503)
+reporting: ROUTE_UNAVAILABLE (HTTP 404)
+acknowledgement (no receipt): NOT_VERIFIED (HTTP 404)
+assignment form: NOT_VERIFIED; evidence upload/download: NOT_VERIFIED
+escalation command: NOT_VERIFIED (command exists; not executed)

@@ -1,0 +1,122 @@
+FF.F.F                                                                   [100%]
+=================================== FAILURES ===================================
+_ test_reference_readiness_distinguishes_known_gate_from_service_failure[False-RELEASE_GATED-tracking-/anonymous/track/] _
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-35/test_reference_readiness_disti0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x1097d9a70>
+capsys = <_pytest.capture.CaptureFixture object at 0x109532a50>
+name = 'tracking', path = '/anonymous/track/', ready = False
+label = 'RELEASE_GATED'
+
+    @pytest.mark.parametrize('name,path', [('tracking','/anonymous/track/'),
+                                         ('feedback','/anonymous/feedback/')])
+    @pytest.mark.parametrize('ready,label', [(False,'RELEASE_GATED'),(True,'FAILED'),(None,'FAILED')])
+    def test_reference_readiness_distinguishes_known_gate_from_service_failure(
+        tmp_path, monkeypatch, capsys, name, path, ready, label,
+    ):
+        monkeypatch.setattr(q04_env,'STATE',tmp_path)
+        (tmp_path/'actors.json').write_text(json.dumps({'HEAD':[{'session_cookie':'h'}],
+            'COMPLAINANT':[{'session_cookie':'c'}]}))
+        monkeypatch.setattr(q04_env,'release_gates',lambda _: {
+            'intake':True,'anonymous':True,'tracking':ready,'feedback':ready})
+        monkeypatch.setattr(q04_env,'http',lambda *args:(503,''))
+        monkeypatch.setattr(q04_env,'compose',lambda *args,**kwargs:None)
+        q04_env.check({'port':55004})
+>       assert f'{name}: {label} (HTTP 503)' in capsys.readouterr().out
+E       AssertionError: assert 'tracking: RELEASE_GATED (HTTP 503)' in 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n'
+E        +  where 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n' = CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='').out
+E        +    where CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='') = readouterr()
+E        +      where readouterr = <_pytest.capture.CaptureFixture object at 0x109532a50>.readouterr
+
+test_q04_environment.py:96: AssertionError
+_ test_reference_readiness_distinguishes_known_gate_from_service_failure[False-RELEASE_GATED-feedback-/anonymous/feedback/] _
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-35/test_reference_readiness_disti1')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10978c710>
+capsys = <_pytest.capture.CaptureFixture object at 0x109821450>
+name = 'feedback', path = '/anonymous/feedback/', ready = False
+label = 'RELEASE_GATED'
+
+    @pytest.mark.parametrize('name,path', [('tracking','/anonymous/track/'),
+                                         ('feedback','/anonymous/feedback/')])
+    @pytest.mark.parametrize('ready,label', [(False,'RELEASE_GATED'),(True,'FAILED'),(None,'FAILED')])
+    def test_reference_readiness_distinguishes_known_gate_from_service_failure(
+        tmp_path, monkeypatch, capsys, name, path, ready, label,
+    ):
+        monkeypatch.setattr(q04_env,'STATE',tmp_path)
+        (tmp_path/'actors.json').write_text(json.dumps({'HEAD':[{'session_cookie':'h'}],
+            'COMPLAINANT':[{'session_cookie':'c'}]}))
+        monkeypatch.setattr(q04_env,'release_gates',lambda _: {
+            'intake':True,'anonymous':True,'tracking':ready,'feedback':ready})
+        monkeypatch.setattr(q04_env,'http',lambda *args:(503,''))
+        monkeypatch.setattr(q04_env,'compose',lambda *args,**kwargs:None)
+        q04_env.check({'port':55004})
+>       assert f'{name}: {label} (HTTP 503)' in capsys.readouterr().out
+E       AssertionError: assert 'feedback: RELEASE_GATED (HTTP 503)' in 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n'
+E        +  where 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n' = CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='').out
+E        +    where CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='') = readouterr()
+E        +      where readouterr = <_pytest.capture.CaptureFixture object at 0x109821450>.readouterr
+
+test_q04_environment.py:96: AssertionError
+_ test_reference_readiness_distinguishes_known_gate_from_service_failure[True-FAILED-feedback-/anonymous/feedback/] _
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-35/test_reference_readiness_disti3')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x109901f20>
+capsys = <_pytest.capture.CaptureFixture object at 0x1097d9e00>
+name = 'feedback', path = '/anonymous/feedback/', ready = True, label = 'FAILED'
+
+    @pytest.mark.parametrize('name,path', [('tracking','/anonymous/track/'),
+                                         ('feedback','/anonymous/feedback/')])
+    @pytest.mark.parametrize('ready,label', [(False,'RELEASE_GATED'),(True,'FAILED'),(None,'FAILED')])
+    def test_reference_readiness_distinguishes_known_gate_from_service_failure(
+        tmp_path, monkeypatch, capsys, name, path, ready, label,
+    ):
+        monkeypatch.setattr(q04_env,'STATE',tmp_path)
+        (tmp_path/'actors.json').write_text(json.dumps({'HEAD':[{'session_cookie':'h'}],
+            'COMPLAINANT':[{'session_cookie':'c'}]}))
+        monkeypatch.setattr(q04_env,'release_gates',lambda _: {
+            'intake':True,'anonymous':True,'tracking':ready,'feedback':ready})
+        monkeypatch.setattr(q04_env,'http',lambda *args:(503,''))
+        monkeypatch.setattr(q04_env,'compose',lambda *args,**kwargs:None)
+        q04_env.check({'port':55004})
+>       assert f'{name}: {label} (HTTP 503)' in capsys.readouterr().out
+E       AssertionError: assert 'feedback: FAILED (HTTP 503)' in 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n'
+E        +  where 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n' = CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='').out
+E        +    where CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='') = readouterr()
+E        +      where readouterr = <_pytest.capture.CaptureFixture object at 0x1097d9e00>.readouterr
+
+test_q04_environment.py:96: AssertionError
+_ test_reference_readiness_distinguishes_known_gate_from_service_failure[None-FAILED-feedback-/anonymous/feedback/] _
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-35/test_reference_readiness_disti5')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x109783150>
+capsys = <_pytest.capture.CaptureFixture object at 0x10951ad50>
+name = 'feedback', path = '/anonymous/feedback/', ready = None, label = 'FAILED'
+
+    @pytest.mark.parametrize('name,path', [('tracking','/anonymous/track/'),
+                                         ('feedback','/anonymous/feedback/')])
+    @pytest.mark.parametrize('ready,label', [(False,'RELEASE_GATED'),(True,'FAILED'),(None,'FAILED')])
+    def test_reference_readiness_distinguishes_known_gate_from_service_failure(
+        tmp_path, monkeypatch, capsys, name, path, ready, label,
+    ):
+        monkeypatch.setattr(q04_env,'STATE',tmp_path)
+        (tmp_path/'actors.json').write_text(json.dumps({'HEAD':[{'session_cookie':'h'}],
+            'COMPLAINANT':[{'session_cookie':'c'}]}))
+        monkeypatch.setattr(q04_env,'release_gates',lambda _: {
+            'intake':True,'anonymous':True,'tracking':ready,'feedback':ready})
+        monkeypatch.setattr(q04_env,'http',lambda *args:(503,''))
+        monkeypatch.setattr(q04_env,'compose',lambda *args,**kwargs:None)
+        q04_env.check({'port':55004})
+>       assert f'{name}: {label} (HTTP 503)' in capsys.readouterr().out
+E       AssertionError: assert 'feedback: FAILED (HTTP 503)' in 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n'
+E        +  where 'queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\nanonymous intake:...orm: FAILED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n' = CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='').out
+E        +    where CaptureResult(out='queue: FAILED (HTTP 503)\nqueue page 2: FAILED (HTTP 503)\nauthenticated intake: FAILED (HTTP 503)\...ED; evidence upload/download: NOT_VERIFIED\nescalation command: NOT_VERIFIED (command exists; not executed)\n', err='') = readouterr()
+E        +      where readouterr = <_pytest.capture.CaptureFixture object at 0x10951ad50>.readouterr
+
+test_q04_environment.py:96: AssertionError
+=========================== short test summary info ============================
+FAILED test_q04_environment.py::test_reference_readiness_distinguishes_known_gate_from_service_failure[False-RELEASE_GATED-tracking-/anonymous/track/]
+FAILED test_q04_environment.py::test_reference_readiness_distinguishes_known_gate_from_service_failure[False-RELEASE_GATED-feedback-/anonymous/feedback/]
+FAILED test_q04_environment.py::test_reference_readiness_distinguishes_known_gate_from_service_failure[True-FAILED-feedback-/anonymous/feedback/]
+FAILED test_q04_environment.py::test_reference_readiness_distinguishes_known_gate_from_service_failure[None-FAILED-feedback-/anonymous/feedback/]
+4 failed, 2 passed, 30 deselected in 0.33s

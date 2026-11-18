@@ -1,0 +1,35 @@
+{
+  "stage": "full-sqlite",
+  "source_revision": "7d12ea429349f1c70bc8d3d5d2fff7ac0b0eb620",
+  "working_tree_status": "",
+  "command": [
+    "sh",
+    "scripts/ci_checks.sh",
+    "build/evidence/full-sqlite"
+  ],
+  "cwd": "<repo>",
+  "environment_overrides": {
+    "PATH": "<venv>/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:<home>/.codex/tmp/arg0-macos/codex-arg0QVeIng:<home>/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:<home>/.unity/bin:<home>/.duckdb/cli/latest:<home>/.docker/bin:<home>/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:<home>/.docker/bin",
+    "DJANGO_SECRET_KEY": "synthetic-branch-integration-test-only",
+    "DJANGO_SETTINGS_MODULE": "scms.settings",
+    "DJANGO_DB_ENGINE": "sqlite",
+    "DJANGO_DB_PATH": "<repo>/build/evidence/atul-20261118/runtime/full-sqlite/disposable.sqlite3",
+    "PRIVATE_EVIDENCE_ROOT": "<repo>/build/evidence/atul-20261118/runtime/full-sqlite/private-evidence",
+    "DJANGO_DEBUG": "False",
+    "DJANGO_MAIL_BACKEND": "console",
+    "DJANGO_SMTP_USE_TLS": "True",
+    "DJANGO_SMTP_USE_SSL": "False",
+    "COMPLAINT_INTAKE_ENABLED": "False",
+    "ANONYMOUS_INTAKE_ENABLED": "False",
+    "ANONYMOUS_FEEDBACK_ENABLED": "False",
+    "ANONYMOUS_TRACKING_ENABLED": "False",
+    "ANONYMOUS_PRIVACY_READY": "False",
+    "ANONYMOUS_TRANSPORT_VERIFIED": "False",
+    "ANONYMOUS_TRACKING_LIMITER_READY": "False",
+    "SCMS_CI_DATABASE_ISOLATED": "1",
+    "SCMS_CI_REQUIRE_F4": "1",
+    "SCMS_CI_PYTHON": "<venv>/bin/python",
+    "PYTEST_ADDOPTS": "--junitxml=<repo>/build/evidence/atul-20261118/runtime/full-sqlite/junit.xml"
+  },
+  "started_utc": "2026-11-18T13:59:35Z"
+}

@@ -1,0 +1,13 @@
+{
+  "observed_before_retest_utc": "2026-11-18T15:15:41Z",
+  "source": "docker stats --no-stream; docker exec task-owned PostgreSQL count probes",
+  "task_project": "q0400883db8f64c",
+  "unrelated_running_containers": 2,
+  "unrelated_container_accessed_or_stopped": false,
+  "dedicated_host_claimed": false,
+  "gunicorn_observed_after_replacement": {
+    "worker_class": "sync",
+    "booted_workers": 1
+  },
+  "background_activity_note": "Before load, unrelated app approximately 0.01% CPU / 136.8 MiB; unrelated database approximately 9.54% CPU / 182.4 MiB. This is an observed point sample, not a continuous profile."
+}
