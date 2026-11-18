@@ -1,6 +1,6 @@
 {
   "DEMO.md": "41eb774377f51d3a8b21e2801d6367649ce99c564543b249b207eaf71d71ea2e",
-  "README.md": "d99f3a32e52f29c7a97a026895879e6aaa6f7d5c9f4a408023e6f2eb8615427c",
+  "README.md": "e612e4251176543baac8684a8d4de9a5e98ad6d9e7a3c5ba291da69e78997381",
   "REPRODUCE.md": "148590b325ff85ad4ef2c052985cd56d285549dbcd839d088e568267dbf939d3",
   "after-followup/browser/test_acknowledgement_copy_and_fallback_desktop-native_/observation.json": "a8583b9d2e63d42b34f0c127c3b7b7123cbdde0e82db2bbb95d280f1e510a060",
   "after-followup/browser/test_acknowledgement_copy_and_fallback_desktop-rejected_/observation.json": "80e3e82a18f7c3bb5ef7160c4bc52ca9bd239d651b4f07018a1e98766d09410b",
@@ -153,6 +153,12 @@
   "before-pr103/pytest.txt": "94505f15715603d9dbcdfe95e5c96f59e292615a444382ba8717c544a3a58727",
   "checks/final-focused.txt": "fb275015fe51c21c5a5bebbc569dc96756e3745fff0403112e016efd3686e67d",
   "checks/focused.txt": "e2dd69fbfafec504169d485b1b5b9ad5bee9a1e8e04d55d1bd9fd239e2795b50",
+  "checks/full-sqlite-with-loopback/coverage-summary.txt": "642204fcbcc9b45f4508d9616fa402b7208443f63cf99575f95a15510c5e1e11",
+  "checks/full-sqlite-with-loopback/pytest.txt": "4ea5583e8f647f80ae55dae11b4cde9c1b140879329e919f3e7f11cb711d45ad",
+  "checks/full-sqlite-with-loopback/run.json": "4afeeeb9cbeb6c45ba2f3180c09e11b0948234c4b92618a17a474e3c1cf8efa0",
+  "checks/hosted-6da634c/ci-browser-6da634c.txt": "5d2074b281160a6f8718d969d004a8f24e8b0dd315e505b1c610b8b3715befe9",
+  "checks/hosted-6da634c/ci-redis-6da634c.txt": "3291ac46fa64d6596472d6b79c1c283086dccfb2d25f8c63d39c512fc2bfba68",
+  "checks/hosted-6da634c/ci-unified-6da634c.txt": "516d68dc67d0d3808b8f7cd71846732d69b7b1f7b9b4b9c7da398e30df243404",
   "checks/initial-template-extraction.txt": "41cf7f1cc0140896045f03436fd3f4a1dd4b7205f4b36e818bdc608e2919eae8",
   "checks/privacy.txt": "3f7e10614ec11878d0013de8d986917b704fa7378bb5c24c43c253580c15f28e",
   "checks/restricted-loopback-attempt/coverage-summary.txt": "642204fcbcc9b45f4508d9616fa402b7208443f63cf99575f95a15510c5e1e11",
@@ -161,5 +167,5 @@
   "harness/test_q06_browser.py.txt": "e0b9117ec62777de19f89735e7a1dd65acf0ef33f40d155000f09af0f329976b",
   "harness/test_q06_keyboard.py.txt": "e4548daffedebe858fb705b5e15a5e56cbc9c94cd9d4674b2e269dea80493f0f",
   "harness/test_q06_work_ui.py.txt": "7cb106172d04aed1f861dba365cd252c2e61625dd56c48eca15ea99cbdeb71cd",
-  "results.json": "8e61137ea2810c46ee756de6febad612ff979f30cdc753c56b7b49d4b0bf98ce"
+  "results.json": "604b1d09e1be98b46ad17c2418bc1d2ef91fe8ea3e731234139925534b61209c"
 }

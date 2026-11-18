@@ -28,6 +28,30 @@ database, synthetic records/accounts, loopback TLS and disposable fakeredis
 fixtures. Release-gated and enabled-fixture states are separately exercised.
 Fixtures enabling test routes do not establish deployed anonymous readiness.
 
+## Required regression and published-commit checks
+
+Local permitted-loopback canonical run: **2,038 passed**, all module coverage gates
+pass (96.86% overall). Source metadata records runtime `2a40cbf` plus untracked
+evidence documents at run start; runtime code was committed. The earlier restricted
+attempt (2,019 pass, 6 fail, 13 errors) could not bind synthetic HTTP/SMTP listeners
+and remains recorded as a failed attempt.
+
+Published `6da634c` checks all pass: SQLite **2,038**, PostgreSQL **2,038**, real
+Chromium regression **16**, real Redis/TLS **9**; the Redis workflow also repeats
+full regression. Suites overlap and their counts are not added. Coverage gates
+remain 70% line / 60% branch per module. Actual hosted logs and exact jobs are
+retained under `checks/hosted-6da634c`:
+
+- Unified: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44364028790
+- Browser: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44364028756
+- Redis/TLS: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44364028857
+
+A later evidence-only commit does not turn this into final Main evidence; check
+its own published-head CI before integration. Initial source/test correction
+attempts are retained, including the old test assumption that every page uses an
+external CSS link. Private pages deliberately use inline CSS; the complete full
+suite includes that corrected privacy-safe contract.
+
 ## SRS acceptance checklist
 
 Sources: Team6_SRS.pdf §3.1 (p4), NFR-QUAL-02 (p13); Team6_STP.pdf VM-03 (p3).

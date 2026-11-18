@@ -112,5 +112,19 @@
   ],
   "uncaught_javascript_exceptions": 0,
   "genuine_first_time_human_acceptance": false,
-  "final_Main_acceptance": false
+  "final_Main_acceptance": false,
+  "canonical_local": {
+    "passed": 2038,
+    "pytest_exit_code": 0,
+    "coverage_gate_exit_code": 0,
+    "runtime_source": "2a40cbf34c1caff4242d729e4a0f2609ef5ad557",
+    "evidence_documents_untracked_at_start": true
+  },
+  "hosted_6da634c": {
+    "sqlite": 2038,
+    "postgresql": 2038,
+    "browser": 16,
+    "redis_tls": 9,
+    "all_jobs_pass": true
+  }
 }
