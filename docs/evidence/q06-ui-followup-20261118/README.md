@@ -118,3 +118,14 @@ earlier browser/full CI results above retain their original source provenance.
 
 Configuration reference: https://whitenoise.readthedocs.io/en/stable/django.html
 Pinned release: https://pypi.org/project/whitenoise/6.12.0/
+
+Published static-fix source `fcf053ccb7730e028461e7a1dec38fc0efaa9afc` now has
+**2,046 SQLite and 2,046 PostgreSQL passes**, 16 browser passes and 9 real
+Redis/TLS passes, with all module gates unchanged. Actual logs are in
+checks/hosted-fcf053c. The combined runtime `81eae6675b75c242cf8dfd0a3691778c9a64fb81`
+passed 2,065 tests on each database, 68 Q06 browser cases and 28 process/SMTP/
+scheduler recovery cases. Its real Docker/Gunicorn browser checks pass14/14
+at both widths, also after replacement; public CSS/JS return200. The actual
+persistence probe retains the same complaint/file/hash/history/outbox graph.
+These remain combined **branch** results, not final Main or human acceptance.
+Local scratch-directory spellings in negative-control logs are output-redacted.

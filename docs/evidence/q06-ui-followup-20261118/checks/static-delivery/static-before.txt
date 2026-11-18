@@ -20,7 +20,7 @@ E           AttributeError: 'SessionStore' object has no attribute '_session_cac
 
 During handling of the above exception, another exception occurred:
 
-roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are_serv0/private'))
+roots = (PosixPath('[temporary-path]'))
 asset = 'scms.css', content_type = 'text/css'
 
     @pytest.mark.parametrize('asset,content_type',[('scms.css','text/css'),('forms.js','javascript')])
@@ -182,7 +182,7 @@ E           AttributeError: 'SessionStore' object has no attribute '_session_cac
 
 During handling of the above exception, another exception occurred:
 
-roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_collected_assets_are_serv1/private'))
+roots = (PosixPath('[temporary-path]'))
 asset = 'forms.js', content_type = 'javascript'
 
     @pytest.mark.parametrize('asset,content_type',[('scms.css','text/css'),('forms.js','javascript')])
@@ -326,7 +326,7 @@ Traceback (most recent call last):
 RuntimeError: Database access not allowed, use the "django_db" mark, or the "db" or "transactional_db" fixtures to enable it.
 _____ test_static_and_private_root_overlap_refuses_application_start[same] _____
 
-roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o0/private'))
+roots = (PosixPath('[temporary-path]'))
 settings = <pytest_django.fixtures.Settings object at 0x10700b890>
 relation = 'same'
 
@@ -343,7 +343,7 @@ E       Failed: DID NOT RAISE ImproperlyConfigured
 accounts/test_static_delivery.py:48: Failed
 _ test_static_and_private_root_overlap_refuses_application_start[private_inside_static] _
 
-roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o1/private'))
+roots = (PosixPath('[temporary-path]'))
 settings = <pytest_django.fixtures.Settings object at 0x107bbd8c0>
 relation = 'private_inside_static'
 
@@ -360,7 +360,7 @@ E       Failed: DID NOT RAISE ImproperlyConfigured
 accounts/test_static_delivery.py:48: Failed
 _ test_static_and_private_root_overlap_refuses_application_start[static_inside_private] _
 
-roots = (PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_r...vate/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-31/test_static_and_private_root_o2/private'))
+roots = (PosixPath('[temporary-path]'))
 settings = <pytest_django.fixtures.Settings object at 0x107bbfac0>
 relation = 'static_inside_private'
 
