@@ -97,3 +97,24 @@ local paths are redacted without changing numerical outcomes or image pixels.
 `results.json` and JUnit are authoritative counts; `sha256.json` hashes this packet.
 See REPRODUCE.md and DEMO.md. Historical failed test attempts are retained locally;
 no failed run is relabelled as a pass.
+
+## Actual Gunicorn static-delivery follow-up
+
+The combined preview `44a12d0` exposed a built-instance defect missed by the
+test server: /accounts/login/ returned 200, but /static/ui/scms.css and
+/static/ui/forms.js returned 404 with DEBUG=False. This was observed directly
+on the isolated real Docker/Gunicorn build, separately from the 68 browser cases.
+The new static regression failed 5 cases before correction (3 passed).
+
+The correction pins WhiteNoise 6.12.0 and places its public-only wrapper after
+SecurityMiddleware, while AnonymousPrivacyMiddleware remains first. It serves
+collected STATIC_ROOT only, with finders/autorefresh disabled. Startup refuses
+public/private evidence root equality or nesting in either direction. No private
+evidence URL alias, anonymous asset request, script permission, HTTP intake gate
+or production secret is introduced. Focused static/role/privacy checks: **253
+passed**, with expected warnings for the uncollected test-only static directory.
+Actual rebuilt-container and published-commit checks must accompany this change;
+earlier browser/full CI results above retain their original source provenance.
+
+Configuration reference: https://whitenoise.readthedocs.io/en/stable/django.html
+Pinned release: https://pypi.org/project/whitenoise/6.12.0/
