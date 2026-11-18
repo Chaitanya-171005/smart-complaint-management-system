@@ -38,11 +38,16 @@ def pytest_command(integrations):
 
 
 def sanitize(text):
-    paths = {
-        str(ROOT): "<repo>",
-        str(Path(sys.prefix).resolve()): "<venv>",
-        str(Path.home()): "<home>",
-    }
+    # Subprocesses may print either the configured spelling or the resolved
+    # path (e.g. Homebrew's /opt symlink or a symlinked virtual environment).
+    # Keep both; resolving alone leaves the configured path in shared evidence.
+    paths = {}
+    for root, replacement in (
+        (ROOT, "<repo>"), (Path(sys.prefix), "<venv>"), (Path.home(), "<home>"),
+    ):
+        for spelling in (str(root), str(root.resolve())):
+            paths.setdefault(spelling, replacement)
+    # Replace nested venv/repo paths before their enclosing home directory.
     for path, replacement in sorted(paths.items(), key=lambda item: len(item[0]), reverse=True):
         text = text.replace(path, replacement)
     return text
