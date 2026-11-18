@@ -54,7 +54,12 @@ def test_public_shell(client, name):
     response = client.get(reverse(name))
     assert response.status_code in (200, 503)
     html = response.content.decode()
-    assert 'ui/scms.css' in html and 'id="main"' in html
+    assert 'id="main"' in html
+    if getattr(response.wsgi_request, "anonymous_intake", False):
+        assert '<style>' in html and '<script' not in html
+        assert '<link rel="stylesheet"' not in html
+    else:
+        assert 'ui/scms.css' in html
     assert 'Workspace' not in html
 
 

@@ -2,6 +2,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
+from django.views.decorators.cache import never_cache
 
 from .forms import LoginForm, RegistrationForm
 from .models import User
@@ -40,8 +41,11 @@ def register(request):
     return render(request, "accounts/register.html", {"form": form})
 
 
+@never_cache
 def register_done(request):
-    return render(request, "accounts/register_done.html")
+    # The same generic acknowledgement and blank sign-in form are shown for
+    # new and existing emails. Registration never authenticates the visitor.
+    return render(request, "accounts/register_done.html", {"form": LoginForm()})
 
 
 @require_http_methods(["GET", "POST"])
@@ -84,15 +88,19 @@ def landing(request):
 
 def _role_landing(role):
     # Role is read from the database on every request (see permissions.py).
+    @never_cache
     @login_required
     def view(request):
         if not has_role(request.user, role):
             return redirect(landing_url_name(request.user.role))
-        return render(
-            request,
-            "accounts/landing.html",
-            {"role_label": User.Role(role).label},
-        )
+        context = {"role_label": User.Role(role).label}
+        if role == User.Role.COMPLAINANT:
+            from complaints.views import intake_start_context
+            intake = intake_start_context(request.user)
+            if intake is not None:
+                context.update(intake)
+                context["show_intake_form"] = True
+        return render(request, "accounts/landing.html", context)
 
     return view
 

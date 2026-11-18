@@ -1,0 +1,7 @@
+{% extends 'ui/base.html' %}
+{% block title %}Access unavailable - SCMS{% endblock %}
+{% block content %}
+<h1>Access unavailable</h1>
+<p role="alert">You do not have permission to use this page. Return to your home page or contact an administrator for help.</p>
+<p><a href="{% url 'accounts:home' %}">Return home</a></p>
+{% endblock %}

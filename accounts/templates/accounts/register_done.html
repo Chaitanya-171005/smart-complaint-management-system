@@ -4,5 +4,11 @@
 <h1 class="success-panel">Registration received</h1>
   <p>Thank you. If this email address was not already registered, your account is ready and you can sign in.
      If you already have an account, please sign in with it, or ask for password-reset assistance.</p>
-  <p><a href="{% url 'accounts:login' %}">Sign in</a></p>
+  <h2>Sign in to continue</h2>
+  <form method="post" action="{% url 'accounts:login' %}" novalidate>
+    {% csrf_token %}
+    <p>{{ form.email.label_tag }} {{ form.email }}</p>
+    <p>{{ form.password.label_tag }} {{ form.password }}</p>
+    <button type="submit">Sign in</button>
+  </form>
 {% endblock %}

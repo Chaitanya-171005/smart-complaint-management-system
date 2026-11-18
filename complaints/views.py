@@ -51,6 +51,19 @@ def _form(data=None):
     return ComplaintForm(data, categories=category_options(), locations=location_options())
 
 
+def intake_start_context(user):
+    """Present the existing intake form on an authorized Complainant home.
+
+    POST still goes through submit_complaint and all its release/CSRF/token,
+    validation and atomic-intake checks. No form is offered while intake is gated.
+    """
+    require_permission(can_submit_complaint, user)
+    notice = settings.COMPLAINT_EMERGENCY_NOTICE
+    if not settings.COMPLAINT_INTAKE_ENABLED or not isinstance(notice, str) or not notice.strip():
+        return None
+    return {"form": _form(), "request_token": _new_token(user), "emergency_notice": notice}
+
+
 def _submission_response(request, form, token, *, status=200):
     return render(request, "complaints/submit.html", {
         "form": form, "request_token": token,
