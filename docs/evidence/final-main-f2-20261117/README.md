@@ -1,5 +1,10 @@
 # F2 verification on integrated Main
 
+Review follow-up: saved local path spellings have been output-redacted in the
+shared metadata/logs. Historical source SHAs and numeric outcomes are unchanged;
+`sha256.json` describes these redacted files. Output redaction is not filesystem
+path containment or an authorization mechanism.
+
 Verified source: `a479551c61beb2e2f6e04b93b167084bb7397dcc`, the PR98 merge
 containing the reviewed F2/F3/F4 integration. This is fresh Main evidence, separate
 from the earlier PR100 branch experiment. No Main merge was performed by this work.

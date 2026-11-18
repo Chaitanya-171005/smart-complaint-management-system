@@ -57,16 +57,16 @@
 2026-11-17T04:32:41.4653384Z ##[endgroup]
 2026-11-17T04:32:41.6582653Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
 2026-11-17T04:32:41.6585051Z ##[group]Getting Git version info
-2026-11-17T04:32:41.6586474Z Working directory is '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:41.6586474Z Working directory is '<home>/work/smart-complaint-management-system/smart-complaint-management-system'
 2026-11-17T04:32:41.6587769Z [command]/usr/bin/git version
 2026-11-17T04:32:41.6588215Z git version 2.56.1
 2026-11-17T04:32:41.6606402Z ##[endgroup]
-2026-11-17T04:32:41.6611260Z Temporarily overriding HOME='/home/runner/work/_temp/95986c71-4885-409e-ba9a-fc236d4d282f' before making global git config changes
+2026-11-17T04:32:41.6611260Z Temporarily overriding HOME='<home>/work/_temp/95986c71-4885-409e-ba9a-fc236d4d282f' before making global git config changes
 2026-11-17T04:32:41.6613019Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-17T04:32:41.6617209Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
-2026-11-17T04:32:41.6672992Z Deleting the contents of '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-17T04:32:41.6617209Z [command]/usr/bin/git config --global --add safe.directory <home>/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:41.6672992Z Deleting the contents of '<home>/work/smart-complaint-management-system/smart-complaint-management-system'
 2026-11-17T04:32:41.6677420Z ##[group]Initializing the repository
-2026-11-17T04:32:41.6681236Z [command]/usr/bin/git init /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:32:41.6681236Z [command]/usr/bin/git init <home>/work/smart-complaint-management-system/smart-complaint-management-system
 2026-11-17T04:32:41.6765302Z hint: Using 'master' as the name for the initial branch. This default branch name
 2026-11-17T04:32:41.6766847Z hint: will change to "main" in Git 3.0. To configure the initial branch name
 2026-11-17T04:32:41.6767845Z hint: to use in all of your new repositories, which will suppress this warning,
@@ -80,7 +80,7 @@
 2026-11-17T04:32:41.6772184Z hint: 	git branch -m <name>
 2026-11-17T04:32:41.6772589Z hint:
 2026-11-17T04:32:41.6773125Z hint: Disable this message with "git config set advice.defaultBranchName false"
-2026-11-17T04:32:41.6783322Z Initialized empty Git repository in /home/runner/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+2026-11-17T04:32:41.6783322Z Initialized empty Git repository in <home>/work/smart-complaint-management-system/smart-complaint-management-system/.git/
 2026-11-17T04:32:41.6792757Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
 2026-11-17T04:32:41.6838704Z ##[endgroup]
 2026-11-17T04:32:41.6839454Z ##[group]Disabling automatic garbage collection
@@ -133,12 +133,12 @@
 2026-11-17T04:32:42.6539788Z Successfully set up CPython (3.13.18)
 2026-11-17T04:32:42.6542057Z ##[endgroup]
 2026-11-17T04:32:42.7839615Z [command]/opt/hostedtoolcache/Python/3.13.18/x64/bin/pip cache dir
-2026-11-17T04:32:42.9972965Z /home/runner/.cache/pip
+2026-11-17T04:32:42.9972965Z <home>/.cache/pip
 2026-11-17T04:32:43.0944222Z Cache hit for: setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
 2026-11-17T04:32:43.1025696Z (node:2203) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
 2026-11-17T04:32:43.3065965Z Received 25849579 of 25849579 (100.0%), 135.5 MBs/sec
 2026-11-17T04:32:43.3066622Z Cache Size: ~25 MB (25849579 B)
-2026-11-17T04:32:43.3087555Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2272a71d-d5ce-4768-8a45-42e65a003c97/cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+2026-11-17T04:32:43.3087555Z [command]/usr/bin/tar -xf <home>/work/_temp/2272a71d-d5ce-4768-8a45-42e65a003c97/cache.tzst -P -C <home>/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
 2026-11-17T04:32:43.3600463Z Cache restored successfully
 2026-11-17T04:32:43.3616661Z Cache restored from key: setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-8fa507bd56ebb14e47bdaf335ad0b06a5f57a5eefd1bfe467b69db27bf8434b9
 2026-11-17T04:32:43.3817489Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt
@@ -346,8 +346,8 @@
 2026-11-17T04:32:57.5164887Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:32:57.5165220Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:32:57.5165519Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
-2026-11-17T04:32:57.5165861Z   DJANGO_DB_PATH: /home/runner/work/_temp/scms-b13-data.V93AmK/db.sqlite3
-2026-11-17T04:32:57.5166254Z   PRIVATE_EVIDENCE_ROOT: /home/runner/work/_temp/scms-b13-data.V93AmK/private-evidence
+2026-11-17T04:32:57.5165861Z   DJANGO_DB_PATH: <home>/work/_temp/scms-b13-data.V93AmK/db.sqlite3
+2026-11-17T04:32:57.5166254Z   PRIVATE_EVIDENCE_ROOT: <home>/work/_temp/scms-b13-data.V93AmK/private-evidence
 2026-11-17T04:32:57.5166609Z   SCMS_CI_DATABASE_ISOLATED: 1
 2026-11-17T04:32:57.5166819Z ##[endgroup]
 2026-11-17T04:32:58.8853817Z System check identified some issues:
@@ -643,8 +643,8 @@
 2026-11-17T04:35:28.1568616Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:28.1568918Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:28.1569226Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
-2026-11-17T04:35:28.1569561Z   DJANGO_DB_PATH: /home/runner/work/_temp/scms-b13-data.V93AmK/db.sqlite3
-2026-11-17T04:35:28.1569953Z   PRIVATE_EVIDENCE_ROOT: /home/runner/work/_temp/scms-b13-data.V93AmK/private-evidence
+2026-11-17T04:35:28.1569561Z   DJANGO_DB_PATH: <home>/work/_temp/scms-b13-data.V93AmK/db.sqlite3
+2026-11-17T04:35:28.1569953Z   PRIVATE_EVIDENCE_ROOT: <home>/work/_temp/scms-b13-data.V93AmK/private-evidence
 2026-11-17T04:35:28.1570282Z   SCMS_CI_DATABASE_ISOLATED: 1
 2026-11-17T04:35:28.1570485Z ##[endgroup]
 2026-11-17T04:35:30.7885466Z .........                                                                [100%]
@@ -669,8 +669,8 @@
 2026-11-17T04:35:30.8903860Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:30.8904160Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:30.8904626Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
-2026-11-17T04:35:30.8904969Z   DJANGO_DB_PATH: /home/runner/work/_temp/scms-b13-data.V93AmK/db.sqlite3
-2026-11-17T04:35:30.8905367Z   PRIVATE_EVIDENCE_ROOT: /home/runner/work/_temp/scms-b13-data.V93AmK/private-evidence
+2026-11-17T04:35:30.8904969Z   DJANGO_DB_PATH: <home>/work/_temp/scms-b13-data.V93AmK/db.sqlite3
+2026-11-17T04:35:30.8905367Z   PRIVATE_EVIDENCE_ROOT: <home>/work/_temp/scms-b13-data.V93AmK/private-evidence
 2026-11-17T04:35:30.8905703Z   SCMS_CI_DATABASE_ISOLATED: 1
 2026-11-17T04:35:30.8905891Z ##[endgroup]
 2026-11-17T04:35:31.0220489Z (node:3127) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
@@ -702,24 +702,24 @@
 2026-11-17T04:35:31.7467798Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:31.7468141Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
 2026-11-17T04:35:31.7468455Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
-2026-11-17T04:35:31.7468810Z   DJANGO_DB_PATH: /home/runner/work/_temp/scms-b13-data.V93AmK/db.sqlite3
-2026-11-17T04:35:31.7469393Z   PRIVATE_EVIDENCE_ROOT: /home/runner/work/_temp/scms-b13-data.V93AmK/private-evidence
+2026-11-17T04:35:31.7468810Z   DJANGO_DB_PATH: <home>/work/_temp/scms-b13-data.V93AmK/db.sqlite3
+2026-11-17T04:35:31.7469393Z   PRIVATE_EVIDENCE_ROOT: <home>/work/_temp/scms-b13-data.V93AmK/private-evidence
 2026-11-17T04:35:31.7469729Z   SCMS_CI_DATABASE_ISOLATED: 1
 2026-11-17T04:35:31.7469934Z ##[endgroup]
 2026-11-17T04:35:31.8759947Z b13-test-redis
 2026-11-17T04:35:31.8844877Z Post job cleanup.
 2026-11-17T04:35:31.9809165Z (node:3201) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 2026-11-17T04:35:31.9809888Z (Use `node --trace-deprecation ...` to show where the warning was created)
-2026-11-17T04:35:31.9961232Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --files-from manifest.txt --use-compress-program zstdmt
+2026-11-17T04:35:31.9961232Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C <home>/work/smart-complaint-management-system/smart-complaint-management-system --files-from manifest.txt --use-compress-program zstdmt
 2026-11-17T04:35:32.1503066Z (node:3201) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
 2026-11-17T04:35:32.4117257Z Sent 29214866 of 29214866 (100.0%), 104.0 MBs/sec
 2026-11-17T04:35:32.4935223Z Cache saved with the key: setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
 2026-11-17T04:35:32.5086724Z Post job cleanup.
 2026-11-17T04:35:32.5774896Z [command]/usr/bin/git version
 2026-11-17T04:35:32.5812114Z git version 2.56.1
-2026-11-17T04:35:32.5845429Z Temporarily overriding HOME='/home/runner/work/_temp/7067130f-ed8f-4523-842c-a15f3ae06b7d' before making global git config changes
+2026-11-17T04:35:32.5845429Z Temporarily overriding HOME='<home>/work/_temp/7067130f-ed8f-4523-842c-a15f3ae06b7d' before making global git config changes
 2026-11-17T04:35:32.5846261Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-17T04:35:32.5850355Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-17T04:35:32.5850355Z [command]/usr/bin/git config --global --add safe.directory <home>/work/smart-complaint-management-system/smart-complaint-management-system
 2026-11-17T04:35:32.5885686Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
 2026-11-17T04:35:32.5918033Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
 2026-11-17T04:35:32.6221354Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader

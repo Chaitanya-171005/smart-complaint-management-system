@@ -55,16 +55,16 @@
 2026-11-18T14:02:56.4346965Z ##[endgroup]
 2026-11-18T14:02:56.6686039Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
 2026-11-18T14:02:56.6688057Z ##[group]Getting Git version info
-2026-11-18T14:02:56.6688913Z Working directory is '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-18T14:02:56.6688913Z Working directory is '<home>/work/smart-complaint-management-system/smart-complaint-management-system'
 2026-11-18T14:02:56.6690065Z [command]/usr/bin/git version
 2026-11-18T14:02:56.6690548Z git version 2.56.1
 2026-11-18T14:02:56.6692299Z ##[endgroup]
-2026-11-18T14:02:56.6698040Z Temporarily overriding HOME='/home/runner/work/_temp/a9230e1a-cf1d-4a9b-9ccf-cdd96c7b6af7' before making global git config changes
+2026-11-18T14:02:56.6698040Z Temporarily overriding HOME='<home>/work/_temp/a9230e1a-cf1d-4a9b-9ccf-cdd96c7b6af7' before making global git config changes
 2026-11-18T14:02:56.6699751Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-18T14:02:56.6702196Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
-2026-11-18T14:02:56.6757930Z Deleting the contents of '/home/runner/work/smart-complaint-management-system/smart-complaint-management-system'
+2026-11-18T14:02:56.6702196Z [command]/usr/bin/git config --global --add safe.directory <home>/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-18T14:02:56.6757930Z Deleting the contents of '<home>/work/smart-complaint-management-system/smart-complaint-management-system'
 2026-11-18T14:02:56.6768406Z ##[group]Initializing the repository
-2026-11-18T14:02:56.6771611Z [command]/usr/bin/git init /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-18T14:02:56.6771611Z [command]/usr/bin/git init <home>/work/smart-complaint-management-system/smart-complaint-management-system
 2026-11-18T14:02:56.6991114Z hint: Using 'master' as the name for the initial branch. This default branch name
 2026-11-18T14:02:56.6992208Z hint: will change to "main" in Git 3.0. To configure the initial branch name
 2026-11-18T14:02:56.6992960Z hint: to use in all of your new repositories, which will suppress this warning,
@@ -78,7 +78,7 @@
 2026-11-18T14:02:56.6997404Z hint: 	git branch -m <name>
 2026-11-18T14:02:56.6997819Z hint:
 2026-11-18T14:02:56.6998336Z hint: Disable this message with "git config set advice.defaultBranchName false"
-2026-11-18T14:02:56.7008786Z Initialized empty Git repository in /home/runner/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+2026-11-18T14:02:56.7008786Z Initialized empty Git repository in <home>/work/smart-complaint-management-system/smart-complaint-management-system/.git/
 2026-11-18T14:02:56.7010953Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
 2026-11-18T14:02:56.7054628Z ##[endgroup]
 2026-11-18T14:02:56.7055725Z ##[group]Disabling automatic garbage collection
@@ -145,12 +145,12 @@
 2026-11-18T14:02:57.6458233Z Successfully set up CPython (3.14.10)
 2026-11-18T14:02:57.6460010Z ##[endgroup]
 2026-11-18T14:02:57.7644922Z [command]/opt/hostedtoolcache/Python/3.14.10/x64/bin/pip cache dir
-2026-11-18T14:02:59.0572000Z /home/runner/.cache/pip
+2026-11-18T14:02:59.0572000Z <home>/.cache/pip
 2026-11-18T14:02:59.2472035Z Cache hit for: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
 2026-11-18T14:02:59.2545577Z (node:2200) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
 2026-11-18T14:03:00.0702204Z Received 28974586 of 28974586 (100.0%), 40.9 MBs/sec
 2026-11-18T14:03:00.0702845Z Cache Size: ~28 MB (28974586 B)
-2026-11-18T14:03:00.0724616Z [command]/usr/bin/tar -xf /home/runner/work/_temp/468522a6-1d4c-42aa-ae56-86d926a0a8d8/cache.tzst -P -C /home/runner/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+2026-11-18T14:03:00.0724616Z [command]/usr/bin/tar -xf <home>/work/_temp/468522a6-1d4c-42aa-ae56-86d926a0a8d8/cache.tzst -P -C <home>/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
 2026-11-18T14:03:00.1076177Z Cache restored successfully
 2026-11-18T14:03:00.1089283Z Cache restored from key: setup-python-Linux-x64-26.04-Ubuntu-python-3.14.10-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
 2026-11-18T14:03:00.1237795Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt
@@ -562,9 +562,9 @@
 2026-11-18T14:05:06.6031424Z Post job cleanup.
 2026-11-18T14:05:06.6700553Z [command]/usr/bin/git version
 2026-11-18T14:05:06.6733179Z git version 2.56.1
-2026-11-18T14:05:06.6759998Z Temporarily overriding HOME='/home/runner/work/_temp/9c760444-6825-4999-8d62-97888e429579' before making global git config changes
+2026-11-18T14:05:06.6759998Z Temporarily overriding HOME='<home>/work/_temp/9c760444-6825-4999-8d62-97888e429579' before making global git config changes
 2026-11-18T14:05:06.6761082Z Adding repository directory to the temporary git global config as a safe directory
-2026-11-18T14:05:06.6764721Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/smart-complaint-management-system/smart-complaint-management-system
+2026-11-18T14:05:06.6764721Z [command]/usr/bin/git config --global --add safe.directory <home>/work/smart-complaint-management-system/smart-complaint-management-system
 2026-11-18T14:05:06.6796689Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
 2026-11-18T14:05:06.6823488Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
 2026-11-18T14:05:06.7069925Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader

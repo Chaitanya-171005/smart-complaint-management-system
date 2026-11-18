@@ -24,7 +24,7 @@ monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ab417f0>
             "<venv>/bin/python", "<home>/private.txt", "<home>/private.txt"]
 E       AssertionError: assert ['/private/va.../private.txt'] == ['<repo>/test.../private.txt']
 E         
-E         At index 0 diff: '/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_sanitizer_covers_symlink_0/home/repo/test.py' != '<repo>/test.py'
+E         At index 0 diff: '/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_sanitizer_covers_symlink_0<home>/test.py' != '<repo>/test.py'
 E         Use -v to get more diff
 
 test_run_tests.py:91: AssertionError

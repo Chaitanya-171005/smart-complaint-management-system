@@ -71,10 +71,13 @@ the private state directory. Keep settings/actors there private (0600).
 The actual retest command used the clean browser checkout at the tested SHA:
 
 ```sh
+Q04_SOURCE=/absolute/clean/source
+Q04_PRIVATE_STATE=/absolute/private/environment
+Q04_OUTPUT=/absolute/new/evidence
 python run_queue_assignment_retest.py \
-  --repo /private/tmp/scms-atul-browser-20261118 \
-  --state /Users/mac/.scms-q04/ab4bebddbbca/environments/atul-20261118-retest \
-  --output /private/tmp/scms-atul-20261118/build/evidence/atul-20261118/queue-assignment-retest \
+  --repo "$Q04_SOURCE" \
+  --state "$Q04_PRIVATE_STATE" \
+  --output "$Q04_OUTPUT" \
   --window-start 2026-11-18T19:30:00+05:30 \
   --window-end 2026-11-18T21:30:00+05:30
 ```

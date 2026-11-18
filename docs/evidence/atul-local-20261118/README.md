@@ -20,6 +20,13 @@ the full R01–R19 mapping have not been certified from that inaccessible file.
 
 ## Sanitizer and regression evidence
 
+The sanitizer performs **output redaction**, not filesystem path containment.
+Review follow-up redacts saved metadata/reproduction path spellings as well as
+process output. Historical source SHAs and numeric results are preserved;
+`sha256.json` describes the redacted files. The new
+`scripts/check_evidence_redaction.py` and regression tests check both review
+packets, including JSON metadata, Markdown reproduction instructions and logs.
+
 The previous sanitizer resolved `sys.prefix` before replacement and could leave
 its configured symlink spelling in shared output. Repository/home aliases could
 also be missed. The fix retains both configured and resolved spellings and

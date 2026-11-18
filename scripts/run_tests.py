@@ -38,6 +38,7 @@ def pytest_command(integrations):
 
 
 def sanitize(text):
+    """Redact known local path spellings from output; not path containment."""
     # Subprocesses may print either the configured spelling or the resolved
     # path (e.g. Homebrew's /opt symlink or a symlinked virtual environment).
     # Keep both; resolving alone leaves the configured path in shared evidence.
