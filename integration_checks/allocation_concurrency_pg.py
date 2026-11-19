@@ -107,3 +107,60 @@ def test_two_heads_same_complaint_commit_only_one_assignment(user_factory,depart
     assert history.actor_id in head_ids and history.assignee_id==staff.pk
     event=NotificationEvent.objects.get(history=history)
     assert event.notices.count()==EmailDelivery.objects.filter(notice__event=event).count()==4
+
+
+def test_independent_assignments_can_hold_the_same_staff_reference_concurrently(user_factory,department,complaint_factory,monkeypatch):
+    import routing.allocation as module
+    heads=[user_factory(role='HEAD',department=department) for _ in range(2)]
+    staff=user_factory(role='STAFF',department=department)
+    complaints=[complaint_factory(department=department) for _ in heads]
+    original=module._lock_assignment_target;barrier=Barrier(2)
+    def synchronized_reference(target_id):
+        target=original(target_id)
+        barrier.wait(timeout=3)
+        return target
+    monkeypatch.setattr(module,'_lock_assignment_target',synchronized_reference)
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        futures=[pool.submit(worker_call,h,staff,c) for h,c in zip(heads,complaints)]
+        outcomes=[f.result(timeout=15) for f in futures]
+    assert outcomes==['committed','committed']
+    for complaint in complaints:
+        complaint.refresh_from_db();assert complaint.assignee_id==staff.pk
+        history=ComplaintHistory.objects.get(complaint_ref=complaint.complaint_id)
+        assert history.assignee_id==staff.pk
+        assert NotificationEvent.objects.get(history=history).notices.count()==4
+
+
+@pytest.mark.parametrize('change',['role','department','active'])
+def test_reused_wsgi_connection_still_refreshes_authorization(client,user_factory,department,department_factory,complaint_factory,change):
+    head=user_factory(role='HEAD',department=department)
+    complaint=complaint_factory(department=department)
+    age=connection.settings_dict.get('CONN_MAX_AGE',0)
+    checks=connection.settings_dict.get('CONN_HEALTH_CHECKS',False)
+    connection.close();connection.settings_dict.update(CONN_MAX_AGE=60,CONN_HEALTH_CHECKS=True)
+    try:
+        client.force_login(head)
+        first=client.get('/routing/queue/');assert first.status_code==200
+        assert complaint.complaint_id.encode() in first.content
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT pg_backend_pid()');before=cursor.fetchone()[0]
+        fields={'role':'COMPLAINANT'} if change=='role' else ({'department_id':department_factory().pk} if change=='department' else {'is_active':False})
+        User.objects.filter(pk=head.pk).update(**fields)
+        second=client.get('/routing/queue/')
+        assert second.status_code=={'role':403,'department':200,'active':302}[change]
+        assert complaint.complaint_id.encode() not in second.content
+        with connection.cursor() as cursor:
+            cursor.execute('SELECT pg_backend_pid()');after=cursor.fetchone()[0]
+        assert before==after  # Same live connection, newly read authorization.
+    finally:
+        connection.close();connection.settings_dict.update(CONN_MAX_AGE=age,CONN_HEALTH_CHECKS=checks)
+
+
+def test_staff_reference_rejects_sql_text_and_preserves_the_original_graph(user_factory,department,complaint_factory):
+    head=user_factory(role='HEAD',department=department);staff=user_factory(role='STAFF',department=department)
+    complaint=complaint_factory(department=department)
+    with pytest.raises(ValueError):
+        allocate_complaint(actor=head,complaint_id=complaint.complaint_id,assignee='1 OR 1=1 --',expected_assignee_id=None)
+    complaint.refresh_from_db();assert complaint.assignee_id is None
+    assert not ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).exists()
+    assert worker_call(head,staff,complaint)=='committed'

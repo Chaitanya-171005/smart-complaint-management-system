@@ -33,12 +33,14 @@
   "blocker": "Previous window expired; new corrected-build load requires a new authorized window.",
   "Q04_pass": false,
   "latest_load_result": {
-    "source": "6fe48dc608f44aae9c8d03adc017633d32434a35",
-    "status": "STOPPED_UNEXPECTED_FAILURE",
-    "warmup_queue": 50,
-    "warmup_assignments_committed": 6,
-    "warmup_assignments_http500": 44,
-    "measured_operations": 0
+    "source": "c39e492b3ea47ac8b520d2e412ce6ebba3e53aab",
+    "status": "LOCAL_PERFORMANCE_TARGET_FAILED",
+    "measured_queue_samples": 500,
+    "measured_action_samples": 500,
+    "queue_p95_ms": 1504.8229710009764,
+    "assignment_p95_ms": 3832.6279829998384,
+    "request_errors": 0,
+    "correct_assignment_graphs": 550
   },
   "lock_correction": {
     "source": "bbec7401b87ad28bf90bc97a15a9ee965a5de7e7",
@@ -47,6 +49,15 @@
     "errors": 0,
     "skipped": 0,
     "explicit_pg_cases": 8,
+    "new_load_result": false
+  },
+  "shared_reference_candidate": {
+    "focused_passes": 159,
+    "expanded_pg_security_config_passes": 26,
+    "overlap": true,
+    "pg_cases": 13,
+    "connection_max_age_seconds": 60,
+    "connection_health_checks": true,
     "new_load_result": false
   }
 }

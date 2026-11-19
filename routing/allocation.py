@@ -2,7 +2,7 @@
 
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import Http404
-from django.db import transaction
+from django.db import connection, transaction
 
 from accounts.models import User
 from accounts.permissions import _refuse, can_allocate_complaint
@@ -27,6 +27,19 @@ class StaleAllocation(AllocationError):
 class _AllocationDenied(Exception):
     def __init__(self, actor, complaint, concealed):
         self.actor, self.complaint, self.concealed = actor, complaint, concealed
+
+
+def _lock_assignment_target(target_id):
+    if connection.vendor == "postgresql":
+        # Staff is a reference read, not an account mutation. Shared locks let
+        # independent complaints target the same Staff concurrently but still
+        # block role/department/active-state updates and deletion until commit.
+        target_id = User._meta.pk.get_prep_value(target_id)
+        table = connection.ops.quote_name(User._meta.db_table)
+        pk = connection.ops.quote_name(User._meta.pk.column)
+        sql = f"SELECT * FROM {table} WHERE {pk} = %s FOR SHARE"  # nosec B608 - quoted model identifiers; value is bound
+        return next(iter(User.objects.raw(sql, [target_id])), None)
+    return User.objects.select_for_update(no_key=True).filter(pk=target_id).first()
 
 
 def allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, reason=""):
@@ -55,7 +68,7 @@ def _allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, 
     if not can_allocate_complaint(actor, complaint):
         raise _AllocationDenied(actor, complaint, concealed=True)
     target_id = getattr(assignee, "pk", assignee)
-    target = User.objects.select_for_update(no_key=True).filter(pk=target_id).first()
+    target = _lock_assignment_target(target_id)
     if not can_allocate_complaint(actor, complaint,
                                   target if target is not None else User(is_active=False)):
         raise _AllocationDenied(actor, complaint, concealed=False)

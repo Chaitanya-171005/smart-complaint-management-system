@@ -1,0 +1,64 @@
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2026-11-19 03:11:20.572 UTC [48] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-19 03:11:20.574 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-19 03:11:20.580 UTC [51] LOG:  database system was shut down at 2026-11-19 03:11:20 UTC
+2026-11-19 03:11:20.585 UTC [48] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+waiting for server to shut down...2026-11-19 03:11:20.801 UTC [48] LOG:  received fast shutdown request
+.2026-11-19 03:11:20.802 UTC [48] LOG:  aborting any active transactions
+2026-11-19 03:11:20.804 UTC [48] LOG:  background worker "logical replication launcher" (PID 54) exited with exit code 1
+2026-11-19 03:11:20.805 UTC [49] LOG:  shutting down
+2026-11-19 03:11:20.807 UTC [49] LOG:  checkpoint starting: shutdown immediate
+2026-11-19 03:11:20.900 UTC [49] LOG:  checkpoint complete: wrote 925 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.044 s, sync=0.045 s, total=0.096 s; sync files=301, longest=0.010 s, average=0.001 s; distance=4256 kB, estimate=4256 kB; lsn=0/1915958, redo lsn=0/1915958
+2026-11-19 03:11:20.907 UTC [48] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-11-19 03:11:21.049 UTC [1] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-19 03:11:21.049 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-19 03:11:21.049 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-19 03:11:21.052 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-19 03:11:21.059 UTC [64] LOG:  database system was shut down at 2026-11-19 03:11:20 UTC
+2026-11-19 03:11:21.065 UTC [1] LOG:  database system is ready to accept connections
+2026-11-19 03:16:21.154 UTC [62] LOG:  checkpoint starting: time
+2026-11-19 03:17:05.729 UTC [62] LOG:  checkpoint complete: wrote 443 buffers (2.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=44.494 s, sync=0.071 s, total=44.575 s; sync files=304, longest=0.002 s, average=0.001 s; distance=2862 kB, estimate=2862 kB; lsn=0/1BE1248, redo lsn=0/1BE11B8
+2026-11-19 03:31:22.030 UTC [62] LOG:  checkpoint starting: time
+2026-11-19 03:31:42.760 UTC [62] LOG:  checkpoint complete: wrote 208 buffers (1.3%); 0 WAL file(s) added, 0 removed, 0 recycled; write=20.608 s, sync=0.109 s, total=20.730 s; sync files=57, longest=0.006 s, average=0.002 s; distance=2943 kB, estimate=2943 kB; lsn=0/24845A8, redo lsn=0/1EC1100
+2026-11-19 03:36:22.852 UTC [62] LOG:  checkpoint starting: time
+2026-11-19 03:38:25.485 UTC [62] LOG:  checkpoint complete: wrote 1230 buffers (7.5%); 0 WAL file(s) added, 0 removed, 2 recycled; write=122.609 s, sync=0.008 s, total=122.633 s; sync files=64, longest=0.001 s, average=0.001 s; distance=26412 kB, estimate=26412 kB; lsn=0/3892990, redo lsn=0/388C448
+2026-11-19 03:41:22.584 UTC [62] LOG:  checkpoint starting: time
+2026-11-19 03:41:23.803 UTC [62] LOG:  checkpoint complete: wrote 13 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.209 s, sync=0.005 s, total=1.219 s; sync files=9, longest=0.003 s, average=0.001 s; distance=26 kB, estimate=23774 kB; lsn=0/3892E28, redo lsn=0/3892D98
