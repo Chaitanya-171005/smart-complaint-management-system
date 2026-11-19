@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.452" timestamp="2026-11-19T03:43:33.606487+00:00" hostname="Macs-MacBook-Pro.local"><testcase classname="integration_checks.allocation_concurrency_pg" name="test_independent_assignments_can_hold_the_same_staff_reference_concurrently" time="5.158"><failure message="threading.BrokenBarrierError">user_factory = &lt;function user_factory.&lt;locals&gt;.create_user at 0x111c58b40&gt;
+department = &lt;Department: Synthetic Department c795e15da4df&gt;
+complaint_factory = &lt;function complaint_factory.&lt;locals&gt;.create_complaint at 0x111b8c0f0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x111b86780&gt;
+
+    def test_independent_assignments_can_hold_the_same_staff_reference_concurrently(user_factory,department,complaint_factory,monkeypatch):
+        import routing.allocation as module
+        heads=[user_factory(role='HEAD',department=department) for _ in range(2)]
+        staff=user_factory(role='STAFF',department=department)
+        complaints=[complaint_factory(department=department) for _ in heads]
+        original=module._lock_assignment_target;barrier=Barrier(2)
+        def synchronized_reference(target_id):
+            target=original(target_id)
+            barrier.wait(timeout=3)
+            return target
+        monkeypatch.setattr(module,'_lock_assignment_target',synchronized_reference)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures=[pool.submit(worker_call,h,staff,c) for h,c in zip(heads,complaints)]
+&gt;           outcomes=[f.result(timeout=15) for f in futures]
+                      ^^^^^^^^^^^^^^^^^^^^
+
+integration_checks/allocation_concurrency_pg.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/_base.py:454: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/_base.py:396: in __get_result
+    raise self._exception
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py:86: in run
+    result = ctx.run(self.task)
+             ^^^^^^^^^^^^^^^^^^
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/concurrent/futures/thread.py:73: in run
+    return fn(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^
+integration_checks/allocation_concurrency_pg.py:24: in worker_call
+    allocate_complaint(actor=head,complaint_id=complaint.complaint_id,assignee=staff,expected_assignee_id=None)
+routing/allocation.py:38: in allocate_complaint
+    return _allocate_complaint(actor=actor, complaint_id=complaint_id, assignee=assignee,
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/contextlib.py:85: in inner
+    return func(*args, **kwds)
+           ^^^^^^^^^^^^^^^^^^^
+routing/allocation.py:62: in _allocate_complaint
+    target = _lock_assignment_target(target_id)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+integration_checks/allocation_concurrency_pg.py:120: in synchronized_reference
+    barrier.wait(timeout=3)
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py:731: in wait
+    self._enter() # Block while the barrier drains.
+    ^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;threading.Barrier at 0x111b72900: broken&gt;
+
+    def _enter(self):
+        while self._state in (-1, 1):
+            # It is draining or resetting, wait until done
+            self._cond.wait()
+        #see if the barrier is in a broken state
+        if self._state &lt; 0:
+&gt;           raise BrokenBarrierError
+E           threading.BrokenBarrierError
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/threading.py:755: BrokenBarrierError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,29 @@
+{
+  "source": "c39e492b3ea47ac8b520d2e412ce6ebba3e53aab",
+  "image": "sha256:2df6260efb55de20ad297ec0386d5830de7e1cc6534e7a385cfeec3246e3e208",
+  "project": "q0471867cc509c0",
+  "port": 55039,
+  "worker_args": "--workers 4 --threads 1",
+  "gunicorn_process_count": 5,
+  "runtime_hashes": {
+    "routing/allocation.py": "c04c66c1b01e754a6477ef6880d17781ff614b6a9b70a16df8a7756ed3416652",
+    "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+    "scripts/q04_env.py": "403f0012c11b798a9d28d1d2633055cb751177ad55f443f42667bbe8cd5233f5",
+    "q04/compose.yml": "f9538a2cf6c255d8fca8b5cada29038878419612ec683cf0b36d955917d91bcc",
+    "requirements.txt": "5aa8c07119832e843ad8bcf75f6d1f011523632877ce705aacc31cb729b9b072"
+  },
+  "image_hashes": {
+    "routing/allocation.py": "c04c66c1b01e754a6477ef6880d17781ff614b6a9b70a16df8a7756ed3416652",
+    "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+    "scripts/q04_env.py": "403f0012c11b798a9d28d1d2633055cb751177ad55f443f42667bbe8cd5233f5",
+    "q04/compose.yml": "f9538a2cf6c255d8fca8b5cada29038878419612ec683cf0b36d955917d91bcc",
+    "requirements.txt": "5aa8c07119832e843ad8bcf75f6d1f011523632877ce705aacc31cb729b9b072"
+  },
+  "source_image_match": true,
+  "dataset": {
+    "complaints": 650,
+    "heads": 50,
+    "reserved_targets": 550
+  },
+  "new_load_run": false
+}

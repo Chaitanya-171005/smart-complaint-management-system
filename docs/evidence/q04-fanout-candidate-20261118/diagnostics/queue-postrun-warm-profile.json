@@ -1,0 +1,227 @@
+{
+  "scope": "One sequential post-run diagnostic; not Q04 latency evidence",
+  "status": 200,
+  "response_bytes": 18891,
+  "diagnostic_elapsed_ms": 58.514930999081116,
+  "query_count": 8,
+  "query_time_ms": 10.0,
+  "tables": {
+    "django_session": 2,
+    "accounts_user": 2,
+    "complaints_complaint": 2,
+    "BEGIN": 1,
+    "COMMIT": 1
+  },
+  "functions": [
+    {
+      "file": "client.py",
+      "line": 1114,
+      "function": "get",
+      "calls": 1,
+      "cumulative_ms": 58.329271
+    },
+    {
+      "file": "client.py",
+      "line": 467,
+      "function": "get",
+      "calls": 1,
+      "cumulative_ms": 58.319678
+    },
+    {
+      "file": "client.py",
+      "line": 633,
+      "function": "generic",
+      "calls": 1,
+      "cumulative_ms": 58.311165
+    },
+    {
+      "file": "client.py",
+      "line": 1067,
+      "function": "request",
+      "calls": 1,
+      "cumulative_ms": 58.23533700000001
+    },
+    {
+      "file": "client.py",
+      "line": 169,
+      "function": "__call__",
+      "calls": 1,
+      "cumulative_ms": 57.98745600000001
+    },
+    {
+      "file": "base.py",
+      "line": 138,
+      "function": "get_response",
+      "calls": 1,
+      "cumulative_ms": 57.661172
+    },
+    {
+      "file": "exception.py",
+      "line": 53,
+      "function": "inner",
+      "calls": 9,
+      "cumulative_ms": 57.62169900000001
+    },
+    {
+      "file": "deprecation.py",
+      "line": 435,
+      "function": "__call__",
+      "calls": 8,
+      "cumulative_ms": 57.618148
+    },
+    {
+      "file": "base.py",
+      "line": 176,
+      "function": "_get_response",
+      "calls": 1,
+      "cumulative_ms": 52.537924000000004
+    },
+    {
+      "file": "permissions.py",
+      "line": 279,
+      "function": "wrapped",
+      "calls": 1,
+      "cumulative_ms": 52.327643
+    },
+    {
+      "file": "http.py",
+      "line": 51,
+      "function": "inner",
+      "calls": 1,
+      "cumulative_ms": 47.280472
+    },
+    {
+      "file": "views.py",
+      "line": 156,
+      "function": "queue",
+      "calls": 1,
+      "cumulative_ms": 47.275286
+    },
+    {
+      "file": "shortcuts.py",
+      "line": 20,
+      "function": "render",
+      "calls": 1,
+      "cumulative_ms": 28.176347
+    },
+    {
+      "file": "loader.py",
+      "line": 52,
+      "function": "render_to_string",
+      "calls": 1,
+      "cumulative_ms": 28.055363000000003
+    },
+    {
+      "file": "django.py",
+      "line": 102,
+      "function": "render",
+      "calls": 1,
+      "cumulative_ms": 27.994489
+    },
+    {
+      "file": "base.py",
+      "line": 168,
+      "function": "render",
+      "calls": 1,
+      "cumulative_ms": 27.938257
+    },
+    {
+      "file": "base.py",
+      "line": 165,
+      "function": "_render",
+      "calls": 1,
+      "cumulative_ms": 27.853696
+    },
+    {
+      "file": "base.py",
+      "line": 1106,
+      "function": "render",
+      "calls": 95,
+      "cumulative_ms": 27.850407
+    },
+    {
+      "file": "base.py",
+      "line": 1060,
+      "function": "render_annotated",
+      "calls": 531,
+      "cumulative_ms": 27.83267
+    },
+    {
+      "file": "defaulttags.py",
+      "line": 191,
+      "function": "render",
+      "calls": 26,
+      "cumulative_ms": 27.595725
+    },
+    {
+      "file": "defaulttags.py",
+      "line": 578,
+      "function": "render",
+      "calls": 25,
+      "cumulative_ms": 27.302518000000003
+    },
+    {
+      "file": "defaulttags.py",
+      "line": 322,
+      "function": "render",
+      "calls": 127,
+      "cumulative_ms": 23.658272
+    },
+    {
+      "file": "query.py",
+      "line": 2285,
+      "function": "_fetch_all",
+      "calls": 53,
+      "cumulative_ms": 17.480954
+    },
+    {
+      "file": "query.py",
+      "line": 124,
+      "function": "__iter__",
+      "calls": 33,
+      "cumulative_ms": 17.323736000000004
+    },
+    {
+      "file": "compiler.py",
+      "line": 1613,
+      "function": "execute_sql",
+      "calls": 6,
+      "cumulative_ms": 16.380347
+    },
+    {
+      "file": "base.py",
+      "line": 1164,
+      "function": "render",
+      "calls": 303,
+      "cumulative_ms": 14.40431
+    },
+    {
+      "file": "query.py",
+      "line": 458,
+      "function": "__iter__",
+      "calls": 26,
+      "cumulative_ms": 12.21512
+    },
+    {
+      "file": "base.py",
+      "line": 1139,
+      "function": "render_value_in_context",
+      "calls": 303,
+      "cumulative_ms": 10.782242
+    },
+    {
+      "file": "connection.py",
+      "line": 479,
+      "function": "wait",
+      "calls": 9,
+      "cumulative_ms": 9.011491
+    },
+    {
+      "file": "utils.py",
+      "line": 120,
+      "function": "execute",
+      "calls": 6,
+      "cumulative_ms": 8.092403
+    }
+  ]
+}

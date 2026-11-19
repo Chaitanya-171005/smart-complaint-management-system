@@ -1,0 +1,15 @@
+{
+  "source": "c39e492b3ea47ac8b520d2e412ce6ebba3e53aab",
+  "authorization_source": "User explicit reply in this chat: Authorize this exact local window",
+  "recorded_at_utc": "2026-11-19T03:27:58.221027+00:00",
+  "window_start": "2026-11-19T09:00:00+05:30",
+  "window_end": "2026-11-19T10:00:00+05:30",
+  "scope": "Fresh isolated Docker/PostgreSQL; four sync workers; local queue/assignment only",
+  "heads": 50,
+  "warmup_per_head_per_scenario": 1,
+  "measured_per_head_per_scenario": 10,
+  "p95_target_ms": 1500,
+  "stop_on_unexpected_failure": true,
+  "release_gate_changes": false,
+  "production_or_shared_targets": false
+}

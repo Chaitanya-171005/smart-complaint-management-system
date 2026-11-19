@@ -1,0 +1,11 @@
+{
+  "correct_targets": 550,
+  "targets": 550,
+  "assigned": 6,
+  "expected_assigned": 6,
+  "history": 6,
+  "events": 6,
+  "notices": 312,
+  "email_jobs": 312,
+  "valid": true
+}

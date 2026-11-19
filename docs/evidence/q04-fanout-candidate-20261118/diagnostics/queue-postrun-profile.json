@@ -1,0 +1,227 @@
+{
+  "scope": "One sequential post-run diagnostic; not Q04 latency evidence",
+  "status": 200,
+  "response_bytes": 18891,
+  "diagnostic_elapsed_ms": 438.55746099870885,
+  "query_count": 8,
+  "query_time_ms": 14.0,
+  "tables": {
+    "django_session": 2,
+    "accounts_user": 2,
+    "complaints_complaint": 2,
+    "BEGIN": 1,
+    "COMMIT": 1
+  },
+  "functions": [
+    {
+      "file": "client.py",
+      "line": 1114,
+      "function": "get",
+      "calls": 1,
+      "cumulative_ms": 420.00866
+    },
+    {
+      "file": "client.py",
+      "line": 467,
+      "function": "get",
+      "calls": 1,
+      "cumulative_ms": 419.998505
+    },
+    {
+      "file": "client.py",
+      "line": 633,
+      "function": "generic",
+      "calls": 1,
+      "cumulative_ms": 419.98946
+    },
+    {
+      "file": "client.py",
+      "line": 1067,
+      "function": "request",
+      "calls": 1,
+      "cumulative_ms": 419.807484
+    },
+    {
+      "file": "client.py",
+      "line": 169,
+      "function": "__call__",
+      "calls": 1,
+      "cumulative_ms": 419.50552100000004
+    },
+    {
+      "file": "base.py",
+      "line": 138,
+      "function": "get_response",
+      "calls": 1,
+      "cumulative_ms": 317.75829300000004
+    },
+    {
+      "file": "exception.py",
+      "line": 53,
+      "function": "inner",
+      "calls": 9,
+      "cumulative_ms": 317.692183
+    },
+    {
+      "file": "deprecation.py",
+      "line": 435,
+      "function": "__call__",
+      "calls": 8,
+      "cumulative_ms": 317.6891
+    },
+    {
+      "file": "base.py",
+      "line": 176,
+      "function": "_get_response",
+      "calls": 1,
+      "cumulative_ms": 309.77094900000003
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1360,
+      "function": "_find_and_load",
+      "calls": 283,
+      "cumulative_ms": 308.716347
+    },
+    {
+      "file": "__init__.py",
+      "line": 71,
+      "function": "import_module",
+      "calls": 63,
+      "cumulative_ms": 308.703165
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1394,
+      "function": "_gcd_import",
+      "calls": 66,
+      "cumulative_ms": 308.57318
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1308,
+      "function": "_find_and_load_unlocked",
+      "calls": 259,
+      "cumulative_ms": 306.64126899999997
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 914,
+      "function": "_load_unlocked",
+      "calls": 237,
+      "cumulative_ms": 302.578349
+    },
+    {
+      "file": "<frozen importlib._bootstrap_external>",
+      "line": 757,
+      "function": "exec_module",
+      "calls": 233,
+      "cumulative_ms": 301.312658
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 483,
+      "function": "_call_with_frames_removed",
+      "calls": 638,
+      "cumulative_ms": 297.94484000000006
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.exec>",
+      "calls": 269,
+      "cumulative_ms": 296.961175
+    },
+    {
+      "file": "<frozen importlib._bootstrap>",
+      "line": 1409,
+      "function": "_handle_fromlist",
+      "calls": 374,
+      "cumulative_ms": 280.200596
+    },
+    {
+      "file": "~",
+      "line": 0,
+      "function": "<built-in method builtins.__import__>",
+      "calls": 139,
+      "cumulative_ms": 279.96508600000004
+    },
+    {
+      "file": "functional.py",
+      "line": 39,
+      "function": "__get__",
+      "calls": 393,
+      "cumulative_ms": 210.23857900000002
+    },
+    {
+      "file": "base.py",
+      "line": 302,
+      "function": "resolve_request",
+      "calls": 1,
+      "cumulative_ms": 196.152934
+    },
+    {
+      "file": "resolvers.py",
+      "line": 670,
+      "function": "resolve",
+      "calls": 4,
+      "cumulative_ms": 196.09610300000003
+    },
+    {
+      "file": "resolvers.py",
+      "line": 726,
+      "function": "url_patterns",
+      "calls": 9,
+      "cumulative_ms": 195.457437
+    },
+    {
+      "file": "resolvers.py",
+      "line": 719,
+      "function": "urlconf_module",
+      "calls": 9,
+      "cumulative_ms": 195.406132
+    },
+    {
+      "file": "urls.py",
+      "line": 1,
+      "function": "<module>",
+      "calls": 1,
+      "cumulative_ms": 195.08032800000004
+    },
+    {
+      "file": "conf.py",
+      "line": 17,
+      "function": "include",
+      "calls": 7,
+      "cumulative_ms": 187.45847200000003
+    },
+    {
+      "file": "urls.py",
+      "line": 1,
+      "function": "<module>",
+      "calls": 1,
+      "cumulative_ms": 167.07348800000003
+    },
+    {
+      "file": "anonymous_views.py",
+      "line": 1,
+      "function": "<module>",
+      "calls": 1,
+      "cumulative_ms": 160.478605
+    },
+    {
+      "file": "anonymous.py",
+      "line": 1,
+      "function": "<module>",
+      "calls": 1,
+      "cumulative_ms": 158.145607
+    },
+    {
+      "file": "evidence.py",
+      "line": 1,
+      "function": "<module>",
+      "calls": 1,
+      "cumulative_ms": 135.500437
+    }
+  ]
+}

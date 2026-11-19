@@ -114,10 +114,22 @@ def publish_history_event(history):
         raise ValidationError("Invalid notification state.")
     event = NotificationEvent.objects.create(history=history, complaint=complaint, kind=kind,
                                             public_id=public_id, status=status, anonymous=anonymous)
-    for user in recipients:
-        notice = Notification.objects.create(event=event, recipient=user)
-        if kind in EMAIL_EVENTS and user.email:
-            EmailDelivery.objects.create(notice=notice)
+    # No save overrides or model signals are involved for these outbox rows.
+    # Keep the whole recipient snapshot in this transaction, but avoid holding
+    # the complaint/assignee locks across two INSERT round trips per recipient.
+    Notification.objects.bulk_create([
+        Notification(event=event, recipient=user) for user in recipients
+    ])
+    if kind in EMAIL_EVENTS:
+        email_recipients = {user.pk for user in recipients if user.email}
+        # Read back IDs rather than relying on a backend returning bulk PKs.
+        # No conflicts are ignored: a required write failure rolls back history,
+        # assignment, event, notices and jobs together.
+        EmailDelivery.objects.bulk_create([
+            EmailDelivery(notice_id=notice_id)
+            for notice_id, recipient_id in event.notices.values_list("pk", "recipient_id")
+            if recipient_id in email_recipients
+        ])
     return event
 
 

@@ -252,7 +252,7 @@ def test_required_failure_rolls_back_state_history_and_notices(case, failure):
             if failure == 'later':
                 change(head, complaint, 'IN_PROGRESS', revision)
                 raise RuntimeError('controlled caller failure')
-            target = 'workflow.lifecycle.record_history' if failure == 'history' else 'workflow.notifications.Notification.objects.create'
+            target = 'workflow.lifecycle.record_history' if failure == 'history' else 'workflow.notifications.Notification.objects.bulk_create'
             with patch(target, side_effect=RuntimeError('controlled required failure')):
                 change(head, complaint, 'IN_PROGRESS', revision)
     assert capture(complaint) == before

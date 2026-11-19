@@ -104,7 +104,7 @@ def database_config(env, base_dir):
         password = env.get("DJANGO_DB_PASSWORD")
         if not password:
             raise ImproperlyConfigured("DJANGO_DB_PASSWORD is required for PostgreSQL.")
-        return {
+        config = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": env.get("DJANGO_DB_NAME", ""),
             "USER": env.get("DJANGO_DB_USER", ""),
@@ -112,6 +112,15 @@ def database_config(env, base_dir):
             "HOST": env.get("DJANGO_DB_HOST", ""),
             "PORT": env.get("DJANGO_DB_PORT", "5432"),
         }
+        if "DJANGO_DB_CONN_MAX_AGE" in env:
+            try:
+                age = int(env["DJANGO_DB_CONN_MAX_AGE"])
+            except (TypeError, ValueError):
+                raise ImproperlyConfigured("DJANGO_DB_CONN_MAX_AGE must be an integer from 0 to 300.") from None
+            if not 0 <= age <= 300:
+                raise ImproperlyConfigured("DJANGO_DB_CONN_MAX_AGE must be an integer from 0 to 300.")
+            config.update(CONN_MAX_AGE=age, CONN_HEALTH_CHECKS=age > 0)
+        return config
     raise ImproperlyConfigured(f"Unknown DJANGO_DB_ENGINE: {engine!r}.")
 
 

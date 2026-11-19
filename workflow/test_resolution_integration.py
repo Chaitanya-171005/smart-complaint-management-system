@@ -223,8 +223,8 @@ def test_required_failure_rolls_back_files_and_all_database_records(case, settin
         target, replacement = 'workflow.resolution_service.staged_evidence', staged
     else:
         target = {'history':'workflow.lifecycle.record_history',
-                  'notice':'workflow.notifications.Notification.objects.create',
-                  'email_job':'workflow.notifications.EmailDelivery.objects.create',
+                  'notice':'workflow.notifications.Notification.objects.bulk_create',
+                  'email_job':'workflow.notifications.EmailDelivery.objects.bulk_create',
                   'attachment':'workflow.resolution_service.Attachment.objects.create'}[failure]
         replacement = None
     error = DatabaseError if failure == 'commit' else RuntimeError

@@ -1,0 +1,53 @@
+2026-11-19T03:49:54.235728568Z Operations to perform:
+2026-11-19T03:49:54.235757638Z   Apply all migrations: accounts, admin, auth, complaints, contenttypes, routing, sessions, workflow
+2026-11-19T03:49:54.235760769Z Running migrations:
+2026-11-19T03:49:54.244634346Z   Applying contenttypes.0001_initial... OK
+2026-11-19T03:49:54.251500325Z   Applying contenttypes.0002_remove_content_type_name... OK
+2026-11-19T03:49:54.282238592Z   Applying auth.0001_initial... OK
+2026-11-19T03:49:54.288530893Z   Applying auth.0002_alter_permission_name_max_length... OK
+2026-11-19T03:49:54.294809806Z   Applying auth.0003_alter_user_email_max_length... OK
+2026-11-19T03:49:54.301833525Z   Applying auth.0004_alter_user_username_opts... OK
+2026-11-19T03:49:54.307905152Z   Applying auth.0005_alter_user_last_login_null... OK
+2026-11-19T03:49:54.310008767Z   Applying auth.0006_require_contenttypes_0002... OK
+2026-11-19T03:49:54.316181191Z   Applying auth.0007_alter_validators_add_error_messages... OK
+2026-11-19T03:49:54.322881884Z   Applying auth.0008_alter_user_username_max_length... OK
+2026-11-19T03:49:54.328964183Z   Applying auth.0009_alter_user_last_name_max_length... OK
+2026-11-19T03:49:54.335826219Z   Applying auth.0010_alter_group_name_max_length... OK
+2026-11-19T03:49:54.342008110Z   Applying auth.0011_update_proxy_permissions... OK
+2026-11-19T03:49:54.348752946Z   Applying auth.0012_alter_user_first_name_max_length... OK
+2026-11-19T03:49:54.380417049Z   Applying accounts.0001_initial... OK
+2026-11-19T03:49:54.428200874Z   Applying accounts.0002_align_field_limits_email_unique... OK
+2026-11-19T03:49:54.447580925Z   Applying accounts.0003_loginthrottle_securityevent... OK
+2026-11-19T03:49:54.456916588Z   Applying accounts.0004_alter_securityevent_event_type... OK
+2026-11-19T03:49:54.498955333Z   Applying accounts.0005_reference_data_locations_audit... OK
+2026-11-19T03:49:54.509587635Z   Applying accounts.0006_security_event_role_changes... OK
+2026-11-19T03:49:54.530271452Z   Applying accounts.0007_security_event_target_and_master_data... OK
+2026-11-19T03:49:54.555012234Z   Applying admin.0001_initial... OK
+2026-11-19T03:49:54.566328259Z   Applying admin.0002_logentry_remove_auto_add... OK
+2026-11-19T03:49:54.578216706Z   Applying admin.0003_logentry_add_action_flag_choices... OK
+2026-11-19T03:49:54.583898152Z   Applying complaints.0001_initial... OK
+2026-11-19T03:49:54.604963160Z   Applying complaints.0002_intake_receipt... OK
+2026-11-19T03:49:54.641700806Z   Applying complaints.0003_complaint... OK
+2026-11-19T03:49:54.786578371Z   Applying complaints.0004_attachment_intakereceipt_accepted_complaint_and_more... OK
+2026-11-19T03:49:54.818299439Z   Applying complaints.0005_anonymous_intake_receipt... OK
+2026-11-19T03:49:54.943934576Z   Applying routing.0001_initial... OK
+2026-11-19T03:49:54.974348261Z   Applying routing.0002_routing_decision... OK
+2026-11-19T03:49:54.982341938Z   Applying routing.0003_escalationrun... OK
+2026-11-19T03:49:54.989742453Z   Applying sessions.0001_initial... OK
+2026-11-19T03:49:54.998539238Z   Applying workflow.0001_initial... OK
+2026-11-19T03:49:55.002468448Z   Applying workflow.0002_alter_complainthistory_actor_kind... OK
+2026-11-19T03:49:55.153417328Z   Applying workflow.0003_b26_notifications... OK
+2026-11-19T03:49:55.277826695Z   Applying workflow.0004_b27_email_attempts... OK
+2026-11-19T03:49:55.400911101Z   Applying workflow.0003_complainthistory_actor_complainthistory_assignee_and_more... OK
+2026-11-19T03:49:55.403419601Z   Applying workflow.0005_merge_b15_f4... OK
+2026-11-19T03:49:55.423558408Z   Applying workflow.0005_b28_notification_read_at... OK
+2026-11-19T03:49:55.425501147Z   Applying workflow.0006_merge_b15_f4_b28... OK
+2026-11-19T03:49:55.562587928Z   Applying workflow.0007_anonymous_resolution_feedback... OK
+2026-11-19T03:49:55.860261047Z [2026-11-19 03:49:55 +0000] [1] [INFO] Starting gunicorn 26.2.0
+2026-11-19T03:49:55.860640162Z [2026-11-19 03:49:55 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+2026-11-19T03:49:55.860648365Z [2026-11-19 03:49:55 +0000] [1] [INFO] Using worker: sync
+2026-11-19T03:49:55.863982724Z [2026-11-19 03:49:55 +0000] [8] [INFO] Booting worker with pid: 8
+2026-11-19T03:49:55.911732550Z [2026-11-19 03:49:55 +0000] [9] [INFO] Booting worker with pid: 9
+2026-11-19T03:49:55.959262485Z [2026-11-19 03:49:55 +0000] [10] [INFO] Booting worker with pid: 10
+2026-11-19T03:49:56.029472768Z [2026-11-19 03:49:56 +0000] [11] [INFO] Booting worker with pid: 11
+2026-11-19T03:49:56.203599834Z [2026-11-19 03:49:56 +0000] [1] [INFO] Control socket listening at [container-home]/.gunicorn/gunicorn.ctl
