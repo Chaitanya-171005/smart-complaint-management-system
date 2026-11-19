@@ -1,0 +1,18 @@
+{
+  "executed_at_utc": "2026-11-17T05:24:10.536208+00:00",
+  "source_revision": "d805d06460a2d221d6a8f0f99d16b91ef2bb48d1",
+  "working_tree_dirty": false,
+  "working_tree_status": [],
+  "source_note": "source_revision identifies HEAD before the run; working_tree_status lists additional local changes tested. Coverage is not feature acceptance.",
+  "pytest_exit_code": 0,
+  "coverage_gate_exit_code": 0,
+  "explicit_integrations": [
+    "integration_checks/anonymous_escalation.py",
+    "integration_checks/anonymous_recovery.py",
+    "integration_checks/lifecycle_f3.py",
+    "integration_checks/resolution_f3.py",
+    "integration_checks/f3_f4_handoff.py",
+    "workflow/test_retired_anonymous_routes.py"
+  ],
+  "f4_dependency_gate": "required"
+}

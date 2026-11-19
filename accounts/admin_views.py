@@ -3,10 +3,11 @@
 from django import forms
 from django.core.exceptions import ValidationError
 from django.core.paginator import Paginator
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
 
+from . import campus_reports
 from . import reference_services as svc
 from . import user_admin_services as user_svc
 from .config_audit import ENTITY_TYPES
@@ -218,5 +219,44 @@ def audit_log(request):
         request,
         "accounts/admin_audit.html",
         {"form": form, "page": page, "filter_query": keep.urlencode()},
+        status=400 if form.is_bound and not form.is_valid() else 200,
+    )
+
+
+class ReportRangeForm(forms.Form):
+    date_from = forms.DateField(label="From", widget=forms.DateInput(attrs={"type": "date"}))
+    date_to = forms.DateField(label="To (included)", widget=forms.DateInput(attrs={"type": "date"}))
+
+    def clean(self):
+        data = super().clean()
+        if data.get("date_from") and data.get("date_to"):
+            try:
+                campus_reports.date_window(data["date_from"], data["date_to"])
+            except ValueError as exc:
+                raise ValidationError(str(exc)) from exc
+        return data
+
+
+@admin_only
+@require_http_methods(["GET"])
+def campus_report(request):
+    """Campus-wide report for a date range, and the CSV with the same figures (REQ-RPT-01)."""
+    form = ReportRangeForm(request.GET or None)
+    report = None
+    if form.is_valid():
+        report = campus_reports.build_report(form.cleaned_data["date_from"], form.cleaned_data["date_to"])
+        if request.GET.get("export") == "csv":
+            response = HttpResponse(campus_reports.report_to_csv(report), content_type="text/csv; charset=utf-8")
+            response["Content-Disposition"] = (
+                f'attachment; filename="scms-campus-report-{report.date_from}-{report.date_to}.csv"'
+            )
+            response["Cache-Control"] = "no-store"
+            return response
+    keep = request.GET.copy()
+    keep.pop("export", None)
+    return render(
+        request,
+        "accounts/admin_report.html",
+        {"form": form, "report": report, "report_query": keep.urlencode()},
         status=400 if form.is_bound and not form.is_valid() else 200,
     )
