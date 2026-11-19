@@ -1,0 +1,79 @@
+{
+  "case": "test_role_navigation_and_refusal[desktop-HEAD]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "role_navigation": {
+      "role": "HEAD",
+      "landing_links": [
+        {
+          "text": "Skip to content",
+          "href": "#main"
+        },
+        {
+          "text": "S\nSCMS\nCampus complaint management",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Overview",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Department queue & assignment",
+          "href": "/routing/queue/"
+        },
+        {
+          "text": "Department reports",
+          "href": "/complaints/dashboard/"
+        },
+        {
+          "text": "Notifications",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Notifications \u2014 0 unread",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Open queue \u2192",
+          "href": "/routing/queue/"
+        },
+        {
+          "text": "View reports \u2192",
+          "href": "/complaints/dashboard/"
+        },
+        {
+          "text": "View notifications \u2192",
+          "href": "/complaints/notifications/"
+        }
+      ],
+      "work_entry": "/routing/queue/",
+      "work_entry_discoverable": true,
+      "direct_entry_http": 200,
+      "denied_http": 403,
+      "refusal_text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nDepartment Head\nLog out\n\nWORKSPACE\n\nOverview\nDepartment queue & assignment\nDepartment reports\nNotifications\nNotifications \u2014 0 unread\nAccess unavailable\n\nYou do not have permission to use this page. Return to your home page or contact an administrator for help.\n\nReturn home\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+      "refusal_layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      }
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

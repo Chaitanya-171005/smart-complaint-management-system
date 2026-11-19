@@ -1,0 +1,49 @@
+{
+  "runtime_source": "81eae6675b75c242cf8dfd0a3691778c9a64fb81",
+  "current_evidence_only_tip": "eb9f20f6b985682f99bd2e81a6ddff1d3bc98fa0",
+  "image": "sha256:5e3b092cc9ca434767078401916ef95fac5876e8e9318730d8ad3dcbb03b2d13",
+  "source_hashes": {
+    "requirements.txt": "dc579245f1747bdb879e498b1cae6a662a28ad67b4d201b8c368fe165e78109a",
+    "scms/settings.py": "26c6a8487becb6748477c1aa814ae3d26c37092df5bab5368df4ea3eb6291e8e",
+    "scms/static_middleware.py": "1504b45e952263a6faaa50931bda795f14947e6a534b226af6f91dfc90b5c0cc",
+    "accounts/static/ui/scms.css": "c3aa80042a1a386be5690a1ec33f6471f36df37392bb39700854b838e66326e4",
+    "accounts/static/ui/forms.js": "59b9d9966facf495061422439e45ec62055ccf5a9f0454835f9d821ddafac995",
+    "accounts/templates/ui/base.html": "51a513ebb67fe58438213c542e4fd8d51939cfd1645eb4a56ad3aa0b4c22a9ae",
+    "accounts/templates/accounts/register.html": "afce6d37a9a04a745c6ea0801ad606391962a42d308fd6c228a28ee6008a2909",
+    "accounts/templates/accounts/register_done.html": "1052bfd2a3f43771700394aafcc32f330598c5e230b5f9d3d1470c258f43ac48",
+    "accounts/templates/accounts/landing.html": "0323e2dd1d8a31c1ca1bda46b3e98ec8615ba9180ee322daca935937425a98e7",
+    "accounts/templates/403.html": "39331566d20cccb479bf107f8142935deb8216c173e650479a9d25ac3f23d9d9",
+    "complaints/views.py": "e55703dfa1f096d14cfe52c3fd157b3f00f81cab0c7336f3b15dd42802555675",
+    "complaints/privacy_middleware.py": "654922fc8ffe0ca8707214fc4fa90ad8de11aa48e522723cbac05239ab945fc0",
+    "complaints/templates/complaints/_intake_panel.html": "a177e4692e37c93dbaabc3b55551419955c979c186bc7725bda3bf5066cd87b1",
+    "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+    "workflow/views.py": "a1cb99dbbb89c7307a7da5ba4e89f497fa614a8eef8f315668aa3512eb671a62",
+    "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+    "scripts/run_tests.py": "6143ca1c115525de8de7ffd85e3eab77e708b7be89d613e8dc9e237dbd437a1f"
+  },
+  "image_metadata": {
+    "hashes": {
+      "requirements.txt": "dc579245f1747bdb879e498b1cae6a662a28ad67b4d201b8c368fe165e78109a",
+      "scms/settings.py": "26c6a8487becb6748477c1aa814ae3d26c37092df5bab5368df4ea3eb6291e8e",
+      "scms/static_middleware.py": "1504b45e952263a6faaa50931bda795f14947e6a534b226af6f91dfc90b5c0cc",
+      "accounts/static/ui/scms.css": "c3aa80042a1a386be5690a1ec33f6471f36df37392bb39700854b838e66326e4",
+      "accounts/static/ui/forms.js": "59b9d9966facf495061422439e45ec62055ccf5a9f0454835f9d821ddafac995",
+      "accounts/templates/ui/base.html": "51a513ebb67fe58438213c542e4fd8d51939cfd1645eb4a56ad3aa0b4c22a9ae",
+      "accounts/templates/accounts/register.html": "afce6d37a9a04a745c6ea0801ad606391962a42d308fd6c228a28ee6008a2909",
+      "accounts/templates/accounts/register_done.html": "1052bfd2a3f43771700394aafcc32f330598c5e230b5f9d3d1470c258f43ac48",
+      "accounts/templates/accounts/landing.html": "0323e2dd1d8a31c1ca1bda46b3e98ec8615ba9180ee322daca935937425a98e7",
+      "accounts/templates/403.html": "39331566d20cccb479bf107f8142935deb8216c173e650479a9d25ac3f23d9d9",
+      "complaints/views.py": "e55703dfa1f096d14cfe52c3fd157b3f00f81cab0c7336f3b15dd42802555675",
+      "complaints/privacy_middleware.py": "654922fc8ffe0ca8707214fc4fa90ad8de11aa48e522723cbac05239ab945fc0",
+      "complaints/templates/complaints/_intake_panel.html": "a177e4692e37c93dbaabc3b55551419955c979c186bc7725bda3bf5066cd87b1",
+      "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+      "workflow/views.py": "a1cb99dbbb89c7307a7da5ba4e89f497fa614a8eef8f315668aa3512eb671a62",
+      "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+      "scripts/run_tests.py": "6143ca1c115525de8de7ffd85e3eab77e708b7be89d613e8dc9e237dbd437a1f"
+    },
+    "python": "3.14.10",
+    "django": "6.1.3",
+    "whitenoise": "6.12.0"
+  },
+  "match": true
+}

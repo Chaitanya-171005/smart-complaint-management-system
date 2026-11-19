@@ -1,0 +1,78 @@
+{
+  "case": "test_role_navigation_and_refusal[mobile320-STAFF]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "role_navigation": {
+      "role": "STAFF",
+      "landing_links": [
+        {
+          "text": "Skip to content",
+          "href": "#main"
+        },
+        {
+          "text": "S\nSCMS\nCampus complaint management",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Overview",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Assigned queue",
+          "href": "/routing/queue/"
+        },
+        {
+          "text": "Notifications",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Notifications \u2014 0 unread",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Open queue \u2192",
+          "href": "/routing/queue/"
+        },
+        {
+          "text": "View notifications \u2192",
+          "href": "/complaints/notifications/"
+        }
+      ],
+      "work_entry": "/routing/queue/",
+      "work_entry_discoverable": true,
+      "direct_entry_http": 200,
+      "denied_http": 403,
+      "refusal_text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nDepartment Staff\nLog out\nOverview\nAssigned queue\nNotifications\nNotifications \u2014 0 unread\nAccess unavailable\n\nYou do not have permission to use this page. Return to your home page or contact an administrator for help.\n\nReturn home\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+      "refusal_layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 345.140625
+          }
+        ]
+      }
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

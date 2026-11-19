@@ -1,0 +1,150 @@
+{
+  "source_revision": "81eae6675b75c242cf8dfd0a3691778c9a64fb81",
+  "scope": "Local branch image/service acceptance and persistent-volume restart/replacement, not final Main deployment sign-off",
+  "started_at_utc": "2026-11-18T18:24:55.040657+00:00",
+  "project": "q0491eca9eb3bfd",
+  "stages": {
+    "accepted_before_restart": {
+      "replayed": false,
+      "counts": {
+        "complaint": 1,
+        "attachment": 1,
+        "receipt": 1,
+        "routing": 1,
+        "history": 2,
+        "event": 2,
+        "notification": 52,
+        "email": 52
+      },
+      "graph_sha256": "210645257296dc393599ea25c384c8109f3b2fbfb649017670b05ded0341f61d",
+      "evidence_sha256": "be21aef17f0baf04b1bf148f8a23bda4e879b346a64637fdd711bea012e646a8",
+      "file_mode": "0o600",
+      "release_gates": {
+        "COMPLAINT_INTAKE_ENABLED": false,
+        "ANONYMOUS_INTAKE_ENABLED": false,
+        "ANONYMOUS_TRACKING_ENABLED": false,
+        "ANONYMOUS_FEEDBACK_ENABLED": false,
+        "ANONYMOUS_PRIVACY_READY": false
+      },
+      "evidence_max_bytes": 5000000
+    },
+    "after_restart": {
+      "replayed": true,
+      "counts": {
+        "complaint": 1,
+        "attachment": 1,
+        "receipt": 1,
+        "routing": 1,
+        "history": 2,
+        "event": 2,
+        "notification": 52,
+        "email": 52
+      },
+      "graph_sha256": "210645257296dc393599ea25c384c8109f3b2fbfb649017670b05ded0341f61d",
+      "evidence_sha256": "be21aef17f0baf04b1bf148f8a23bda4e879b346a64637fdd711bea012e646a8",
+      "file_mode": "0o600",
+      "release_gates": {
+        "COMPLAINT_INTAKE_ENABLED": false,
+        "ANONYMOUS_INTAKE_ENABLED": false,
+        "ANONYMOUS_TRACKING_ENABLED": false,
+        "ANONYMOUS_FEEDBACK_ENABLED": false,
+        "ANONYMOUS_PRIVACY_READY": false
+      },
+      "evidence_max_bytes": 5000000
+    },
+    "after_container_replacement": {
+      "replayed": true,
+      "counts": {
+        "complaint": 1,
+        "attachment": 1,
+        "receipt": 1,
+        "routing": 1,
+        "history": 2,
+        "event": 2,
+        "notification": 52,
+        "email": 52
+      },
+      "graph_sha256": "210645257296dc393599ea25c384c8109f3b2fbfb649017670b05ded0341f61d",
+      "evidence_sha256": "be21aef17f0baf04b1bf148f8a23bda4e879b346a64637fdd711bea012e646a8",
+      "file_mode": "0o600",
+      "release_gates": {
+        "COMPLAINT_INTAKE_ENABLED": false,
+        "ANONYMOUS_INTAKE_ENABLED": false,
+        "ANONYMOUS_TRACKING_ENABLED": false,
+        "ANONYMOUS_FEEDBACK_ENABLED": false,
+        "ANONYMOUS_PRIVACY_READY": false
+      },
+      "evidence_max_bytes": 5000000
+    }
+  },
+  "status": "LOCAL_PERSISTENCE_PASS",
+  "before": {
+    "q0491eca9eb3bfd-app-1": {
+      "id": "3b2bd529981fb8523602b6230a29e2d47df5b0bb74e2c5342e8cc9e5ab79d825",
+      "image": "sha256:5e3b092cc9ca434767078401916ef95fac5876e8e9318730d8ad3dcbb03b2d13",
+      "mounts": [
+        {
+          "Destination": "/data/private-evidence",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "q0491eca9eb3bfd_q04_evidence",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/q0491eca9eb3bfd_q04_evidence/_data",
+          "Type": "volume"
+        }
+      ]
+    },
+    "q0491eca9eb3bfd-db-1": {
+      "id": "48dc87d3e098769cb7a83b38dd2468b91a0c5e37b454d55a2aadb615b8fa7eda",
+      "image": "sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929",
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "q0491eca9eb3bfd_q04_database",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/q0491eca9eb3bfd_q04_database/_data",
+          "Type": "volume"
+        }
+      ]
+    }
+  },
+  "after": {
+    "q0491eca9eb3bfd-app-1": {
+      "id": "72028b2ee8624146dcafbc6663efe3fba76a0dde37cf29a34ff3cbc1ba5c0033",
+      "image": "sha256:5e3b092cc9ca434767078401916ef95fac5876e8e9318730d8ad3dcbb03b2d13",
+      "mounts": [
+        {
+          "Destination": "/data/private-evidence",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "q0491eca9eb3bfd_q04_evidence",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/q0491eca9eb3bfd_q04_evidence/_data",
+          "Type": "volume"
+        }
+      ]
+    },
+    "q0491eca9eb3bfd-db-1": {
+      "id": "13791152cec8e48c29f27757dc6f456f7e8d962cb8639c1442ccfbbc0ed554df",
+      "image": "sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929",
+      "mounts": [
+        {
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "rw",
+          "Name": "q0491eca9eb3bfd_q04_database",
+          "Propagation": "",
+          "RW": true,
+          "Source": "/var/lib/docker/volumes/q0491eca9eb3bfd_q04_database/_data",
+          "Type": "volume"
+        }
+      ]
+    }
+  },
+  "finished_at_utc": "2026-11-18T18:25:21.136359+00:00"
+}

@@ -1,0 +1,181 @@
+{
+  "case": "test_role_home_links_are_working_and_responsive[mobile320-COMPLAINANT]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "role_link_crawl": {
+      "role": "COMPLAINANT",
+      "links": [
+        {
+          "route": "/accounts/home/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "My complaints",
+                "right": 366.796875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Dashboard",
+                "right": 469.234375
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 582.890625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/new/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "My complaints",
+                "right": 366.796875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Dashboard",
+                "right": 469.234375
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 582.890625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "My complaints",
+                "right": 366.796875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Dashboard",
+                "right": 469.234375
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 582.890625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/dashboard/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "My complaints",
+                "right": 366.796875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Dashboard",
+                "right": 469.234375
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 582.890625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/notifications/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "My complaints",
+                "right": 366.796875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Dashboard",
+                "right": 469.234375
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 582.890625
+              }
+            ]
+          },
+          "fits": true
+        }
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

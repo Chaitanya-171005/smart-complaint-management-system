@@ -1,0 +1,70 @@
+{
+  "case": "test_release_gated_routes_have_safe_visible_refusals[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "default_release_gates": [
+      {
+        "route": "/complaints/new/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nComplainant\nLog out\n\nWORKSPACE\n\nOverview\nSubmit complaint\nMy complaints\nDashboard\nNotifications\nNotifications \u2014 0 unread\nComplaint submission is currently unavailable\n\nPlease contact campus administration for assistance.\n\nHome\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 1280,
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "visualWidth": 1280,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": []
+        }
+      },
+      {
+        "route": "/anonymous/new/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSign in\nRegister\nComplaint submission is currently unavailable\n\nPlease contact campus administration for assistance.\n\nHome\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 1280,
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "visualWidth": 1280,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": []
+        }
+      },
+      {
+        "route": "/anonymous/track/",
+        "http": 503,
+        "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSign in\nRegister\nTrack an anonymous complaint\n\nReference tracking is temporarily unavailable. Please try again later.\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+        "layout": {
+          "innerWidth": 1280,
+          "clientWidth": 1280,
+          "scrollWidth": 1280,
+          "visualWidth": 1280,
+          "viewportMeta": "width=device-width, initial-scale=1",
+          "overflowing": []
+        }
+      }
+    ],
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      },
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

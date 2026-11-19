@@ -1,0 +1,11 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+2026-11-18 18:25:08.622 UTC [1] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-18 18:25:08.622 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-18 18:25:08.622 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-18 18:25:08.626 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-18 18:25:08.634 UTC [29] LOG:  database system was shut down at 2026-11-18 18:25:06 UTC
+2026-11-18 18:25:08.641 UTC [1] LOG:  database system is ready to accept connections
+2026-11-18 18:30:08.739 UTC [27] LOG:  checkpoint starting: time
+2026-11-18 18:30:09.660 UTC [27] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.908 s, sync=0.005 s, total=0.921 s; sync files=9, longest=0.003 s, average=0.001 s; distance=37 kB, estimate=37 kB; lsn=0/1C714B0, redo lsn=0/1C71458

@@ -1,0 +1,90 @@
+{
+  "runtime_source": "27d41850ecf2de3f77cd726de98a2eeae8b08cad",
+  "latest_inspected_Main": "b7db7848cbc15d8b67fbba508e57b9f31e16dc74",
+  "post_runtime_changes": "Benchmark evidence merge and completion documents only; git diff and22 runtime file hashes checked.",
+  "canonical_sqlite": {
+    "passed": 2097,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage_gates": "PASS"
+  },
+  "canonical_postgresql": {
+    "passed": 2097,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage_gates": "PASS"
+  },
+  "additional_postgresql": {
+    "passed": 13,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "q06_browser": {
+    "independent_passed": 60,
+    "four_screen_reference_feedback_passed": 8,
+    "total_in_this_checklist": 68,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "primary_screens": {
+      "desktop": 4,
+      "mobile_320": 4
+    }
+  },
+  "hosted_browser": {
+    "passed": 16,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "redis_tls": {
+    "passed": 9,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "built_browser_after_replacement": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "q05_process_smtp_scheduler": {
+    "passed": 28,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "persistence": "LOCAL_PERSISTENCE_PASS",
+  "direct_Main_f2": {
+    "passed": 622,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "demo_recording": {
+    "passed": 2,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "scope": "Actual synthetic automated branch preview; overlaps four-screen coverage."
+  },
+  "q04_local": {
+    "source": "a434eaa47f6e96f001c5d188f544cae137b1029d",
+    "status": "LOCAL_SCENARIO_PASS",
+    "queue_p95_ms": 471.59727300095255,
+    "assignment_p95_ms": 620.157540000946,
+    "measured_each": 500,
+    "request_errors": 0,
+    "correct_graphs": 550,
+    "packet": "../q04-fanout-candidate-20261118/"
+  },
+  "human_first_time_acceptance": false,
+  "final_Main_acceptance": false,
+  "official_overall_Q04_acceptance": false,
+  "combined_source_changes_merged_into_Main": false,
+  "verdict": "DEMO READY WITH LIMITATIONS",
+  "counts_overlap": "Different suites overlap; do not sum into a unique aggregate."
+}

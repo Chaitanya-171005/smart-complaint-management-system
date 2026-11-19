@@ -1,0 +1,219 @@
+"""Q05 actual PostgreSQL processes: auto-close versus feedback and abrupt death."""
+from datetime import timedelta
+import json
+import os
+from pathlib import Path
+import select
+import signal
+import subprocess
+import sys
+from unittest.mock import patch
+
+import pytest
+from django.db import connection
+from django.utils import timezone
+
+from complaints.models import Complaint
+from workflow import lifecycle
+from workflow.autoclose import auto_close_complaint, run_auto_close
+from workflow.lifecycle import get_transition_revision
+from workflow.models import ComplaintHistory, EmailAttempt, EmailDelivery, Notification, NotificationEvent
+
+pytestmark = pytest.mark.django_db(transaction=True)
+FIXED = ('complaint_id','submitted_by_id','department_id','assignee_id','due_at','priority',
+         'is_escalated','escalation_level','resolved_at','resolution_remarks')
+
+
+@pytest.fixture
+def scenario(complaint_factory,user_factory,settings):
+    assert connection.vendor == 'postgresql'
+    settings.COMPLAINT_AUTO_CLOSE_DAYS = 7  # Synthetic proposed D05 policy only.
+    now = timezone.now()
+    complaint = complaint_factory(status='RESOLVED',submitted_at=now-timedelta(days=10),
+        due_at=now-timedelta(days=9),resolved_at=now-timedelta(days=8),
+        resolution_remarks='Synthetic resolved work for Q05.')
+    head = user_factory(role='HEAD',department=complaint.department)
+    return now,complaint,complaint.submitted_by,head
+
+
+def fixed(complaint):
+    complaint.refresh_from_db()
+    return {name:getattr(complaint,name) for name in FIXED}
+
+
+def graph(complaint):
+    complaint.refresh_from_db()
+    return {
+        'complaint':list(Complaint.objects.filter(pk=complaint.pk).values()),
+        'history':list(ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).order_by('pk').values()),
+        'events':list(NotificationEvent.objects.filter(complaint=complaint).order_by('pk').values()),
+        'notices':list(Notification.objects.filter(event__complaint=complaint).order_by('pk').values()),
+        'deliveries':list(EmailDelivery.objects.filter(notice__event__complaint=complaint).order_by('pk').values()),
+        'attempts':list(EmailAttempt.objects.filter(delivery__notice__event__complaint=complaint).order_by('pk').values()),
+    }
+
+
+def durable(complaint,kind,owner,head):
+    assert ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).count() == 1
+    event = NotificationEvent.objects.get(complaint=complaint)
+    assert event.kind == kind
+    assert set(event.notices.values_list('recipient_id',flat=True)) == {owner.pk,head.pk}
+    jobs = EmailDelivery.objects.filter(notice__event=event)
+    assert jobs.count() == (0 if kind == 'REOPENED' else 2)
+    assert all(job.status == 'PENDING' and job.attempt_count == 0 for job in jobs)
+    assert not EmailAttempt.objects.exists()  # No SMTP worker is invoked here.
+
+
+CHILD = r'''
+import json, os, signal, sys
+import django
+from django.conf import settings
+settings.DATABASES = {'default':json.loads(os.environ['Q05_CHILD_DATABASE'])}
+settings.COMPLAINT_AUTO_CLOSE_DAYS = 7
+django.setup()
+from django.db import connection
+from django.db.models.query import QuerySet
+from django.utils.dateparse import parse_datetime
+from accounts.models import User
+from complaints.models import Complaint
+from workflow import lifecycle
+from workflow.autoclose import auto_close_complaint
+from workflow.confirmation_service import confirm_resolution
+from workflow.reopening_service import reject_resolution
+assert connection.vendor == 'postgresql'
+mode,kind = os.environ['Q05_MODE'],os.environ['Q05_KIND']
+original_lock = QuerySet.select_for_update
+ready = False
+def gated(self,*args,**kwargs):
+    global ready
+    if mode == 'race' and self.model is Complaint and not ready:
+        ready = True
+        print(json.dumps({'ready':True,'vendor':connection.vendor}),flush=True)
+        if sys.stdin.readline().strip() != 'go': raise RuntimeError('Test release missing')
+    return original_lock(self,*args,**kwargs)
+QuerySet.select_for_update = gated
+if mode == 'before_commit':
+    original_history = lifecycle.record_history
+    def killed_history(*args,**kwargs):
+        original_history(*args,**kwargs)
+        os.kill(os.getpid(),signal.SIGKILL)
+    lifecycle.record_history = killed_history
+identifier = os.environ['Q05_COMPLAINT']
+if kind == 'auto':
+    result = auto_close_complaint(identifier,now=parse_datetime(os.environ['Q05_NOW']))
+    outcome = 'AUTO' if result else 'SKIPPED'
+else:
+    actor = User.objects.get(pk=int(os.environ['Q05_OWNER']))
+    args = dict(actor=actor,complaint_id=identifier,expected_revision=os.environ['Q05_REVISION'])
+    try:
+        if kind == 'confirm': confirm_resolution(**args,rating=5)
+        else: reject_resolution(**args,reason='Synthetic dissatisfaction reason for Q05.')
+        outcome = 'FEEDBACK'
+    except lifecycle.ModifiedRecord:
+        outcome = 'STALE'
+if mode == 'after_commit':
+    assert outcome == 'AUTO'
+    os.kill(os.getpid(),signal.SIGKILL)
+print(json.dumps({'outcome':outcome}),flush=True)
+'''
+
+
+def worker(scenario,kind,mode,revision=''):
+    now,complaint,owner,_ = scenario
+    config = {key:connection.settings_dict[key] for key in ('ENGINE','NAME','USER','PASSWORD','HOST','PORT','OPTIONS')}
+    config['NAME'] = str(config['NAME'])
+    env = dict(os.environ,DJANGO_SETTINGS_MODULE='q05_checks.settings',Q05_CHILD_DATABASE=json.dumps(config),
+        Q05_MODE=mode,Q05_KIND=kind,Q05_COMPLAINT=complaint.complaint_id,Q05_NOW=now.isoformat(),
+        Q05_OWNER=str(owner.pk),Q05_REVISION=revision)
+    return subprocess.Popen([sys.executable,'-c',CHILD],env=env,cwd=Path(__file__).resolve().parents[1],
+        stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+
+
+def dispose(process):
+    if process.poll() is None:
+        process.kill();process.communicate(timeout=5)
+
+
+@pytest.mark.parametrize('kind',['auto','confirm','reject','maximum'])
+def test_two_processes_preserve_first_valid_lifecycle_outcome(scenario,kind):
+    now,complaint,owner,head = scenario
+    if kind == 'maximum':
+        complaint.reopen_count = 2;complaint.save(update_fields=['reopen_count'])
+    original = fixed(complaint)
+    revision = get_transition_revision(actor=owner,complaint_id=complaint.complaint_id,
+        target_state='CLOSED' if kind == 'confirm' else 'REOPENED')
+    workers = [worker(scenario,'auto','race'),worker(scenario,kind,'race',revision)]
+    try:
+        for process in workers:
+            ready,_,_ = select.select([process.stdout],[],[],15)
+            assert ready and json.loads(process.stdout.readline()) == {'ready':True,'vendor':'postgresql'}
+        for process in workers:
+            process.stdin.write('go\n');process.stdin.flush()
+        results=[]
+        for process in workers:
+            stdout,stderr=process.communicate(timeout=30)
+            assert process.returncode == 0,stderr
+            results.append(json.loads(stdout)['outcome'])
+        assert fixed(complaint) == original
+        if kind == 'auto':
+            assert sorted(results) == ['AUTO','SKIPPED']
+        elif 'FEEDBACK' in results:
+            assert results.count('SKIPPED') == 1 and 'AUTO' not in results
+        else:
+            assert sorted(results) == ['AUTO','STALE']
+        feedback = 'FEEDBACK' in results
+        expected_state = {'confirm':'CLOSED','reject':'REOPENED','maximum':'RESOLVED'}.get(kind,'CLOSED') if feedback else 'CLOSED'
+        assert complaint.status == expected_state
+        assert complaint.rating == (5 if feedback and kind == 'confirm' else None)
+        assert complaint.reopen_count == (2 if kind == 'maximum' else int(feedback and kind == 'reject'))
+        assert (complaint.closed_at is not None) == (expected_state == 'CLOSED')
+        event_kind = 'REOPENED' if expected_state == 'REOPENED' else 'ESCALATED' if expected_state == 'RESOLVED' else 'CLOSED'
+        durable(complaint,event_kind,owner,head)
+        accepted = graph(complaint)
+        assert run_auto_close(now=now) == 0 and graph(complaint) == accepted
+    finally:
+        for process in workers:dispose(process)
+
+
+@pytest.mark.parametrize('point',['before_commit','after_commit'])
+def test_sigkill_preserves_atomic_closure_history_and_outbox(scenario,point):
+    now,complaint,owner,head = scenario
+    original = fixed(complaint);before = graph(complaint)
+    process = worker(scenario,'auto',point)
+    try:
+        _,stderr=process.communicate(timeout=30)
+        assert process.returncode == -signal.SIGKILL,stderr
+    finally:dispose(process)
+    assert fixed(complaint) == original
+    if point == 'before_commit':
+        assert graph(complaint) == before
+        assert run_auto_close(now=now) == 1
+    else:
+        durable(complaint,'CLOSED',owner,head)
+        committed = graph(complaint)
+        assert run_auto_close(now=now) == 0 and graph(complaint) == committed
+    assert fixed(complaint) == original and complaint.status == 'CLOSED' and complaint.rating is None
+    durable(complaint,'CLOSED',owner,head)
+    accepted = graph(complaint)
+    assert run_auto_close(now=now) == 0 and graph(complaint) == accepted
+
+
+def test_partial_batch_failure_keeps_completed_item_and_retries_remaining(scenario,complaint_factory):
+    now,first,owner,head = scenario
+    second = complaint_factory(status='RESOLVED',submitted_by=owner,department=first.department,
+        submitted_at=now-timedelta(days=9),due_at=now-timedelta(days=8),
+        resolved_at=now-timedelta(days=7),resolution_remarks='Synthetic second resolved work.')
+    second_before = graph(second)
+    original = lifecycle.record_history
+    def fail_second(identifier,*args,**kwargs):
+        if identifier == second.complaint_id:raise RuntimeError('Synthetic required history failure')
+        return original(identifier,*args,**kwargs)
+    with patch.object(lifecycle,'record_history',side_effect=fail_second):
+        with pytest.raises(RuntimeError):run_auto_close(now=now)
+    durable(first,'CLOSED',owner,head)
+    accepted = graph(first)
+    assert graph(second) == second_before
+    assert run_auto_close(now=now) == 1 and graph(first) == accepted
+    durable(second,'CLOSED',owner,head)
+    complete = (graph(first),graph(second))
+    assert run_auto_close(now=now) == 0 and (graph(first),graph(second)) == complete

@@ -1,0 +1,49 @@
+{
+  "runtime_source": "81eae6675b75c242cf8dfd0a3691778c9a64fb81",
+  "post_runtime_changes": "Evidence documents only; runtime file hashes match actual built image.",
+  "canonical_sqlite": {
+    "passed": 2065,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage_gate": "PASS"
+  },
+  "canonical_postgresql": {
+    "passed": 2065,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "coverage_gate": "PASS"
+  },
+  "q06_fixture_browser": {
+    "passed": 68,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "primary_screens": {
+      "desktop": 4,
+      "mobile_320": 4
+    }
+  },
+  "built_browser": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "repeated_after_replacement": true
+  },
+  "q05_process_smtp_scheduler": {
+    "passed": 28,
+    "failed": 0,
+    "skipped": 0
+  },
+  "persistence": "LOCAL_PERSISTENCE_PASS",
+  "demo_recording_cases": {
+    "passed": 2,
+    "failed": 0,
+    "scope": "Actual automated synthetic branch preview; overlaps four-screen coverage."
+  },
+  "human_first_time_acceptance": false,
+  "final_Main_acceptance": false,
+  "official_overall_Q04_acceptance": false,
+  "combined_source_changes_merged_into_Main": false
+}

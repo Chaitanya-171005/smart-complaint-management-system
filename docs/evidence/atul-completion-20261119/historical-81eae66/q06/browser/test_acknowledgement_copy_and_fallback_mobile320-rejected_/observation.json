@@ -1,0 +1,48 @@
+{
+  "case": "test_acknowledgement_copy_and_fallback[mobile320-rejected]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "copy": {
+      "mode": "rejected",
+      "status": "Could not copy. Select the Complaint ID and copy it manually.",
+      "layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "My complaints",
+            "right": 366.796875
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Dashboard",
+            "right": 469.234375
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 582.890625
+          }
+        ]
+      },
+      "text_status": "Complaint ID\nSCMS-2026-000002 Copy Complaint ID Could not copy. Select the Complaint ID and copy it manually.\nSubmitted\n2026-11-18T18:28:00.384560+00:00\nStatus\nAssigned\nDue\n2026-11-18T20:28:00.384560+00:00"
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

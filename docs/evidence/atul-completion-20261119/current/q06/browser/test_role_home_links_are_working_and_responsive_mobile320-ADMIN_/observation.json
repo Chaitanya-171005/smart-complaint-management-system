@@ -1,0 +1,317 @@
+{
+  "case": "test_role_home_links_are_working_and_responsive[mobile320-ADMIN]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "role_link_crawl": {
+      "role": "ADMIN",
+      "links": [
+        {
+          "route": "/accounts/home/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/accounts/admin-config/users/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Change role / department",
+                "right": 368.78125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Change role / department",
+                "right": 368.78125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Change role / department",
+                "right": 368.78125
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/accounts/admin-config/departments/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/accounts/admin-config/locations/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Edit",
+                "right": 419.6875
+              },
+              {
+                "tag": "BUTTON",
+                "id": "",
+                "text": "Deactivate",
+                "right": 471.6875
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/routing/configuration/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/accounts/admin-config/audit/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/notifications/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Locations",
+                "right": 376
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Routing & SLA",
+                "right": 500.8125
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Configuration audit",
+                "right": 656.671875
+              },
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 770.328125
+              }
+            ]
+          },
+          "fits": true
+        }
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

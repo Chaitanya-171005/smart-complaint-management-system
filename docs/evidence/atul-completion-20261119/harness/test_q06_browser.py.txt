@@ -1,0 +1,330 @@
+"""Q06-only automated browser observation; no human acceptance implied."""
+from contextlib import contextmanager
+import json
+import os
+from pathlib import Path
+import re
+from urllib.parse import urlsplit
+from uuid import uuid4
+
+import pytest
+from playwright.sync_api import expect
+from complaints.test_tracking import backend  # noqa: F401
+from integration_checks.intake_browser import browser_site as intake_site, chromium, tls_context  # noqa: F401
+
+pytestmark = pytest.mark.django_db(transaction=True)
+OUT = Path(os.environ['Q06_OUTPUT'])
+PASSWORD = 'SyntheticTest123!'
+
+@pytest.fixture(params=[1280, 320], ids=['desktop', 'mobile320'])
+def width(request):
+    return request.param
+
+@pytest.fixture
+def browser_site(intake_site, backend, settings, user_factory, complaint_factory, request):
+    origin, config, user = intake_site
+    settings.SCMS_HTTPS_MODE = 'proxy'
+    settings.SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    settings.ANONYMOUS_TRACKING_TRUSTED_PROXY_CIDRS = ['127.0.0.1/32', '::1/128']
+    settings.COMPLAINT_EMERGENCY_NOTICE = ('SYNTHETIC Q06 TEST ONLY. SCMS is not an emergency channel. '
+        'For fire, electrical, medical or structural danger contact the test campus desk. Not campus-confirmed.')
+    roles = {'COMPLAINANT':user}
+    for role in ('STAFF','HEAD','ADMIN'):
+        roles[role] = user_factory(role=role, department=config['department'] if role!='ADMIN' else None)
+    record = complaint_factory(submitted_by=user, category_record=config['category'],
+        location_record=config['location'], department=config['department'], assignee=roles['STAFF'])
+    name=request.node.originalname
+    if 'long_labels' in name:
+        config['category'].name='W'*50;config['category'].save(update_fields=['name'])
+        loc=config['location'];loc.block='B'*20;loc.floor='F'*10;loc.room_area='R'*30
+        loc.save(update_fields=['block','floor','room_area'])
+    if 'release_gated' in name:
+        settings.COMPLAINT_INTAKE_ENABLED=False
+        settings.ANONYMOUS_INTAKE_ENABLED=False
+        settings.ANONYMOUS_PRIVACY_READY=False
+        settings.ANONYMOUS_TRACKING_ENABLED=False
+    if 'configuration_unavailable' in name:
+        config['category'].active=False;config['category'].save(update_fields=['active'])
+    return {'origin':origin,'config':config,'roles':roles,'record':record.complaint_id}
+
+@pytest.fixture
+def ui(chromium, browser_site, width, request):
+    name=re.sub(r'[^a-zA-Z0-9_-]','_',request.node.name)
+    folder=OUT/name;folder.mkdir(parents=True,exist_ok=True)
+    context=chromium.new_context(ignore_https_errors=True,viewport={'width':width,'height':900 if width==1280 else 740},
+        is_mobile=width==320,has_touch=width==320)
+    page=context.new_page()
+    page.set_default_timeout(10000)
+    events={'page_errors':[],'console':[],'failed_requests':[]}
+    page.on('pageerror',lambda err:events['page_errors'].append(str(err)))
+    page.on('console',lambda msg:events['console'].append({'type':msg.type,'text':msg.text.replace(browser_site['origin'],'<origin>')}))
+    page.on('requestfailed',lambda req:events['failed_requests'].append({'path':urlsplit(req.url).path,'failure':req.failure}))
+    log={'case':request.node.name,'viewport':width,'mobile_emulation':width==320,'observations':{},'events':events}
+    class UI:
+        pass
+    u=UI();u.page=page;u.context=context;u.site=browser_site;u.width=width;u.log=log;u.folder=folder
+    def record(key,value):
+        log['observations'][key]=value
+        (folder/'observation.json').write_text(json.dumps(log,indent=2)+'\n')
+    def screenshot(label,mask=None):
+        page.screenshot(path=str(folder/(label+'.png')),full_page=True,mask=mask or [])
+    u.record=record;u.screenshot=screenshot
+    try:
+        yield u
+    finally:
+        record('browser',{'engine':'Chromium','version':chromium.version})
+        context.close()
+
+def goto(u,path):
+    return u.page.goto(u.site['origin']+path)
+
+def login(u,role='COMPLAINANT'):
+    goto(u,'/accounts/login/')
+    u.page.get_by_label('Email').fill(u.site['roles'][role].email)
+    u.page.get_by_label('Password').fill(PASSWORD)
+    u.page.get_by_role('button',name='Sign in',exact=True).click()
+    expect(u.page).to_have_url(u.site['origin']+'/accounts/landing/'+role.lower()+'/')
+
+def fill_complaint(u,description='A synthetic Q06 complaint with enough description.',anonymous=False):
+    p=u.page;c=u.site['config']
+    p.locator('#id_category').select_option(str(c['category'].pk))
+    p.locator('#id_location').select_option(c['location'].code)
+    p.locator('#id_priority').select_option('LOW')
+    p.get_by_label('Title').fill('Synthetic Q06 complaint')
+    p.get_by_label('Description').fill(description)
+
+def submit(u,anonymous=False):
+    u.page.get_by_role('button',name='Submit anonymously' if anonymous else 'Submit complaint',exact=True).click()
+    expect(u.page.get_by_role('heading',level=1)).to_have_text('Anonymous complaint accepted' if anonymous else 'Your complaint was submitted')
+
+def layout(p):
+    return p.evaluate('''() => ({innerWidth,clientWidth:document.documentElement.clientWidth,
+      scrollWidth:document.documentElement.scrollWidth,visualWidth:visualViewport.width,
+      viewportMeta:document.querySelector('meta[name=viewport]')?.content||null,
+      overflowing:[...document.querySelectorAll('input,select,textarea,button,a,table')].filter(e=>{
+       const r=e.getBoundingClientRect();return r.width&&((r.right>document.documentElement.clientWidth+1)||r.left<0)
+      }).map(e=>({tag:e.tagName,id:e.id,text:(e.textContent||'').slice(0,70),right:e.getBoundingClientRect().right}))})''')
+
+def fits(u,result):
+    return abs(result['innerWidth']-u.width)<=1 and result['scrollWidth']<=result['clientWidth']+1
+
+def label_audit(p):
+    return p.evaluate('''() => [...document.querySelectorAll('input:not([type=hidden]),select,textarea')]
+      .filter(e=>e.getBoundingClientRect().width).map(e=>({id:e.id,type:e.type,
+      label:e.labels?.length>0||!!e.getAttribute('aria-label')||!!e.getAttribute('aria-labelledby'),
+      invalid:e.getAttribute('aria-invalid'),describedBy:e.getAttribute('aria-describedby'),
+      missingDescriptions:(e.getAttribute('aria-describedby')||'').split(/\\s+/).filter(x=>x&&!document.getElementById(x))}))''')
+
+def accepted(u):
+    login(u);goto(u,'/complaints/new/');fill_complaint(u);submit(u)
+
+def test_registration_to_acknowledgement_screen_budget(ui):
+    u=ui;p=u.page;screens=[]
+    def snap(label):
+        screens.append({'route':urlsplit(p.url).path,'title':p.title(),'heading':p.locator('h1').inner_text()})
+        u.screenshot(str(len(screens))+'-'+label)
+    goto(u,'/accounts/register/');snap('register')
+    email='q06-first-'+uuid4().hex+'@example.test'
+    p.get_by_label('Full name').fill('Synthetic First Registration')
+    p.get_by_label('Email').fill(email)
+    p.get_by_label('Password').fill(PASSWORD)
+    p.get_by_label('User type').select_option(index=1)
+    p.get_by_role('button',name='Register',exact=True).click()
+    expect(p.get_by_role('heading',level=1)).to_have_text('Registration received');snap('registration-received')
+    p.locator('main').get_by_label('Email').fill(email);p.locator('main').get_by_label('Password').fill(PASSWORD)
+    p.locator('main').get_by_role('button',name='Sign in',exact=True).click()
+    expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/');snap('home-and-intake')
+    fill_complaint(u);submit(u);snap('acknowledgement')
+    u.record('primary_screens',{'definition':'Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen',
+        'sequence':screens,'count':len(screens),'count_before_acknowledgement':len(screens)-1,'target':4,'human_unaided_assessed':False})
+    assert len(screens)<=4,'Normal workflow visits more than four primary screens'
+
+def test_registration_invalid_values_preserved_and_corrected(ui):
+    u=ui;p=u.page;goto(u,'/accounts/register/')
+    p.get_by_label('Full name').fill('Synthetic retained name')
+    p.get_by_label('Email').fill('invalid-email')
+    p.get_by_label('Password').fill('short')
+    p.get_by_label('I live in a hostel').check()
+    p.get_by_role('button',name='Register',exact=True).click()
+    expect(p.locator('.error')).not_to_have_count(0)
+    assert p.get_by_label('Full name').input_value()=='Synthetic retained name'
+    assert p.get_by_label('Email').input_value()=='invalid-email'
+    assert p.get_by_label('Password').input_value()==''
+    assert p.get_by_label('I live in a hostel').is_checked()
+    u.record('invalid_registration',{'messages':p.locator('.error').all_inner_texts(),'labels':label_audit(p),'layout':layout(p),'safe_values_preserved':True,'password_cleared':True})
+    u.screenshot('invalid-registration')
+    p.get_by_label('Email').fill('q06-correct-'+uuid4().hex+'@example.test')
+    p.get_by_label('Password').fill(PASSWORD)
+    p.get_by_label('User type').select_option(index=1)
+    p.get_by_label('Hostel block').fill('Test A');p.get_by_label('Hostel room').fill('101')
+    p.get_by_role('button',name='Register',exact=True).click()
+    expect(p.get_by_role('heading',level=1)).to_have_text('Registration received')
+
+def test_registration_errors_have_programmatic_descriptions(ui):
+    u=ui;p=u.page;goto(u,'/accounts/register/')
+    p.get_by_role('button',name='Register',exact=True).click()
+    audit=label_audit(p);u.record('registration_error_semantics',audit);u.screenshot('registration-required-errors')
+    assert all(x['label'] and not x['missingDescriptions'] for x in audit),'Invalid registration fields reference missing error description elements'
+
+def test_login_invalid_refusal_and_correction(ui):
+    u=ui;p=u.page;goto(u,'/accounts/login/')
+    p.get_by_label('Email').fill(u.site['roles']['COMPLAINANT'].email)
+    p.get_by_label('Password').fill('Incorrect123!')
+    p.get_by_role('button',name='Sign in',exact=True).click()
+    expect(p.get_by_role('alert')).to_have_text('Invalid email or password.')
+    assert p.get_by_label('Email').input_value()==u.site['roles']['COMPLAINANT'].email
+    assert p.get_by_label('Password').input_value()==''
+    u.record('login_refusal',{'alert':p.get_by_role('alert').inner_text(),'password_cleared':True,'layout':layout(p)})
+    u.screenshot('login-refusal');p.get_by_label('Password').fill(PASSWORD)
+    p.get_by_role('button',name='Sign in',exact=True).click()
+    expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/')
+
+def test_intake_required_native_validation(ui):
+    u=ui;p=u.page;login(u);goto(u,'/complaints/new/')
+    sent=[];p.on('request',lambda r:sent.append(r.method) if r.method=='POST' else None)
+    p.get_by_role('button',name='Submit complaint',exact=True).click()
+    native=p.evaluate('''() => ({focus:document.activeElement.id,invalid:[...document.querySelectorAll(':invalid')].map(e=>e.id)})''')
+    u.record('native_required',native);u.screenshot('required-field-focus')
+    assert not sent and 'id_category' in native['invalid'] and native['focus']=='id_category'
+    assert all(x['label'] for x in label_audit(p))
+
+def test_intake_server_validation_preserves_values_and_resubmits(ui):
+    u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Too short')
+    token=p.locator('[name=request_token]').input_value()
+    p.get_by_role('button',name='Submit complaint',exact=True).click()
+    expect(p.locator('#id_description_error')).to_contain_text('at least 20 characters')
+    assert p.get_by_label('Title').input_value()=='Synthetic Q06 complaint'
+    assert p.locator('#id_priority').input_value()=='LOW'
+    assert p.locator('#id_category').input_value()==str(u.site['config']['category'].pk)
+    assert p.locator('#id_location').input_value()==u.site['config']['location'].code
+    assert p.locator('[name=request_token]').input_value()==token
+    p.get_by_label('Description').fill('Corrected synthetic description with more than twenty characters.')
+    u.record('correction',{'old_error_remains_while_typing':p.locator('#id_description_error').is_visible(),'safe_values_and_token_preserved':True,'layout':layout(p),'labels':label_audit(p)})
+    u.screenshot('corrected-before-resubmit');submit(u)
+    assert p.locator('#complaint-id').inner_text().startswith('SCMS-')
+
+def test_intake_errors_announce_or_focus_after_server_refusal(ui):
+    u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Bad')
+    p.get_by_role('button',name='Submit complaint',exact=True).click()
+    state=p.evaluate('''() => ({focus:document.activeElement.id,alerts:document.querySelectorAll('[role=alert],[aria-live=assertive]').length,
+        invalidFocus:document.activeElement.getAttribute('aria-invalid')==='true'})''')
+    u.record('server_error_announcement',state);u.screenshot('server-error-announcement')
+    assert state['alerts']>0 or state['invalidFocus'],'No automatic error announcement or focus on invalid field after full-page refusal'
+
+@pytest.mark.parametrize('clipboard_mode',['native','rejected','unavailable'])
+def test_acknowledgement_copy_and_fallback(ui,clipboard_mode):
+    u=ui;p=u.page
+    if clipboard_mode=='native':
+        u.context.grant_permissions(['clipboard-read','clipboard-write'],origin=u.site['origin'])
+    else:
+        body="{writeText:async()=>{throw new DOMException('Synthetic denied','NotAllowedError')}}" if clipboard_mode=='rejected' else 'undefined'
+        u.context.add_init_script("Object.defineProperty(navigator,'clipboard',{configurable:true,value:"+body+"});")
+    accepted(u);identifier=p.locator('#complaint-id').inner_text().strip()
+    p.get_by_role('button',name='Copy Complaint ID',exact=True).click()
+    status=p.locator('#copy-complaint-id-status')
+    if clipboard_mode=='native':
+        expect(status).to_have_text('Complaint ID copied.')
+        assert p.evaluate('navigator.clipboard.readText()')==identifier
+    else:
+        expect(status).to_contain_text('copy it manually')
+        assert p.locator('#complaint-id').evaluate("e=>getComputedStyle(e).userSelect!=='none'")
+    u.record('copy',{'mode':clipboard_mode,'status':status.inner_text(),'layout':layout(p),'text_status':p.locator('dl').inner_text()})
+    u.screenshot('acknowledgement-'+clipboard_mode)
+    assert fits(u,layout(p))
+    assert not u.log['events']['page_errors']
+
+def test_keyboard_navigation_labels_and_focus(ui):
+    u=ui;p=u.page;login(u);goto(u,'/complaints/new/')
+    seen=[]
+    for _ in range(20):
+        p.keyboard.press('Tab')
+        state=p.evaluate('''() => ({id:document.activeElement.id,tag:document.activeElement.tagName,
+          type:document.activeElement.type,focusVisible:document.activeElement.matches(':focus-visible'),
+          outline:getComputedStyle(document.activeElement).outlineStyle,outlineWidth:getComputedStyle(document.activeElement).outlineWidth})''')
+        seen.append(state)
+    audit=label_audit(p);u.record('keyboard',{'tab_sequence':seen,'labels':audit})
+    p.locator('#id_description').focus();p.keyboard.press('Tab');u.screenshot('keyboard-focus')
+    assert all(x['label'] for x in audit)
+    assert {'id_category','id_location','id_title','id_description','id_priority','id_evidence'}.issubset({x['id'] for x in seen})
+    assert any(x['focusVisible'] and x['outline']!='none' and x['outlineWidth']!='0px' for x in seen)
+
+@pytest.mark.parametrize('role',['COMPLAINANT','STAFF','HEAD','ADMIN'])
+def test_role_navigation_and_refusal(ui,role):
+    u=ui;p=u.page;login(u,role)
+    links=[{'text':a.inner_text(),'href':a.get_attribute('href')} for a in p.get_by_role('link').all()]
+    u.screenshot(role.lower()+'-home')
+    entry={'COMPLAINANT':'/complaints/new/','STAFF':'/routing/queue/','HEAD':'/routing/queue/','ADMIN':'/accounts/admin-config/users/'}[role]
+    discoverable=any(x['href']==entry for x in links)
+    own=goto(u,entry);assert own.status==200
+    denied='/accounts/admin-config/users/' if role in ('STAFF','HEAD') else '/routing/queue/'
+    response=goto(u,denied);assert response.status==403
+    u.record('role_navigation',{'role':role,'landing_links':links,'work_entry':entry,'work_entry_discoverable':discoverable,'direct_entry_http':own.status,'denied_http':response.status,'refusal_text':p.locator('body').inner_text(),'refusal_layout':layout(p)})
+    u.screenshot(role.lower()+'-permission-denied')
+    assert discoverable,'Role home has no discoverable link to its department queue'
+
+def test_permission_refusal_explains_corrective_action(ui):
+    u=ui;p=u.page;login(u);r=goto(u,'/routing/queue/');assert r.status==403
+    text=p.locator('body').inner_text();u.record('permission_guidance',{'text':text,'links':p.get_by_role('link').count()})
+    u.screenshot('permission-guidance')
+    assert re.search(r'contact|administrator|sign in|home|back|permission',text,re.I),'403 has no corrective action or recovery navigation'
+
+def test_navigation_and_responsive_pages(ui):
+    u=ui;p=u.page;login(u)
+    paths=['/accounts/landing/complainant/','/complaints/','/complaints/dashboard/','/complaints/notifications/','/complaints/'+u.site['record']+'/']
+    rows=[]
+    for i,path in enumerate(paths):
+        r=goto(u,path);metrics=layout(p);rows.append({'route':path,'http':r.status,'layout':metrics,'fits':fits(u,metrics)})
+        u.screenshot(str(i)+'-navigation')
+    u.record('navigation',rows)
+    assert all(x['http']==200 for x in rows)
+    assert all(x['fits'] for x in rows),'At least one linked page fails 320px layout/viewport check'
+    assert not u.log['events']['page_errors']
+
+@pytest.mark.parametrize('anonymous',[False,True],ids=['authenticated','anonymous'])
+def test_long_labels_responsive_layout(ui,anonymous):
+    u=ui;p=u.page
+    if not anonymous:login(u)
+    goto(u,'/anonymous/new/' if anonymous else '/complaints/new/')
+    fill_complaint(u);p.get_by_label('Title').fill('W'*120)
+    p.get_by_label('Description').fill('x'*2000)
+    metrics=layout(p);u.record('long_labels',{'anonymous':anonymous,'layout':metrics,'category_length':50,'location_lengths':[20,10,30]})
+    u.screenshot('long-labels')
+    assert fits(u,metrics),'Valid maximum-length reference labels overflow the viewport'
+
+def test_anonymous_submission_and_tracking_ui(ui):
+    u=ui;p=u.page;goto(u,'/anonymous/new/');fill_complaint(u,anonymous=True);submit(u,anonymous=True)
+    reference=p.locator('#tracking-reference').inner_text().strip()
+    assert re.fullmatch('[a-f0-9]{32}',reference)
+    first_layout=layout(p)
+    u.record('anonymous_ack',{'reference_length':len(reference),'one_time_warning':p.get_by_text('This reference is shown once.',exact=False).count()>0,
+        'selectable':p.locator('#tracking-reference').evaluate("e=>getComputedStyle(e).userSelect!=='none'"),'copy_button_count':p.get_by_role('button',name=re.compile('copy',re.I)).count(),'layout':first_layout})
+    u.screenshot('anonymous-accepted-masked',mask=[p.locator('#tracking-reference')])
+    p.get_by_role('link',name='Check status using your saved private reference').click()
+    p.get_by_label('Private tracking reference').fill(reference)
+    p.get_by_role('button',name='Check status',exact=True).click()
+    expect(p.get_by_role('heading',name='Complaint status',exact=True)).to_be_visible()
+    assert reference not in p.content() and reference not in p.url
+    assert p.get_by_label('Private tracking reference').input_value()==''
+    u.record('tracking',{'status_text':p.locator('section').inner_text(),'layout':layout(p),'reference_not_redisplayed':True,'backend':'per-test fakeredis Lua emulator; no deployed Redis acceptance'})
+    u.screenshot('tracking-result')
+    p.get_by_label('Private tracking reference').fill('0'*32)
+    p.get_by_role('button',name='Check status',exact=True).click()
+    expect(p.get_by_role('status')).to_have_text('No matching complaint was found.')
+    assert fits(u,first_layout) and fits(u,layout(p))
+    assert not u.log['events']['page_errors']
+
+def test_release_gated_routes_have_safe_visible_refusals(ui):
+    u=ui;p=u.page;login(u);rows=[]
+    for i,path in enumerate(('/complaints/new/','/anonymous/new/','/anonymous/track/')):
+        r=goto(u,path);rows.append({'route':path,'http':r.status,'text':p.locator('body').inner_text(),'layout':layout(p)})
+        u.screenshot(str(i)+'-release-gated')
+    u.record('default_release_gates',rows)
+    assert all(x['http']==503 for x in rows)
+    assert all('unavailable' in x['text'].lower() for x in rows)
+
+def test_configuration_unavailable_is_explained_and_disabled(ui):
+    u=ui;p=u.page;login(u);goto(u,'/complaints/new/')
+    expect(p.get_by_role('button',name='Submit complaint',exact=True)).to_be_disabled()
+    text=p.locator('body').inner_text();u.record('configuration_refusal',{'text':text,'layout':layout(p)})
+    u.screenshot('configuration-unavailable')
+    assert 'contact an administrator' in text.lower()

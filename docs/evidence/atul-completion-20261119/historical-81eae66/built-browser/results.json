@@ -1,0 +1,323 @@
+{
+  "source": "81eae6675b75c242cf8dfd0a3691778c9a64fb81",
+  "scope": "Actual isolated Docker/Gunicorn HTTP build with release gates closed; enabled-intake workflow remains fixture evidence. No production/human acceptance.",
+  "cases": [
+    {
+      "case": "login",
+      "width": 1280,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:17.517714+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "register",
+      "width": 1280,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:18.421689+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "head-queue",
+      "width": 1280,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:19.344107+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "complainant-home",
+      "width": 1280,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:21.708981+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "permission-guidance",
+      "width": 1280,
+      "expected_status": 403,
+      "observed_at_utc": "2026-11-18T18:24:22.600721+00:00",
+      "status": 403,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "private-unavailable",
+      "width": 1280,
+      "expected_status": 503,
+      "observed_at_utc": "2026-11-18T18:24:23.458298+00:00",
+      "status": 503,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": []
+    },
+    {
+      "case": "tracking-unavailable",
+      "width": 1280,
+      "expected_status": 503,
+      "observed_at_utc": "2026-11-18T18:24:24.260307+00:00",
+      "status": 503,
+      "layout": {
+        "innerWidth": 1280,
+        "scrollWidth": 1280,
+        "clientWidth": 1280,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": []
+    },
+    {
+      "case": "login",
+      "width": 320,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:25.072243+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "register",
+      "width": 320,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:25.871862+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "head-queue",
+      "width": 320,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:26.682037+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "complainant-home",
+      "width": 320,
+      "expected_status": 200,
+      "observed_at_utc": "2026-11-18T18:24:28.225198+00:00",
+      "status": 200,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "permission-guidance",
+      "width": 320,
+      "expected_status": 403,
+      "observed_at_utc": "2026-11-18T18:24:29.112757+00:00",
+      "status": 403,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": [
+        {
+          "path": "/static/ui/scms.css",
+          "status": 200
+        },
+        {
+          "path": "/static/ui/forms.js",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "case": "private-unavailable",
+      "width": 320,
+      "expected_status": 503,
+      "observed_at_utc": "2026-11-18T18:24:29.951986+00:00",
+      "status": 503,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": []
+    },
+    {
+      "case": "tracking-unavailable",
+      "width": 320,
+      "expected_status": 503,
+      "observed_at_utc": "2026-11-18T18:24:30.756141+00:00",
+      "status": 503,
+      "layout": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "clientWidth": 320,
+        "stylesheets": 1
+      },
+      "outcome": "PASS",
+      "page_errors": [],
+      "asset_responses": []
+    }
+  ],
+  "passed": 14,
+  "failed": 0,
+  "skipped": 0
+}

@@ -1,0 +1,28 @@
+{
+  "case": "test_work_queue_responsive_controls[desktop-HEAD]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "queue_ui": {
+      "role": "HEAD",
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      },
+      "assign_buttons": 1
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

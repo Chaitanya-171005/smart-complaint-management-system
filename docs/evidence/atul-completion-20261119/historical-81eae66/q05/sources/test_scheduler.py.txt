@@ -1,0 +1,187 @@
+"""Actual PostgreSQL multiprocess overlap and abrupt-death scheduler checks."""
+from datetime import timedelta
+import json
+import os
+from pathlib import Path
+import select
+import signal
+import subprocess
+import sys
+from unittest.mock import patch
+
+import pytest
+from django.db import connection
+from django.utils import timezone
+
+from complaints.models import Complaint
+from routing import escalation
+from routing.models import EscalationRun
+from workflow.models import ComplaintHistory
+
+pytestmark = pytest.mark.django_db(transaction=True)
+FIXED_FIELDS = ('complaint_id', 'status', 'priority', 'department_id', 'due_at', 'submitted_by_id')
+
+
+@pytest.fixture
+def scenario(complaint_factory, routing_configuration):
+    assert connection.vendor == 'postgresql', 'Actual PostgreSQL is required.'
+    now = timezone.now().replace(microsecond=0)
+    config = routing_configuration
+    complaint = complaint_factory(category_record=config['category'], location_record=config['location'],
+        department=config['department'], submitted_at=now-timedelta(days=2), due_at=now-timedelta(days=1))
+    return now, complaint
+
+
+def state(complaint):
+    complaint.refresh_from_db()
+    return {name: getattr(complaint, name) for name in FIXED_FIELDS}
+
+
+def events(complaint):
+    return ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id, event_type='ESCALATED')
+
+
+CHILD = r'''
+import json, os, signal, sys
+import django
+from django.conf import settings
+settings.DATABASES = {'default': json.loads(os.environ['Q05_CHILD_DATABASE'])}
+django.setup()
+from django.db import connection
+from django.utils.dateparse import parse_datetime
+from complaints.models import Complaint
+from routing import escalation
+assert connection.vendor == 'postgresql'
+mode = os.environ['Q05_CHILD_MODE']
+if mode == 'overlap':
+    original = Complaint.objects.select_for_update
+    def gated(*args, **kwargs):
+        print(json.dumps({'ready': True, 'vendor': connection.vendor}), flush=True)
+        if sys.stdin.readline().strip() != 'go': raise RuntimeError('Test release missing')
+        return original(*args, **kwargs)
+    Complaint.objects.select_for_update = gated
+if mode == 'before_commit':
+    original_history = escalation.record_history
+    def killed_history(*args, **kwargs):
+        original_history(*args, **kwargs)
+        os.kill(os.getpid(), signal.SIGKILL)
+    escalation.record_history = killed_history
+notify = None
+if mode == 'after_commit':
+    def notify(*args): os.kill(os.getpid(), signal.SIGKILL)
+result = escalation.run_escalation(now=parse_datetime(os.environ['Q05_NOW']), notify=notify)
+print(json.dumps({'status': result.status, 'escalated': result.escalated,
+                  'skipped': result.skipped, 'failed': result.failed}), flush=True)
+'''
+
+
+def worker(now, mode):
+    config = {key: connection.settings_dict[key] for key in (
+        'ENGINE', 'NAME', 'USER', 'PASSWORD', 'HOST', 'PORT', 'OPTIONS',
+    )}
+    config['NAME'] = str(config['NAME'])
+    env = dict(os.environ, DJANGO_SETTINGS_MODULE='q05_checks.settings',
+        Q05_CHILD_DATABASE=json.dumps(config), Q05_CHILD_MODE=mode, Q05_NOW=now.isoformat())
+    return subprocess.Popen([sys.executable, '-c', CHILD], cwd=Path(__file__).resolve().parents[1],
+        env=env, text=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+
+def dispose(process):
+    if process.poll() is None:
+        process.kill()
+        process.communicate(timeout=5)
+
+
+def test_two_processes_compete_for_same_due_complaint(scenario):
+    now, complaint = scenario
+    original = state(complaint)
+    workers = [worker(now, 'overlap') for _ in range(2)]
+    try:
+        for process in workers:
+            ready, _, _ = select.select([process.stdout], [], [], 15)
+            assert ready, 'Worker did not reach its candidate boundary.'
+            assert json.loads(process.stdout.readline()) == {'ready': True, 'vendor': 'postgresql'}
+        for process in workers:
+            process.stdin.write('go\n'); process.stdin.flush()
+        results = []
+        for process in workers:
+            stdout, stderr = process.communicate(timeout=30)
+            assert process.returncode == 0, stderr
+            results.append(json.loads(stdout))
+        assert sorted(result['escalated'] for result in results) == [0, 1]
+        assert sorted(result['skipped'] for result in results) == [0, 1]
+        assert all(result['status'] == 'COMPLETED' and result['failed'] == 0 for result in results)
+        assert state(complaint) == original
+        assert complaint.escalation_level == 1 and events(complaint).count() == 1
+        assert EscalationRun.objects.count() == 2
+    finally:
+        for process in workers: dispose(process)
+
+
+def test_repeated_runs_respect_interval_and_maximum(scenario):
+    now, complaint = scenario
+    original = state(complaint)
+    first = escalation.run_escalation(now=now)
+    repeat = escalation.run_escalation(now=now)
+    recorded_at = events(complaint).get().occurred_at
+    early = escalation.run_escalation(now=recorded_at+timedelta(minutes=119))
+    second = escalation.run_escalation(now=recorded_at+timedelta(minutes=120))
+    capped = escalation.run_escalation(now=now+timedelta(days=2))
+    assert [result.escalated for result in (first, repeat, early, second, capped)] == [1, 0, 0, 1, 0]
+    assert state(complaint) == original
+    assert complaint.escalation_level == 2 and events(complaint).count() == 2
+
+
+@pytest.mark.parametrize('point', ['before_commit', 'after_commit'])
+def test_sigkill_then_retry_preserves_one_escalation(scenario, point):
+    now, complaint = scenario
+    original = state(complaint)
+    process = worker(now, point)
+    try:
+        _, stderr = process.communicate(timeout=30)
+        assert process.returncode == -signal.SIGKILL, stderr
+    finally:
+        dispose(process)
+    assert state(complaint) == original
+    committed = point == 'after_commit'
+    assert complaint.escalation_level == int(committed)
+    assert events(complaint).count() == int(committed)
+    abandoned = EscalationRun.objects.get()
+    # SIGKILL cannot run Python finally: this run record requires supervision.
+    assert abandoned.status == 'RUNNING' and abandoned.finished_at is None
+    resumed = escalation.run_escalation(now=now)
+    assert resumed.status == 'COMPLETED' and resumed.escalated == int(not committed)
+    assert state(complaint) == original
+    assert complaint.escalation_level == 1 and events(complaint).count() == 1
+    abandoned.refresh_from_db()
+    assert abandoned.status == 'RUNNING'  # Recorded limitation, never claimed repaired.
+
+
+def test_required_history_failure_rolls_back_then_retries(scenario):
+    now, complaint = scenario
+    original = state(complaint)
+    with patch.object(escalation, 'record_history', side_effect=RuntimeError('Synthetic required-operation failure')):
+        failed = escalation.run_escalation(now=now)
+    assert failed.status == 'FAILED' and failed.failed == 1 and failed.escalated == 0
+    assert state(complaint) == original
+    assert complaint.escalation_level == 0 and events(complaint).count() == 0
+    retried = escalation.run_escalation(now=now)
+    assert retried.escalated == 1 and retried.failed == 0
+    assert state(complaint) == original
+    assert complaint.escalation_level == 1 and events(complaint).count() == 1
+
+
+def test_callback_failure_keeps_commit_and_retry_does_not_duplicate(scenario):
+    now, complaint = scenario
+    original = state(complaint)
+    def fail_notification(*args):
+        raise RuntimeError('Synthetic callback failure')
+    accepted = escalation.run_escalation(now=now, notify=fail_notification)
+    assert accepted.status == 'COMPLETED' and accepted.escalated == 1 and accepted.failed == 0
+    assert 'notification_failed=1' in accepted.error
+    assert state(complaint) == original
+    assert complaint.escalation_level == 1 and events(complaint).count() == 1
+    repeat = escalation.run_escalation(now=now, notify=fail_notification)
+    assert repeat.escalated == 0 and repeat.error == ''
+    assert state(complaint) == original
+    assert complaint.escalation_level == 1 and events(complaint).count() == 1

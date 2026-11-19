@@ -1,0 +1,43 @@
+{
+  "case": "test_anonymous_submission_and_tracking_ui[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "anonymous_ack": {
+      "reference_length": 32,
+      "one_time_warning": true,
+      "selectable": true,
+      "copy_button_count": 0,
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      }
+    },
+    "tracking": {
+      "status_text": "Complaint status\nComplaint identifier\nSCMS-2026-000002\nCategory\nSynthetic lights\nLocation\nTEST-DD61DB160999\nStatus\nAssigned\nEscalated\nNo\nStatus history\n2026-11-19T05:20:54.152962+00:00: Submitted \u2192 Submitted\n2026-11-19T05:20:54.160497+00:00: Allocated \u2014 Submitted \u2192 Assigned\n\nHistory page 1 of 1. Page 1 contains the newest entries; each page has at most 25 entries.",
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      },
+      "reference_not_redisplayed": true,
+      "backend": "per-test fakeredis Lua emulator; no deployed Redis acceptance"
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

@@ -1,0 +1,52 @@
+from pathlib import Path
+import json,hashlib,os,subprocess
+from datetime import datetime,timezone
+from playwright.sync_api import sync_playwright
+root=Path(os.environ['SCMS_VERIFY_ROOT'])
+state=Path(os.environ['SCMS_PRIVATE_STATE'])
+actors=json.loads((state/'actors.json').read_text())
+out=Path(os.environ['SCMS_BROWSER_OUTPUT']);out.mkdir(parents=True,exist_ok=False)
+origin='http://127.0.0.1:'+str(json.loads((state/'settings.json').read_text())['port'])
+cases=[('login','/accounts/login/',200,None),('register','/accounts/register/',200,None),('head-queue','/routing/queue/',200,'HEAD'),('complainant-home','/accounts/landing/complainant/',200,'COMPLAINANT'),('permission-guidance','/routing/queue/',403,'COMPLAINANT'),('private-unavailable','/anonymous/new/',503,'HEAD'),('tracking-unavailable','/anonymous/track/',503,'HEAD')]
+results=[]
+with sync_playwright() as p:
+ browser=p.chromium.launch()
+ for width in (1280,320):
+  for name,path,status,role in cases:
+   context=browser.new_context(viewport={'width':width,'height':800},is_mobile=width==320)
+   if role:context.add_cookies([{'name':'sessionid','value':actors[role][0]['session_cookie'],'url':origin}])
+   page=context.new_page();errors=[];responses=[]
+   page.on('pageerror',lambda e:errors.append(str(e)))
+   page.on('response',lambda r:responses.append({'path':r.url.removeprefix(origin),'status':r.status}) if '/static/' in r.url else None)
+   row={'case':name,'width':width,'expected_status':status,'observed_at_utc':datetime.now(timezone.utc).isoformat()}
+   try:
+    response=page.goto(origin+path,wait_until='networkidle')
+    row['status']=response.status
+    row['layout']=page.evaluate('({innerWidth,scrollWidth:document.documentElement.scrollWidth,clientWidth:document.documentElement.clientWidth,stylesheets:document.styleSheets.length})')
+    assert response.status==status
+    assert row['layout']['stylesheets']>0
+    assert row['layout']['scrollWidth']<=row['layout']['clientWidth']+1
+    assert not errors
+    private=path.startswith('/anonymous/')
+    if private:
+     assert not responses
+     assert page.locator('script').count()==0
+     assert 'script-src \'none\'' in response.headers['content-security-policy']
+     assert 'Q04 Synthetic HEAD' not in page.locator('body').inner_text()
+    else:
+     assert {r['path'] for r in responses if r['status']==200}>={'/static/ui/scms.css','/static/ui/forms.js'}
+     assert all(r['status']==200 for r in responses)
+    if name=='head-queue':assert page.locator('article').count()<=25
+    if name=='permission-guidance':assert page.get_by_role('link',name='Return home').count()==1
+    if name=='complainant-home':assert page.locator('[name=request_token]').count()==0
+    row['outcome']='PASS'
+   except Exception as exc:
+    row['outcome']='FAIL';row['error']=str(exc).replace(origin,'[origin]')
+   row['page_errors']=errors;row['asset_responses']=responses
+   page.screenshot(path=str(out/f'{name}-{width}.png'),full_page=True)
+   results.append(row);context.close()
+ browser.close()
+report={'source':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root,text=True).strip(),'scope':'Actual isolated Docker/Gunicorn HTTP build with release gates closed; enabled-intake workflow remains fixture evidence. No production/human acceptance.','cases':results,'passed':sum(r['outcome']=='PASS' for r in results),'failed':sum(r['outcome']=='FAIL' for r in results),'skipped':0}
+(out/'results.json').write_text(json.dumps(report,indent=2)+'\n')
+print(json.dumps({k:report[k] for k in ('passed','failed','skipped')}))
+raise SystemExit(bool(report['failed']))

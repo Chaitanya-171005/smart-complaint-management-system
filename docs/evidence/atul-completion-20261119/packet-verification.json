@@ -1,0 +1,14 @@
+{
+  "scope": "Only this packet at this publication point; output redaction is not filesystem containment",
+  "raw_private_values_found": 0,
+  "raw_local_paths_found": 0,
+  "all_json_xml_parsed": true,
+  "counts": {
+    "json": 139,
+    "xml": 8,
+    "files": 471,
+    "pptx_members": 59
+  },
+  "image_runtime_hashes_match": true,
+  "runtime_source": "27d41850ecf2de3f77cd726de98a2eeae8b08cad"
+}

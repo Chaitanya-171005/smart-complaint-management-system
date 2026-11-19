@@ -1,0 +1,47 @@
+{
+  "case": "test_work_queue_responsive_controls[mobile320-HEAD]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "queue_ui": {
+      "role": "HEAD",
+      "layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Department queue & assignment",
+            "right": 340.75
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Department reports",
+            "right": 500.109375
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 613.765625
+          }
+        ]
+      },
+      "assign_buttons": 1
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

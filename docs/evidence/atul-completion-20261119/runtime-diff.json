@@ -1,0 +1,24 @@
+{
+  "tested_runtime": "27d41850ecf2de3f77cd726de98a2eeae8b08cad",
+  "pre_packet_integration_tip": "118e635351488ce5ceebe3b1db0134375afc098e",
+  "changes_after_runtime": [
+    "docs/evidence/q04-fanout-candidate-20261118/README.md",
+    "docs/evidence/q04-fanout-candidate-20261118/REPRODUCE.md",
+    "docs/evidence/q04-fanout-candidate-20261118/harness/run_shared_20261119.py.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/queue-assignment-shared-20261119/app.log",
+    "docs/evidence/q04-fanout-candidate-20261118/queue-assignment-shared-20261119/db.log",
+    "docs/evidence/q04-fanout-candidate-20261118/queue-assignment-shared-20261119/report.json",
+    "docs/evidence/q04-fanout-candidate-20261118/queue-assignment-shared-20261119/samples.jsonl",
+    "docs/evidence/q04-fanout-candidate-20261118/results.json",
+    "docs/evidence/q04-fanout-candidate-20261118/sha256.json",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/ci-browser-a434eaa.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/ci-redis-a434eaa.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/ci-unified-a434eaa.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/prepare-shared-stack.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/refresh-shared-sessions.txt",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/shared-preflight.json",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/shared-window-authorization.json",
+    "docs/evidence/q04-fanout-candidate-20261118/shared-run/stop-shared-stack.txt"
+  ],
+  "evidence_only": true
+}

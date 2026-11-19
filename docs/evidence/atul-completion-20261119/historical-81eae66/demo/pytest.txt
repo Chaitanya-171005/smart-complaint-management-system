@@ -1,0 +1,8 @@
+..                                                                       [100%]
+=============================== warnings summary ===============================
+build/evidence/combined-preview/harness/q06_recorded_demo.py::test_first_registration_to_submission_uses_four_visible_pages[1280]
+  [source]/scms/static_middleware.py:17: UserWarning: No directory at: [source]/staticfiles/
+    super().__init__(get_response)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2 passed, 1 warning in 19.78s

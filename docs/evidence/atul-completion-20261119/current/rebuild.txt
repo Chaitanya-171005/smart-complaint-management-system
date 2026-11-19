@@ -1,0 +1,72 @@
+ Image q0491eca9eb3bfd:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.08kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.14-slim
+#3 DONE 1.7s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 399B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
+#5 resolve docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 51.04kB 0.1s done
+#6 DONE 0.1s
+
+#7 [3/7] COPY requirements.txt /app/requirements.txt
+#7 CACHED
+
+#8 [2/7] WORKDIR /app
+#8 CACHED
+
+#9 [4/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/7] COPY . /app
+#10 DONE 0.2s
+
+#11 [6/7] RUN useradd --create-home --uid 10001 appuser && mkdir -p /data/private-evidence && chown -R appuser:appuser /app /data/private-evidence && chmod +x /app/scripts/docker-entrypoint.sh
+#11 DONE 1.7s
+
+#12 [7/7] RUN DJANGO_SECRET_KEY=build-only-throwaway python manage.py collectstatic --noinput
+#12 1.259 
+#12 1.259 132 static files copied to '/app/staticfiles'.
+#12 DONE 1.6s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 1.2s done
+#13 exporting manifest sha256:beee34c39cc80aede52aeb5868eb05cfb4c0cafb906c462700b596c1db47fcdf 0.0s done
+#13 exporting config sha256:9f0e7f939d9012a5c718269a5c59c61cc1589b3796826c599b20b50b64cf1b6f 0.0s done
+#13 exporting attestation manifest sha256:65af0e72ea80cae85986861ffc7d81a86082e5a136749426192f39ac221ce08a 0.0s done
+#13 exporting manifest list sha256:307e3ac2edd309d5dcef84c2754d587b0783369e3d7b6ec8e09ee1f31f808401 0.0s done
+#13 naming to docker.io/library/q0491eca9eb3bfd:local done
+#13 unpacking to docker.io/library/q0491eca9eb3bfd:local
+#13 unpacking to docker.io/library/q0491eca9eb3bfd:local 0.7s done
+#13 DONE 2.1s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image q0491eca9eb3bfd:local Built 
+ Container q0491eca9eb3bfd-app-1 Recreate 
+ Container q0491eca9eb3bfd-app-1 Recreated 
+ Container q0491eca9eb3bfd-db-1 Starting 
+ Container q0491eca9eb3bfd-db-1 Started 
+ Container q0491eca9eb3bfd-db-1 Waiting 
+ Container q0491eca9eb3bfd-db-1 Healthy 
+ Container q0491eca9eb3bfd-app-1 Starting 
+ Container q0491eca9eb3bfd-app-1 Started 
+ Container q0491eca9eb3bfd-db-1 Waiting 
+ Container q0491eca9eb3bfd-app-1 Waiting 
+ Container q0491eca9eb3bfd-db-1 Healthy 
+ Container q0491eca9eb3bfd-app-1 Healthy 
+System check identified no issues (0 silenced).

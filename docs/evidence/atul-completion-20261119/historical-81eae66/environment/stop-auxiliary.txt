@@ -1,0 +1,6 @@
+ Container q0491eca9eb3bfd-app-1 Stopping 
+ Container q0491eca9eb3bfd-app-1 Stopped 
+ Container q0491eca9eb3bfd-db-1 Stopping 
+ Container q0491eca9eb3bfd-db-1 Stopped 
+scms-atul-combined-pg-20261118
+Stopped only combined-preview containers; its persistent named volumes remain. Benchmark project unchanged.

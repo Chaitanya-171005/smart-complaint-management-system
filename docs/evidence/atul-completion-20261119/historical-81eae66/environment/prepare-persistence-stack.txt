@@ -1,0 +1,98 @@
+ Image q0491eca9eb3bfd:local Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 538B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.08kB 0.0s done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/python:3.14-slim
+#3 DONE 1.3s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 399B done
+#4 DONE 0.0s
+
+#5 [1/7] FROM docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f
+#5 resolve docker.io/library/python:3.14-slim@sha256:9aaa474097d094040649f2162a627c0049b408f52138d980916788d80f04802f 0.0s done
+#5 DONE 0.0s
+
+#6 [internal] load build context
+#6 transferring context: 7.32MB 0.3s done
+#6 DONE 0.3s
+
+#7 [2/7] WORKDIR /app
+#7 CACHED
+
+#8 [3/7] COPY requirements.txt /app/requirements.txt
+#8 CACHED
+
+#9 [4/7] RUN pip install --no-cache-dir -r requirements.txt
+#9 CACHED
+
+#10 [5/7] COPY . /app
+#10 DONE 0.1s
+
+#11 [6/7] RUN useradd --create-home --uid 10001 appuser && mkdir -p /data/private-evidence && chown -R appuser:appuser /app /data/private-evidence && chmod +x /app/scripts/docker-entrypoint.sh
+#11 DONE 0.8s
+
+#12 [7/7] RUN DJANGO_SECRET_KEY=build-only-throwaway python manage.py collectstatic --noinput
+#12 0.887 
+#12 0.887 132 static files copied to '/app/staticfiles'.
+#12 DONE 1.0s
+
+#13 exporting to image
+#13 exporting layers
+#13 exporting layers 0.5s done
+#13 exporting manifest sha256:56f2b82c397e3a83fdfdd9547d26fe48bf2dd8004d55f806c575df5c2bf19f5d 0.0s done
+#13 exporting config sha256:b94e70ec1ecd27b043734a4786b58fb8f7ac66bd431d3f6d078aff28187a2b64 0.0s done
+#13 exporting attestation manifest sha256:b927fb698d28f0c369961615b67f8eae7a6df61d6a93879078db014fb895f350 0.0s done
+#13 exporting manifest list sha256:4c710667206bc2263cf36dd2367fa54b2b608b0b55fef8080588ae2bfb38897b 0.0s done
+#13 naming to docker.io/library/q0491eca9eb3bfd:local done
+#13 unpacking to docker.io/library/q0491eca9eb3bfd:local
+#13 unpacking to docker.io/library/q0491eca9eb3bfd:local 0.4s done
+#13 DONE 1.1s
+
+#14 resolving provenance for metadata file
+#14 DONE 0.0s
+ Image q0491eca9eb3bfd:local Built 
+ Volume q0491eca9eb3bfd_q04_evidence Creating 
+ Volume q0491eca9eb3bfd_q04_evidence Creating 
+ Volume q0491eca9eb3bfd_q04_database Creating 
+ Network q0491eca9eb3bfd_q04 Creating 
+ Network q0491eca9eb3bfd_q04 Creating 
+ Volume q0491eca9eb3bfd_q04_database Creating 
+ Volume q0491eca9eb3bfd_q04_evidence Created 
+ Volume q0491eca9eb3bfd_q04_evidence Created 
+ Volume q0491eca9eb3bfd_q04_database Created 
+ Volume q0491eca9eb3bfd_q04_database Created 
+ Network q0491eca9eb3bfd_q04 Created 
+ Network q0491eca9eb3bfd_q04 Created 
+ Container q0491eca9eb3bfd-db-1 Creating 
+ Container q0491eca9eb3bfd-db-1 Created 
+ Container q0491eca9eb3bfd-app-1 Creating 
+ Container q0491eca9eb3bfd-app-1 Created 
+ Container q0491eca9eb3bfd-db-1 Starting 
+ Container q0491eca9eb3bfd-db-1 Started 
+ Container q0491eca9eb3bfd-db-1 Waiting 
+ Container q0491eca9eb3bfd-db-1 Healthy 
+ Container q0491eca9eb3bfd-app-1 Starting 
+ Container q0491eca9eb3bfd-app-1 Started 
+ Container q0491eca9eb3bfd-app-1 Waiting 
+ Container q0491eca9eb3bfd-db-1 Waiting 
+ Container q0491eca9eb3bfd-db-1 Healthy 
+ Container q0491eca9eb3bfd-app-1 Healthy 
+System check identified no issues (0 silenced).
+Seeded: 50 complainants, 50 heads, 2 staff, 650 complaints; 550 targets available.
+queue: READY (HTTP 200, rows=25)
+queue page 2: READY (HTTP 200, rows=25)
+authenticated intake: RELEASE_GATED (HTTP 503)
+anonymous intake: RELEASE_GATED (HTTP 503)
+tracking: RELEASE_GATED (HTTP 503)
+feedback: RELEASE_GATED (HTTP 503)
+reporting: ROUTE_UNAVAILABLE (HTTP 404)
+acknowledgement (no receipt): NOT_VERIFIED (HTTP 404)
+assignment form: NOT_VERIFIED; evidence upload/download: NOT_VERIFIED
+escalation command: NOT_VERIFIED (command exists; not executed)
+Local test URL: http://127.0.0.1:55029; private data: [source]/build/private-q05-state/environments/combined-recovery

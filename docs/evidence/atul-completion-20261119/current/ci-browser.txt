@@ -1,0 +1,547 @@
+chromium-intake	UNKNOWN STEP	﻿2026-11-19T03:57:10.1491702Z Current runner version: '2.338.2'
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1513354Z ##[group]Runner Image Provisioner
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1514080Z Hosted Compute Agent
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1514564Z Version: 20261103.629
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1515170Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1515830Z Build Date: 2026-11-03T17:26:59Z
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1516458Z Worker ID: {b1a67cb7-2134-4245-9a96-ec4dfaf47640}
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1517167Z Region: centralus
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1517624Z Cloud: Azure
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1518137Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1519763Z ##[group]Operating System
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1520367Z Ubuntu
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1520833Z 24.04.5
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1521271Z LTS
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1521770Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1522334Z ##[group]Runner Image
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1522827Z Image: ubuntu-24.04
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1523423Z Version: 20261111.370.1
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1524432Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261111.370/images/ubuntu/Ubuntu2404-Readme.md
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1525803Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261111.370
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1526605Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1527597Z ##[group]GITHUB_TOKEN Permissions
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1529653Z Contents: read
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1530226Z Metadata: read
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1530711Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1532566Z Secret source: Actions
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1533322Z Cache mode: write
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1534224Z Prepare workflow directory
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1843140Z Prepare all required actions
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.1881632Z Getting action download info
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.4265541Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.5163017Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.6170293Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.8558419Z Complete job name: chromium-intake
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9232538Z ##[group]Run actions/checkout@v4
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9233201Z with:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9233685Z   repository: Chaitanya-171005/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9236713Z   token: ***
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9237074Z   ssh-strict: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9237435Z   ssh-user: git
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9237803Z   persist-credentials: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9238196Z   clean: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9238556Z   sparse-checkout-cone-mode: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9238972Z   fetch-depth: 1
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9239464Z   fetch-tags: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9239827Z   show-progress: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9240189Z   lfs: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9240525Z   submodules: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9240886Z   set-safe-directory: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9241287Z   allow-unsafe-pr-checkout: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9241871Z env:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9242242Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9242743Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9243226Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:10.9243738Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1142950Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1145155Z ##[group]Getting Git version info
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1146169Z Working directory is '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1147486Z [command]/usr/bin/git version
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1186525Z git version 2.56.1
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1203124Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1231514Z Temporarily overriding HOME='[ci-home]/work/_temp/40fd6add-aad4-4af3-a77e-c2981c96374e' before making global git config changes
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1233690Z Adding repository directory to the temporary git global config as a safe directory
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1237443Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1274570Z Deleting the contents of '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1284961Z ##[group]Initializing the repository
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1286369Z [command]/usr/bin/git init [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1355839Z hint: Using 'master' as the name for the initial branch. This default branch name
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1357328Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1358589Z hint: to use in all of your new repositories, which will suppress this warning,
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1359703Z hint: call:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1360636Z hint:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1361369Z hint: 	git config --global init.defaultBranch <name>
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1362139Z hint:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1362832Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1364065Z hint: 'development'. The just-created branch can be renamed via this command:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1364992Z hint:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1365508Z hint: 	git branch -m <name>
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1366066Z hint:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1366809Z hint: Disable this message with "git config set advice.defaultBranchName false"
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1368388Z Initialized empty Git repository in [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1373800Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1448673Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1449708Z ##[group]Disabling automatic garbage collection
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1451710Z [command]/usr/bin/git config --local gc.auto 0
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1482096Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1483308Z ##[group]Setting up auth
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1487858Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1519514Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1903846Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.1943248Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2166257Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2214913Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2418784Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2462561Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2463509Z ##[group]Fetching the repository
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:11.2472879Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +27d41850ecf2de3f77cd726de98a2eeae8b08cad:refs/remotes/origin/codex/atul-combined-preview-20261118
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0140680Z From https://github.com/Chaitanya-171005/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0142017Z  * [new ref]         27d41850ecf2de3f77cd726de98a2eeae8b08cad -> origin/codex/atul-combined-preview-20261118
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0144270Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0144972Z ##[group]Determining the checkout info
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0145735Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0151501Z [command]/usr/bin/git sparse-checkout disable
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0214522Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0252003Z ##[group]Checking out the ref
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0255201Z [command]/usr/bin/git checkout --progress --force -B codex/atul-combined-preview-20261118 refs/remotes/origin/codex/atul-combined-preview-20261118
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0996677Z Switched to a new branch 'codex/atul-combined-preview-20261118'
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.0999267Z branch 'codex/atul-combined-preview-20261118' set up to track 'origin/codex/atul-combined-preview-20261118'.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1009790Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1054988Z [command]/usr/bin/git log -1 --format=%H
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1083809Z 27d41850ecf2de3f77cd726de98a2eeae8b08cad
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1383555Z ##[group]Run actions/setup-python@v5
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1384579Z with:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1385355Z   python-version: 3.13
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1386198Z   cache: pip
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1386979Z   check-latest: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1393487Z   token: ***
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1394315Z   update-environment: true
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1395224Z   allow-prereleases: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1396108Z   freethreaded: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1396944Z env:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1397776Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1398823Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1399924Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.1401004Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.2564911Z ##[group]Installed versions
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.2634927Z (node:2095) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.2638171Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.2640374Z Successfully set up CPython (3.13.18)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.2642560Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:12.3862745Z [command]/opt/hostedtoolcache/Python/3.13.18/x64/bin/pip cache dir
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:13.0315188Z [ci-home]/.cache/pip
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:13.1739429Z Cache hit for: setup-python-Linux-x64-24.04-Ubuntu-python-3.13.18-pip-d470d0969aea35a5da4bdb29493e3533ffccdde978c4b6644705a24068ae8c3c
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:13.1820466Z (node:2095) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.0289471Z Received 76004842 of 76004842 (100.0%), 103.5 MBs/sec
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.0290067Z Cache Size: ~72 MB (76004842 B)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.0310379Z [command]/usr/bin/tar -xf [ci-home]/work/_temp/c007407d-c56c-4657-b228-ee02b763b87a/cache.tzst -P -C [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1440120Z Cache restored successfully
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1478539Z Cache restored from key: setup-python-Linux-x64-24.04-Ubuntu-python-3.13.18-pip-d470d0969aea35a5da4bdb29493e3533ffccdde978c4b6644705a24068ae8c3c
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1859020Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1859865Z ^[[36;1mpython -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0^[[0m
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1860336Z ^[[36;1mpython -m playwright install --with-deps chromium^[[0m
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1884503Z shell: /usr/bin/bash -e {0}
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1884740Z env:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1884954Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1885228Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1885484Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1885800Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1886172Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1886521Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1886834Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1887190Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1887496Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:14.1887980Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1114756Z Collecting playwright==1.58.0
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1125901Z   Using cached playwright-1.58.0-py3-none-manylinux1_x86_64.whl.metadata (3.5 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1509902Z Collecting Django<6.2,>=6.1.2 (from -r requirements.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1519938Z   Using cached django-6.1.3-py3-none-any.whl.metadata (3.9 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1723973Z Collecting python-dotenv (from -r requirements.txt (line 2))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.1732611Z   Using cached python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.2993630Z Collecting Pillow==13.0.0 (from -r requirements.txt (line 3))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3003759Z   Using cached pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3249674Z Collecting pypdf==6.21.4 (from -r requirements.txt (line 4))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3258384Z   Using cached pypdf-6.21.4-py3-none-any.whl.metadata (7.6 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3469751Z Collecting psycopg==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3478087Z   Using cached psycopg-3.3.8-py3-none-any.whl.metadata (4.4 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3685730Z Collecting gunicorn==26.2.0 (from -r requirements.txt (line 6))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3694143Z   Using cached gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3936221Z Collecting redis==8.1.0 (from -r requirements.txt (line 7))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.3945483Z   Using cached redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4171823Z Collecting whitenoise==6.12.0 (from -r requirements.txt (line 8))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4180892Z   Using cached whitenoise-6.12.0-py3-none-any.whl.metadata (3.7 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4430219Z Collecting pytest==9.1.1 (from -r requirements-dev.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4438344Z   Using cached pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4690726Z Collecting pytest-django==4.14.0 (from -r requirements-dev.txt (line 2))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4701478Z   Using cached pytest_django-4.14.0-py3-none-any.whl.metadata (8.1 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4914494Z Collecting pytest-cov==7.1.0 (from -r requirements-dev.txt (line 3))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.4923268Z   Using cached pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.5169815Z Collecting fakeredis==2.40.0 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.5178190Z   Using cached fakeredis-2.40.0-py3-none-any.whl.metadata (9.3 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.5379452Z Collecting pyee<14,>=13 (from playwright==1.58.0)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.5387618Z   Using cached pyee-13.0.1-py3-none-any.whl.metadata (3.0 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6429515Z Collecting greenlet<4.0.0,>=3.1.1 (from playwright==1.58.0)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6440600Z   Using cached greenlet-3.5.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6641656Z Collecting iniconfig>=1.0.1 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6650055Z   Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6839819Z Collecting packaging>=22 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.6847962Z   Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.7031024Z Collecting pluggy<2,>=1.5 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.7038818Z   Using cached pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.7245529Z Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:15.7254100Z   Using cached pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0128298Z Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov==7.1.0->-r requirements-dev.txt (line 3))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0138575Z   Using cached coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.3 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0339464Z Collecting sortedcontainers>=2 (from fakeredis==2.40.0->fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0348046Z   Using cached sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0852217Z Collecting lupa>=2.1 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.0862692Z   Using cached lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (60 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2054556Z Collecting psycopg-binary==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2068694Z   Using cached psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2290978Z Collecting asgiref>=3.9.1 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2300163Z   Using cached asgiref-3.13.0-py3-none-any.whl.metadata (12 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2527871Z Collecting sqlparse>=0.5.0 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2539822Z   Using cached sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2760438Z Collecting typing-extensions (from pyee<14,>=13->playwright==1.58.0)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2769741Z   Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2818577Z Using cached playwright-1.58.0-py3-none-manylinux1_x86_64.whl (46.2 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2956769Z Using cached pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2985224Z Using cached pypdf-6.21.4-py3-none-any.whl (410 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.2994309Z Using cached psycopg-3.3.8-py3-none-any.whl (216 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3002744Z Using cached gunicorn-26.2.0-py3-none-any.whl (228 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3011460Z Using cached redis-8.1.0-py3-none-any.whl (560 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3020988Z Using cached whitenoise-6.12.0-py3-none-any.whl (20 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3028642Z Using cached pytest-9.1.1-py3-none-any.whl (386 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3037675Z Using cached pytest_django-4.14.0-py3-none-any.whl (27 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3045606Z Using cached pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3053463Z Using cached fakeredis-2.40.0-py3-none-any.whl (204 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3061942Z Using cached psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3084499Z Using cached django-6.1.3-py3-none-any.whl (8.4 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3116400Z Using cached greenlet-3.5.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (623 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3125811Z Using cached pluggy-1.7.0-py3-none-any.whl (27 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3133732Z Using cached pyee-13.0.1-py3-none-any.whl (15 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3142077Z Using cached python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3150347Z Using cached asgiref-3.13.0-py3-none-any.whl (27 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3158243Z Using cached coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (262 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3166578Z Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3174602Z Using cached lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (2.4 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3188828Z Using cached packaging-26.3-py3-none-any.whl (129 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3197388Z Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3208950Z Using cached sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3216804Z Using cached sqlparse-0.6.1-py3-none-any.whl (51 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.3224808Z Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:16.5890567Z Installing collected packages: sortedcontainers, whitenoise, typing-extensions, sqlparse, redis, python-dotenv, pypdf, pygments, psycopg-binary, psycopg, pluggy, Pillow, packaging, lupa, iniconfig, gunicorn, greenlet, coverage, asgiref, pytest, pyee, fakeredis, Django, pytest-django, pytest-cov, playwright
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.2386174Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.2409612Z Successfully installed Django-6.1.3 Pillow-13.0.0 asgiref-3.13.0 coverage-7.17.3 fakeredis-2.40.0 greenlet-3.5.6 gunicorn-26.2.0 iniconfig-2.3.1 lupa-2.8 packaging-26.3 playwright-1.58.0 pluggy-1.7.0 psycopg-3.3.8 psycopg-binary-3.3.8 pyee-13.0.1 pygments-2.21.0 pypdf-6.21.4 pytest-9.1.1 pytest-cov-7.1.0 pytest-django-4.14.0 python-dotenv-1.2.4 redis-8.1.0 sortedcontainers-2.4.0 sqlparse-0.6.1 typing-extensions-4.16.0 whitenoise-6.12.0
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.6498110Z Installing dependencies...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.6591000Z Switching to root user to install dependencies...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.7180671Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.7430203Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.7439671Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.7460948Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.7486678Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8321337Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8403971Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1456 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8676330Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [317 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8694834Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1715 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8763731Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [346 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8781392Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1887 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8855611Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [433 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.8875381Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.6 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9300844Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1198 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9352558Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [239 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9368602Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1230 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9713349Z Get:21 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [723 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9828588Z Get:22 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [794 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9867936Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [248 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9883427Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1792 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9952562Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [414 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:21.9972600Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.7 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:27.9835311Z Fetched 13.2 MB in 1s (12.2 MB/s)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:28.9143418Z Reading package lists...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:28.9406565Z Reading package lists...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.1588412Z Building dependency tree...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.1594586Z Reading state information...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2904003Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2904597Z libasound2t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2905059Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2905613Z libatk-bridge2.0-0t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2906129Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2906575Z libatk1.0-0t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2907007Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2908070Z libatspi2.0-0t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2908486Z libcairo2 is already the newest version (1.18.0-3build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2908896Z libcairo2 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2909510Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2909977Z libcups2t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2910438Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2910895Z libdbus-1-3 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2911374Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2911894Z libdrm2 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2912363Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.10).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2912870Z libglib2.0-0t64 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2913313Z libnspr4 is already the newest version (2:4.35-1.1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2913746Z libnspr4 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2914123Z libnss3 is already the newest version (2:3.98-1ubuntu0.3).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2914525Z libnss3 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2914919Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2915321Z libpango-1.0-0 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2915688Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2916058Z libx11-6 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2916316Z libxcb1 is already the newest version (1.15-1ubuntu2).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2916597Z libxcb1 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2916872Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2917161Z libxcomposite1 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2917459Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2917734Z libxdamage1 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2917990Z libxext6 is already the newest version (2:1.3.4-1build2).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2918251Z libxext6 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2918669Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2918953Z libxfixes3 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2919389Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2919662Z libxkbcommon0 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2919927Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2920187Z libxrandr2 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2920522Z xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2920894Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2921443Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2921734Z libfontconfig1 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2922018Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2922418Z libfreetype6 set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2922800Z fonts-liberation is already the newest version (1:2.1.5-3).
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2923195Z fonts-liberation set to manually installed.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2923577Z The following additional packages will be installed:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2924104Z   libgl1-mesa-dri libglx-mesa0 mesa-libgallium xfonts-encodings xfonts-utils
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2924568Z Recommended packages:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.2924870Z   fonts-ipafont-mincho fonts-tlwg-loma
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3093810Z The following NEW packages will be installed:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3094498Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3099765Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3100115Z   xfonts-utils
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3103352Z The following packages will be upgraded:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3107032Z   libgbm1 libgl1-mesa-dri libglx-mesa0 mesa-libgallium
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3276375Z 4 upgraded, 9 newly installed, 0 to remove and 29 not upgraded.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3276862Z Need to get 32.1 MB of archives.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3277293Z After this operation, 79.7 MB of additional disk space will be used.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3277812Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.3767433Z Get:2 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.4500673Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.5337556Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.5683511Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.6378424Z Get:6 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.7461920Z Get:7 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgl1-mesa-dri amd64 25.2.8-0ubuntu0.24.04.5 [38.0 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.7767150Z Get:8 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglx-mesa0 amd64 25.2.8-0ubuntu0.24.04.5 [110 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.8073581Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgbm1 amd64 25.2.8-0ubuntu0.24.04.5 [34.2 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:29.8773509Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-libgallium amd64 25.2.8-0ubuntu0.24.04.5 [10.8 MB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.2948170Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.3323238Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.3675726Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.4044355Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6320668Z Fetched 32.1 MB in 1s (29.4 MB/s)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6544342Z Selecting previously unselected package fonts-ipafont-gothic.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6739992Z (Reading database ... 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6740516Z (Reading database ... 5%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6740819Z (Reading database ... 10%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6741123Z (Reading database ... 15%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6741401Z (Reading database ... 20%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6741603Z (Reading database ... 25%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6741794Z (Reading database ... 30%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6742071Z (Reading database ... 35%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6742374Z (Reading database ... 40%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6742892Z (Reading database ... 45%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6743099Z (Reading database ... 50%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.6778844Z (Reading database ... 55%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.7852477Z (Reading database ... 60%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:30.9885846Z (Reading database ... 65%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.1915029Z (Reading database ... 70%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.3820194Z (Reading database ... 75%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.4344895Z (Reading database ... 80%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.5872014Z (Reading database ... 85%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.6812392Z (Reading database ... 90%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.7299741Z (Reading database ... 95%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.7300032Z (Reading database ... 100%
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.7300329Z (Reading database ... 216752 files and directories currently installed.)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.7343049Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.7519545Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:31.9887290Z Selecting previously unselected package fonts-freefont-ttf.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.0010700Z Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.0018160Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1323665Z Selecting previously unselected package fonts-tlwg-loma-otf.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1446397Z Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1453982Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1667543Z Selecting previously unselected package fonts-unifont.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1792601Z Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.1800682Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.3920087Z Selecting previously unselected package fonts-wqy-zenhei.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.4043040Z Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.4134234Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.9059942Z Preparing to unpack .../05-libgl1-mesa-dri_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.9197973Z Unpacking libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.9653616Z Preparing to unpack .../06-libglx-mesa0_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:32.9682309Z Unpacking libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.0046064Z Preparing to unpack .../07-libgbm1_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.0066629Z Unpacking libgbm1:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.0420838Z Preparing to unpack .../08-mesa-libgallium_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.0442402Z Unpacking mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4058511Z Selecting previously unselected package xfonts-encodings.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4184021Z Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4191191Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4476823Z Selecting previously unselected package xfonts-utils.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4595430Z Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4602543Z Unpacking xfonts-utils (1:7.7+6build3) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.4895064Z Selecting previously unselected package xfonts-cyrillic.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5012634Z Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5019782Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5307970Z Selecting previously unselected package xfonts-scalable.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5425295Z Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5432228Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5920471Z Setting up mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5941272Z Setting up libgbm1:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.5957645Z Setting up libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6021169Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6119025Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6135377Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6151151Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6166505Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6223902Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6237052Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6252758Z Setting up libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6268755Z Setting up xfonts-utils (1:7.7+6build3) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6304738Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6551692Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.6789729Z Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.8228483Z Processing triggers for man-db (2.12.0-4build2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.8248033Z Not building database; man-db/auto-update is not 'true'.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:33.8257185Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4171721Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4172268Z Running kernel seems to be up-to-date.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4172563Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4172684Z No services need to be restarted.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4172900Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4173025Z No containers need to be restarted.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4173230Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4173384Z No user sessions are running outdated binaries.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4173631Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:34.4173862Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:35.3137408Z Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/chrome-for-testing-public/145.0.7632.6/linux64/chrome-linux64.zip
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:35.3889703Z (node:2824) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:35.3891015Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.5173333Z |                                                                                |   0% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.7246580Z |■■■■■■■■                                                                        |  10% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.7841143Z |■■■■■■■■■■■■■■■■                                                                |  20% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.8358248Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.8813876Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.9378387Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:36.9765649Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:37.0122230Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:37.0587932Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:37.1178447Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:37.1649712Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 167.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.0057530Z Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to [ci-home]/.cache/ms-playwright/chromium-1208
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.0061230Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.0843223Z (node:2836) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.0844546Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1418619Z |                                                                                |   0% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1679389Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1780963Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1860642Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1896499Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1913121Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1971841Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.1986331Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.2004266Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.2027737Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.2035094Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.2446487Z FFmpeg (playwright ffmpeg v1011) downloaded to [ci-home]/.cache/ms-playwright/ffmpeg-1011
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.2449500Z Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/chrome-for-testing-public/145.0.7632.6/linux64/chrome-headless-shell-linux64.zip
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.3198787Z (node:2847) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.3200107Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.4413055Z |                                                                                |   0% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.6698160Z |■■■■■■■■                                                                        |  10% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.7090343Z |■■■■■■■■■■■■■■■■                                                                |  20% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.7437608Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.7822169Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.8080093Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.8393982Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.8676351Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.8964009Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.9220471Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:39.9460919Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 110.9 MiB
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3099815Z Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to [ci-home]/.cache/ms-playwright/chromium_headless_shell-1208
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3324620Z ##[group]Run set -euo pipefail
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3324904Z ^[[36;1mset -euo pipefail^[[0m
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3325146Z ^[[36;1mmkdir -p build/evidence/intake-browser^[[0m
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3325984Z ^[[36;1mpython -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py integration_checks/q06_four_screen_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt^[[0m
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3346533Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3346814Z env:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3347021Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3347264Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3347500Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3347812Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3348178Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3348525Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3348823Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3349267Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3349570Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	UNKNOWN STEP	2026-11-19T03:57:41.3349828Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1714149Z ................                                                         [100%]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1714692Z =============================== warnings summary ===============================
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1715541Z integration_checks/intake_browser.py::test_normal_submit_shows_accessible_inline_error_at_320[short-authenticated]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1717193Z   [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system/scms/static_middleware.py:17: UserWarning: No directory at: [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system/staticfiles/
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1718497Z     super().__init__(get_response)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1718725Z 
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1718975Z -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.1719653Z 16 passed, 1 warning in 26.16s
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3099310Z ##[group]Run actions/upload-artifact@v4
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3099554Z with:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3099730Z   name: intake-browser-evidence
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3099954Z   path: build/evidence/intake-browser/
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3100182Z   if-no-files-found: error
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3100375Z   compression-level: 6
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3100557Z   overwrite: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3100732Z   include-hidden-files: false
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3100934Z env:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3101117Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3101355Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3101578Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3101889Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3102384Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3102712Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3103036Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3103333Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3103627Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.3103887Z ##[endgroup]
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.4431597Z (node:4324) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.4432306Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.4500972Z With the provided path, there will be 21 files uploaded
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.4502054Z Artifact name is valid!
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.4502670Z Root directory input is valid!
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.7124773Z Beginning upload of artifact content to blob storage
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:08.7872195Z (node:4324) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.1685216Z Uploaded bytes 1544754
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.2089677Z Finished uploading artifact content to blob storage!
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.2090442Z SHA256 digest of uploaded artifact zip is 2bb0f77372f610f3d7e7bb04a044b2bef20c52da7318b92669805628a7103a94
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.2092758Z Finalizing artifact upload
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.6465847Z Artifact intake-browser-evidence.zip successfully finalized. Artifact ID 14497332615
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.6466784Z Artifact intake-browser-evidence has been successfully uploaded! Final size is 1544754 bytes. Artifact ID is 14497332615
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.6472196Z Artifact download URL: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44454936029/artifacts/14497332615
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.6650604Z Post job cleanup.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.7653092Z Cache hit occurred on the primary key setup-python-Linux-x64-24.04-Ubuntu-python-3.13.18-pip-d470d0969aea35a5da4bdb29493e3533ffccdde978c4b6644705a24068ae8c3c, not saving cache.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.7654394Z (node:4337) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.7655161Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.7774124Z Post job cleanup.
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8481632Z [command]/usr/bin/git version
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8518840Z git version 2.56.1
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8554653Z Temporarily overriding HOME='[ci-home]/work/_temp/4316a85d-a99d-4d35-9f87-1aab7ecf9d87' before making global git config changes
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8555626Z Adding repository directory to the temporary git global config as a safe directory
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8562225Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8597766Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8633173Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8949834Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8981220Z http.https://github.com/.extraheader
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.8990856Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.9054611Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.9368336Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.9421613Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:09.9783037Z Cleaning up orphan processes
+chromium-intake	UNKNOWN STEP	2026-11-19T03:58:10.0096247Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

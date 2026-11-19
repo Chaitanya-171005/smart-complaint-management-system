@@ -1,0 +1,29 @@
+{
+  "case": "test_acknowledgement_copy_and_fallback[desktop-native]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "copy": {
+      "mode": "native",
+      "status": "Complaint ID copied.",
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      },
+      "text_status": "Complaint ID\nSCMS-2026-000002 Copy Complaint ID Complaint ID copied.\nSubmitted\n2026-11-18T18:27:50.935491+00:00\nStatus\nAssigned\nDue\n2026-11-18T20:27:50.935491+00:00"
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

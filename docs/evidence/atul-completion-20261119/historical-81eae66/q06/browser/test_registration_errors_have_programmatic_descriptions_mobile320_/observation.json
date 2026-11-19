@@ -1,0 +1,74 @@
+{
+  "case": "test_registration_errors_have_programmatic_descriptions[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "registration_error_semantics": [
+      {
+        "id": "id_full_name",
+        "type": "text",
+        "label": true,
+        "invalid": "true",
+        "describedBy": "id_full_name_error",
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_email",
+        "type": "email",
+        "label": true,
+        "invalid": "true",
+        "describedBy": "id_email_error",
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_password",
+        "type": "password",
+        "label": true,
+        "invalid": "true",
+        "describedBy": "id_password_error",
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_user_type",
+        "type": "select-one",
+        "label": true,
+        "invalid": null,
+        "describedBy": null,
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_hostel_resident",
+        "type": "checkbox",
+        "label": true,
+        "invalid": null,
+        "describedBy": null,
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_hostel_block",
+        "type": "text",
+        "label": true,
+        "invalid": null,
+        "describedBy": null,
+        "missingDescriptions": []
+      },
+      {
+        "id": "id_hostel_room",
+        "type": "text",
+        "label": true,
+        "invalid": null,
+        "describedBy": null,
+        "missingDescriptions": []
+      }
+    ],
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

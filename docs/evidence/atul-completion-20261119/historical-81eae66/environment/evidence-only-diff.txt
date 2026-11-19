@@ -1,0 +1,6 @@
+docs/evidence/q06-ui-followup-20261118/README.md
+docs/evidence/q06-ui-followup-20261118/checks/hosted-fcf053c/ci-browser-fcf053c.txt
+docs/evidence/q06-ui-followup-20261118/checks/hosted-fcf053c/ci-redis-fcf053c.txt
+docs/evidence/q06-ui-followup-20261118/checks/hosted-fcf053c/ci-unified-fcf053c.txt
+docs/evidence/q06-ui-followup-20261118/checks/static-delivery/static-before.txt
+docs/evidence/q06-ui-followup-20261118/sha256.json

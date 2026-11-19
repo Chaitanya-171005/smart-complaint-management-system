@@ -1,0 +1,12 @@
+2026-11-19T05:20:55.586476207Z Operations to perform:
+2026-11-19T05:20:55.586520347Z   Apply all migrations: accounts, admin, auth, complaints, contenttypes, routing, sessions, workflow
+2026-11-19T05:20:55.586523427Z Running migrations:
+2026-11-19T05:20:55.586525027Z   No migrations to apply.
+2026-11-19T05:20:55.945877918Z [2026-11-19 05:20:55 +0000] [1] [INFO] Starting gunicorn 26.2.0
+2026-11-19T05:20:55.946284414Z [2026-11-19 05:20:55 +0000] [1] [INFO] Listening at: http://0.0.0.0:8000 (1)
+2026-11-19T05:20:55.946316072Z [2026-11-19 05:20:55 +0000] [1] [INFO] Using worker: sync
+2026-11-19T05:20:55.950305448Z [2026-11-19 05:20:55 +0000] [8] [INFO] Booting worker with pid: 8
+2026-11-19T05:20:55.969581555Z [2026-11-19 05:20:55 +0000] [9] [INFO] Booting worker with pid: 9
+2026-11-19T05:20:56.024224452Z [2026-11-19 05:20:56 +0000] [10] [INFO] Booting worker with pid: 10
+2026-11-19T05:20:56.116702429Z [2026-11-19 05:20:56 +0000] [11] [INFO] Booting worker with pid: 11
+2026-11-19T05:20:56.407831894Z [2026-11-19 05:20:56 +0000] [1] [INFO] Control socket listening at [container-home]/.gunicorn/gunicorn.ctl
