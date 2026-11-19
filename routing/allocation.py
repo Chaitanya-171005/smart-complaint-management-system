@@ -45,14 +45,17 @@ def allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, r
 @transaction.atomic
 def _allocate_complaint(*, actor, complaint_id, assignee, expected_assignee_id, reason=""):
     actor_id = getattr(actor, "pk", None)
-    actor = User.objects.select_for_update().filter(pk=actor_id).first()
+    # Keep authorization-changing updates fenced while allowing notification
+    # foreign keys to reference other concurrently allocating Heads. FOR UPDATE
+    # conflicts with those KEY SHARE checks and can deadlock at commit.
+    actor = User.objects.select_for_update(no_key=True).filter(pk=actor_id).first()
     complaint = Complaint.objects.select_for_update().filter(complaint_id=complaint_id).first()
     if complaint is None:
         raise Http404
     if not can_allocate_complaint(actor, complaint):
         raise _AllocationDenied(actor, complaint, concealed=True)
     target_id = getattr(assignee, "pk", assignee)
-    target = User.objects.select_for_update().filter(pk=target_id).first()
+    target = User.objects.select_for_update(no_key=True).filter(pk=target_id).first()
     if not can_allocate_complaint(actor, complaint,
                                   target if target is not None else User(is_active=False)):
         raise _AllocationDenied(actor, complaint, concealed=False)
