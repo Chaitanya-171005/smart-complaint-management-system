@@ -1,6 +1,6 @@
 {
-  "README.md": "89101df0985a733186c43c9993a85ade200c1d0300c743920ac6934200a37406",
-  "REPRODUCE.md": "7748ae3cf94b3a205fb6cfb494b4eef297482795df92a6ad30206f0f71863d28",
+  "README.md": "ec71f9ba3417a8c97b0ce53c02b43562d490c9210626fa956860585f369df5a2",
+  "REPRODUCE.md": "daa926a8892450b9ed15f9846700738f487591728900b7d04279d0db5126bebf",
   "after.txt": "4cb67a857329b6229e1dc7df7a2bf483d494783faef4d2e69341bf5dd38fa4e2",
   "after.xml": "d78bfbf344c4ce2b4f8acfe3bdfaa346ce8d49215687028ab0fdc23e6aa7be83",
   "before.txt": "c72ec7051b900d42909cbb98e3e408f459f73a324ee5e0c49f6b0eac70e69b72",
@@ -16,6 +16,7 @@
   "failed-warmup-20261119/samples.jsonl": "b11bcaeb1e0d35c96a9b97be9ec821c0418579460aa669f9e4f35da91ca13234",
   "harness/post_stop_probe.py.txt": "9751edb5e4504091c453bfbeab6de98d6f56bbbcfb1a6197e4d2f08770504fd8",
   "harness/run_authorized_20261119.py.txt": "b3b2a47baf40f96d8a411e5420894c5713e6ba1084254fb8f6fbda4b87cd5d76",
+  "harness/run_shared_20261119.py.txt": "4e00ff3aa23c657e46796852a5b295d100309b9163161a912c89add7bdd28dae",
   "lock-fix/after.txt": "c789a301a5d9ef48102debc4f619280747abcf528ff465c5d795664e07d5d392",
   "lock-fix/after.xml": "8f5d0dadc890946d383c896d36aea5709aa33c1d4fdbe6d884f635614816706d",
   "lock-fix/before.txt": "5b954ad192ce57302e25c6242ebf85e9dc69336204fff00b391d41352389603d",
@@ -33,5 +34,17 @@
   "queue-assignment-lockfix-20261119/db.log": "7109fea5098dcfb3dc968c9466ab33d8b82da86a80c2fe34621dbd01f734d41f",
   "queue-assignment-lockfix-20261119/report.json": "80061183549945283ba644a196870edbc5c63b32889295e0a0248acfedc25f04",
   "queue-assignment-lockfix-20261119/samples.jsonl": "e916bf5a5826826c1653ff5b63019c61af8bef31310ec5d2f6567cc9aba63dbe",
-  "results.json": "13880740d29ce638f061670a0b810bae0c977b579bd35711b7633cc8ac1ecb51"
+  "queue-assignment-shared-20261119/app.log": "d7c13b3ad5999b6afeb04c43e668ba625fe31007998308207e051a21fd6c5fea",
+  "queue-assignment-shared-20261119/db.log": "1cf01d4d8d2996b5bce3a8c62d5b33c50520eb16e1640e2fd2749c87def11f10",
+  "queue-assignment-shared-20261119/report.json": "449dc653a1db6ca87bad9c39f1990169940e475ba5d3519adce4029226c01b33",
+  "queue-assignment-shared-20261119/samples.jsonl": "a23bef2e2d013416eae050af3603df6ebfd4e5d513df59f3dd88aa3f84a77690",
+  "results.json": "e49e43ca044a8b238857b17582277b8ce285746d4587bccade9dc9b060da9864",
+  "shared-run/ci-browser-a434eaa.txt": "2946029f6c34480c5503130cb8fcdc89a7f3315196e9b20b0a3260fa8f299776",
+  "shared-run/ci-redis-a434eaa.txt": "ecb7e923603f2166b66e57930a2701678aaf14ceaaf5f682c0ea4b108d17c44d",
+  "shared-run/ci-unified-a434eaa.txt": "730eedc53f2556b96aef22c23e755aa8d74dd0d91ba39e8d0d347636a93785d9",
+  "shared-run/prepare-shared-stack.txt": "1e3ddc8c4e80d2ab1c3d604776c0d88f3d08183847429d37f068a5ca82916867",
+  "shared-run/refresh-shared-sessions.txt": "838d8c6ce2095fe1da4be611834a18812cb6b598e58a68696b81a600120f6754",
+  "shared-run/shared-preflight.json": "54043abcbbe86a4932a31ce2420a6575abdc46f2ef4a934ae6a0a25bcc909fd3",
+  "shared-run/shared-window-authorization.json": "7e25d5c41ab3a485e979ab914ebe2a87cc0cc40b6c0fbeca0551dbcc9ef1e8c9",
+  "shared-run/stop-shared-stack.txt": "95b83e14d420ab5df31fb24f736cd4c579825334835a4feff72bf39b3565f2eb"
 }
