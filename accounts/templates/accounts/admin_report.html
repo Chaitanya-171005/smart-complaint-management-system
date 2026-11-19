@@ -1,11 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Campus report - SCMS</title>
-</head>
-<body>
+{% extends "ui/base.html" %}
+{% block title %}Campus report - SCMS{% endblock %}
+{% block content %}
   <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Campus report</h1>
   <form method="get">
@@ -49,5 +44,4 @@
     {% empty %}<tr><td colspan="2">No complaints in this range.</td></tr>{% endfor %}
   </table>
   {% endif %}
-</body>
-</html>
+{% endblock %}

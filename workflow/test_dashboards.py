@@ -86,7 +86,11 @@ def test_owner_cannot_request_department_report_and_head_cannot_change_scope(dat
     client.force_login(head)
     for output in ('html','csv'):
         assert client.get(reverse('workflow:department_report',args=[other.pk]),{'format':output}).status_code==404
-    assert total(client.get(reverse('workflow:dashboard')).context)==4
+    dashboard = client.get(reverse('workflow:dashboard'))
+    assert total(dashboard.context) == 4
+    assert b'ui/scms.css' in dashboard.content
+    assert f'action="{url}"'.encode() in dashboard.content
+    assert b'name="date_from"' in dashboard.content and b'name="date_to"' in dashboard.content
     assert client.get(reverse('workflow:dashboard'),{'department':other.pk}).status_code==400
 
 
@@ -156,6 +160,7 @@ def test_department_period_report_reuses_b30_figures_and_csv(dataset,client):
     client.force_login(head)
     screen=client.get(url,query)
     assert screen.status_code==200
+    assert b'id="main"' in screen.content and b'ui/scms.css' in screen.content
     assert screen.context['report'].total==4
     assert screen.context['report'].by_department==[(department.name,4)]
     export=client.get(url,{**query,'export':'csv'})

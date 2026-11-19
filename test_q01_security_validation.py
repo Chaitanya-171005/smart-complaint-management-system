@@ -37,6 +37,8 @@ APP_ROOT = Path(settings.BASE_DIR)
 UNSAFE_ALLOWED = {
     # Fixed SQL, no user input: takes the shared configuration advisory lock (F3 lock order, PR #106).
     ("accounts/configuration_lock.py", "raw SQL (cursor)"),
+    # PR #105: only quoted model identifiers and a bound, prepared user ID feed the Staff lock.
+    ("routing/allocation.py", "raw SQL (.raw)"),
     # Marks only the repository's own stylesheet as safe, and refuses it if it holds a closing style tag.
     ("accounts/templatetags/ui_assets.py", "mark_safe"),
 }

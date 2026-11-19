@@ -22,10 +22,10 @@ class Links(HTMLParser):
 
 
 @pytest.mark.parametrize('role,expected,absent', [
-    ('COMPLAINANT', ['complaints:submit', 'workflow:complaint_list', 'workflow:dashboard'], ['routing:queue', 'accounts:admin_users']),
-    ('STAFF', ['routing:queue'], ['complaints:submit', 'accounts:admin_users', 'workflow:dashboard']),
-    ('HEAD', ['routing:queue', 'workflow:dashboard'], ['complaints:submit', 'accounts:admin_users']),
-    ('ADMIN', ['accounts:admin_users', 'accounts:admin_departments', 'accounts:admin_locations', 'routing:configuration', 'accounts:admin_audit'], ['routing:queue', 'complaints:submit', 'workflow:dashboard']),
+    ('COMPLAINANT', ['complaints:submit', 'workflow:complaint_list', 'workflow:dashboard'], ['routing:queue', 'accounts:admin_users', 'accounts:admin_report']),
+    ('STAFF', ['routing:queue'], ['complaints:submit', 'accounts:admin_users', 'workflow:dashboard', 'accounts:admin_report']),
+    ('HEAD', ['routing:queue', 'workflow:dashboard'], ['complaints:submit', 'accounts:admin_users', 'accounts:admin_report']),
+    ('ADMIN', ['accounts:admin_users', 'accounts:admin_departments', 'accounts:admin_locations', 'routing:configuration', 'accounts:admin_audit', 'accounts:admin_report'], ['routing:queue', 'complaints:submit', 'workflow:dashboard']),
 ])
 def test_role_landing_navigation(client, user_factory, department, role, expected, absent):
     user = user_factory(role=role, department=department if role in ('HEAD', 'STAFF') else None)
@@ -85,7 +85,7 @@ def test_logout_and_login_keep_csrf_protection(user_factory):
 @pytest.mark.parametrize('role', ['COMPLAINANT', 'STAFF', 'HEAD'])
 def test_admin_navigation_is_backed_by_access_restrictions(client, user_factory, department, role):
     client.force_login(user_factory(role=role, department=department))
-    for name in ('accounts:admin_users', 'routing:configuration', 'accounts:admin_audit'):
+    for name in ('accounts:admin_users', 'routing:configuration', 'accounts:admin_audit', 'accounts:admin_report'):
         assert client.get(reverse(name)).status_code in (302, 403, 404)
 
 

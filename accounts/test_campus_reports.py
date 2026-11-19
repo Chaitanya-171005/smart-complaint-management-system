@@ -333,6 +333,7 @@ def test_screen_shows_the_figures_and_the_download_matches(dataset, scms_admin_u
     client = login(scms_admin_user)
     params = {"date_from": "2026-11-10", "date_to": "2026-11-12"}
     page = client.get(URL, params).content.decode()
+    assert 'id="main"' in page and "ui/scms.css" in page
     assert "<td>Total complaints</td><td>9</td>" in page
     assert "<td>Reopens (total count)</td><td>3</td>" in page
     assert "B30 Wiring" in page and "B30-HALL" in page
