@@ -34,7 +34,12 @@ HEAD_ONLY_NAMES = {"assign_complaint"}
 
 APP_ROOT = Path(settings.BASE_DIR)
 # Reviewed exceptions to the unsafe-pattern scan: (relative path, pattern). Keep this list short.
-UNSAFE_ALLOWED = set()
+UNSAFE_ALLOWED = {
+    # Fixed SQL, no user input: takes the shared configuration advisory lock (F3 lock order, PR #106).
+    ("accounts/configuration_lock.py", "raw SQL (cursor)"),
+    # Marks only the repository's own stylesheet as safe, and refuses it if it holds a closing style tag.
+    ("accounts/templatetags/ui_assets.py", "mark_safe"),
+}
 UNSAFE_PATTERNS = {
     "mark_safe": re.compile(r"\bmark_safe\b"),
     "|safe filter": re.compile(r"\|\s*safe\b"),
