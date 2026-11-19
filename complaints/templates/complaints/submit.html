@@ -1,9 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Submit a complaint - SCMS</title>
-<style>@media (max-width: 480px) { body { overflow-wrap: anywhere; } input, select, textarea, button { box-sizing: border-box; max-width: 100%; } textarea { width: 100%; } }</style></head>
-<body>
-  <nav><a href="{% url 'accounts:home' %}">Home</a></nav>
+{% extends "ui/base.html" %}
+{% block title %}Submit a complaint - SCMS{% endblock %}
+{% block content %}
+<nav><a href="{% url 'accounts:home' %}">Home</a></nav>
   <h1>Submit a complaint</h1>
   <aside aria-labelledby="emergency-heading">
     <h2 id="emergency-heading">For emergencies</h2>
@@ -24,5 +22,4 @@
   {% if not form.is_bound or not request_token %}
   <p><a href="{% url 'complaints:submit' %}">Start a new form</a></p>
   {% endif %}
-</body>
-</html>
+{% endblock %}

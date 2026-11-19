@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Locations - SCMS</title>
-</head>
-<body>
-  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+{% extends "ui/base.html" %}
+{% block title %}Locations - SCMS{% endblock %}
+{% block content %}
+<p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Locations</h1>
   {% if action_error %}<p role="alert">{{ action_error }}</p>{% endif %}
   <p>Locations are deactivated, never deleted. The code is the stable key used by other modules.</p>
@@ -35,5 +30,4 @@
     {{ form.as_p }}
     <button type="submit">Add</button>
   </form>
-</body>
-</html>
+{% endblock %}

@@ -25,6 +25,27 @@ def form_data(client, case, name='resolve'):
             'csrfmiddlewaretoken':client.cookies['csrftoken'].value}
 
 
+def test_browser_empty_optional_evidence_posts_without_attachment(case, settings):
+    client = Client(enforce_csrf_checks=True)
+    client.force_login(case[1])
+    data = form_data(client, case)
+    response = client.post(route(case), {**data, 'evidence': ''})
+    assert response.status_code == 302
+    assert not Attachment.objects.exists()
+    case[0].refresh_from_db()
+    assert case[0].status == Complaint.Status.RESOLVED
+
+
+def test_nonempty_evidence_text_without_upload_is_rejected(case, settings):
+    client = Client(enforce_csrf_checks=True)
+    client.force_login(case[1])
+    data = form_data(client, case)
+    assert client.post(route(case), {**data, 'evidence': '../private'}).status_code == 400
+    assert not Attachment.objects.exists()
+    case[0].refresh_from_db()
+    assert case[0].status != Complaint.Status.RESOLVED
+
+
 def test_real_csrf_resolution_post_redirect_and_protected_evidence(case, settings):
     complaint, staff, _ = case
     client = Client(enforce_csrf_checks=True)

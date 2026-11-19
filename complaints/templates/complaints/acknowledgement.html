@@ -1,15 +1,13 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Complaint submitted - SCMS</title>
-<style>@media (max-width: 480px) { body { overflow-wrap: anywhere; } button { max-width: 100%; } }</style></head>
-<body>
-  <h1>Your complaint was submitted</h1>
+{% extends "ui/base.html" %}
+{% block title %}Complaint submitted - SCMS{% endblock %}
+{% block content %}
+<h1 class="success-panel">Your complaint was submitted</h1>
   <dl>
     <dt>Complaint ID</dt><dd><span id="complaint-id">{{ complaint.complaint_id }}</span>
       <button type="button" id="copy-complaint-id" aria-describedby="copy-complaint-id-status">Copy Complaint ID</button>
       <span id="copy-complaint-id-status" role="status" aria-live="polite"></span></dd>
     <dt>Submitted</dt><dd>{{ submitted_at|date:"c" }}</dd>
-    <dt>Status</dt><dd>{{ complaint.get_status_display }}</dd>
+    <dt>Status</dt><dd><span class="badge status-{{ complaint.status }}">{{ complaint.get_status_display }}</span></dd>
     <dt>Due</dt><dd>{{ complaint.due_at|date:"c" }}</dd>
   </dl>
   {% if attachments %}
@@ -32,5 +30,4 @@
       }
     });
   </script>
-</body>
-</html>
+{% endblock %}

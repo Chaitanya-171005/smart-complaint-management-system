@@ -1,0 +1,12 @@
+<a href="{% url 'accounts:home' %}">Overview</a>
+{% if user.role == 'COMPLAINANT' %}<a href="{% url 'complaints:submit' %}">Submit complaint</a>
+<a href="{% url 'workflow:complaint_list' %}">My complaints</a>
+<a href="{% url 'workflow:dashboard' %}">Dashboard</a>{% endif %}
+{% if user.role == 'STAFF' or user.role == 'HEAD' %}<a href="{% url 'routing:queue' %}">{% if user.role == 'HEAD' %}Department queue & assignment{% else %}Assigned queue{% endif %}</a>{% endif %}
+{% if user.role == 'HEAD' %}<a href="{% url 'workflow:dashboard' %}">Department reports</a>{% endif %}
+{% if user.role == 'ADMIN' %}<a href="{% url 'accounts:admin_users' %}">Users</a>
+<a href="{% url 'accounts:admin_departments' %}">Departments</a>
+<a href="{% url 'accounts:admin_locations' %}">Locations</a>
+<a href="{% url 'routing:configuration' %}">Routing & SLA</a>
+<a href="{% url 'accounts:admin_audit' %}">Configuration audit</a>{% endif %}
+<a href="{% url 'workflow:notifications' %}">Notifications</a>

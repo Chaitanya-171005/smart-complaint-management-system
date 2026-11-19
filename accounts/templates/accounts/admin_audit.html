@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Configuration audit - SCMS</title>
-</head>
-<body>
-  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+{% extends "ui/base.html" %}
+{% block title %}Configuration audit - SCMS{% endblock %}
+{% block content %}
+<p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Configuration audit log</h1>
   <p>Read-only record of administrative configuration changes. It is separate from complaint history,
      and entries cannot be edited or deleted. Sensitive values are never stored.</p>
@@ -35,5 +30,4 @@
     Page {{ page.number }} of {{ page.paginator.num_pages }}
     {% if page.has_next %}<a href="?{{ filter_query }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}
   </p>
-</body>
-</html>
+{% endblock %}

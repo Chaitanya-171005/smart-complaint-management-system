@@ -1,7 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anonymous resolution feedback - SCMS</title></head>
-<body>
+{% extends "ui/base.html" %}
+{% block title %}Anonymous resolution feedback - SCMS{% endblock %}
+{% block content %}
 <h1>Anonymous resolution feedback</h1>
 {% if unavailable %}
 <p role="alert">Reference feedback is temporarily unavailable. Please try again later.</p>
@@ -36,5 +35,4 @@
 {% endif %}
 <p><a href="{% url 'complaints:track_reference' %}">Track status and history</a></p>
 {% endif %}
-</body>
-</html>
+{% endblock %}

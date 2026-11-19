@@ -1,6 +1,7 @@
-<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Department queue</title></head>
-<body><h1>Department queue</h1>
+{% extends "ui/base.html" %}
+{% block title %}Department queue{% endblock %}
+{% block content %}
+<h1>Department queue</h1>
 {% for item in queue_items %}
 {% with complaint=item.complaint %}
 <article><h2>{{ complaint.complaint_id }}: {{ item.title }}</h2>
@@ -10,6 +11,11 @@
 <p>{{ item.summary.status }} · {{ item.summary.priority }}{% if item.summary.is_escalated %} · Escalated (level {{ item.summary.escalation_level }}){% endif %}</p>
 {% else %}
 <p>{{ complaint.status }} · {{ complaint.priority }}{% if complaint.is_escalated %} · Escalated{% endif %} · {{ complaint.submitted_at }}</p>
+{% endif %}
+{% if request.user.role == 'STAFF' and complaint.assignee_id == request.user.pk %}
+<p><a href="{% url 'workflow:work_status' complaint.complaint_id %}">Open assigned complaint</a></p>
+{% elif request.user.role == 'HEAD' %}
+<p><a href="{% url 'workflow:work_status' complaint.complaint_id %}">View work status</a></p>
 {% endif %}
 <p>Assignee: {{ complaint.assignee|default:"Unassigned" }}</p>
 {% if not complaint.submitted_by_id %}<p><a href="{% url 'workflow:feedback_detail' complaint.complaint_id %}">Resolution feedback</a></p>{% endif %}
@@ -22,4 +28,4 @@
 {% endwith %}
 {% empty %}<p>No complaints in the queue.</p>{% endfor %}
 <nav>{% if page.has_previous %}<a href="?page={{ page.previous_page_number }}">Previous</a>{% endif %} Page {{ page.number }} of {{ page.paginator.num_pages }} {% if page.has_next %}<a href="?page={{ page.next_page_number }}">Next</a>{% endif %}</nav>
-</body></html>
+{% endblock %}

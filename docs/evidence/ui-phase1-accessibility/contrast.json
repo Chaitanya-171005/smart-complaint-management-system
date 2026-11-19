@@ -1,0 +1,62 @@
+{
+  "Sidebar normal": {
+    "foreground": "#f4f8ff",
+    "background": "#142d50",
+    "contrast": 12.96,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Sidebar hover/active/current/focus": {
+    "foreground": "#f4f8ff",
+    "background": "#29496f",
+    "contrast": 8.66,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Sidebar label": {
+    "foreground": "#c1d4ee",
+    "background": "#142d50",
+    "contrast": 9.15,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Sidebar focus ring on navy": {
+    "foreground": "#ffcb66",
+    "background": "#142d50",
+    "contrast": 9.2,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Sidebar focus ring on highlighted link": {
+    "foreground": "#ffcb66",
+    "background": "#29496f",
+    "contrast": 6.14,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Input normal/focus border": {
+    "foreground": "#64748b",
+    "background": "#ffffff",
+    "contrast": 4.76,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Input disabled border": {
+    "foreground": "#64748b",
+    "background": "#e2e8f0",
+    "contrast": 3.86,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Input border against page": {
+    "foreground": "#64748b",
+    "background": "#f3f6fa",
+    "contrast": 4.39,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Input error border": {
+    "foreground": "#a32028",
+    "background": "#ffffff",
+    "contrast": 7.51,
+    "evidence": "source colors; not new browser computed styles"
+  },
+  "Input error border on disabled background": {
+    "foreground": "#a32028",
+    "background": "#e2e8f0",
+    "contrast": 6.1,
+    "evidence": "source colors; not new browser computed styles"
+  }
+}
