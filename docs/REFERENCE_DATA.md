@@ -48,5 +48,8 @@ The location **code is never edited** after creation: other modules store and ro
 - **B07 adapter.** `accounts.reference_adapters.location_options()` returns the active
   locations as `complaints.reference_data.LocationOption`, keyed by the canonical location
   code. Pass it to the intake form; a renamed block or room keeps its key.
-- **Department deactivation guard** remains a tracked follow-up once B17 (#53) merges: B05 will
-  call `routing.services.department_in_use` before deactivating a department.
+- **Deactivation guards.** `set_department_active` and `set_location_active` call F3's
+  `routing.services.department_in_use` / `location_in_use` before deactivating, and refuse with a
+  message when the department is the escalation default or has active routing rules, or the
+  location has active routing rules. The Administrator changes the default (or deactivates the
+  rules) in F3 first. A refused change writes no audit record. Reactivation is never blocked.
