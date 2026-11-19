@@ -6,7 +6,10 @@ import pytest
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.urls import reverse
+from django.utils import timezone
 
+from accounts.campus_reports import report_rows
+from complaints.models import Complaint
 from workflow.dashboards import current_snapshot, snapshot_csv
 
 pytestmark = pytest.mark.django_db
@@ -143,3 +146,48 @@ def test_empty_snapshot_and_anonymous_access(client,user_factory):
     assert response.status_code==200 and total(response.context)==0
     assert client.post(reverse('workflow:dashboard')).status_code==405
     assert client.get(reverse('workflow:dashboard'),{'format':'csv'}).status_code==400
+
+
+def test_department_period_report_reuses_b30_figures_and_csv(dataset,client):
+    owner,head,_,department,other=dataset
+    day=timezone.localtime(Complaint.objects.first().submitted_at).date().isoformat()
+    query={'date_from':day,'date_to':day}
+    url=reverse('workflow:department_report',args=[department.pk])
+    client.force_login(head)
+    screen=client.get(url,query)
+    assert screen.status_code==200
+    assert screen.context['report'].total==4
+    assert screen.context['report'].by_department==[(department.name,4)]
+    export=client.get(url,{**query,'export':'csv'})
+    assert export.status_code==200
+    csv_rows=list(csv.reader(StringIO(export.content.decode())))
+    screen_rows=[[str(cell) for cell in row] for row in report_rows(screen.context['report'])]
+    assert csv_rows[:4]+csv_rows[5:] == screen_rows[:4]+screen_rows[5:]
+    assert 'no-store' in export['Cache-Control']
+    assert export['X-Content-Type-Options']=='nosniff'
+    assert other.name.encode() not in export.content
+    assert owner.email.encode() not in export.content
+    anonymous=Complaint.objects.get(submitted_by=None)
+    for secret in (anonymous.reference_digest, anonymous.complaint_id,
+                   'PRIVATE BODY', 'PRIVATE RESOLUTION'):
+        assert secret.encode() not in export.content
+        assert secret.encode() not in screen.content
+
+
+def test_department_period_report_authorization_and_invalid_ranges(dataset,client,user_factory):
+    owner,head,_,department,other=dataset
+    url=reverse('workflow:department_report',args=[department.pk])
+    query={'date_from':'2026-11-01','date_to':'2026-11-30'}
+    client.force_login(owner)
+    assert client.get(url,query).status_code==404
+    client.force_login(head)
+    assert client.get(reverse('workflow:department_report',args=[other.pk]),query).status_code==404
+    for bad in ({'date_from':'2026-11-01'}, {'date_from':'9999-12-31','date_to':'9999-12-31'},
+                {**query,'status':'ASSIGNED'}, {**query,'export':'pdf'}):
+        assert client.get(url,bad).status_code==400
+    assert client.get(url,{'format':'csv'}).status_code==200
+    type(head).objects.filter(pk=head.pk).update(department=other)
+    assert client.get(url,query).status_code==404
+    admin=user_factory(role='ADMIN')
+    client.force_login(admin)
+    assert client.get(url,query).status_code==403

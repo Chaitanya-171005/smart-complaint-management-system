@@ -1,4 +1,4 @@
-"""B31 current-record snapshots; D03/B30 period calculations are not supplied."""
+"""B31 current-record snapshots and Head department-report authorization."""
 import csv
 from collections import Counter
 from io import StringIO
@@ -6,7 +6,7 @@ from io import StringIO
 from django.core.exceptions import ValidationError
 from django.http import Http404
 
-from accounts.models import User
+from accounts.models import Department, User
 from accounts.permissions import can_view_report, has_role, require_permission, scope_complaints
 from complaints.models import Complaint
 from workflow.services import filter_complaints
@@ -14,6 +14,19 @@ from workflow.services import filter_complaints
 
 def _dashboard_role(user):
     return has_role(user, User.Role.COMPLAINANT, User.Role.HEAD)
+
+
+def authorized_report_department(*, actor, department_id):
+    """Reload membership before giving the shared B30 service a department scope."""
+    current = (User.objects.filter(pk=actor.pk).first()
+               if actor is not None and actor.is_authenticated else None)
+    require_permission(_dashboard_role, current)
+    if not has_role(current, User.Role.HEAD) or not can_view_report(current, department_id):
+        raise Http404
+    department = Department.objects.filter(pk=department_id).first()
+    if department is None:
+        raise Http404
+    return department
 
 
 def current_snapshot(*, actor, department_id=None, status='', category=''):
