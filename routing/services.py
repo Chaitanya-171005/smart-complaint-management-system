@@ -10,6 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
 
 from accounts.config_audit import record_change
+from accounts.configuration_lock import lock_configuration
 from accounts.models import ConfigAuditEvent, Department, Location
 from accounts.permissions import can_manage_configuration, require_permission
 
@@ -43,6 +44,7 @@ def admin_operation(func):
     def wrapper(actor, *args, **kwargs):
         _require_admin(actor)
         with transaction.atomic():
+            lock_configuration()
             return func(actor, *args, **kwargs)
 
     return wrapper
