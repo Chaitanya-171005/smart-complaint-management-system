@@ -1,0 +1,28 @@
+{
+  "source": "a434eaa47f6e96f001c5d188f544cae137b1029d",
+  "image": "sha256:6069cff926a5d048bf85a3cde7b893c3f379b3412fc7301aad75e8173f2765a6",
+  "project": "q040e15147a9b60",
+  "port": 55049,
+  "source_hashes": {
+    "routing/allocation.py": "329e481e10080887078f7941e41b44e9b1ac4fb681e4425f431b0c34ef7a54e4",
+    "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+    "scms/settings.py": "ea8d410627e923cabde636458899e9ce4efe1b800985cbdcce42e302a777b33f",
+    "q04/compose.yml": "58a719dbd2c492c58db8318ec9242ce92fbd32836d2fdb708d016c3f4322a225",
+    "requirements.txt": "5aa8c07119832e843ad8bcf75f6d1f011523632877ce705aacc31cb729b9b072"
+  },
+  "image_metadata": {
+    "hashes": {
+      "routing/allocation.py": "329e481e10080887078f7941e41b44e9b1ac4fb681e4425f431b0c34ef7a54e4",
+      "workflow/notifications.py": "e75db275efeff458404a789cd882e2dcd0c423ab8ce9ebe2ab4b381c8c4f3557",
+      "scms/settings.py": "ea8d410627e923cabde636458899e9ce4efe1b800985cbdcce42e302a777b33f",
+      "q04/compose.yml": "58a719dbd2c492c58db8318ec9242ce92fbd32836d2fdb708d016c3f4322a225",
+      "requirements.txt": "5aa8c07119832e843ad8bcf75f6d1f011523632877ce705aacc31cb729b9b072"
+    },
+    "connection_max_age": 60,
+    "connection_health_checks": true
+  },
+  "match": true,
+  "workers": 4,
+  "threads_per_worker": 1,
+  "new_load_run": false
+}
