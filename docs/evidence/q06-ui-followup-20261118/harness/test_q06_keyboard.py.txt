@@ -1,0 +1,54 @@
+"""Keyboard-only Q06 happy path, with mouse-free navigation and submission."""
+from test_q06_browser import (ui, width, browser_site, chromium, tls_context,
+    intake_site, backend, goto, PASSWORD)  # noqa: F401
+import pytest
+from playwright.sync_api import expect
+
+pytestmark = pytest.mark.django_db(transaction=True)
+
+def test_keyboard_only_login_to_acknowledgement(ui):
+    u=ui;p=u.page;steps=[]
+    def tab_to(locator,allow_accepted=False):
+        for _ in range(35):
+            if allow_accepted and p.locator('#complaint-id').count():
+                return False
+            p.keyboard.press('Tab')
+            if locator.evaluate('e=>e===document.activeElement'):
+                steps.append({'id':locator.get_attribute('id'),'name':locator.inner_text()[:60],
+                    'focus_visible':locator.evaluate("e=>e.matches(':focus-visible')")})
+                return True
+        raise AssertionError('Keyboard could not reach the required control')
+    goto(u,'/accounts/login/')
+    tab_to(p.get_by_label('Email'));p.keyboard.insert_text(u.site['roles']['COMPLAINANT'].email)
+    tab_to(p.get_by_label('Password'));p.keyboard.insert_text(PASSWORD)
+    tab_to(p.get_by_role('button',name='Sign in',exact=True));p.keyboard.press('Enter')
+    expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/')
+    tab_to(p.locator("main a[href='/complaints/new/']").first);p.keyboard.press('Enter')
+    expect(p.get_by_role('heading',level=1)).to_have_text('Submit a complaint')
+    def choose(locator,text,value):
+        # Commit the native macOS popup choice explicitly; Home/ArrowDown/Tab
+        # alone can leave a desktop popup's placeholder unchanged.
+        tab_to(locator);p.keyboard.press('Space');p.keyboard.type(text,delay=20)
+        control_id=locator.get_attribute('id');before=locator.input_value();p.keyboard.press('Enter')
+        if p.locator('#complaint-id').count():
+            u.record('native_selection',{'id':control_id,'value_before_enter':before,'enter_submitted_valid_form':True})
+            return
+        u.record('native_selection',{'id':control_id,'value':locator.input_value(),'expected':value})
+        assert locator.input_value()==value,'Native keyboard selection was not committed'
+    choose(p.locator('#id_category'),u.site['config']['category'].name,str(u.site['config']['category'].pk))
+    choose(p.locator('#id_location'),'Test',u.site['config']['location'].code)
+    choose(p.locator('#id_priority'),'Low','LOW')
+    tab_to(p.get_by_label('Title'));p.keyboard.insert_text('Keyboard-only Q06 complaint')
+    tab_to(p.get_by_label('Description'));p.keyboard.insert_text('A synthetic complaint entered using only keyboard navigation.')
+    if tab_to(p.get_by_role('button',name='Submit complaint',exact=True),allow_accepted=True):
+        p.keyboard.press('Enter')
+    try:
+        expect(p.get_by_role('heading',level=1)).to_have_text('Your complaint was submitted')
+    except AssertionError:
+        u.record('keyboard_failure',{'steps':steps,'fields':p.evaluate('''() => [...document.querySelectorAll('input:not([type=hidden]),select,textarea')].map(e=>({id:e.id,value:e.type==='password'?'REDACTED':e.value,valid:e.validity.valid,message:e.validationMessage}))''')})
+        u.screenshot('keyboard-failure')
+        raise
+    tab_to(p.get_by_role('button',name='Copy Complaint ID',exact=True))
+    u.record('keyboard_only',{'completed':True,'steps':steps,'mouse_actions':0})
+    u.screenshot('keyboard-only-acknowledgement')
+    assert p.locator('#complaint-id').inner_text().startswith('SCMS-')

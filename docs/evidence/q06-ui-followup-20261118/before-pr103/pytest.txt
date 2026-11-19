@@ -1,0 +1,212 @@
+FF..FF......FF................FF.....F............................       [100%]
+=================================== FAILURES ===================================
+_________ test_registration_to_acknowledgement_screen_budget[desktop] __________
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x112baacf0>
+
+    def test_registration_to_acknowledgement_screen_budget(ui):
+        u=ui;p=u.page;screens=[]
+        def snap(label):
+            screens.append({'route':urlsplit(p.url).path,'title':p.title(),'heading':p.locator('h1').inner_text()})
+            u.screenshot(str(len(screens))+'-'+label)
+        goto(u,'/accounts/register/');snap('register')
+        email='q06-first-'+uuid4().hex+'@example.test'
+        p.get_by_label('Full name').fill('Synthetic First Registration')
+        p.get_by_label('Email').fill(email)
+        p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_label('User type').select_option(index=1)
+        p.get_by_role('button',name='Register',exact=True).click()
+        expect(p.get_by_role('heading',level=1)).to_have_text('Registration received');snap('registration-received')
+        p.locator('main').get_by_role('link',name='Sign in',exact=True).click();snap('login')
+        p.get_by_label('Email').fill(email);p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_role('button',name='Sign in',exact=True).click()
+        expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/');snap('home')
+        p.locator("main a[href='/complaints/new/']").first.click();snap('intake')
+        fill_complaint(u);submit(u);snap('acknowledgement')
+        u.record('primary_screens',{'definition':'Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen',
+            'sequence':screens,'count':len(screens),'count_before_acknowledgement':len(screens)-1,'target':4,'human_unaided_assessed':False})
+>       assert len(screens)<=4,'Normal workflow visits more than four primary screens'
+E       AssertionError: Normal workflow visits more than four primary screens
+E       assert 6 <= 4
+E        +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:142: AssertionError
+________ test_registration_to_acknowledgement_screen_budget[mobile320] _________
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x112a2c6e0>
+
+    def test_registration_to_acknowledgement_screen_budget(ui):
+        u=ui;p=u.page;screens=[]
+        def snap(label):
+            screens.append({'route':urlsplit(p.url).path,'title':p.title(),'heading':p.locator('h1').inner_text()})
+            u.screenshot(str(len(screens))+'-'+label)
+        goto(u,'/accounts/register/');snap('register')
+        email='q06-first-'+uuid4().hex+'@example.test'
+        p.get_by_label('Full name').fill('Synthetic First Registration')
+        p.get_by_label('Email').fill(email)
+        p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_label('User type').select_option(index=1)
+        p.get_by_role('button',name='Register',exact=True).click()
+        expect(p.get_by_role('heading',level=1)).to_have_text('Registration received');snap('registration-received')
+        p.locator('main').get_by_role('link',name='Sign in',exact=True).click();snap('login')
+        p.get_by_label('Email').fill(email);p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_role('button',name='Sign in',exact=True).click()
+        expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/');snap('home')
+        p.locator("main a[href='/complaints/new/']").first.click();snap('intake')
+        fill_complaint(u);submit(u);snap('acknowledgement')
+        u.record('primary_screens',{'definition':'Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen',
+            'sequence':screens,'count':len(screens),'count_before_acknowledgement':len(screens)-1,'target':4,'human_unaided_assessed':False})
+>       assert len(screens)<=4,'Normal workflow visits more than four primary screens'
+E       AssertionError: Normal workflow visits more than four primary screens
+E       assert 6 <= 4
+E        +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:142: AssertionError
+_______ test_registration_errors_have_programmatic_descriptions[desktop] _______
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x113b01fd0>
+
+    def test_registration_errors_have_programmatic_descriptions(ui):
+        u=ui;p=u.page;goto(u,'/accounts/register/')
+        p.get_by_role('button',name='Register',exact=True).click()
+        audit=label_audit(p);u.record('registration_error_semantics',audit);u.screenshot('registration-required-errors')
+>       assert all(x['label'] and not x['missingDescriptions'] for x in audit),'Invalid registration fields reference missing error description elements'
+E       AssertionError: Invalid registration fields reference missing error description elements
+E       assert False
+E        +  where False = all(<generator object test_registration_errors_have_programmatic_descriptions.<locals>.<genexpr> at 0x113dc7ed0>)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:169: AssertionError
+______ test_registration_errors_have_programmatic_descriptions[mobile320] ______
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x113b03a10>
+
+    def test_registration_errors_have_programmatic_descriptions(ui):
+        u=ui;p=u.page;goto(u,'/accounts/register/')
+        p.get_by_role('button',name='Register',exact=True).click()
+        audit=label_audit(p);u.record('registration_error_semantics',audit);u.screenshot('registration-required-errors')
+>       assert all(x['label'] and not x['missingDescriptions'] for x in audit),'Invalid registration fields reference missing error description elements'
+E       AssertionError: Invalid registration fields reference missing error description elements
+E       assert False
+E        +  where False = all(<generator object test_registration_errors_have_programmatic_descriptions.<locals>.<genexpr> at 0x113f74040>)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:169: AssertionError
+______ test_intake_errors_announce_or_focus_after_server_refusal[desktop] ______
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x113b01fd0>
+
+    def test_intake_errors_announce_or_focus_after_server_refusal(ui):
+        u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Bad')
+        p.get_by_role('button',name='Submit complaint',exact=True).click()
+        state=p.evaluate('''() => ({focus:document.activeElement.id,alerts:document.querySelectorAll('[role=alert],[aria-live=assertive]').length,
+            invalidFocus:document.activeElement.getAttribute('aria-invalid')==='true'})''')
+        u.record('server_error_announcement',state);u.screenshot('server-error-announcement')
+>       assert state['alerts']>0 or state['invalidFocus'],'No automatic error announcement or focus on invalid field after full-page refusal'
+E       AssertionError: No automatic error announcement or focus on invalid field after full-page refusal
+E       assert (0 > 0 or False)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:214: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:283 Bad Request: /complaints/new/
+_____ test_intake_errors_announce_or_focus_after_server_refusal[mobile320] _____
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x1119c1a90>
+
+    def test_intake_errors_announce_or_focus_after_server_refusal(ui):
+        u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Bad')
+        p.get_by_role('button',name='Submit complaint',exact=True).click()
+        state=p.evaluate('''() => ({focus:document.activeElement.id,alerts:document.querySelectorAll('[role=alert],[aria-live=assertive]').length,
+            invalidFocus:document.activeElement.getAttribute('aria-invalid')==='true'})''')
+        u.record('server_error_announcement',state);u.screenshot('server-error-announcement')
+>       assert state['alerts']>0 or state['invalidFocus'],'No automatic error announcement or focus on invalid field after full-page refusal'
+E       AssertionError: No automatic error announcement or focus on invalid field after full-page refusal
+E       assert (0 > 0 or False)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:214: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:283 Bad Request: /complaints/new/
+_________ test_permission_refusal_explains_corrective_action[desktop] __________
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x112e827b0>
+
+    def test_permission_refusal_explains_corrective_action(ui):
+        u=ui;p=u.page;login(u);r=goto(u,'/routing/queue/');assert r.status==403
+        text=p.locator('body').inner_text();u.record('permission_guidance',{'text':text,'links':p.get_by_role('link').count()})
+        u.screenshot('permission-guidance')
+>       assert re.search(r'contact|administrator|sign in|home|back|permission',text,re.I),'403 has no corrective action or recovery navigation'
+E       AssertionError: 403 has no corrective action or recovery navigation
+E       assert None
+E        +  where None = <function search at 0x10ec1bed0>('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)
+E        +    where <function search at 0x10ec1bed0> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:271: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:283 Forbidden (Permission denied): /routing/queue/
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/base.py", line 199, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "[review-source]/accounts/permissions.py", line 281, in wrapped
+    denied = _enforce_role(request, roles)
+  File "[review-source]/accounts/permissions.py", line 271, in _enforce_role
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+________ test_permission_refusal_explains_corrective_action[mobile320] _________
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x112e82660>
+
+    def test_permission_refusal_explains_corrective_action(ui):
+        u=ui;p=u.page;login(u);r=goto(u,'/routing/queue/');assert r.status==403
+        text=p.locator('body').inner_text();u.record('permission_guidance',{'text':text,'links':p.get_by_role('link').count()})
+        u.screenshot('permission-guidance')
+>       assert re.search(r'contact|administrator|sign in|home|back|permission',text,re.I),'403 has no corrective action or recovery navigation'
+E       AssertionError: 403 has no corrective action or recovery navigation
+E       assert None
+E        +  where None = <function search at 0x10ec1bed0>('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)
+E        +    where <function search at 0x10ec1bed0> = re.search
+E        +    and   re.IGNORECASE = re.I
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:271: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  django.request:log.py:283 Forbidden (Permission denied): /routing/queue/
+Traceback (most recent call last):
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/exception.py", line 56, in inner
+    response = get_response(request)
+  File "[venv]/lib/python3.14/site-packages/django/core/handlers/base.py", line 199, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "[review-source]/accounts/permissions.py", line 281, in wrapped
+    denied = _enforce_role(request, roles)
+  File "[review-source]/accounts/permissions.py", line 271, in _enforce_role
+    raise PermissionDenied
+django.core.exceptions.PermissionDenied
+___________ test_long_labels_responsive_layout[mobile320-anonymous] ____________
+
+ui = <test_q06_browser.ui.<locals>.UI object at 0x112d3c980>, anonymous = True
+
+    @pytest.mark.parametrize('anonymous',[False,True],ids=['authenticated','anonymous'])
+    def test_long_labels_responsive_layout(ui,anonymous):
+        u=ui;p=u.page
+        if not anonymous:login(u)
+        goto(u,'/anonymous/new/' if anonymous else '/complaints/new/')
+        fill_complaint(u);p.get_by_label('Title').fill('W'*120)
+        p.get_by_label('Description').fill('x'*2000)
+        metrics=layout(p);u.record('long_labels',{'anonymous':anonymous,'layout':metrics,'category_length':50,'location_lengths':[20,10,30]})
+        u.screenshot('long-labels')
+>       assert fits(u,metrics),'Valid maximum-length reference labels overflow the viewport'
+E       AssertionError: Valid maximum-length reference labels overflow the viewport
+E       assert False
+E        +  where False = fits(<test_q06_browser.ui.<locals>.UI object at 0x112d3c980>, {'innerWidth': 660, 'clientWidth': 320, 'scrollWidth': 660, 'visualWidth': 320, ...})
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:294: AssertionError
+=========================== short test summary info ============================
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_registration_to_acknowledgement_screen_budget[desktop]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_registration_to_acknowledgement_screen_budget[mobile320]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_registration_errors_have_programmatic_descriptions[desktop]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_registration_errors_have_programmatic_descriptions[mobile320]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_intake_errors_announce_or_focus_after_server_refusal[desktop]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_intake_errors_announce_or_focus_after_server_refusal[mobile320]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_permission_refusal_explains_corrective_action[desktop]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_permission_refusal_explains_corrective_action[mobile320]
+FAILED build/evidence/q06-ui103/harness/test_q06_browser.py::test_long_labels_responsive_layout[mobile320-anonymous]
+9 failed, 57 passed in 164.01s (0:02:44)

@@ -1,8 +1,6 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>Notifications — SCMS</title></head>
-<body>
-{% load notification_tags %}{% notification_header %}
+{% extends "ui/base.html" %}
+{% block title %}Notifications — SCMS{% endblock %}
+{% block content %}
 <h1>Notifications</h1>
 <ul>
 {% for notice in page %}
@@ -19,5 +17,4 @@
 <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
 {% if page.has_next %}<a href="?page={{ page.next_page_number }}">Next</a>{% endif %}
 </nav>
-</body>
-</html>
+{% endblock %}

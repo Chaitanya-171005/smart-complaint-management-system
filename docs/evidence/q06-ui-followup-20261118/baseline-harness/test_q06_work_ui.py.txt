@@ -1,0 +1,45 @@
+"""Additional Q06 navigation/layout and actual reference-copy observation."""
+from test_q06_browser import (ui, width, browser_site, chromium, tls_context,
+    intake_site, backend, goto, login, fill_complaint, submit, layout, fits)  # noqa: F401
+import pytest
+
+pytestmark = pytest.mark.django_db(transaction=True)
+
+@pytest.mark.parametrize('role',['HEAD','STAFF'])
+def test_work_queue_responsive_controls(ui,role):
+    u=ui;p=u.page;login(u,role);response=goto(u,'/routing/queue/')
+    assert response.status==200
+    metrics=layout(p)
+    u.record('queue_ui',{'role':role,'layout':metrics,'assign_buttons':p.get_by_role('button',name='Assign',exact=True).count()})
+    u.screenshot('department-queue')
+    assert fits(u,metrics),'Department queue lacks an effective 320px layout'
+
+def test_anonymous_reference_manual_clipboard_copy(ui):
+    u=ui;p=u.page
+    u.context.grant_permissions(['clipboard-read','clipboard-write'],origin=u.site['origin'])
+    goto(u,'/anonymous/new/');fill_complaint(u,anonymous=True);submit(u,anonymous=True)
+    field=p.locator('#tracking-reference');reference=field.inner_text().strip()
+    field.click(click_count=3);p.keyboard.press('ControlOrMeta+C')
+    copied=p.evaluate('navigator.clipboard.readText()').strip()
+    same=copied==reference
+    u.record('manual_reference_copy',{'copied_exactly':same,'reference_length':len(reference),
+        'copy_button_present':p.get_by_role('button').count()>0,'method':'real triple-click text selection then ControlOrMeta+C; browser clipboard readback'})
+    u.screenshot('reference-copy-masked',mask=[field])
+    p.evaluate("navigator.clipboard.writeText('')")
+    assert same,'Manual reference copy did not reproduce the complete reference'
+
+@pytest.mark.parametrize('role',['COMPLAINANT','STAFF','HEAD','ADMIN'])
+def test_role_home_links_are_working_and_responsive(ui,role):
+    u=ui;p=u.page;login(u,role)
+    links=[a.get_attribute('href') for a in p.get_by_role('link').all()]
+    rows=[]
+    for i,path in enumerate(dict.fromkeys(links)):
+        if not path.startswith('/') or path.startswith('//'):continue
+        response=goto(u,path);metrics=layout(p)
+        rows.append({'route':path,'http':response.status,'layout':metrics,'fits':fits(u,metrics)})
+        if response.status!=200 or not fits(u,metrics):
+            u.screenshot(f'{role.lower()}-linked-{i}')
+            p.screenshot(path=str(u.folder/f'{role.lower()}-linked-{i}-viewport.png'),full_page=False)
+    u.record('role_link_crawl',{'role':role,'links':rows})
+    assert all(x['http']==200 for x in rows),'A role-home navigation link is broken'
+    assert all(x['fits'] for x in rows),'Linked role pages are not fully usable at the requested width'

@@ -1,0 +1,25 @@
+{
+  "case": "test_permission_refusal_explains_corrective_action[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "permission_guidance": {
+      "text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nComplainant\nLog out\nOverview\nSubmit complaint\nMy complaints\nDashboard\nNotifications\nNotifications \u2014 0 unread\nAccess unavailable\n\nYou do not have permission to use this page. Return to your home page or contact an administrator for help.\n\nReturn home\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+      "links": 9
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

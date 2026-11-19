@@ -1,0 +1,747 @@
+tracking-integration	Set up job	﻿2026-11-18T17:55:37.5309813Z Current runner version: '2.338.2'
+tracking-integration	Set up job	2026-11-18T17:55:37.5346950Z ##[group]Runner Image Provisioner
+tracking-integration	Set up job	2026-11-18T17:55:37.5348521Z Hosted Compute Agent
+tracking-integration	Set up job	2026-11-18T17:55:37.5349669Z Version: 20261103.629
+tracking-integration	Set up job	2026-11-18T17:55:37.5350879Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+tracking-integration	Set up job	2026-11-18T17:55:37.5352387Z Build Date: 2026-11-03T17:26:59Z
+tracking-integration	Set up job	2026-11-18T17:55:37.5353602Z Worker ID: {2b08b482-3b26-48ce-bf08-d01932506301}
+tracking-integration	Set up job	2026-11-18T17:55:37.5354968Z Region: eastus
+tracking-integration	Set up job	2026-11-18T17:55:37.5355930Z Cloud: Azure
+tracking-integration	Set up job	2026-11-18T17:55:37.5356906Z ##[endgroup]
+tracking-integration	Set up job	2026-11-18T17:55:37.5360178Z ##[group]Operating System
+tracking-integration	Set up job	2026-11-18T17:55:37.5361239Z Ubuntu
+tracking-integration	Set up job	2026-11-18T17:55:37.5362239Z 26.04.1
+tracking-integration	Set up job	2026-11-18T17:55:37.5363127Z LTS
+tracking-integration	Set up job	2026-11-18T17:55:37.5364127Z ##[endgroup]
+tracking-integration	Set up job	2026-11-18T17:55:37.5365164Z ##[group]Runner Image
+tracking-integration	Set up job	2026-11-18T17:55:37.5366172Z Image: ubuntu-26.04
+tracking-integration	Set up job	2026-11-18T17:55:37.5367465Z Version: 20261111.196.1
+tracking-integration	Set up job	2026-11-18T17:55:37.5369372Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261111.196/images/ubuntu/Ubuntu2604-Readme.md
+tracking-integration	Set up job	2026-11-18T17:55:37.5372503Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261111.196
+tracking-integration	Set up job	2026-11-18T17:55:37.5374320Z ##[endgroup]
+tracking-integration	Set up job	2026-11-18T17:55:37.5376221Z ##[group]GITHUB_TOKEN Permissions
+tracking-integration	Set up job	2026-11-18T17:55:37.5379502Z Contents: read
+tracking-integration	Set up job	2026-11-18T17:55:37.5380514Z Metadata: read
+tracking-integration	Set up job	2026-11-18T17:55:37.5381544Z ##[endgroup]
+tracking-integration	Set up job	2026-11-18T17:55:37.5384581Z Secret source: Actions
+tracking-integration	Set up job	2026-11-18T17:55:37.5386247Z Cache mode: write
+tracking-integration	Set up job	2026-11-18T17:55:37.5387738Z Prepare workflow directory
+tracking-integration	Set up job	2026-11-18T17:55:37.5981852Z Prepare all required actions
+tracking-integration	Set up job	2026-11-18T17:55:37.6055750Z Getting action download info
+tracking-integration	Set up job	2026-11-18T17:55:37.8068840Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+tracking-integration	Set up job	2026-11-18T17:55:37.9050362Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+tracking-integration	Set up job	2026-11-18T17:55:37.9638391Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+tracking-integration	Set up job	2026-11-18T17:55:38.1509986Z Complete job name: tracking-integration
+tracking-integration	Run actions/checkout@v4	﻿2026-11-18T17:55:38.2417776Z ##[group]Run actions/checkout@v4
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2418749Z with:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2419368Z   repository: Chaitanya-171005/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2423434Z   token: ***
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2423872Z   ssh-strict: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2424310Z   ssh-user: git
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2424761Z   persist-credentials: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2425258Z   clean: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2425695Z   sparse-checkout-cone-mode: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2426230Z   fetch-depth: 1
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2426669Z   fetch-tags: false
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2427281Z   show-progress: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2427751Z   lfs: false
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2428165Z   submodules: false
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2428616Z   set-safe-directory: true
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2429134Z   allow-unsafe-pr-checkout: false
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2429891Z env:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2430499Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2431265Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2431846Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2432340Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2432939Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.2433566Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.4995362Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.4998894Z ##[group]Getting Git version info
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5000992Z Working directory is '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5004221Z [command]/usr/bin/git version
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5005452Z git version 2.56.1
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5009037Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5016297Z Temporarily overriding HOME='[ci-home]/work/_temp/c6ba39c3-4241-4720-8db6-9f63c77e3876' before making global git config changes
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5020174Z Adding repository directory to the temporary git global config as a safe directory
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5024085Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5091903Z Deleting the contents of '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5094858Z ##[group]Initializing the repository
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5100011Z [command]/usr/bin/git init [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5204434Z hint: Using 'master' as the name for the initial branch. This default branch name
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5206468Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5208619Z hint: to use in all of your new repositories, which will suppress this warning,
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5210249Z hint: call:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5211213Z hint:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5212307Z hint: 	git config --global init.defaultBranch <name>
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5213658Z hint:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5214886Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5216818Z hint: 'development'. The just-created branch can be renamed via this command:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5218734Z hint:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5219709Z hint: 	git branch -m <name>
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5220809Z hint:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5222177Z hint: Disable this message with "git config set advice.defaultBranchName false"
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5224890Z Initialized empty Git repository in [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5229824Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5285921Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5287473Z ##[group]Disabling automatic garbage collection
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5289419Z [command]/usr/bin/git config --local gc.auto 0
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5332147Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5334685Z ##[group]Setting up auth
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5342121Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5384544Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5841356Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.5889770Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6246709Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6282214Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6578833Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6620572Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6621641Z ##[group]Fetching the repository
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:38.6631011Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d3f67fb36025cd8eece553cb0a06caf42c27d2f9:refs/remotes/pull/104/merge
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0511577Z From https://github.com/Chaitanya-171005/smart-complaint-management-system
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0513971Z  * [new ref]         d3f67fb36025cd8eece553cb0a06caf42c27d2f9 -> pull/104/merge
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0518407Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0520680Z ##[group]Determining the checkout info
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0523084Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0608790Z [command]/usr/bin/git sparse-checkout disable
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0624357Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0628312Z ##[group]Checking out the ref
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.0629904Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/104/merge
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1291323Z Note: switching to 'refs/remotes/pull/104/merge'.
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1292710Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1299107Z You are in 'detached HEAD' state. You can look around, make experimental
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1302209Z changes and commit them, and you can discard any commits you make in this
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1305092Z state without impacting any branches by switching back to a branch.
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1306774Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1308256Z If you want to create a new branch to retain commits you create, you may
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1311016Z do so (now or later) by using -c with the switch command. Example:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1312481Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1313162Z   git switch -c <new-branch-name>
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1314184Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1314929Z Or undo this operation with:
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1316032Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1316907Z   git switch -
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1318156Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1319881Z Turn off this advice by setting config variable advice.detachedHead to false
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1321318Z 
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1323074Z HEAD is now at d3f67fb Merge 6da634c138ced6eed48faa925274f7657778f670 into 68cd6fafe59c49b21d99a0b4ec889579883b2b84
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1329414Z ##[endgroup]
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1358475Z [command]/usr/bin/git log -1 --format=%H
+tracking-integration	Run actions/checkout@v4	2026-11-18T17:55:39.1385557Z d3f67fb36025cd8eece553cb0a06caf42c27d2f9
+tracking-integration	Run actions/setup-python@v5	﻿2026-11-18T17:55:39.1789413Z ##[group]Run actions/setup-python@v5
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1790709Z with:
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1791608Z   python-version: 3.13
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1792635Z   cache: pip
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1793558Z   check-latest: false
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1804572Z   token: ***
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1805555Z   update-environment: true
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1806697Z   allow-prereleases: false
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1807908Z   freethreaded: false
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1808881Z env:
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1810226Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1811985Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1813257Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1814367Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1815753Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.1817303Z ##[endgroup]
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.3245074Z ##[group]Installed versions
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.3371968Z (node:2426) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.3375650Z (Use `node --trace-deprecation ...` to show where the warning was created)
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.3377947Z Successfully set up CPython (3.13.18)
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.3379888Z ##[endgroup]
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:39.5160208Z [command]/opt/hostedtoolcache/Python/3.13.18/x64/bin/pip cache dir
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.2177675Z [ci-home]/.cache/pip
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.3486470Z Cache hit for: setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.3616906Z (node:2426) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.6505994Z Received 29214866 of 29214866 (100.0%), 117.1 MBs/sec
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.6506759Z Cache Size: ~28 MB (29214866 B)
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.6539761Z [command]/usr/bin/tar -xf [ci-home]/work/_temp/7a6d2216-823d-4ee8-8021-e47e7934d764/cache.tzst -P -C [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system --use-compress-program unzstd
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.7224337Z Cache restored successfully
+tracking-integration	Run actions/setup-python@v5	2026-11-18T17:55:40.7242414Z Cache restored from key: setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+tracking-integration	Install test dependencies and real nginx	﻿2026-11-18T17:55:40.7484069Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7485035Z ^[[36;1mpython -m pip install -r requirements.txt -r requirements-dev.txt^[[0m
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7485478Z ^[[36;1msudo apt-get update^[[0m
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7485791Z ^[[36;1msudo apt-get install -y nginx openssl^[[0m
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7542048Z shell: /usr/bin/bash -e {0}
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7542345Z env:
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7542715Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7543143Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7543432Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7543682Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7544148Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7544567Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7545027Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7545479Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7545957Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7546390Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7546808Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:40.7547355Z ##[endgroup]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:41.8493825Z Collecting Django<6.2,>=6.1.2 (from -r requirements.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:41.8507323Z   Using cached django-6.1.3-py3-none-any.whl.metadata (3.9 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:41.8872607Z Collecting python-dotenv (from -r requirements.txt (line 2))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:41.8885089Z   Using cached python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.0696850Z Collecting Pillow==13.0.0 (from -r requirements.txt (line 3))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.0718187Z   Using cached pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.1268658Z Collecting pypdf==6.21.4 (from -r requirements.txt (line 4))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.1280548Z   Using cached pypdf-6.21.4-py3-none-any.whl.metadata (7.6 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.1690402Z Collecting psycopg==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.1706710Z   Using cached psycopg-3.3.8-py3-none-any.whl.metadata (4.4 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2088896Z Collecting gunicorn==26.2.0 (from -r requirements.txt (line 6))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2100586Z   Using cached gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2532670Z Collecting redis==8.1.0 (from -r requirements.txt (line 7))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2545288Z   Using cached redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2987385Z Collecting pytest==9.1.1 (from -r requirements-dev.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.2998860Z   Using cached pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.3363483Z Collecting pytest-django==4.14.0 (from -r requirements-dev.txt (line 2))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.3375378Z   Using cached pytest_django-4.14.0-py3-none-any.whl.metadata (8.1 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.3709948Z Collecting pytest-cov==7.1.0 (from -r requirements-dev.txt (line 3))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.3721464Z   Using cached pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4173352Z Collecting fakeredis==2.40.0 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4187767Z   Using cached fakeredis-2.40.0-py3-none-any.whl.metadata (9.3 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4533438Z Collecting iniconfig>=1.0.1 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4544963Z   Using cached iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4879705Z Collecting packaging>=22 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.4891635Z   Using cached packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.5202029Z Collecting pluggy<2,>=1.5 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.5213676Z   Using cached pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.5572017Z Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.5583857Z   Using cached pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.9789663Z Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov==7.1.0->-r requirements-dev.txt (line 3))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:42.9803296Z   Using cached coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.3 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.0142187Z Collecting sortedcontainers>=2 (from fakeredis==2.40.0->fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.0153121Z   Using cached sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.0904522Z Collecting lupa>=2.1 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.0916718Z   Using cached lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (60 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.2647561Z Collecting psycopg-binary==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.2661103Z   Using cached psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3014951Z Collecting asgiref>=3.9.1 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3026618Z   Using cached asgiref-3.13.0-py3-none-any.whl.metadata (12 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3343517Z Collecting sqlparse>=0.5.0 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3357972Z   Using cached sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3422589Z Using cached pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3460314Z Using cached pypdf-6.21.4-py3-none-any.whl (410 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3473224Z Using cached psycopg-3.3.8-py3-none-any.whl (216 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3484921Z Using cached gunicorn-26.2.0-py3-none-any.whl (228 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3496787Z Using cached redis-8.1.0-py3-none-any.whl (560 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3510198Z Using cached pytest-9.1.1-py3-none-any.whl (386 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3522639Z Using cached pytest_django-4.14.0-py3-none-any.whl (27 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3533769Z Using cached pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3544865Z Using cached fakeredis-2.40.0-py3-none-any.whl (204 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3556777Z Using cached psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3585968Z Using cached django-6.1.3-py3-none-any.whl (8.4 MB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3626794Z Using cached pluggy-1.7.0-py3-none-any.whl (27 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3638411Z Using cached python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3649566Z Using cached asgiref-3.13.0-py3-none-any.whl (27 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3661323Z Using cached coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (262 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3673221Z Using cached iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3684728Z Using cached lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (2.4 MB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3704735Z Using cached packaging-26.3-py3-none-any.whl (129 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3716405Z Using cached pygments-2.21.0-py3-none-any.whl (1.3 MB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3732248Z Using cached sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.3743464Z Using cached sqlparse-0.6.1-py3-none-any.whl (51 kB)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:43.6731591Z Installing collected packages: sortedcontainers, sqlparse, redis, python-dotenv, pypdf, pygments, psycopg-binary, psycopg, pluggy, Pillow, packaging, lupa, iniconfig, gunicorn, coverage, asgiref, pytest, fakeredis, Django, pytest-django, pytest-cov
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.5780969Z 
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.5810979Z Successfully installed Django-6.1.3 Pillow-13.0.0 asgiref-3.13.0 coverage-7.17.3 fakeredis-2.40.0 gunicorn-26.2.0 iniconfig-2.3.1 lupa-2.8 packaging-26.3 pluggy-1.7.0 psycopg-3.3.8 psycopg-binary-3.3.8 pygments-2.21.0 pypdf-6.21.4 pytest-9.1.1 pytest-cov-7.1.0 pytest-django-4.14.0 python-dotenv-1.2.4 redis-8.1.0 sortedcontainers-2.4.0 sqlparse-0.6.1
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7458398Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7688620Z Get:6 https://packages.microsoft.com/ubuntu/26.04/prod resolute InRelease [3964 B]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7818938Z Hit:2 http://azure.archive.ubuntu.com/ubuntu resolute InRelease
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7857463Z Get:3 http://azure.archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7916640Z Get:4 http://azure.archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.7928285Z Get:5 http://azure.archive.ubuntu.com/ubuntu resolute-security InRelease [137 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8018527Z Get:7 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main amd64 Packages [165 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8278369Z Get:8 https://packages.microsoft.com/ubuntu/26.04/prod resolute/main arm64 Packages [151 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8388416Z Get:9 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main amd64v3 Packages [874 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8449379Z Get:10 http://azure.archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [196 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8512397Z Get:11 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe amd64v3 Packages [392 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8598283Z Get:12 http://azure.archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [123 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8777503Z Get:13 http://azure.archive.ubuntu.com/ubuntu resolute-security/main amd64v3 Packages [719 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8828357Z Get:14 http://azure.archive.ubuntu.com/ubuntu resolute-security/main Translation-en [158 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8838768Z Get:15 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe amd64v3 Packages [221 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8858317Z Get:16 http://azure.archive.ubuntu.com/ubuntu resolute-security/universe Translation-en [72.6 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8874593Z Get:17 http://azure.archive.ubuntu.com/ubuntu resolute-security/restricted amd64v3 Packages [590 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:48.8905215Z Get:18 http://azure.archive.ubuntu.com/ubuntu resolute-security/restricted Translation-en [122 kB]
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:51.0615419Z Fetched 4197 kB in 0s (11.8 MB/s)
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:51.7672103Z Reading package lists...
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:51.8020809Z Reading package lists...
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:51.9884396Z Building dependency tree...
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:51.9892730Z Reading state information...
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:52.0253310Z nginx is already the newest version (1.28.3-2ubuntu1.12).
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:52.0254009Z openssl is already the newest version (3.5.5-1ubuntu3.7).
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:52.0895577Z Solving dependencies...
+tracking-integration	Install test dependencies and real nginx	2026-11-18T17:55:52.2023252Z 0 upgraded, 0 newly installed, 0 to remove and 29 not upgraded.
+tracking-integration	Start dedicated disposable memory-only Redis	﻿2026-11-18T17:55:52.2086003Z ##[group]Run docker run --detach --name b13-test-redis --publish 127.0.0.1:6379:6379 \
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2086654Z ^[[36;1mdocker run --detach --name b13-test-redis --publish 127.0.0.1:6379:6379 \^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2087317Z ^[[36;1m  redis:7.4-alpine redis-server \^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2087761Z ^[[36;1m  --save "" --appendonly no --maxmemory 64mb --maxmemory-policy noeviction \^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2088302Z ^[[36;1m  --slowlog-log-slower-than -1 --notify-keyspace-events ""^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2088682Z ^[[36;1mfor attempt in $(seq 1 30); do^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2089042Z ^[[36;1m  if docker exec b13-test-redis redis-cli ping; then break; fi^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2089404Z ^[[36;1m  sleep 1^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2089614Z ^[[36;1mdone^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2089862Z ^[[36;1mdocker exec b13-test-redis redis-cli ping^[[0m
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2144191Z shell: /usr/bin/bash -e {0}
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2144458Z env:
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2144777Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2145218Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2145697Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2145944Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2146264Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2146677Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2147404Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2147867Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2148260Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2148646Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2149034Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.2149364Z ##[endgroup]
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.3141799Z Unable to find image 'redis:7.4-alpine' locally
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.5658843Z 7.4-alpine: Pulling from library/redis
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6700647Z 710f3da1112f: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6701781Z 4f4fb700ef54: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6702432Z 4a603bc2424c: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6702892Z f55179448640: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6703310Z ad83137ff0b2: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6703631Z 6c0bde7286d0: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.6703878Z 0e50696bc150: Pulling fs layer
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.7203332Z 4a603bc2424c: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.7217532Z 6c0bde7286d0: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.7237960Z 0e50696bc150: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.7238618Z 4f4fb700ef54: Already exists
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.8172915Z 5864e364268f: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.8177983Z f55179448640: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.8181735Z ad83137ff0b2: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.8185281Z 710f3da1112f: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.8193129Z dfed3a5d50b9: Download complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.9198248Z 6c0bde7286d0: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:52.9261318Z 710f3da1112f: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.0229889Z ad83137ff0b2: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1185754Z 4a603bc2424c: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1193456Z 0e50696bc150: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1217416Z 4f4fb700ef54: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1235531Z f55179448640: Pull complete
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1361123Z Digest: sha256:7f7d30b7fdd09467bac58198a1f166dd69789d348d4fe859cccb20e0cf287fbe
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.1361724Z Status: Downloaded newer image for redis:7.4-alpine
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:53.8489174Z e3a26b9ee96876e5092b931e25244ad2692b18503a98be8f8f8bfe2e9311915c
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:54.1135457Z PONG
+tracking-integration	Start dedicated disposable memory-only Redis	2026-11-18T17:55:54.1675836Z PONG
+tracking-integration	Prepare disposable CI database and evidence storage	﻿2026-11-18T17:55:54.1749251Z ##[group]Run set -euo pipefail
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1749623Z ^[[36;1mset -euo pipefail^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1749975Z ^[[36;1mci_data="$(mktemp -d "$RUNNER_TEMP/scms-b13-data.XXXXXX")"^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1750400Z ^[[36;1mmkdir -p "$ci_data/private-evidence"^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1750703Z ^[[36;1m{^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1750980Z ^[[36;1m  printf 'DJANGO_DB_PATH=%s/db.sqlite3\n' "$ci_data"^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1751447Z ^[[36;1m  printf 'PRIVATE_EVIDENCE_ROOT=%s/private-evidence\n' "$ci_data"^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1751866Z ^[[36;1m  printf 'SCMS_CI_DATABASE_ISOLATED=1\n'^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1752171Z ^[[36;1m} >> "$GITHUB_ENV"^[[0m
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1805158Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1805547Z env:
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1825880Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1826386Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1826686Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1826939Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1827546Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1827976Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1828435Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1828880Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1829531Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1829929Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1830334Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Prepare disposable CI database and evidence storage	2026-11-18T17:55:54.1830673Z ##[endgroup]
+tracking-integration	System, migration, full tests and coverage gates	﻿2026-11-18T17:55:54.1999431Z ##[group]Run sh scripts/ci_checks.sh build/evidence/b13-review
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.1999912Z ^[[36;1msh scripts/ci_checks.sh build/evidence/b13-review^[[0m
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2047860Z shell: /usr/bin/bash -e {0}
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2048124Z env:
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2048440Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2048862Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2049145Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2049399Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2049724Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2050146Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2050614Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2051056Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2051450Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2051852Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2052277Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2052720Z   DJANGO_DB_PATH: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/db.sqlite3
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2053258Z   PRIVATE_EVIDENCE_ROOT: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/private-evidence
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2053704Z   SCMS_CI_DATABASE_ISOLATED: 1
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:54.2053947Z ##[endgroup]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6050309Z System check identified some issues:
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6050613Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6050702Z WARNINGS:
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6052295Z ?: (security.W005) You have not set the SECURE_HSTS_INCLUDE_SUBDOMAINS setting to True. Without this, your site is potentially vulnerable to attack via an insecure connection to a subdomain. Only set this to True if you are certain that all subdomains of your domain should be served exclusively via SSL.
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6054889Z ?: (security.W021) You have not set the SECURE_HSTS_PRELOAD setting to True. Without this, your site cannot be submitted to the browser preload list.
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6055794Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:55.6056006Z System check identified 2 issues (0 silenced).
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:56.1240115Z System check identified no issues (0 silenced).
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:56.6661751Z No changes detected
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1721008Z Operations to perform:
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1721979Z   Apply all migrations: accounts, admin, auth, complaints, contenttypes, routing, sessions, workflow
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1722936Z Running migrations:
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1770591Z   Applying contenttypes.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1826249Z   Applying contenttypes.0002_remove_content_type_name... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1918519Z   Applying auth.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.1971503Z   Applying auth.0002_alter_permission_name_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2012678Z   Applying auth.0003_alter_user_email_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2050543Z   Applying auth.0004_alter_user_username_opts... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2088321Z   Applying auth.0005_alter_user_last_login_null... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2100005Z   Applying auth.0006_require_contenttypes_0002... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2140850Z   Applying auth.0007_alter_validators_add_error_messages... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2178470Z   Applying auth.0008_alter_user_username_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2215298Z   Applying auth.0009_alter_user_last_name_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2262323Z   Applying auth.0010_alter_group_name_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2301356Z   Applying auth.0011_update_proxy_permissions... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2338206Z   Applying auth.0012_alter_user_first_name_max_length... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2428638Z   Applying accounts.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2739662Z   Applying accounts.0002_align_field_limits_email_unique... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2819811Z   Applying accounts.0003_loginthrottle_securityevent... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.2877719Z   Applying accounts.0004_alter_securityevent_event_type... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3087145Z   Applying accounts.0005_reference_data_locations_audit... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3148787Z   Applying accounts.0006_security_event_role_changes... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3318754Z   Applying accounts.0007_security_event_target_and_master_data... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3406341Z   Applying admin.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3508559Z   Applying admin.0002_logentry_remove_auto_add... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3580201Z   Applying admin.0003_logentry_add_action_flag_choices... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3608204Z   Applying complaints.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3700874Z   Applying complaints.0002_intake_receipt... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.3841745Z   Applying complaints.0003_complaint... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.4899342Z   Applying complaints.0004_attachment_intakereceipt_accepted_complaint_and_more... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5015265Z   Applying complaints.0005_anonymous_intake_receipt... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5568686Z   Applying routing.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5727594Z   Applying routing.0002_routing_decision... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5761350Z   Applying routing.0003_escalationrun... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5796756Z   Applying sessions.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5834458Z   Applying workflow.0001_initial... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.5859801Z   Applying workflow.0002_alter_complainthistory_actor_kind... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.6790874Z   Applying workflow.0003_b26_notifications... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.7816490Z   Applying workflow.0004_b27_email_attempts... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.8280581Z   Applying workflow.0003_complainthistory_actor_complainthistory_assignee_and_more... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.8293666Z   Applying workflow.0005_merge_b15_f4... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.8424414Z   Applying workflow.0005_b28_notification_read_at... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.8436751Z   Applying workflow.0006_merge_b15_f4_b28... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:57.9202529Z   Applying workflow.0007_anonymous_resolution_feedback... OK
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:58.5679339Z Explicit integration checks: integration_checks/anonymous_escalation.py, integration_checks/anonymous_recovery.py, integration_checks/lifecycle_f3.py, integration_checks/resolution_f3.py, integration_checks/f3_f4_handoff.py, workflow/test_retired_anonymous_routes.py
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:55:58.5681047Z F4 dependency gate: required
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7064668Z ============================= test session starts ==============================
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7065725Z platform linux -- Python 3.13.18, pytest-9.1.1, pluggy-1.7.0
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7066615Z django: version: 6.1.3, settings: scms.settings (from env)
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7087902Z rootdir: <repo>
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7097835Z configfile: pytest.ini
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7098364Z plugins: django-4.14.0, cov-7.1.0
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7098722Z collected 2038 items
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7098884Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7099121Z accounts/test_config_audit.py .......................................... [  2%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7099618Z                                                                          [  2%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7100106Z accounts/test_foundation.py .........                                    [  2%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7100633Z accounts/test_login.py ................................                  [  4%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7101163Z accounts/test_permissions.py .................................           [  5%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7101695Z accounts/test_q06_flow.py ............                                   [  6%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7102226Z accounts/test_reference_data.py ........................................ [  8%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7102703Z ............................                                             [  9%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7103510Z accounts/test_registration.py ......................................     [ 11%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7104067Z accounts/test_security_log.py ...........................                [ 12%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7104659Z accounts/test_session.py .................                               [ 13%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7105278Z accounts/test_ui_phase1.py .................                             [ 14%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7106021Z accounts/test_user_admin.py ........................................     [ 16%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7106595Z complaints/test_evidence.py ............................................ [ 18%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7107313Z ............................                                             [ 19%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7107820Z complaints/test_forms.py ..........                                      [ 20%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7108383Z complaints/test_models.py .............................................. [ 22%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7108871Z                                                                          [ 22%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7109365Z complaints/test_tracking.py ............................................ [ 24%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7109882Z .........................................................                [ 27%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7110403Z routing/test_allocation.py .....................                         [ 28%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7110983Z routing/test_b12_privacy.py ...........                                  [ 29%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7111540Z routing/test_b15_http.py .........................                       [ 30%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7112099Z routing/test_escalation.py ..........................                    [ 31%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7112694Z routing/test_escalation_outer_transaction.py .                           [ 31%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7113270Z routing/test_queue.py ...                                                [ 31%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7113803Z routing/test_resolver.py ......                                          [ 32%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7114337Z routing/test_sla.py .......                                              [ 32%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7114869Z routing/tests.py .................................                       [ 34%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7115341Z test_domain_fixtures.py ................                                 [ 34%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7115790Z test_fixtures.py ......                                                  [ 35%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7116238Z workflow/test_dashboards.py ..............                               [ 35%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7116716Z workflow/test_history.py ............                                    [ 36%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7117479Z workflow/test_history_actor.py ..                                        [ 36%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7118245Z workflow/test_history_integration.py ........................            [ 37%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7119060Z workflow/test_retired_anonymous_routes.py .............................. [ 39%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7119773Z ..                                                                       [ 39%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7120465Z accounts/test_permissions_integration.py ............                    [ 39%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7121094Z accounts/test_registration.py ..                                         [ 40%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7121560Z accounts/test_user_admin.py ......                                       [ 40%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7122036Z complaints/test_anonymous.py ........................................... [ 42%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7122467Z ...................................................                      [ 44%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7122888Z complaints/test_evidence.py ..                                           [ 45%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7123369Z complaints/test_evidence_recovery.py ................................... [ 46%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7123779Z .                                                                        [ 46%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7124178Z complaints/test_http_intake.py .....................................     [ 48%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7124858Z complaints/test_identifiers.py .........................                 [ 49%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7125328Z complaints/test_intake.py ......................................         [ 51%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7125792Z complaints/test_submission.py .......................................... [ 53%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7126326Z                                                                          [ 53%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7126741Z complaints/test_tracking.py .                                            [ 53%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7127474Z integration_checks/anonymous_escalation.py .                             [ 53%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7127980Z integration_checks/anonymous_recovery.py ....                            [ 54%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7128466Z integration_checks/f3_f4_handoff.py ...                                  [ 54%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7128951Z integration_checks/lifecycle_f3.py ....                                  [ 54%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7129438Z integration_checks/resolution_f3.py ....                                 [ 54%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7129908Z routing/test_allocation.py ...........                                   [ 55%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7130359Z routing/test_b12_privacy.py ....                                         [ 55%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7130820Z routing/test_b15_http.py .......                                         [ 55%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7131355Z routing/test_escalation.py .....                                         [ 55%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7131827Z routing/test_intake_allocation_integration.py .                          [ 56%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7132317Z routing/test_intake_entrypoint.py ........                               [ 56%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7132821Z routing/test_intake_routing.py ...                                       [ 56%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7133291Z routing/test_notification_handoff.py ........                            [ 56%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7134350Z routing/test_resolver.py .                                               [ 57%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7135638Z routing/test_scheduler_deployment.py ..                                  [ 57%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7136671Z test_docker_files.py ..                                                  [ 57%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7138313Z test_q04_escalation.py .                                                 [ 57%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7139326Z workflow/test_autoclose.py ...................................           [ 58%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7140658Z workflow/test_confirmation.py .......................................... [ 61%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7141688Z ......                                                                   [ 61%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7142331Z workflow/test_email_retries.py ..........................                [ 62%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7142839Z workflow/test_history_integration.py .                                   [ 62%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7143879Z workflow/test_lifecycle.py ............................................. [ 64%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7144704Z ....................................................................     [ 68%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7145536Z workflow/test_notification_smtp.py ....                                  [ 68%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7146136Z workflow/test_notification_ui.py ...........                             [ 68%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7146630Z workflow/test_notifications.py .......................................   [ 70%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7147396Z workflow/test_reference_feedback.py .................................... [ 72%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7147859Z ..................................................                       [ 75%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7148285Z workflow/test_reopening.py ...................................           [ 76%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7148755Z workflow/test_resolution_http.py ....................                    [ 77%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7149239Z workflow/test_resolution_integration.py ................................ [ 79%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7149870Z ....................                                                     [ 80%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7150279Z workflow/test_tracking.py ..........                                     [ 80%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7150736Z accounts/test_foundation.py ....                                         [ 81%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7151217Z accounts/test_permissions_integration.py .                               [ 81%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7151818Z accounts/test_ui_contrast.py ......                                      [ 81%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7152275Z complaints/test_checks.py ....................                           [ 82%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7152728Z complaints/test_forms.py ............................................... [ 84%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7153137Z .....................................................................    [ 88%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7153544Z complaints/test_models.py ...........                                    [ 88%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7154010Z routing/test_scheduler_deployment.py ...                                 [ 88%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7154470Z routing/test_sla.py ..................................                   [ 90%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7154923Z scms/test_database_settings.py .....                                     [ 90%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7155379Z scms/test_mail_config.py .....................................           [ 92%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7155810Z test_ci_checks.py ..............                                         [ 93%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7156230Z test_ci_environment.py .........                                         [ 93%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7156670Z test_coverage_summary.py ..............                                  [ 94%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7157215Z test_docker_files.py .....                                               [ 94%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7157624Z test_fixtures.py ....                                                    [ 94%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7158773Z test_github_workflows.py .....                                           [ 94%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7159240Z test_jenkins_pipeline.py .....                                           [ 95%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7159682Z test_q04_environment.py ..............................                   [ 96%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7160123Z test_q04_escalation.py .....                                             [ 96%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7161272Z test_q04_load.py ....................................                    [ 98%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7161748Z test_run_tests.py ...........                                            [ 99%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7162667Z workflow/test_resolution.py ......                                       [ 99%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7163300Z workflow/tests.py ..........                                             [100%]
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7163565Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7163713Z ================================ tests coverage ================================
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7164148Z _______________ coverage: platform linux, python 3.13.18-final-0 _______________
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7164439Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7164630Z Name                                                    Stmts   Miss Branch BrPart   Cover   Missing
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7165119Z ----------------------------------------------------------------------------------------------------
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7165628Z accounts/admin.py                                           1      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7166128Z accounts/admin_views.py                                   134      0     38      2  98.84%   75->77, 98->100
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7166618Z accounts/apps.py                                            3      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7167169Z accounts/config_audit.py                                   33      0     20      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7167641Z accounts/forms.py                                          34      1      8      1  95.24%   25
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7168137Z accounts/models.py                                        172      5     10      1  96.70%   85, 93, 173, 225, 288
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7169433Z accounts/permissions.py                                   140      1     56      1  98.98%   168
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7170309Z accounts/reference_adapters.py                              4      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7170879Z accounts/reference_services.py                            118      4     28      2  95.89%   79-80, 188, 199
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7171932Z accounts/security_log.py                                   19      0      4      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7172418Z accounts/services.py                                       78      0     18      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7172929Z accounts/templatetags/ui_assets.py                         13      1      2      1  86.67%   19
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7173422Z accounts/urls.py                                            4      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7173887Z accounts/user_admin_services.py                            65      0     20      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7174386Z accounts/validators.py                                      7      1      2      0  88.89%   15
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7174846Z accounts/views.py                                          69      0     18      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7175293Z complaints/admin.py                                         1      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7175764Z complaints/anonymous.py                                    64      1     10      1  97.30%   84
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7176276Z complaints/anonymous_views.py                              64      2     14      2  94.87%   32, 51
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7176761Z complaints/apps.py                                          5      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7177503Z complaints/checks.py                                       37      1      8      1  95.56%   72
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7177982Z complaints/evidence.py                                    180      1     44      1  99.11%   116
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7178531Z complaints/evidence_recovery.py                           119      2     52      2  97.66%   42, 121
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7179084Z complaints/feedback_views.py                               53      3     16      2  92.75%   42, 52, 64
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7179572Z complaints/forms.py                                        92      0     30      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7180061Z complaints/identifiers.py                                  26      0     10      1  97.22%   49->56
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7180559Z complaints/intake.py                                       88      1     30      1  98.31%   152
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7181120Z complaints/management/commands/reconcile_evidence.py       15      2      0      0  86.67%   21-22
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7181665Z complaints/models.py                                       99      0      2      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7182131Z complaints/privacy.py                                      59      2     22      0  97.53%   95-96
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7182669Z complaints/privacy_middleware.py                          101      5     28      0  96.12%   19, 92-93, 128-129
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7183221Z complaints/reference_data.py                               16      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7183707Z complaints/references.py                                    6      0      2      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7184173Z complaints/services.py                                      5      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7184650Z complaints/submission.py                                   71      0     20      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7185120Z complaints/tracking.py                                     23      0      2      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7185626Z complaints/tracking_limits.py                              84      1     24      2  97.22%   141, 165->169
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7186160Z complaints/tracking_source.py                              37      2     16      2  92.45%   25, 43
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7186670Z complaints/tracking_views.py                               27      0      6      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7187418Z complaints/transport.py                                     5      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7187872Z complaints/urls.py                                          4      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7188332Z complaints/validators.py                                   14      0      6      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7189006Z complaints/views.py                                       114      2     22      2  97.06%   124, 158
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7189470Z routing/adapters.py                                         4      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7189899Z routing/admin.py                                           12      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7190349Z routing/allocation.py                                      55      0     20      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7190792Z routing/apps.py                                             3      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7191251Z routing/escalation.py                                      76      1     16      1  97.83%   110
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7191714Z routing/intake.py                                          22      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7192211Z routing/management/commands/run_escalation.py              17      0      4      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7192867Z routing/models.py                                         150     15     28     10  85.96%   39, 83, 137, 139, 141, 190, 195, 200, 202, 204, 207, 212, 215, 254, 258
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7193463Z routing/notifications.py                                   17      0      6      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7193913Z routing/queue.py                                           10      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7194340Z routing/resolver.py                                        54      0     18      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7194969Z routing/services.py                                       245     12     72      9  93.38%   99, 138-139, 209->220, 285, 290, 307->318, 326, 340-341, 371->392, 450, 474, 480-481
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7195581Z routing/sla.py                                             41      0     14      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7195993Z routing/urls.py                                             4      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7196518Z routing/views.py                                           84     15     30      7  78.95%   32-33, 41-47, 72, 76, 80, 97, 101, 113, 132-134
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7197155Z scms/mail_config.py                                        45      0     20      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7197606Z workflow/admin.py                                          14      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7198116Z workflow/anonymous_feedback_models.py                      31      3      6      2  86.49%   14, 48, 51
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7198626Z workflow/apps.py                                            5      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7199101Z workflow/autoclose.py                                      43      3     16      3  89.83%   34, 48, 63
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7199567Z workflow/checks.py                                         10      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7200043Z workflow/confirmation_service.py                           12      0      2      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7200546Z workflow/dashboard_views.py                                33      0      8      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7201027Z workflow/dashboards.py                                     42      1     12      1  96.30%   27
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7201528Z workflow/email_delivery.py                                139      3     46      1  97.84%   80-82
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7202043Z workflow/feedback_detail_views.py                          14      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7202538Z workflow/feedback_policy.py                                 7      0      2      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7202999Z workflow/forms.py                                          13      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7203614Z workflow/history_service.py                                24      0      4      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7204092Z workflow/lifecycle.py                                     136      0     26      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7204634Z workflow/management/commands/auto_close_complaints.py      15      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7205351Z workflow/management/commands/deliver_notifications.py      22      0      6      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7205863Z workflow/models.py                                         64      0     12      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7206337Z workflow/notification_models.py                            68      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7206839Z workflow/notification_views.py                             21      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7207454Z workflow/notifications.py                                  96      3     42      0  96.38%   68-70
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7207991Z workflow/reference_feedback.py                             78      2     24      2  96.08%   79, 84
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7208528Z workflow/reopening_service.py                              18      0      4      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7209047Z workflow/reopening_views.py                                39      2      6      0  95.56%   47-48
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7209560Z workflow/resolution_service.py                             40      0     10      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7210049Z workflow/services.py                                       23      2      8      0  93.55%   55-56
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7210572Z workflow/templatetags/notification_tags.py                  7      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7211071Z workflow/urls.py                                           11      0      0      0 100.00%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7211516Z workflow/views.py                                         144      2     18      0  98.77%   60-61
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7212011Z ----------------------------------------------------------------------------------------------------
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7212479Z TOTAL                                                    4311    102   1068     61  96.90%
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7212846Z Coverage JSON written to file coverage.json
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7213208Z ======================= 2038 passed in 180.74s (0:03:00) =======================
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7494197Z Module         Statements       Line     Branch  Status
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7494894Z accounts              894     98.55%     96.43%  PASS
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7495470Z complaints           1409     98.23%     95.33%  PASS
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7496013Z routing               794     94.58%     86.06%  PASS
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7496547Z workflow             1169     98.20%     95.63%  PASS
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7496903Z 
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7497293Z Targets: line >= 70%; branch >= 60% per module.
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7497893Z Fewer than 10 statements: PLACEHOLDER (heuristic, not feature acceptance).
+tracking-integration	System, migration, full tests and coverage gates	2026-11-18T17:59:00.7498330Z Coverage gate: PASS
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	﻿2026-11-18T17:59:00.7589800Z ##[group]Run set -euo pipefail
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7590155Z ^[[36;1mset -euo pipefail^[[0m
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7590443Z ^[[36;1mmkdir -p build/evidence/b13-review^[[0m
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7590866Z ^[[36;1mpython -m pytest integration_checks/tracking_redis.py --no-cov -q \^[[0m
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7591345Z ^[[36;1m  | tee build/evidence/b13-review/real-redis-proxy.txt^[[0m
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7640762Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7641116Z env:
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7641422Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7641822Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7642104Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7642350Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7642663Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7643081Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7643745Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7644214Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7644603Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7644985Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7645381Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7645814Z   DJANGO_DB_PATH: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/db.sqlite3
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7646357Z   PRIVATE_EVIDENCE_ROOT: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/private-evidence
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7646812Z   SCMS_CI_DATABASE_ISOLATED: 1
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:00.7647277Z ##[endgroup]
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:03.3764476Z .........                                                                [100%]
+tracking-integration	Execute real Redis and real TLS proxy checks (no skips)	2026-11-18T17:59:03.3765514Z 9 passed in 2.15s
+tracking-integration	Upload test and integration evidence	﻿2026-11-18T17:59:03.5062818Z ##[group]Run actions/upload-artifact@v4
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5063161Z with:
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5063386Z   name: b13-redis-tls-proxy-evidence
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5063700Z   path: build/evidence/b13-review/
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5063994Z   if-no-files-found: error
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5064263Z   compression-level: 6
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5064504Z   overwrite: false
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5064733Z   include-hidden-files: false
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5064991Z env:
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5065297Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5065714Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5066008Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5066277Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5066606Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5067246Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5067710Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5068205Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5068627Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5069073Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5069503Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5069979Z   DJANGO_DB_PATH: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/db.sqlite3
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5070538Z   PRIVATE_EVIDENCE_ROOT: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/private-evidence
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5071024Z   SCMS_CI_DATABASE_ISOLATED: 1
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.5071288Z ##[endgroup]
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.6824693Z (node:3371) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.6826014Z (Use `node --trace-deprecation ...` to show where the warning was created)
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.6938982Z With the provided path, there will be 4 files uploaded
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.6940032Z Artifact name is valid!
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.6940512Z Root directory input is valid!
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.9149309Z Beginning upload of artifact content to blob storage
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.9529797Z (node:3371) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:03.9934271Z Uploaded bytes 4174
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.0090339Z Finished uploading artifact content to blob storage!
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.0091681Z SHA256 digest of uploaded artifact zip is 9ba5103de7864aa9119a8b082f4c4a3e9413a37a6f719e4a8b1840c89ce1ce77
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.0093742Z Finalizing artifact upload
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.3784678Z Artifact b13-redis-tls-proxy-evidence.zip successfully finalized. Artifact ID 14455663315
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.3786684Z Artifact b13-redis-tls-proxy-evidence has been successfully uploaded! Final size is 4174 bytes. Artifact ID is 14455663315
+tracking-integration	Upload test and integration evidence	2026-11-18T17:59:04.3793644Z Artifact download URL: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44364028857/artifacts/14455663315
+tracking-integration	Remove disposable Redis	﻿2026-11-18T17:59:04.3962843Z ##[group]Run docker rm --force b13-test-redis
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.3963503Z ^[[36;1mdocker rm --force b13-test-redis^[[0m
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4015161Z shell: /usr/bin/bash -e {0}
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4015438Z env:
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4015757Z   DJANGO_SECRET_KEY: synthetic-ci-test-only-not-a-deployment-secret
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4016168Z   DJANGO_SETTINGS_MODULE: scms.settings
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4016454Z   DJANGO_DB_ENGINE: sqlite
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4016702Z   SCMS_DISPOSABLE_REDIS: True
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4017150Z   SCMS_TRACKING_REDIS_TEST_URL: redis://127.0.0.1:6379/15
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4017563Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4018016Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4018466Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4018908Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4019324Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4019758Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4020204Z   DJANGO_DB_PATH: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/db.sqlite3
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4020738Z   PRIVATE_EVIDENCE_ROOT: [ci-home]/work/_temp/scms-b13-data.qH6Nmi/private-evidence
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4021173Z   SCMS_CI_DATABASE_ISOLATED: 1
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.4021424Z ##[endgroup]
+tracking-integration	Remove disposable Redis	2026-11-18T17:59:04.5457674Z b13-test-redis
+tracking-integration	Post Run actions/setup-python@v5	﻿2026-11-18T17:59:04.5562080Z Post job cleanup.
+tracking-integration	Post Run actions/setup-python@v5	2026-11-18T17:59:04.6880192Z Cache hit occurred on the primary key setup-python-Linux-x64-26.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3, not saving cache.
+tracking-integration	Post Run actions/setup-python@v5	2026-11-18T17:59:04.6882374Z (node:3448) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+tracking-integration	Post Run actions/setup-python@v5	2026-11-18T17:59:04.6883829Z (Use `node --trace-deprecation ...` to show where the warning was created)
+tracking-integration	Post Run actions/checkout@v4	﻿2026-11-18T17:59:04.7023757Z Post job cleanup.
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.7944051Z [command]/usr/bin/git version
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.7997597Z git version 2.56.1
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8043452Z Temporarily overriding HOME='[ci-home]/work/_temp/756b5134-8c61-44ac-a4b6-25323d7f2685' before making global git config changes
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8045214Z Adding repository directory to the temporary git global config as a safe directory
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8052968Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8102172Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8147490Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8474838Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8506499Z http.https://github.com/.extraheader
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8519506Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8560348Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8897789Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+tracking-integration	Post Run actions/checkout@v4	2026-11-18T17:59:04.8955381Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+tracking-integration	Complete job	﻿2026-11-18T17:59:04.9422206Z Cleaning up orphan processes
+tracking-integration	Complete job	2026-11-18T17:59:04.9866809Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

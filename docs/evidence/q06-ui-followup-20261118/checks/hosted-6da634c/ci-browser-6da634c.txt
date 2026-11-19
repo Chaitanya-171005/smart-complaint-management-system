@@ -1,0 +1,559 @@
+chromium-intake	Set up job	﻿2026-11-18T17:55:38.6391948Z Current runner version: '2.338.2'
+chromium-intake	Set up job	2026-11-18T17:55:38.6409107Z ##[group]Runner Image Provisioner
+chromium-intake	Set up job	2026-11-18T17:55:38.6409823Z Hosted Compute Agent
+chromium-intake	Set up job	2026-11-18T17:55:38.6410221Z Version: 20261111.635
+chromium-intake	Set up job	2026-11-18T17:55:38.6410644Z Commit: b8a594ea514ff44cadb5342986c68b1eac6e22ed
+chromium-intake	Set up job	2026-11-18T17:55:38.6411253Z Build Date: 2026-11-11T01:49:01Z
+chromium-intake	Set up job	2026-11-18T17:55:38.6411729Z Worker ID: {4aac6e1e-0bf5-40c2-9388-19b1525f68cf}
+chromium-intake	Set up job	2026-11-18T17:55:38.6412268Z Region: us-west-2
+chromium-intake	Set up job	2026-11-18T17:55:38.6412648Z Cloud: AWS
+chromium-intake	Set up job	2026-11-18T17:55:38.6413002Z ##[endgroup]
+chromium-intake	Set up job	2026-11-18T17:55:38.6413904Z ##[group]Operating System
+chromium-intake	Set up job	2026-11-18T17:55:38.6414326Z Ubuntu
+chromium-intake	Set up job	2026-11-18T17:55:38.6414684Z 24.04.5
+chromium-intake	Set up job	2026-11-18T17:55:38.6415048Z LTS
+chromium-intake	Set up job	2026-11-18T17:55:38.6415408Z ##[endgroup]
+chromium-intake	Set up job	2026-11-18T17:55:38.6416090Z ##[group]Runner Image
+chromium-intake	Set up job	2026-11-18T17:55:38.6416513Z Image: ubuntu-24.04
+chromium-intake	Set up job	2026-11-18T17:55:38.6416943Z Version: 20261116.133.1
+chromium-intake	Set up job	2026-11-18T17:55:38.6417695Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261116.133/images/ubuntu/Ubuntu2404-Readme.md
+chromium-intake	Set up job	2026-11-18T17:55:38.6418933Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261116.133
+chromium-intake	Set up job	2026-11-18T17:55:38.6419607Z ##[endgroup]
+chromium-intake	Set up job	2026-11-18T17:55:38.6420405Z ##[group]GITHUB_TOKEN Permissions
+chromium-intake	Set up job	2026-11-18T17:55:38.6421993Z Contents: read
+chromium-intake	Set up job	2026-11-18T17:55:38.6422419Z Metadata: read
+chromium-intake	Set up job	2026-11-18T17:55:38.6422806Z ##[endgroup]
+chromium-intake	Set up job	2026-11-18T17:55:38.6424232Z Secret source: Actions
+chromium-intake	Set up job	2026-11-18T17:55:38.6424858Z Cache mode: write
+chromium-intake	Set up job	2026-11-18T17:55:38.6425363Z Prepare workflow directory
+chromium-intake	Set up job	2026-11-18T17:55:38.6686772Z Prepare all required actions
+chromium-intake	Set up job	2026-11-18T17:55:38.6722211Z Getting action download info
+chromium-intake	Set up job	2026-11-18T17:55:38.9971113Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+chromium-intake	Set up job	2026-11-18T17:55:40.9452443Z Download action repository 'actions/setup-python@v5' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+chromium-intake	Set up job	2026-11-18T17:55:41.0830931Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+chromium-intake	Set up job	2026-11-18T17:55:41.4608046Z Complete job name: chromium-intake
+chromium-intake	Run actions/checkout@v4	﻿2026-11-18T17:55:41.5321771Z ##[group]Run actions/checkout@v4
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5322874Z with:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5323804Z   repository: Chaitanya-171005/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5331131Z   token: ***
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5331855Z   ssh-strict: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5332617Z   ssh-user: git
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5333365Z   persist-credentials: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5334162Z   clean: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5334913Z   sparse-checkout-cone-mode: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5335903Z   fetch-depth: 1
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5336627Z   fetch-tags: false
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5337388Z   show-progress: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5338164Z   lfs: false
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5338850Z   submodules: false
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5339580Z   set-safe-directory: true
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5340406Z   allow-unsafe-pr-checkout: false
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5341503Z env:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5342266Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5343272Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5344220Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:41.5345333Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.0799864Z Syncing repository: Chaitanya-171005/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.0801898Z ##[group]Getting Git version info
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.0802455Z Working directory is '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.0803175Z [command]/usr/bin/git version
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3337279Z git version 2.56.1
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3351612Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3362108Z Temporarily overriding HOME='[ci-home]/work/_temp/bea28dd6-0a7b-4c93-9bae-ad9cf2c32efb' before making global git config changes
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3362986Z Adding repository directory to the temporary git global config as a safe directory
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3365890Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3773951Z Deleting the contents of '[ci-home]/work/smart-complaint-management-system/smart-complaint-management-system'
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3776822Z ##[group]Initializing the repository
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.3780040Z [command]/usr/bin/git init [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4653195Z hint: Using 'master' as the name for the initial branch. This default branch name
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4654282Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4654780Z hint: to use in all of your new repositories, which will suppress this warning,
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4655188Z hint: call:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4655431Z hint:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4656063Z hint: 	git config --global init.defaultBranch <name>
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4656404Z hint:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4656814Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4657294Z hint: 'development'. The just-created branch can be renamed via this command:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4657729Z hint:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4657958Z hint: 	git branch -m <name>
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4658241Z hint:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4658576Z hint: Disable this message with "git config set advice.defaultBranchName false"
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4664788Z Initialized empty Git repository in [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system/.git/
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4673449Z [command]/usr/bin/git remote add origin https://github.com/Chaitanya-171005/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4720357Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4721066Z ##[group]Disabling automatic garbage collection
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4722897Z [command]/usr/bin/git config --local gc.auto 0
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4745256Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4746141Z ##[group]Setting up auth
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4750894Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.4779339Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.6702871Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.6729060Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.6879335Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.6907073Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.7058452Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.7087342Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.7087848Z ##[group]Fetching the repository
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:44.7100115Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +d3f67fb36025cd8eece553cb0a06caf42c27d2f9:refs/remotes/pull/104/merge
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4379945Z From https://github.com/Chaitanya-171005/smart-complaint-management-system
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4380720Z  * [new ref]         d3f67fb36025cd8eece553cb0a06caf42c27d2f9 -> pull/104/merge
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4383505Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4384013Z ##[group]Determining the checkout info
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4385908Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4391775Z [command]/usr/bin/git sparse-checkout disable
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4444476Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4466436Z ##[group]Checking out the ref
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4469269Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/104/merge
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4914765Z Note: switching to 'refs/remotes/pull/104/merge'.
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4915048Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4915323Z You are in 'detached HEAD' state. You can look around, make experimental
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4916037Z changes and commit them, and you can discard any commits you make in this
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4916568Z state without impacting any branches by switching back to a branch.
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4916850Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4917221Z If you want to create a new branch to retain commits you create, you may
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4917825Z do so (now or later) by using -c with the switch command. Example:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4919537Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4919734Z   git switch -c <new-branch-name>
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4919944Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4920072Z Or undo this operation with:
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4920262Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4920354Z   git switch -
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4920532Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4920746Z Turn off this advice by setting config variable advice.detachedHead to false
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4921058Z 
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4921322Z HEAD is now at d3f67fb Merge 6da634c138ced6eed48faa925274f7657778f670 into 68cd6fafe59c49b21d99a0b4ec889579883b2b84
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4924234Z ##[endgroup]
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4962915Z [command]/usr/bin/git log -1 --format=%H
+chromium-intake	Run actions/checkout@v4	2026-11-18T17:55:45.4982307Z d3f67fb36025cd8eece553cb0a06caf42c27d2f9
+chromium-intake	Run actions/setup-python@v5	﻿2026-11-18T17:55:45.5186188Z ##[group]Run actions/setup-python@v5
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5186521Z with:
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5186762Z   python-version: 3.13
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5187016Z   cache: pip
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5187239Z   check-latest: false
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5189448Z   token: ***
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5189705Z   update-environment: true
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5190018Z   allow-prereleases: false
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5190250Z   freethreaded: false
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5190461Z env:
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5190695Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5190975Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5191312Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.5191661Z ##[endgroup]
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.6190519Z ##[group]Installed versions
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.7598875Z (node:2147) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.7599967Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.7600560Z Successfully set up CPython (3.13.18)
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.7601061Z ##[endgroup]
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:45.9990604Z [command]/opt/hostedtoolcache/Python/3.13.18/x64/bin/pip cache dir
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:48.5243766Z [ci-home]/.cache/pip
+chromium-intake	Run actions/setup-python@v5	2026-11-18T17:55:48.8448851Z pip cache is not found
+chromium-intake	Install browser regression dependencies	﻿2026-11-18T17:55:48.8562492Z ##[group]Run python -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:48.8563159Z ^[[36;1mpython -m pip install -r requirements.txt -r requirements-dev.txt playwright==1.58.0^[[0m
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:48.8563628Z ^[[36;1mpython -m playwright install --with-deps chromium^[[0m
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0444352Z shell: /usr/bin/bash -e {0}
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0444705Z env:
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0444954Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0445285Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0445805Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0446172Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0446614Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0446970Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0447338Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0447675Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0448145Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:49.0448448Z ##[endgroup]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.1493944Z Collecting playwright==1.58.0
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.2067308Z   Downloading playwright-1.58.0-py3-none-manylinux1_x86_64.whl.metadata (3.5 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.2496541Z Collecting Django<6.2,>=6.1.2 (from -r requirements.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.2695966Z   Downloading django-6.1.3-py3-none-any.whl.metadata (3.9 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.2875293Z Collecting python-dotenv (from -r requirements.txt (line 2))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.2956501Z   Downloading python_dotenv-1.2.4-py3-none-any.whl.metadata (29 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4075301Z Collecting Pillow==13.0.0 (from -r requirements.txt (line 3))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4162031Z   Downloading pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4425034Z Collecting pypdf==6.21.4 (from -r requirements.txt (line 4))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4510068Z   Downloading pypdf-6.21.4-py3-none-any.whl.metadata (7.6 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4701983Z Collecting psycopg==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4798796Z   Downloading psycopg-3.3.8-py3-none-any.whl.metadata (4.4 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.4972649Z Collecting gunicorn==26.2.0 (from -r requirements.txt (line 6))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5054748Z   Downloading gunicorn-26.2.0-py3-none-any.whl.metadata (5.5 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5262843Z Collecting redis==8.1.0 (from -r requirements.txt (line 7))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5349623Z   Downloading redis-8.1.0-py3-none-any.whl.metadata (16 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5576568Z Collecting pytest==9.1.1 (from -r requirements-dev.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5657814Z   Downloading pytest-9.1.1-py3-none-any.whl.metadata (7.6 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5872131Z Collecting pytest-django==4.14.0 (from -r requirements-dev.txt (line 2))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.5952066Z   Downloading pytest_django-4.14.0-py3-none-any.whl.metadata (8.1 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6115113Z Collecting pytest-cov==7.1.0 (from -r requirements-dev.txt (line 3))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6201715Z   Downloading pytest_cov-7.1.0-py3-none-any.whl.metadata (32 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6422766Z Collecting fakeredis==2.40.0 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6516777Z   Downloading fakeredis-2.40.0-py3-none-any.whl.metadata (9.3 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6690046Z Collecting pyee<14,>=13 (from playwright==1.58.0)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.6769669Z   Downloading pyee-13.0.1-py3-none-any.whl.metadata (3.0 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.7697158Z Collecting greenlet<4.0.0,>=3.1.1 (from playwright==1.58.0)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.7789725Z   Downloading greenlet-3.5.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl.metadata (3.8 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.7950315Z Collecting iniconfig>=1.0.1 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.8034070Z   Downloading iniconfig-2.3.1-py3-none-any.whl.metadata (2.8 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.8198580Z Collecting packaging>=22 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.8281618Z   Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.8431181Z Collecting pluggy<2,>=1.5 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.8523107Z   Downloading pluggy-1.7.0-py3-none-any.whl.metadata (5.0 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.9225140Z Collecting pygments>=2.7.2 (from pytest==9.1.1->-r requirements-dev.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:51.9309518Z   Downloading pygments-2.21.0-py3-none-any.whl.metadata (2.5 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.1733962Z Collecting coverage>=7.10.6 (from coverage[toml]>=7.10.6->pytest-cov==7.1.0->-r requirements-dev.txt (line 3))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.1836777Z   Downloading coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (8.3 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.2011472Z Collecting sortedcontainers>=2 (from fakeredis==2.40.0->fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.2096748Z   Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl.metadata (10 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.2514416Z Collecting lupa>=2.1 (from fakeredis[lua]==2.40.0->-r requirements-dev.txt (line 4))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.2597434Z   Downloading lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (60 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.3559847Z Collecting psycopg-binary==3.3.8 (from psycopg[binary]==3.3.8->-r requirements.txt (line 5))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.3669467Z   Downloading psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (2.7 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.3840733Z Collecting asgiref>=3.9.1 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4006931Z   Downloading asgiref-3.13.0-py3-none-any.whl.metadata (12 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4159911Z Collecting sqlparse>=0.5.0 (from Django<6.2,>=6.1.2->-r requirements.txt (line 1))
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4245280Z   Downloading sqlparse-0.6.1-py3-none-any.whl.metadata (6.9 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4422371Z Collecting typing-extensions (from pyee<14,>=13->playwright==1.58.0)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4502697Z   Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.4630019Z Downloading playwright-1.58.0-py3-none-manylinux1_x86_64.whl (46.2 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6309327Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 46.2/46.2 MB 309.5 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6396353Z Downloading pillow-13.0.0-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl (7.1 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6650524Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 7.1/7.1 MB 290.5 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6749869Z Downloading pypdf-6.21.4-py3-none-any.whl (410 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6859456Z Downloading psycopg-3.3.8-py3-none-any.whl (216 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.6967531Z Downloading gunicorn-26.2.0-py3-none-any.whl (228 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7080333Z Downloading redis-8.1.0-py3-none-any.whl (560 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7132854Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 560.6/560.6 kB 105.7 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7224852Z Downloading pytest-9.1.1-py3-none-any.whl (386 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7339829Z Downloading pytest_django-4.14.0-py3-none-any.whl (27 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7434166Z Downloading pytest_cov-7.1.0-py3-none-any.whl (22 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7526609Z Downloading fakeredis-2.40.0-py3-none-any.whl (204 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7634025Z Downloading psycopg_binary-3.3.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (5.2 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7818887Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 5.2/5.2 MB 293.0 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.7901703Z Downloading django-6.1.3-py3-none-any.whl (8.4 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8304171Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 8.4/8.4 MB 214.9 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8393005Z Downloading greenlet-3.5.6-cp313-cp313-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl (623 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8436331Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 623.8/623.8 kB 149.8 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8517815Z Downloading pluggy-1.7.0-py3-none-any.whl (27 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8628337Z Downloading pyee-13.0.1-py3-none-any.whl (15 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8746765Z Downloading python_dotenv-1.2.4-py3-none-any.whl (23 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8847369Z Downloading asgiref-3.13.0-py3-none-any.whl (27 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.8942731Z Downloading coverage-7.17.3-cp313-cp313-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (262 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9039225Z Downloading iniconfig-2.3.1-py3-none-any.whl (7.6 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9133216Z Downloading lupa-2.8-cp313-cp313-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (2.4 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9301596Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.4/2.4 MB 165.4 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9386973Z Downloading packaging-26.3-py3-none-any.whl (129 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9482397Z Downloading pygments-2.21.0-py3-none-any.whl (1.3 MB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9544996Z    ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.3/1.3 MB 253.4 MB/s  0:00:00
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9657251Z Downloading sortedcontainers-2.4.0-py2.py3-none-any.whl (29 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9751095Z Downloading sqlparse-0.6.1-py3-none-any.whl (51 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:52.9844247Z Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:53.3630379Z Installing collected packages: sortedcontainers, typing-extensions, sqlparse, redis, python-dotenv, pypdf, pygments, psycopg-binary, psycopg, pluggy, Pillow, packaging, lupa, iniconfig, gunicorn, greenlet, coverage, asgiref, pytest, pyee, fakeredis, Django, pytest-django, pytest-cov, playwright
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.1611721Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.1634665Z Successfully installed Django-6.1.3 Pillow-13.0.0 asgiref-3.13.0 coverage-7.17.3 fakeredis-2.40.0 greenlet-3.5.6 gunicorn-26.2.0 iniconfig-2.3.1 lupa-2.8 packaging-26.3 playwright-1.58.0 pluggy-1.7.0 psycopg-3.3.8 psycopg-binary-3.3.8 pyee-13.0.1 pygments-2.21.0 pypdf-6.21.4 pytest-9.1.1 pytest-cov-7.1.0 pytest-django-4.14.0 python-dotenv-1.2.4 redis-8.1.0 sortedcontainers-2.4.0 sqlparse-0.6.1 typing-extensions-4.16.0
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.5726940Z Installing dependencies...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.5792148Z Switching to root user to install dependencies...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.8014238Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [152 B]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:57.9088349Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:58.0306611Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [723 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:55:58.1251801Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [794 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:05.1041453Z Hit:2 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble InRelease
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:05.1577440Z Get:3 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:05.9191154Z Get:4 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:06.0618196Z Get:5 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:06.1481612Z Get:9 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1455 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:09.9544578Z Get:10 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [317 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.1887646Z Get:11 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1714 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.3383521Z Get:12 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [345 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.4402500Z Get:13 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1887 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.6512610Z Get:14 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [433 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.7244245Z Get:15 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1198 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:10.8560441Z Get:16 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security/main Translation-en [239 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:11.6245364Z Get:17 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1229 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:11.8753405Z Get:18 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1792 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:12.2853922Z Get:19 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [414 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:22.5955101Z Fetched 12.9 MB in 15s (886 kB/s)
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.5066700Z Reading package lists...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.5313216Z Reading package lists...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.7282325Z Building dependency tree...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.7287237Z Reading state information...
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8737949Z libasound2t64 is already the newest version (1.2.11-1ubuntu0.3).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8739010Z libasound2t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8739391Z libatk-bridge2.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8739821Z libatk-bridge2.0-0t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8740364Z libatk1.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8740724Z libatk1.0-0t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8741477Z libatspi2.0-0t64 is already the newest version (2.52.0-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8741868Z libatspi2.0-0t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8742269Z libcairo2 is already the newest version (1.18.0-3build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8742582Z libcairo2 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8742908Z libcups2t64 is already the newest version (2.4.7-1.2ubuntu7.14).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8743236Z libcups2t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8743570Z libdbus-1-3 is already the newest version (1.14.10-4ubuntu4.1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8743879Z libdbus-1-3 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8744184Z libdrm2 is already the newest version (2.4.125-1ubuntu0.1~24.04.2).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8744517Z libdrm2 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8744834Z libglib2.0-0t64 is already the newest version (2.80.0-6ubuntu3.10).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8745152Z libglib2.0-0t64 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8745872Z libnspr4 is already the newest version (2:4.35-1.1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8746286Z libnspr4 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8746659Z libnss3 is already the newest version (2:3.98-1ubuntu0.3).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8746966Z libnss3 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8747269Z libpango-1.0-0 is already the newest version (1.52.1+ds-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8747575Z libpango-1.0-0 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8747901Z libx11-6 is already the newest version (2:1.8.7-1ubuntu0.1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8748216Z libx11-6 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8748545Z libxcb1 is already the newest version (1.15-1ubuntu2).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8748920Z libxcb1 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8749246Z libxcomposite1 is already the newest version (1:0.4.5-1build3).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8749585Z libxcomposite1 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8749903Z libxdamage1 is already the newest version (1:1.1.6-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8750221Z libxdamage1 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8750517Z libxext6 is already the newest version (2:1.3.4-1build2).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8750835Z libxext6 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8751247Z libxfixes3 is already the newest version (1:6.0.0-2build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8751601Z libxfixes3 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8751902Z libxkbcommon0 is already the newest version (1.6.0-1build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8752218Z libxkbcommon0 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8752521Z libxrandr2 is already the newest version (2:1.5.2-2build1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8752827Z libxrandr2 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8753133Z xvfb is already the newest version (2:21.1.12-1ubuntu1.9).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8753629Z fonts-noto-color-emoji is already the newest version (2.047-0ubuntu0.24.04.1).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8754054Z libfontconfig1 is already the newest version (2.15.0-1.1ubuntu2).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8754403Z libfontconfig1 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8754737Z libfreetype6 is already the newest version (2.13.2+dfsg-1ubuntu0.2).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8755078Z libfreetype6 set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8755375Z fonts-liberation is already the newest version (1:2.1.5-3).
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8755886Z fonts-liberation set to manually installed.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8756213Z The following additional packages will be installed:
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8756604Z   libgl1-mesa-dri libglx-mesa0 mesa-libgallium xfonts-encodings xfonts-utils
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8756976Z Recommended packages:
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:23.8757245Z   fonts-ipafont-mincho fonts-tlwg-loma
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1394789Z The following NEW packages will be installed:
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1395830Z   fonts-freefont-ttf fonts-ipafont-gothic fonts-tlwg-loma-otf fonts-unifont
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1405305Z   fonts-wqy-zenhei xfonts-cyrillic xfonts-encodings xfonts-scalable
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1405874Z   xfonts-utils
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1410119Z The following packages will be upgraded:
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1415171Z   libgbm1 libgl1-mesa-dri libglx-mesa0 mesa-libgallium
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1577340Z 4 upgraded, 9 newly installed, 0 to remove and 7 not upgraded.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1577788Z Need to get 32.1 MB of archives.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1578181Z After this operation, 79.7 MB of additional disk space will be used.
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.1578548Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [152 B]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:24.2874578Z Get:2 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-ipafont-gothic all 00303-21ubuntu1 [3513 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:56:26.8631618Z Get:3 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 fonts-freefont-ttf all 20211204+svn4273-2 [5641 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:58:02.2723179Z Get:4 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-tlwg-loma-otf all 1:0.7.3-1 [107 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:58:09.2034476Z Get:5 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-unifont all 1:15.1.01-1build1 [2993 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:59:33.1675112Z Ign:6 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8
+chromium-intake	Install browser regression dependencies	2026-11-18T17:59:33.2952844Z Get:7 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgl1-mesa-dri amd64 25.2.8-0ubuntu0.24.04.5 [38.0 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:59:34.6713727Z Get:8 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 libglx-mesa0 amd64 25.2.8-0ubuntu0.24.04.5 [110 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:59:36.7476511Z Get:9 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 libgbm1 amd64 25.2.8-0ubuntu0.24.04.5 [34.2 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T17:59:43.2117319Z Get:10 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble-updates/main amd64 mesa-libgallium amd64 25.2.8-0ubuntu0.24.04.5 [10.8 MB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:01.0426712Z Get:11 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-encodings all 1:1.0.5-0ubuntu2 [578 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:28.9715309Z Get:12 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-utils amd64 1:7.7+6build3 [94.4 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:30.8171403Z Get:13 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 xfonts-cyrillic all 1:1.0.5+nmu1 [384 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:35.7676183Z Get:14 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/main amd64 xfonts-scalable all 1:1.0.3-1.3 [304 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:41.3150404Z Get:6 http://us-east-2.ec2.archive.ubuntu.com/ubuntu noble/universe amd64 fonts-wqy-zenhei all 0.9.45-8 [7472 kB]
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.1143158Z Fetched 32.1 MB in 7min 18s (73.2 kB/s)
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.2192440Z Selecting previously unselected package fonts-ipafont-gothic.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3807949Z (Reading database ... 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3808329Z (Reading database ... 5%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3809093Z (Reading database ... 10%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3809332Z (Reading database ... 15%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3809563Z (Reading database ... 20%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3809830Z (Reading database ... 25%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3810036Z (Reading database ... 30%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3810364Z (Reading database ... 35%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3810582Z (Reading database ... 40%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3810813Z (Reading database ... 45%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.3811040Z (Reading database ... 50%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:43.6737597Z (Reading database ... 55%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:44.9752917Z (Reading database ... 60%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:45.3636341Z (Reading database ... 65%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:45.7085879Z (Reading database ... 70%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:45.8724667Z (Reading database ... 75%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:46.2539719Z (Reading database ... 80%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:48.1020430Z (Reading database ... 85%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:49.8572486Z (Reading database ... 90%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.4695455Z (Reading database ... 95%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.4696371Z (Reading database ... 100%
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.4698907Z (Reading database ... 216720 files and directories currently installed.)
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.4738633Z Preparing to unpack .../00-fonts-ipafont-gothic_00303-21ubuntu1_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.4830809Z Unpacking fonts-ipafont-gothic (00303-21ubuntu1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.8116968Z Selecting previously unselected package fonts-freefont-ttf.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.8218772Z Preparing to unpack .../01-fonts-freefont-ttf_20211204+svn4273-2_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.8223687Z Unpacking fonts-freefont-ttf (20211204+svn4273-2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.8896660Z Selecting previously unselected package fonts-tlwg-loma-otf.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.8998705Z Preparing to unpack .../02-fonts-tlwg-loma-otf_1%3a0.7.3-1_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.9004041Z Unpacking fonts-tlwg-loma-otf (1:0.7.3-1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.9150569Z Selecting previously unselected package fonts-unifont.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.9252006Z Preparing to unpack .../03-fonts-unifont_1%3a15.1.01-1build1_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:51.9255814Z Unpacking fonts-unifont (1:15.1.01-1build1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.0195638Z Selecting previously unselected package fonts-wqy-zenhei.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.0294013Z Preparing to unpack .../04-fonts-wqy-zenhei_0.9.45-8_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.0371530Z Unpacking fonts-wqy-zenhei (0.9.45-8) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.4512460Z Preparing to unpack .../05-libgl1-mesa-dri_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.4617512Z Unpacking libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.5919693Z Preparing to unpack .../06-libglx-mesa0_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.5947080Z Unpacking libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.6211250Z Preparing to unpack .../07-libgbm1_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.6226595Z Unpacking libgbm1:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.6498448Z Preparing to unpack .../08-mesa-libgallium_25.2.8-0ubuntu0.24.04.5_amd64.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.6515866Z Unpacking mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.5) over (25.2.8-0ubuntu0.24.04.4) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.7960523Z Selecting previously unselected package xfonts-encodings.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.8066041Z Preparing to unpack .../09-xfonts-encodings_1%3a1.0.5-0ubuntu2_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.8069617Z Unpacking xfonts-encodings (1:1.0.5-0ubuntu2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.8242190Z Selecting previously unselected package xfonts-utils.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.8338858Z Preparing to unpack .../10-xfonts-utils_1%3a7.7+6build3_amd64.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.8342899Z Unpacking xfonts-utils (1:7.7+6build3) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:52.9973636Z Selecting previously unselected package xfonts-cyrillic.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0072438Z Preparing to unpack .../11-xfonts-cyrillic_1%3a1.0.5+nmu1_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0076922Z Unpacking xfonts-cyrillic (1:1.0.5+nmu1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0260857Z Selecting previously unselected package xfonts-scalable.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0357612Z Preparing to unpack .../12-xfonts-scalable_1%3a1.0.3-1.3_all.deb ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0363467Z Unpacking xfonts-scalable (1:1.0.3-1.3) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0624755Z Setting up mesa-libgallium:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0636584Z Setting up libgbm1:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0646250Z Setting up libgl1-mesa-dri:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0696233Z Setting up fonts-wqy-zenhei (0.9.45-8) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0770387Z Setting up fonts-freefont-ttf (20211204+svn4273-2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0780780Z Setting up fonts-tlwg-loma-otf (1:0.7.3-1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0790766Z Setting up xfonts-encodings (1:1.0.5-0ubuntu2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0799909Z Setting up fonts-ipafont-gothic (00303-21ubuntu1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0840009Z update-alternatives: using /usr/share/fonts/opentype/ipafont-gothic/ipag.ttf to provide /usr/share/fonts/truetype/fonts-japanese-gothic.ttf (fonts-japanese-gothic.ttf) in auto mode
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0848932Z Setting up fonts-unifont (1:15.1.01-1build1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0859697Z Setting up libglx-mesa0:amd64 (25.2.8-0ubuntu0.24.04.5) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0869837Z Setting up xfonts-utils (1:7.7+6build3) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.0896146Z Setting up xfonts-cyrillic (1:1.0.5+nmu1) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.1152430Z Setting up xfonts-scalable (1:1.0.3-1.3) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:03:53.1347991Z Processing triggers for libc-bin (2.39-0ubuntu8.12) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:00.8081666Z Processing triggers for man-db (2.12.0-4build2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:00.8105125Z Not building database; man-db/auto-update is not 'true'.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:00.8115223Z Processing triggers for fontconfig (2.15.0-1.1ubuntu2) ...
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2304105Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2305828Z Running kernel seems to be up-to-date.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2306353Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2307119Z No services need to be restarted.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2307515Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2307639Z No containers need to be restarted.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2308010Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2308191Z No user sessions are running outdated binaries.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2308405Z 
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:02.2308654Z No VM guests are running outdated hypervisor (qemu) binaries on this host.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.0083846Z Downloading Chrome for Testing 145.0.7632.6 (playwright chromium v1208) from https://cdn.playwright.dev/chrome-for-testing-public/145.0.7632.6/linux64/chrome-linux64.zip
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.0766377Z (node:2975) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.0767550Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.1988070Z |                                                                                |   0% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.3535144Z |■■■■■■■■                                                                        |  10% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.4293273Z |■■■■■■■■■■■■■■■■                                                                |  20% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.4607265Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.4964055Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.5518202Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.6005353Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.6520323Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.7016982Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.7548054Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:03.8025105Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 167.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:05.8654984Z Chrome for Testing 145.0.7632.6 (playwright chromium v1208) downloaded to [ci-home]/.cache/ms-playwright/chromium-1208
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:05.8657269Z Downloading FFmpeg (playwright ffmpeg v1011) from https://cdn.playwright.dev/dbazure/download/playwright/builds/ffmpeg/1011/ffmpeg-linux.zip
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:05.9346912Z (node:2986) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:05.9347881Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.1386120Z |                                                                                |   0% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.2259610Z |■■■■■■■■                                                                        |  10% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.2707996Z |■■■■■■■■■■■■■■■■                                                                |  20% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.2923590Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3083600Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3160445Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3230266Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3323785Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3376083Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3443069Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3471151Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 2.3 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3860279Z FFmpeg (playwright ffmpeg v1011) downloaded to [ci-home]/.cache/ms-playwright/ffmpeg-1011
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.3862488Z Downloading Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) from https://cdn.playwright.dev/chrome-for-testing-public/145.0.7632.6/linux64/chrome-headless-shell-linux64.zip
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.4573879Z (node:2997) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.4574868Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.5809676Z |                                                                                |   0% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.7139959Z |■■■■■■■■                                                                        |  10% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.7386346Z |■■■■■■■■■■■■■■■■                                                                |  20% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.7649752Z |■■■■■■■■■■■■■■■■■■■■■■■■                                                        |  30% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.7953818Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                                |  40% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.8210797Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                        |  50% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.8510451Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                                |  60% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.8799663Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                        |  70% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.9182408Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■                |  80% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.9516499Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■        |  90% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:06.9875229Z |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■| 100% of 110.9 MiB
+chromium-intake	Install browser regression dependencies	2026-11-18T18:04:08.4859175Z Chrome Headless Shell 145.0.7632.6 (playwright chromium-headless-shell v1208) downloaded to [ci-home]/.cache/ms-playwright/chromium_headless_shell-1208
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	﻿2026-11-18T18:04:08.5032159Z ##[group]Run set -euo pipefail
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5032762Z ^[[36;1mset -euo pipefail^[[0m
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5033043Z ^[[36;1mmkdir -p build/evidence/intake-browser^[[0m
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5033870Z ^[[36;1mpython -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py integration_checks/q06_four_screen_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt^[[0m
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5063013Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5063428Z env:
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5063699Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5063989Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5064292Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5064634Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5065030Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5065655Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5066058Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5066388Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5066711Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:08.5067043Z ##[endgroup]
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:37.8920493Z ................                                                         [100%]
+chromium-intake	Normal submissions and accessible inline errors at 320 pixels	2026-11-18T18:04:37.8921379Z 16 passed in 27.52s
+chromium-intake	Retain synthetic browser evidence	﻿2026-11-18T18:04:38.0250296Z ##[group]Run actions/upload-artifact@v4
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0250607Z with:
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0250844Z   name: intake-browser-evidence
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0251241Z   path: build/evidence/intake-browser/
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0251554Z   if-no-files-found: error
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0251793Z   compression-level: 6
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0252020Z   overwrite: false
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0252246Z   include-hidden-files: false
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0252479Z env:
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0252726Z   DJANGO_SECRET_KEY: synthetic-browser-ci-only
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0253016Z   DJANGO_DB_ENGINE: sqlite
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0253272Z   SCMS_BROWSER_EVIDENCE_DIR: build/evidence/intake-browser
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0253655Z   pythonLocation: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0254017Z   PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib/pkgconfig
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0254405Z   Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0254736Z   Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0255143Z   Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.13.18/x64
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0255659Z   LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.13.18/x64/lib
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.0255964Z ##[endgroup]
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.1487173Z (node:4462) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.1487864Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.1544115Z With the provided path, there will be 21 files uploaded
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.1547263Z Artifact name is valid!
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.1547687Z Root directory input is valid!
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.5533194Z Beginning upload of artifact content to blob storage
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:38.7216700Z (node:4462) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:39.5683127Z Uploaded bytes 1542747
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:39.6615764Z Finished uploading artifact content to blob storage!
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:39.6627045Z SHA256 digest of uploaded artifact zip is e1a21b96de0b8911e07d3b2f21281d9d78ccf56035265a0c65cb2947a972bf3a
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:39.6628000Z Finalizing artifact upload
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:40.0827970Z Artifact intake-browser-evidence.zip successfully finalized. Artifact ID 14456623789
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:40.0828821Z Artifact intake-browser-evidence has been successfully uploaded! Final size is 1542747 bytes. Artifact ID is 14456623789
+chromium-intake	Retain synthetic browser evidence	2026-11-18T18:04:40.0833515Z Artifact download URL: https://github.com/Chaitanya-171005/smart-complaint-management-system/actions/runs/44364028756/artifacts/14456623789
+chromium-intake	Post Run actions/setup-python@v5	﻿2026-11-18T18:04:40.0987247Z Post job cleanup.
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:40.1913659Z (node:4477) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:40.1914247Z (Use `node --trace-deprecation ...` to show where the warning was created)
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:40.2037490Z [command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system --files-from manifest.txt --use-compress-program zstdmt
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:40.6311365Z (node:4477) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:41.6256723Z Sent 11468800 of 75995501 (15.1%), 10.9 MBs/sec
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:42.6261983Z Sent 63832064 of 75995501 (84.0%), 30.4 MBs/sec
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:43.1523761Z Sent 75995501 of 75995501 (100.0%), 28.7 MBs/sec
+chromium-intake	Post Run actions/setup-python@v5	2026-11-18T18:04:43.4524564Z Cache saved with the key: setup-python-Linux-x64-24.04-Ubuntu-python-3.13.18-pip-3487283e21919e2a9b5d6f0baaea7c51e7b7a1568a9e3cfee8814f2356d965f3
+chromium-intake	Post Run actions/checkout@v4	﻿2026-11-18T18:04:43.4675289Z Post job cleanup.
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5310048Z [command]/usr/bin/git version
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5339284Z git version 2.56.1
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5364270Z Temporarily overriding HOME='[ci-home]/work/_temp/239b4c70-0b07-45a6-9e5b-c9bd03a77cb4' before making global git config changes
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5365836Z Adding repository directory to the temporary git global config as a safe directory
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5369007Z [command]/usr/bin/git config --global --add safe.directory [ci-home]/work/smart-complaint-management-system/smart-complaint-management-system
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5397261Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5422330Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5618370Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5643940Z http.https://github.com/.extraheader
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5653676Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5678417Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5883307Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+chromium-intake	Post Run actions/checkout@v4	2026-11-18T18:04:43.5901058Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+chromium-intake	Complete job	﻿2026-11-18T18:04:43.6194340Z Cleaning up orphan processes
+chromium-intake	Complete job	2026-11-18T18:04:43.6443148Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-python@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -1,0 +1,101 @@
+{
+  "case": "test_registration_invalid_values_preserved_and_corrected[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "invalid_registration": {
+      "messages": [
+        "Enter a valid email address.",
+        "This password is too short. It must contain at least 8 characters.",
+        "Password must include at least one letter and one digit.",
+        "Required for hostel residents.",
+        "Required for hostel residents."
+      ],
+      "labels": [
+        {
+          "id": "id_full_name",
+          "type": "text",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_email",
+          "type": "email",
+          "label": true,
+          "invalid": "true",
+          "describedBy": "id_email_error",
+          "missingDescriptions": [
+            "id_email_error"
+          ]
+        },
+        {
+          "id": "id_password",
+          "type": "password",
+          "label": true,
+          "invalid": "true",
+          "describedBy": "id_password_error",
+          "missingDescriptions": [
+            "id_password_error"
+          ]
+        },
+        {
+          "id": "id_user_type",
+          "type": "select-one",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_hostel_resident",
+          "type": "checkbox",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_hostel_block",
+          "type": "text",
+          "label": true,
+          "invalid": "true",
+          "describedBy": "id_hostel_block_error",
+          "missingDescriptions": [
+            "id_hostel_block_error"
+          ]
+        },
+        {
+          "id": "id_hostel_room",
+          "type": "text",
+          "label": true,
+          "invalid": "true",
+          "describedBy": "id_hostel_room_error",
+          "missingDescriptions": [
+            "id_hostel_room_error"
+          ]
+        }
+      ],
+      "layout": {
+        "innerWidth": 1280,
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "visualWidth": 1280,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": []
+      },
+      "safe_values_preserved": true,
+      "password_cleared": true
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

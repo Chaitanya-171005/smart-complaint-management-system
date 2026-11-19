@@ -1,0 +1,82 @@
+{
+  "case": "test_keyboard_only_login_to_acknowledgement[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "native_selection": {
+      "id": "id_priority",
+      "value": "LOW",
+      "expected": "LOW"
+    },
+    "keyboard_only": {
+      "completed": true,
+      "steps": [
+        {
+          "id": "id_email",
+          "name": "",
+          "focus_visible": true
+        },
+        {
+          "id": "id_password",
+          "name": "",
+          "focus_visible": true
+        },
+        {
+          "id": null,
+          "name": "Sign in",
+          "focus_visible": true
+        },
+        {
+          "id": null,
+          "name": "Start a new form",
+          "focus_visible": true
+        },
+        {
+          "id": "id_category",
+          "name": "Select category\nSynthetic lights",
+          "focus_visible": true
+        },
+        {
+          "id": "id_location",
+          "name": "Select location\nTest / 1 / Room",
+          "focus_visible": true
+        },
+        {
+          "id": "id_priority",
+          "name": "Low\nMedium\nHigh\nCritical",
+          "focus_visible": true
+        },
+        {
+          "id": "id_title",
+          "name": "",
+          "focus_visible": true
+        },
+        {
+          "id": "id_description",
+          "name": "",
+          "focus_visible": true
+        },
+        {
+          "id": null,
+          "name": "Submit complaint",
+          "focus_visible": true
+        },
+        {
+          "id": "copy-complaint-id",
+          "name": "Copy Complaint ID",
+          "focus_visible": true
+        }
+      ],
+      "mouse_actions": 0
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

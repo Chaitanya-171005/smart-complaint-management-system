@@ -1,0 +1,41 @@
+{% load static notification_tags ui_assets %}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}SCMS{% endblock %}</title>
+{% if request.anonymous_intake %}
+<style>{% private_ui_css %}</style>
+{% else %}
+<link rel="stylesheet" href="{% static 'ui/scms.css' %}">
+<script src="{% static 'ui/forms.js' %}" defer></script>
+{% endif %}
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="topbar">
+<a class="brand" href="{% if user.is_authenticated %}{% url 'accounts:home' %}{% else %}{% url 'accounts:login' %}{% endif %}">
+<span class="brand-mark" aria-hidden="true">S</span>
+<span>SCMS<small>Campus complaint management</small>
+</span>
+</a>
+{% if user.is_authenticated %}<div class="account">
+<span>{{ user.full_name }}<small>{{ user.get_role_display }}</small>
+</span>
+<form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="secondary" type="submit">Log out</button>
+</form>
+</div>{% else %}<nav aria-label="Account">
+<a href="{% url 'accounts:login' %}">Sign in</a>
+<a href="{% url 'accounts:register' %}">Register</a>
+</nav>{% endif %}</header>
+<div class="layout {% if not user.is_authenticated %}public-layout{% endif %}">{% if user.is_authenticated %}<aside class="sidebar">
+<p class="nav-label">WORKSPACE</p>
+<nav aria-label="Workspace">{% include 'ui/navigation.html' %}</nav>
+</aside>{% endif %}
+<main id="main" tabindex="-1">{% if user.is_authenticated %}{% notification_header %}{% endif %}{% if messages %}<div aria-live="polite">{% for message in messages %}<p class="alert {{ message.tags }}">{{ message }}</p>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
+</div>
+<footer class="site-footer">SCMS · Campus services <span>For emergencies, use your campus emergency contacts.</span>
+</footer>
+</body>
+</html>
