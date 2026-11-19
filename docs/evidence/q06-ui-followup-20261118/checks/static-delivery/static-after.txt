@@ -1,0 +1,14 @@
+........................................................................ [ 28%]
+........................................................................ [ 56%]
+........................................................................ [ 85%]
+.....................................                                    [100%]
+=============================== warnings summary ===============================
+accounts/test_q06_flow.py: 12 warnings
+accounts/test_ui_phase1.py: 14 warnings
+complaints/test_tracking.py: 64 warnings
+complaints/test_anonymous.py: 48 warnings
+  [repo]/scms/static_middleware.py:17: UserWarning: No directory at: [repo]/staticfiles/
+    super().__init__(get_response)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+253 passed, 138 warnings in 24.10s

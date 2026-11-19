@@ -9,6 +9,7 @@ on:
       - 'workflow/**'
       - 'integration_checks/intake_browser.py'
       - 'integration_checks/reference_feedback_browser.py'
+      - 'integration_checks/q06_four_screen_browser.py'
       - 'requirements*.txt'
       - 'conftest.py'
       - 'pytest.ini'
@@ -42,7 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p build/evidence/intake-browser
-          python -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt
+          python -m pytest integration_checks/intake_browser.py integration_checks/reference_feedback_browser.py integration_checks/q06_four_screen_browser.py --no-cov -q --junitxml=build/evidence/intake-browser/junit.xml | tee build/evidence/intake-browser/pytest.txt
       - name: Retain synthetic browser evidence
         if: always()
         uses: actions/upload-artifact@v4

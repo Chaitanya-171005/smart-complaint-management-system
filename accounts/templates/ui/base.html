@@ -1,12 +1,16 @@
-{% load static notification_tags %}
+{% load static notification_tags ui_assets %}
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}SCMS{% endblock %}</title>
+{% if request.anonymous_intake %}
+<style>{% private_ui_css %}</style>
+{% else %}
 <link rel="stylesheet" href="{% static 'ui/scms.css' %}">
 <script src="{% static 'ui/forms.js' %}" defer></script>
+{% endif %}
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>

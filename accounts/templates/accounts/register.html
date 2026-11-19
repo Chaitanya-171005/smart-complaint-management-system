@@ -8,10 +8,12 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
     {% for field in form %}
-      <p>
+      <div class="form-field">
         {{ field.label_tag }} {{ field }}
-        {% for error in field.errors %}<br><span class="error">{{ error }}</span>{% endfor %}
-      </p>
+        {% if field.errors %}<ul id="{{ field.auto_id }}_error" class="errorlist" role="alert">
+          {% for error in field.errors %}<li class="error">{{ error }}</li>{% endfor %}
+        </ul>{% endif %}
+      </div>
     {% endfor %}
     <p>Password: at least 8 characters, with a letter and a digit.</p>
     <button type="submit">Register</button>

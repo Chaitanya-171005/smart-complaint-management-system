@@ -1,0 +1,56 @@
+{
+  "case": "test_anonymous_reference_manual_clipboard_copy[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "manual_reference_copy": {
+      "copied_exactly": true,
+      "reference_length": 32,
+      "copy_button_present": false,
+      "method": "real triple-click text selection then ControlOrMeta+C; browser clipboard readback"
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Loading the stylesheet '<origin>/static/ui/scms.css' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'style-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      },
+      {
+        "type": "error",
+        "text": "Loading the script '<origin>/static/ui/forms.js' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'script-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      },
+      {
+        "type": "error",
+        "text": "Loading the stylesheet '<origin>/static/ui/scms.css' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'style-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      },
+      {
+        "type": "error",
+        "text": "Loading the script '<origin>/static/ui/forms.js' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'script-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      }
+    ],
+    "failed_requests": [
+      {
+        "path": "/static/ui/scms.css",
+        "failure": "csp"
+      },
+      {
+        "path": "/static/ui/forms.js",
+        "failure": "csp"
+      },
+      {
+        "path": "/static/ui/scms.css",
+        "failure": "csp"
+      },
+      {
+        "path": "/static/ui/forms.js",
+        "failure": "csp"
+      }
+    ]
+  }
+}

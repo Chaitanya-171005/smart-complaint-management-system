@@ -1,0 +1,238 @@
+{
+  "case": "test_keyboard_navigation_labels_and_focus[desktop]",
+  "viewport": 1280,
+  "mobile_emulation": false,
+  "observations": {
+    "keyboard": {
+      "tab_sequence": [
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "BUTTON",
+          "type": "submit",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_category",
+          "tag": "SELECT",
+          "type": "select-one",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_sub_category",
+          "tag": "INPUT",
+          "type": "text",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_location",
+          "tag": "SELECT",
+          "type": "select-one",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_title",
+          "tag": "INPUT",
+          "type": "text",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_description",
+          "tag": "TEXTAREA",
+          "type": "textarea",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_priority",
+          "tag": "SELECT",
+          "type": "select-one",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "id_evidence",
+          "tag": "INPUT",
+          "type": "file",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "BUTTON",
+          "type": "submit",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "A",
+          "type": "",
+          "focusVisible": true,
+          "outline": "solid",
+          "outlineWidth": "3px"
+        },
+        {
+          "id": "",
+          "tag": "BODY",
+          "type": null,
+          "focusVisible": false,
+          "outline": "none",
+          "outlineWidth": "0px"
+        }
+      ],
+      "labels": [
+        {
+          "id": "id_category",
+          "type": "select-one",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_sub_category",
+          "type": "text",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_location",
+          "type": "select-one",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_title",
+          "type": "text",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_description",
+          "type": "textarea",
+          "label": true,
+          "invalid": null,
+          "describedBy": "id_description_helptext",
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_priority",
+          "type": "select-one",
+          "label": true,
+          "invalid": null,
+          "describedBy": null,
+          "missingDescriptions": []
+        },
+        {
+          "id": "id_evidence",
+          "type": "file",
+          "label": true,
+          "invalid": null,
+          "describedBy": "evidence-help",
+          "missingDescriptions": []
+        }
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

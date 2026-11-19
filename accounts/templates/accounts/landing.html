@@ -4,6 +4,12 @@
 <p class="eyebrow">{{ role_label }} workspace</p>
 <h1>Welcome, {{ user.full_name }}</h1>
 <p class="intro">Manage campus concerns and keep track of the next step.</p>
+{% if show_intake_form %}
+<section aria-labelledby="intake-heading">
+<h2 id="intake-heading">Submit a complaint</h2>
+{% include 'complaints/_intake_panel.html' %}
+</section>
+{% endif %}
 <div class="cards">
 {% if user.role == 'COMPLAINANT' %}<section class="card">
 <h2>Raise a concern</h2>

@@ -1,0 +1,110 @@
+{
+  "case": "test_role_navigation_and_refusal[mobile320-COMPLAINANT]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "role_navigation": {
+      "role": "COMPLAINANT",
+      "landing_links": [
+        {
+          "text": "Skip to content",
+          "href": "#main"
+        },
+        {
+          "text": "S\nSCMS\nCampus complaint management",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Overview",
+          "href": "/accounts/home/"
+        },
+        {
+          "text": "Submit complaint",
+          "href": "/complaints/new/"
+        },
+        {
+          "text": "My complaints",
+          "href": "/complaints/"
+        },
+        {
+          "text": "Dashboard",
+          "href": "/complaints/dashboard/"
+        },
+        {
+          "text": "Notifications",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Notifications \u2014 0 unread",
+          "href": "/complaints/notifications/"
+        },
+        {
+          "text": "Start a new form",
+          "href": "/complaints/new/"
+        },
+        {
+          "text": "Submit complaint \u2192",
+          "href": "/complaints/new/"
+        },
+        {
+          "text": "View complaints \u2192",
+          "href": "/complaints/"
+        },
+        {
+          "text": "Open dashboard \u2192",
+          "href": "/complaints/dashboard/"
+        },
+        {
+          "text": "View notifications \u2192",
+          "href": "/complaints/notifications/"
+        }
+      ],
+      "work_entry": "/complaints/new/",
+      "work_entry_discoverable": true,
+      "direct_entry_http": 200,
+      "denied_http": 403,
+      "refusal_text": "Skip to content\nS\nSCMS\nCampus complaint management\nSynthetic Test User\nComplainant\nLog out\nOverview\nSubmit complaint\nMy complaints\nDashboard\nNotifications\nNotifications \u2014 0 unread\nAccess unavailable\n\nYou do not have permission to use this page. Return to your home page or contact an administrator for help.\n\nReturn home\n\nSCMS \u00b7 Campus services\nFor emergencies, use your campus emergency contacts.",
+      "refusal_layout": {
+        "innerWidth": 320,
+        "clientWidth": 320,
+        "scrollWidth": 320,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "A",
+            "id": "",
+            "text": "My complaints",
+            "right": 366.796875
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Dashboard",
+            "right": 469.234375
+          },
+          {
+            "tag": "A",
+            "id": "",
+            "text": "Notifications",
+            "right": 582.890625
+          }
+        ]
+      }
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Failed to load resource: the server responded with a status of 403 (Forbidden)"
+      }
+    ],
+    "failed_requests": []
+  }
+}

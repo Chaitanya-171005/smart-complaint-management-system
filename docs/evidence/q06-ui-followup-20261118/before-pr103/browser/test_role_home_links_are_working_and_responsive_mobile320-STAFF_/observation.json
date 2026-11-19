@@ -1,0 +1,81 @@
+{
+  "case": "test_role_home_links_are_working_and_responsive[mobile320-STAFF]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "role_link_crawl": {
+      "role": "STAFF",
+      "links": [
+        {
+          "route": "/accounts/home/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 345.140625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/routing/queue/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 345.140625
+              }
+            ]
+          },
+          "fits": true
+        },
+        {
+          "route": "/complaints/notifications/",
+          "http": 200,
+          "layout": {
+            "innerWidth": 320,
+            "clientWidth": 320,
+            "scrollWidth": 320,
+            "visualWidth": 320,
+            "viewportMeta": "width=device-width, initial-scale=1",
+            "overflowing": [
+              {
+                "tag": "A",
+                "id": "",
+                "text": "Notifications",
+                "right": 345.140625
+              }
+            ]
+          },
+          "fits": true
+        }
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "case": "test_long_labels_responsive_layout[mobile320-anonymous]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "long_labels": {
+      "anonymous": true,
+      "layout": {
+        "innerWidth": 660,
+        "clientWidth": 320,
+        "scrollWidth": 660,
+        "visualWidth": 320,
+        "viewportMeta": "width=device-width, initial-scale=1",
+        "overflowing": [
+          {
+            "tag": "SELECT",
+            "id": "id_category",
+            "text": "\n  Select category\n\n  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+            "right": 660
+          },
+          {
+            "tag": "SELECT",
+            "id": "id_location",
+            "text": "\n  Select location\n\n  BBBBBBBBBBBBBBBBBBBB / FFFFFFFFFF / RRRRRRRRRRRR",
+            "right": 601
+          }
+        ]
+      },
+      "category_length": 50,
+      "location_lengths": [
+        20,
+        10,
+        30
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [
+      {
+        "type": "error",
+        "text": "Loading the stylesheet '<origin>/static/ui/scms.css' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'style-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      },
+      {
+        "type": "error",
+        "text": "Loading the script '<origin>/static/ui/forms.js' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'script-src-elem' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      }
+    ],
+    "failed_requests": [
+      {
+        "path": "/static/ui/scms.css",
+        "failure": "csp"
+      },
+      {
+        "path": "/static/ui/forms.js",
+        "failure": "csp"
+      }
+    ]
+  }
+}

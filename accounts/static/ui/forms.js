@@ -1,5 +1,9 @@
 /* Submission feedback only; validation, retries and CSRF stay server-controlled. */
 (() => {
+  // After a server-side refusal, associate the visible error with the first
+  // invalid field and move keyboard focus there. Validation stays on the server.
+  const invalid = document.querySelector('[aria-invalid="true"]');
+  if (invalid) invalid.focus();
   document.addEventListener('submit', (event) => {
     const form = event.target;
     if (!(form instanceof HTMLFormElement) || form.method.toLowerCase() !== 'post' || event.defaultPrevented) return;

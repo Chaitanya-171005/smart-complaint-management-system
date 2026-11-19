@@ -9,6 +9,7 @@
   <form method="post" enctype="multipart/form-data" action="{% url 'complaints:anonymous_submit' %}">
     {% csrf_token %}
     <input type="hidden" name="request_token" value="{{ request_token }}">
+    {% if form.errors %}<p role="alert">Please review the messages below before trying again.</p>{% endif %}
     {{ form.as_p }}
     <p><label for="id_evidence">Evidence (optional)</label><br><input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf"><br>Attach up to three JPEG, PNG or PDF files. Reselect the same files on a retry.</p>
     <p>A successful submission shows a private tracking reference once. Save it immediately: it cannot be recovered or shown again if you lose it or the response is interrupted.</p>
