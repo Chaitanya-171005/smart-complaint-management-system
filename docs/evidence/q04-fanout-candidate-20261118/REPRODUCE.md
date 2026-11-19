@@ -2,8 +2,9 @@
 
 Use a disposable checkout at `a434eaa47f6e96f001c5d188f544cae137b1029d`,
 Python3.14 with requirements-dev.txt installed, a synthetic DJANGO_SECRET_KEY,
-and an isolated PostgreSQL17 database. Set DJANGO_DATABASE_URL to its disposable
-connection URL. Do not run against shared data. Actual hosted source runs:
+and an isolated PostgreSQL17 database. Set DJANGO_DB_ENGINE=postgresql and
+DJANGO_DB_NAME, DJANGO_DB_USER, DJANGO_DB_PASSWORD, DJANGO_DB_HOST and
+DJANGO_DB_PORT to that disposable database. Do not run against shared data. Actual hosted source runs:
 
 - Unified SQLite/PostgreSQL/coverage: Actions44454131707.
 - Browser: Actions44454131714.
