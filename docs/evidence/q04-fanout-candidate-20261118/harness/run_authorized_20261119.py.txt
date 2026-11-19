@@ -1,0 +1,197 @@
+"""Reproduce the authorized local queue/assignment run; never a full Q04 pass.
+
+Uses the reviewed HTTP/CSRF client and percentile implementation. Adds a durable
+database warmup gate, raw warmup samples, deadline and fail-fast measurements.
+Private actor/settings files remain outside shared evidence. Never reuse targets.
+"""
+import argparse
+from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import threading
+import time
+
+DB_CHECK = r'''
+import json, sys
+from django.conf import settings
+from accounts.models import User
+from complaints.models import Complaint
+from workflow.models import ComplaintHistory, NotificationEvent
+from django.contrib.sessions.models import Session
+from django.utils import timezone
+spec=json.load(sys.stdin)
+assigned=history=events=correct=0
+for row in spec['targets']:
+    c=Complaint.objects.get(complaint_id=row['ref'])
+    hs=list(ComplaintHistory.objects.filter(complaint_ref=c.complaint_id, event_type='ALLOCATED', actor_kind='HEAD'))
+    assigned += c.assignee_id is not None
+    history += len(hs)
+    events += NotificationEvent.objects.filter(history__in=hs).count()
+    should=row['index'] in spec['expected']
+    valid=(c.status=='ASSIGNED' and c.department.name=='Q04 Synthetic Services')
+    if should:
+        valid=valid and c.assignee_id==int(row['assignee']) and len(hs)==1
+        if len(hs)==1:
+            h=hs[0]
+            valid=valid and h.actor.email==row['account']+'@q04.invalid' and h.assignee_id==int(row['assignee'])
+            valid=valid and NotificationEvent.objects.filter(history=h, kind='STAFF_ASSIGNED').count()==1
+    else:
+        valid=valid and c.assignee_id is None and not hs
+    correct += bool(valid)
+heads=User.objects.filter(email__in=[x+'@q04.invalid' for x in spec['heads']], role='HEAD', is_active=True, department__name='Q04 Synthetic Services').count()
+sessions=Session.objects.filter(session_key__in=spec['sessions'],expire_date__gt=timezone.now()).count()
+print('Q04_DB_JSON:'+json.dumps(dict(targets=len(spec['targets']), assigned=assigned, expected_assigned=len(spec['expected']), head_assignment_history=history, notification_events=events, correct_targets=correct, active_department_heads=heads, unexpired_head_sessions=sessions, valid=correct==len(spec['targets']) and heads==50 and sessions==50, release_gates={name:getattr(settings,name) for name in ('COMPLAINT_INTAKE_ENABLED','ANONYMOUS_INTAKE_ENABLED','ANONYMOUS_TRACKING_ENABLED','ANONYMOUS_FEEDBACK_ENABLED','ANONYMOUS_PRIVACY_READY')}, evidence_max_bytes=settings.EVIDENCE_MAX_BYTES)))
+'''
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__)
+    p.add_argument('--repo',type=Path,required=True)
+    p.add_argument('--state',type=Path,required=True)
+    p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--window-start',required=True)
+    p.add_argument('--window-end',required=True)
+    args=p.parse_args()
+    sys.path.insert(0,str(args.repo))
+    from scripts.q04_load import ActorClient, check_case, summarize
+    start=datetime.fromisoformat(args.window_start)
+    end=datetime.fromisoformat(args.window_end)
+    if start.tzinfo is None or end.tzinfo is None:
+        raise SystemExit('Use timezone-qualified authorization boundaries')
+    def remaining():
+        now=datetime.now(timezone.utc)
+        if not start<=now<end:
+            raise RuntimeError('Outside authorized window; no new requests')
+        return min(30,(end-now).total_seconds())
+    remaining()
+    args.output.mkdir(parents=True,exist_ok=False)
+    report={'status':'RUNNING','scope':'Local Docker/PostgreSQL queue/assignment only; other Q04 scenarios and overall acceptance pending',
+            'authorization':{'owner':'atul-suresh','start':start.isoformat(),'end':end.isoformat()},
+            'started_at_utc':datetime.now(timezone.utc).isoformat(),'results':{},'checks':{},
+            'load_model':'50 distinct department Heads; one warmup + ten measured operations per Head per scenario; closed-loop barrier, no think time; fresh CSRF preparation traffic excluded from POST timer, included in wall throughput',
+            'local_d02':{'bytes':5000000,'status':'Atul proposal for this local setup; pending team confirmation'},
+            'harness_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
+    lock=threading.Lock(); stop=threading.Event(); expected=set(); reserved=False
+    def save():
+        (args.output/'report.json').write_text(json.dumps(report,indent=2)+'\n')
+    def docker(*cmd):
+        return subprocess.check_output(['docker',*cmd],text=True,timeout=30)
+    try:
+        settings=json.loads((args.state/'settings.json').read_text())
+        heads=json.loads((args.state/'actors.json').read_text())['HEAD']
+        if len(heads)!=50 or len({h['account_key'] for h in heads})!=50 or len({h['session_cookie'] for h in heads})!=50:
+            raise RuntimeError('50 distinct Head accounts/sessions required')
+        app=settings['project']+'-app-1'
+        marker=args.state/'action-targets-consumed'
+        with marker.open('x') as f:
+            f.write(json.dumps({'state':'running','phase':'execution','evidence':str(args.output)}))
+        reserved=True
+        os.chmod(marker,0o600)
+        report['source_revision']=subprocess.check_output(['git','rev-parse','HEAD'],cwd=args.repo,text=True).strip()
+        report['working_tree_status']=subprocess.check_output(['git','status','--porcelain'],cwd=args.repo,text=True).splitlines()
+        report['project']=settings['project'];report['dataset']={'complaints':settings['complaints'],'seed':settings['seed'],'heads':50,'action_targets':550}
+        report['image']=docker('inspect',app,'--format','{{.Image}}').strip()
+        report['app_resources']=json.loads(docker('inspect',app,'--format','{"command":{{json .Config.Cmd}},"memory_limit":{{.HostConfig.Memory}},"nano_cpus":{{.HostConfig.NanoCpus}}}'))
+        report['worker_configuration']=json.loads(docker('exec',app,'python','-c',"import json,os;print(json.dumps({'gunicorn_command_args':os.environ.get('GUNICORN_CMD_ARGS','')}))"))
+        report['docker_resources']=json.loads(docker('info','--format','{"cpus":{{.NCPU}},"memory_bytes":{{.MemTotal}}}'))
+        report['postgresql']=docker('exec',settings['project']+'-db-1','psql','-U','q04','-d','q04','-Atc','SHOW server_version; SHOW max_connections;').splitlines()
+        files=['complaints/'+x+'.py' for x in ('submission','anonymous','tracking','feedback_views','evidence','privacy','checks')]+['routing/allocation.py','routing/queue.py','workflow/reference_feedback.py','workflow/notifications.py','scripts/run_tests.py','scripts/q04_env.py']
+        image_hashes=json.loads(docker('exec',app,'python','-c',"import hashlib,json;from pathlib import Path;files="+repr(files)+";print(json.dumps({p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in files}))"))
+        source_hashes={p:hashlib.sha256((args.repo/p).read_bytes()).hexdigest() for p in files}
+        report['source_image_hashes']={'source':source_hashes,'image':image_hashes,'match':source_hashes==image_hashes}
+        if source_hashes!=image_hashes: raise RuntimeError('Image/source mismatch')
+        origin='http://127.0.0.1:'+str(settings['port'])
+        report['origin']=origin;report['network']='loopback HTTP, no TLS or shaping; private Docker bridge to PostgreSQL; no production/shared services'
+        clients=[ActorClient(origin,h) for h in heads]
+        class GuardedOpener:
+            def __init__(self,opener): self.opener=opener
+            def open(self,request,timeout=30):
+                if stop.is_set(): raise OSError('Run stopped')
+                try: timeout=min(timeout,remaining())
+                except RuntimeError:
+                    stop.set();raise OSError('Window expired') from None
+                return self.opener.open(request,timeout=timeout)
+        for client in clients: client.opener=GuardedOpener(client.opener)
+        targets=[]
+        for i,h in enumerate(heads):
+            ops=h['operations']['action']
+            if len(ops)!=11: raise RuntimeError('11 fresh targets per Head required')
+            for j,op in enumerate(ops):
+                targets.append({'index':i*11+j,'ref':op['path'].split('/')[2],'account':h['account_key'],'assignee':op['payload']['assignee']})
+        if len({t['ref'] for t in targets})!=550: raise RuntimeError('Targets must be unique')
+        def probe(label):
+            payload={'heads':[h['account_key'] for h in heads],'targets':targets,'expected':sorted(expected),'sessions':[h['session_cookie'] for h in heads]}
+            result=subprocess.run(['docker','exec','-i',app,'python','manage.py','shell','-c',DB_CHECK],input=json.dumps(payload),capture_output=True,text=True,timeout=60)
+            if result.returncode: raise RuntimeError('Database verification process failed')
+            row=json.loads(next(x[12:] for x in result.stdout.splitlines() if x.startswith('Q04_DB_JSON:')))
+            report['checks'][label]=row; save()
+            if not row['valid'] or any(row['release_gates'].values()) or row['evidence_max_bytes']!=5000000:
+                raise RuntimeError('Database, release gate or local byte-limit verification failed')
+        probe('baseline')
+        cases={
+            'queue':dict(name='queue',method='GET',role='HEAD',path='/routing/queue/',expect_status=200,expect_pattern='Q04 synthetic complaint',record_pattern='<article>',min_records=1,max_records=25,threshold_ms=1500),
+            'action':dict(name='action',method='POST',role='HEAD',path='/complaints/SCMS-2099-000001/assign/',prepare_path='/routing/queue/',expect_status=302,expect_pattern='^/routing/queue/',threshold_ms=1500)}
+        tokens=set()
+        journal=(args.output/'samples.jsonl').open('x')
+        def operation(name,worker,number,phase):
+            if stop.is_set(): return None
+            remaining_seconds=remaining()
+            case=dict(cases[name]);payload={}
+            if name=='action':
+                op=heads[worker]['operations']['action'][number]
+                case.update(path=op['path'],prepare_path=op['prepare_path']);payload=op['payload']
+            check_case(case)
+            began=time.perf_counter()
+            row=clients[worker].operation(case,payload,tokens,lock,timeout=remaining_seconds)
+            row.update(scenario=name,phase=phase,worker=worker,iteration=number,operation_wall_ms=(time.perf_counter()-began)*1000)
+            with lock:
+                journal.write(json.dumps(row)+'\n');journal.flush()
+                if name=='action' and not row['error']: expected.add(worker*11+number)
+                if row['error']: stop.set()
+            return row
+        def batch(name,phase,iterations):
+            barrier=threading.Barrier(50)
+            def work(i):
+                barrier.wait(timeout=min(60,remaining()))
+                rows=[]
+                for j in iterations:
+                    if stop.is_set(): break
+                    row=operation(name,i,j,phase)
+                    if row: rows.append(row)
+                return rows
+            began=time.perf_counter()
+            with ThreadPoolExecutor(max_workers=50) as pool:
+                rows=[r for group in pool.map(work,range(50)) for r in group]
+            wall=time.perf_counter()-began
+            result={**summarize(rows,1500),'wall_seconds':wall,'throughput_operations_per_second':len(rows)/wall,'concurrency':50}
+            report['results'][phase+'_'+name]=result;save()
+            if stop.is_set() or len(rows)!=50*len(iterations): raise RuntimeError('Unexpected request failure; stopped')
+            remaining()
+        batch('queue','warmup',range(1))
+        batch('action','warmup',range(1))
+        probe('warmup_before_measurements')
+        batch('queue','measured',range(1,11))
+        batch('action','measured',range(1,11))
+        probe('final')
+        report['status']='LOCAL_SCENARIO_PASS' if all(report['results']['measured_'+n]['status']=='PASS' for n in ('queue','action')) else 'LOCAL_PERFORMANCE_TARGET_FAILED'
+        journal.close()
+    except BaseException as exc:
+        stop.set()
+        report['status']='STOPPED_UNEXPECTED_FAILURE'
+        report['failure_category']=type(exc).__name__
+        # Fixed messages only; never expose actor cookies, settings or raw HTTP.
+        if isinstance(exc,RuntimeError): report['failure']=str(exc)
+    finally:
+        report['finished_at_utc']=datetime.now(timezone.utc).isoformat();save()
+        if reserved:
+            marker.write_text(json.dumps({'state':report['status'],'phase':'execution','evidence':str(args.output)}))
+        print(json.dumps({k:report.get(k) for k in ('status','source_revision','started_at_utc','finished_at_utc')}))
+    return 0 if report['status']=='LOCAL_SCENARIO_PASS' else 2
+
+if __name__=='__main__':
+    raise SystemExit(main())

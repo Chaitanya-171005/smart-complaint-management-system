@@ -44,3 +44,43 @@ Last real authorized result remains queue p95 2,895.659 ms and assignment p95
 7,147.723 ms, both failing <=1,500 ms. Preserve its original packet on PR #101.
 Other Q04 scenarios and final Main/Q05/human acceptance remain separate pending
 work. See REPRODUCE.md for actual focused commands and the guarded next run.
+
+## Stopped real multiworker run and assignment lock correction
+
+On 19 November, the authorized run at **00:15:34–00:16:11 IST** used
+`6fe48dc608f44aae9c8d03adc017633d32434a35`, image
+`sha256:e42ab60f663ae6863ae488daa0a6309a6045c8e0c661dab6ceab1bc57e010a94`,
+four sync workers, PostgreSQL17.6 and 650 synthetic complaints. All50 Head
+sessions passed baseline verification. Queue warmup returned50 successful
+responses. Assignment warmup returned6 successful redirects and44 HTTP500s.
+The harness stopped, with **zero measured operations**. Warmup timings are raw
+evidence only and do not establish a passing p95. The complete100 warmup
+samples, actual app/DB logs, image/resources and failure report are retained.
+No run targets, reservations or data were reset or reused.
+
+The PostgreSQL logs identify a real row-lock/foreign-key cycle: allocation
+locks its Head and target Staff FOR UPDATE, while notification foreign keys
+need KEY SHARE on other Heads locked by waiting assignments. A two-Head
+PostgreSQL reproduction fails before correction (one failure, four existing
+authorization-lock cases pass), with SQLSTATE40P01. This is a specific
+concurrency failure missed by sequential correctness checks.
+
+The correction uses FOR NO KEY UPDATE for the two account rows. Complaint
+locking, current-state authorization and atomic assignment/history/outbox remain.
+Role, department and active-status updates still block during allocation;
+foreign-key references can proceed. The PostgreSQL-only regression is a required
+CI step and refuses a non-PostgreSQL backend rather than reporting a skip.
+Reference: https://www.postgresql.org/docs/17/explicit-locking.html
+
+Actual post-correction focused result at
+`bbec7401b87ad28bf90bc97a15a9ee965a5de7e7`: **142 passed, zero failures/errors/skips**,
+including8 lock/concurrency cases, notification graph, HTTP/permissions and the
+new Main deactivation guards. This source includes latest inspected Main
+`b7db7848cbc15d8b67fbba508e57b9f31e16dc74` through an isolated branch merge.
+A read-only post-stop check verifies all550 targets, exactly6 committed
+assignments/history/events, and312 notices/email jobs. Failed attempts leave no
+partial accepted assignment. Expired benchmark sessions are not reused.
+
+The original warmup failure is retained after this code correction. A new
+50-user run needs a new explicit window and fresh environment/targets. No new
+measurement or overall Q04/final Main acceptance is claimed.

@@ -1,0 +1,5 @@
+..............................................{"heads": 3, "notice_inserts": 1, "email_inserts": 1, "total_statements": 13}
+.{"heads": 50, "notice_inserts": 1, "email_inserts": 1, "total_statements": 13}
+..................two_head_outcomes ['committed', 'committed']
+.............................................................................
+142 passed in 50.43s

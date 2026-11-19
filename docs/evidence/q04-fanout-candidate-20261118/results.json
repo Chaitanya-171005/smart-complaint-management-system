@@ -28,8 +28,25 @@
       "after_email_inserts": 1
     }
   },
-  "new_load_run": false,
-  "docker_candidate_built": false,
-  "blocker": "Docker Desktop manually paused; attempted preparation failed before image build.",
-  "Q04_pass": false
+  "new_load_run": true,
+  "docker_candidate_built": true,
+  "blocker": "Previous window expired; new corrected-build load requires a new authorized window.",
+  "Q04_pass": false,
+  "latest_load_result": {
+    "source": "6fe48dc608f44aae9c8d03adc017633d32434a35",
+    "status": "STOPPED_UNEXPECTED_FAILURE",
+    "warmup_queue": 50,
+    "warmup_assignments_committed": 6,
+    "warmup_assignments_http500": 44,
+    "measured_operations": 0
+  },
+  "lock_correction": {
+    "source": "bbec7401b87ad28bf90bc97a15a9ee965a5de7e7",
+    "focused_passed": 142,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "explicit_pg_cases": 8,
+    "new_load_result": false
+  }
 }

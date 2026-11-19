@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="5" time="5.487" timestamp="2026-11-18T18:50:58.933654+00:00" hostname="Macs-MacBook-Pro.local"><testcase classname="integration_checks.allocation_concurrency_pg" name="test_two_heads_same_staff_keep_all_notification_foreign_keys_without_deadlock" time="3.190"><failure message="AssertionError: assert ['committed', '40P01'] == ['committed', 'committed']&#10;  &#10;  At index 1 diff: '40P01' != 'committed'&#10;  Use -v to get more diff">user_factory = &lt;function user_factory.&lt;locals&gt;.create_user at 0x104658510&gt;
+department = &lt;Department: Synthetic Department 25168f98ae11&gt;
+complaint_factory = &lt;function complaint_factory.&lt;locals&gt;.create_complaint at 0x10491ce00&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x10457a190&gt;
+
+    def test_two_heads_same_staff_keep_all_notification_foreign_keys_without_deadlock(user_factory,department,complaint_factory,monkeypatch):
+        heads=[user_factory(role='HEAD',department=department) for _ in range(2)]
+        staff=user_factory(role='STAFF',department=department)
+        complaints=[complaint_factory(department=department) for _ in heads]
+        barrier=Barrier(2);original=QuerySet.first;head_ids={h.pk for h in heads}
+        def synchronized_first(qs):
+            obj=original(qs)
+            if qs.model is User and qs.query.select_for_update and obj and obj.pk in head_ids:
+                barrier.wait(timeout=10)
+            return obj
+        monkeypatch.setattr(QuerySet,'first',synchronized_first)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures=[pool.submit(worker_call,h,staff,c) for h,c in zip(heads,complaints)]
+            outcomes=[f.result(timeout=20) for f in futures]
+        print('two_head_outcomes',outcomes)
+&gt;       assert outcomes==['committed','committed']
+E       AssertionError: assert ['committed', '40P01'] == ['committed', 'committed']
+E         
+E         At index 1 diff: '40P01' != 'committed'
+E         Use -v to get more diff
+
+integration_checks/allocation_concurrency_pg.py:47: AssertionError</failure></testcase><testcase classname="integration_checks.allocation_concurrency_pg" name="test_authorization_changes_still_block_until_allocation_commits[head-role-STAFF]" time="0.520" /><testcase classname="integration_checks.allocation_concurrency_pg" name="test_authorization_changes_still_block_until_allocation_commits[head-is_active-False]" time="0.524" /><testcase classname="integration_checks.allocation_concurrency_pg" name="test_authorization_changes_still_block_until_allocation_commits[staff-role-COMPLAINANT]" time="0.512" /><testcase classname="integration_checks.allocation_concurrency_pg" name="test_authorization_changes_still_block_until_allocation_commits[staff-is_active-False]" time="0.551" /></testsuite></testsuites>

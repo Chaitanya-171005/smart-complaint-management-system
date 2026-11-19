@@ -1,0 +1,455 @@
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default "max_connections" ... 100
+selecting default "shared_buffers" ... 128MB
+selecting default time zone ... Etc/UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data -l logfile start
+
+waiting for server to start....2026-11-18 18:00:23.051 UTC [48] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-18 18:00:23.053 UTC [48] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-18 18:00:23.059 UTC [51] LOG:  database system was shut down at 2026-11-18 18:00:22 UTC
+2026-11-18 18:00:23.064 UTC [48] LOG:  database system is ready to accept connections
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: ignoring /docker-entrypoint-initdb.d/*
+
+waiting for server to shut down...2026-11-18 18:00:23.273 UTC [48] LOG:  received fast shutdown request
+.2026-11-18 18:00:23.275 UTC [48] LOG:  aborting any active transactions
+2026-11-18 18:00:23.277 UTC [48] LOG:  background worker "logical replication launcher" (PID 54) exited with exit code 1
+2026-11-18 18:00:23.277 UTC [49] LOG:  shutting down
+2026-11-18 18:00:23.279 UTC [49] LOG:  checkpoint starting: shutdown immediate
+2026-11-18 18:00:23.354 UTC [49] LOG:  checkpoint complete: wrote 925 buffers (5.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.024 s, sync=0.047 s, total=0.077 s; sync files=301, longest=0.012 s, average=0.001 s; distance=4256 kB, estimate=4256 kB; lsn=0/1915958, redo lsn=0/1915958
+2026-11-18 18:00:23.360 UTC [48] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+2026-11-18 18:00:23.401 UTC [1] LOG:  starting PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
+2026-11-18 18:00:23.401 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-18 18:00:23.401 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-18 18:00:23.404 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-18 18:00:23.409 UTC [64] LOG:  database system was shut down at 2026-11-18 18:00:23 UTC
+2026-11-18 18:00:23.414 UTC [1] LOG:  database system is ready to accept connections
+2026-11-18 18:05:23.450 UTC [62] LOG:  checkpoint starting: time
+2026-11-18 18:06:07.910 UTC [62] LOG:  checkpoint complete: wrote 445 buffers (2.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=44.412 s, sync=0.041 s, total=44.461 s; sync files=304, longest=0.002 s, average=0.001 s; distance=2864 kB, estimate=2864 kB; lsn=0/1BE1C90, redo lsn=0/1BE1C00
+2026-11-18 18:36:54.285 UTC [62] LOG:  checkpoint starting: time
+2026-11-18 18:36:55.500 UTC [62] LOG:  checkpoint complete: wrote 12 buffers (0.1%); 0 WAL file(s) added, 0 removed, 0 recycled; write=1.205 s, sync=0.004 s, total=1.215 s; sync files=8, longest=0.003 s, average=0.001 s; distance=18 kB, estimate=2580 kB; lsn=0/1BE6558, redo lsn=0/1BE6500
+2026-11-18 18:41:54.505 UTC [62] LOG:  checkpoint starting: time
+2026-11-18 18:42:03.089 UTC [62] LOG:  checkpoint complete: wrote 86 buffers (0.5%); 1 WAL file(s) added, 0 removed, 0 recycled; write=8.540 s, sync=0.011 s, total=8.585 s; sync files=26, longest=0.006 s, average=0.001 s; distance=501 kB, estimate=2372 kB; lsn=0/1C63D88, redo lsn=0/1C63CF8
+2026-11-18 18:45:43.530 UTC [4443] ERROR:  deadlock detected
+2026-11-18 18:45:43.530 UTC [4443] DETAIL:  Process 4443 waits for ShareLock on transaction 1766; blocked by process 4442.
+	Process 4442 waits for ShareLock on transaction 1768; blocked by process 4443.
+	Process 4443: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4442: COMMIT
+2026-11-18 18:45:43.530 UTC [4443] HINT:  See server log for query details.
+2026-11-18 18:45:43.530 UTC [4443] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:43.530 UTC [4443] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:44.531 UTC [4444] ERROR:  deadlock detected
+2026-11-18 18:45:44.531 UTC [4444] DETAIL:  Process 4444 waits for ShareLock on transaction 1766; blocked by process 4442.
+	Process 4442 waits for ShareLock on transaction 1772; blocked by process 4444.
+	Process 4444: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4442: COMMIT
+2026-11-18 18:45:44.531 UTC [4444] HINT:  See server log for query details.
+2026-11-18 18:45:44.531 UTC [4444] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:44.531 UTC [4444] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:45.532 UTC [4442] ERROR:  deadlock detected
+2026-11-18 18:45:45.532 UTC [4442] DETAIL:  Process 4442 waits for ShareLock on transaction 1773; blocked by process 4445.
+	Process 4445 waits for ShareLock on transaction 1766; blocked by process 4442.
+	Process 4442: COMMIT
+	Process 4445: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:45.532 UTC [4442] HINT:  See server log for query details.
+2026-11-18 18:45:45.532 UTC [4442] CONTEXT:  while locking tuple (1,65) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:45.532 UTC [4442] STATEMENT:  COMMIT
+2026-11-18 18:45:46.539 UTC [4456] ERROR:  deadlock detected
+2026-11-18 18:45:46.539 UTC [4456] DETAIL:  Process 4456 waits for ShareLock on transaction 1773; blocked by process 4445.
+	Process 4445 waits for ShareLock on transaction 1774; blocked by process 4446.
+	Process 4446 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4456.
+	Process 4456: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4445: COMMIT
+	Process 4446: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:46.539 UTC [4456] HINT:  See server log for query details.
+2026-11-18 18:45:46.539 UTC [4456] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:46.539 UTC [4456] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:46.569 UTC [4445] ERROR:  deadlock detected
+2026-11-18 18:45:46.569 UTC [4445] DETAIL:  Process 4445 waits for ShareLock on transaction 1774; blocked by process 4446.
+	Process 4446 waits for ShareLock on transaction 1773; blocked by process 4445.
+	Process 4445: COMMIT
+	Process 4446: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:46.569 UTC [4445] HINT:  See server log for query details.
+2026-11-18 18:45:46.569 UTC [4445] CONTEXT:  while locking tuple (1,54) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:46.569 UTC [4445] STATEMENT:  COMMIT
+2026-11-18 18:45:47.568 UTC [4458] ERROR:  deadlock detected
+2026-11-18 18:45:47.568 UTC [4458] DETAIL:  Process 4458 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4457.
+	Process 4457 waits for ShareLock on transaction 1774; blocked by process 4446.
+	Process 4446 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4458.
+	Process 4458: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4457: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4446: COMMIT
+	Process 4459: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:47.568 UTC [4458] HINT:  See server log for query details.
+2026-11-18 18:45:47.568 UTC [4458] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:47.569 UTC [4457] ERROR:  deadlock detected
+2026-11-18 18:45:47.569 UTC [4457] DETAIL:  Process 4457 waits for ShareLock on transaction 1774; blocked by process 4446.
+	Process 4446 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4457.
+	Process 4457: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4446: COMMIT
+	Process 4459: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:47.569 UTC [4457] HINT:  See server log for query details.
+2026-11-18 18:45:47.569 UTC [4457] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:47.569 UTC [4457] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:47.604 UTC [4446] ERROR:  deadlock detected
+2026-11-18 18:45:47.604 UTC [4446] DETAIL:  Process 4446 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459 waits for ShareLock on transaction 1774; blocked by process 4446.
+	Process 4446: COMMIT
+	Process 4459: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:47.604 UTC [4446] HINT:  See server log for query details.
+2026-11-18 18:45:47.604 UTC [4446] CONTEXT:  while locking tuple (1,55) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:47.604 UTC [4446] STATEMENT:  COMMIT
+2026-11-18 18:45:48.598 UTC [4461] ERROR:  deadlock detected
+2026-11-18 18:45:48.598 UTC [4461] DETAIL:  Process 4461 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4460.
+	Process 4460 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459 waits for ShareLock on transaction 1787; blocked by process 4462.
+	Process 4462 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4461.
+	Process 4461: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4460: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4459: COMMIT
+	Process 4462: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:48.598 UTC [4461] HINT:  See server log for query details.
+2026-11-18 18:45:48.598 UTC [4461] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:48.605 UTC [4460] ERROR:  deadlock detected
+2026-11-18 18:45:48.605 UTC [4460] DETAIL:  Process 4460 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459 waits for ShareLock on transaction 1787; blocked by process 4462.
+	Process 4462 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4460.
+	Process 4460: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4459: COMMIT
+	Process 4462: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:48.605 UTC [4460] HINT:  See server log for query details.
+2026-11-18 18:45:48.605 UTC [4460] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:48.605 UTC [4460] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:48.635 UTC [4459] ERROR:  deadlock detected
+2026-11-18 18:45:48.635 UTC [4459] DETAIL:  Process 4459 waits for ShareLock on transaction 1787; blocked by process 4462.
+	Process 4462 waits for ShareLock on transaction 1782; blocked by process 4459.
+	Process 4459: COMMIT
+	Process 4462: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:48.635 UTC [4459] HINT:  See server log for query details.
+2026-11-18 18:45:48.635 UTC [4459] CONTEXT:  while locking tuple (1,51) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:48.635 UTC [4459] STATEMENT:  COMMIT
+2026-11-18 18:45:49.635 UTC [4464] ERROR:  deadlock detected
+2026-11-18 18:45:49.635 UTC [4464] DETAIL:  Process 4464 waits for ShareLock on transaction 1787; blocked by process 4462.
+	Process 4462 waits for ShareLock on transaction 1789; blocked by process 4463.
+	Process 4463 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4464.
+	Process 4464: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4462: COMMIT
+	Process 4463: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:49.635 UTC [4464] HINT:  See server log for query details.
+2026-11-18 18:45:49.635 UTC [4464] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:49.635 UTC [4464] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:49.665 UTC [4462] ERROR:  deadlock detected
+2026-11-18 18:45:49.665 UTC [4462] DETAIL:  Process 4462 waits for ShareLock on transaction 1789; blocked by process 4463.
+	Process 4463 waits for ShareLock on transaction 1787; blocked by process 4462.
+	Process 4462: COMMIT
+	Process 4463: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:49.665 UTC [4462] HINT:  See server log for query details.
+2026-11-18 18:45:49.665 UTC [4462] CONTEXT:  while locking tuple (1,50) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:49.665 UTC [4462] STATEMENT:  COMMIT
+2026-11-18 18:45:50.664 UTC [4474] ERROR:  deadlock detected
+2026-11-18 18:45:50.664 UTC [4474] DETAIL:  Process 4474 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4465.
+	Process 4465 waits for ShareLock on transaction 1789; blocked by process 4463.
+	Process 4463 waits for ShareLock on transaction 1793; blocked by process 4474.
+	Process 4474: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4465: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4463: COMMIT
+2026-11-18 18:45:50.664 UTC [4474] HINT:  See server log for query details.
+2026-11-18 18:45:50.664 UTC [4474] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:50.666 UTC [4465] ERROR:  deadlock detected
+2026-11-18 18:45:50.666 UTC [4465] DETAIL:  Process 4465 waits for ShareLock on transaction 1789; blocked by process 4463.
+	Process 4463 waits for ShareLock on transaction 1796; blocked by process 4475.
+	Process 4475 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4465.
+	Process 4465: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4463: COMMIT
+	Process 4475: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:50.666 UTC [4465] HINT:  See server log for query details.
+2026-11-18 18:45:50.666 UTC [4465] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:50.666 UTC [4465] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:51.665 UTC [4463] ERROR:  deadlock detected
+2026-11-18 18:45:51.665 UTC [4463] DETAIL:  Process 4463 waits for ShareLock on transaction 1796; blocked by process 4475.
+	Process 4475 waits for ShareLock on transaction 1789; blocked by process 4463.
+	Process 4463: COMMIT
+	Process 4475: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:51.665 UTC [4463] HINT:  See server log for query details.
+2026-11-18 18:45:51.665 UTC [4463] CONTEXT:  while locking tuple (1,61) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:51.665 UTC [4463] STATEMENT:  COMMIT
+2026-11-18 18:45:52.666 UTC [4476] ERROR:  deadlock detected
+2026-11-18 18:45:52.666 UTC [4476] DETAIL:  Process 4476 waits for ShareLock on transaction 1796; blocked by process 4475.
+	Process 4475 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4476.
+	Process 4476: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4475: COMMIT
+	Process 4477: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:52.666 UTC [4476] HINT:  See server log for query details.
+2026-11-18 18:45:52.666 UTC [4476] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:52.666 UTC [4476] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:52.696 UTC [4475] ERROR:  deadlock detected
+2026-11-18 18:45:52.696 UTC [4475] DETAIL:  Process 4475 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for ShareLock on transaction 1796; blocked by process 4475.
+	Process 4475: COMMIT
+	Process 4477: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:52.696 UTC [4475] HINT:  See server log for query details.
+2026-11-18 18:45:52.696 UTC [4475] CONTEXT:  while locking tuple (2,68) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:52.696 UTC [4475] STATEMENT:  COMMIT
+2026-11-18 18:45:53.694 UTC [4479] ERROR:  deadlock detected
+2026-11-18 18:45:53.694 UTC [4479] DETAIL:  Process 4479 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4478.
+	Process 4478 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for ShareLock on transaction 1802; blocked by process 4479.
+	Process 4479: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4478: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4477: COMMIT
+2026-11-18 18:45:53.694 UTC [4479] HINT:  See server log for query details.
+2026-11-18 18:45:53.694 UTC [4479] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:53.697 UTC [4478] ERROR:  deadlock detected
+2026-11-18 18:45:53.697 UTC [4478] DETAIL:  Process 4478 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for ShareLock on transaction 1801; blocked by process 4478.
+	Process 4478: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4477: COMMIT
+2026-11-18 18:45:53.697 UTC [4478] HINT:  See server log for query details.
+2026-11-18 18:45:53.697 UTC [4478] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:53.697 UTC [4478] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:54.698 UTC [4480] ERROR:  deadlock detected
+2026-11-18 18:45:54.698 UTC [4480] DETAIL:  Process 4480 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for ShareLock on transaction 1805; blocked by process 4480.
+	Process 4480: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4477: COMMIT
+2026-11-18 18:45:54.698 UTC [4480] HINT:  See server log for query details.
+2026-11-18 18:45:54.698 UTC [4480] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:54.698 UTC [4480] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:55.699 UTC [4481] ERROR:  deadlock detected
+2026-11-18 18:45:55.699 UTC [4481] DETAIL:  Process 4481 waits for ShareLock on transaction 1798; blocked by process 4477.
+	Process 4477 waits for ShareLock on transaction 1806; blocked by process 4481.
+	Process 4481: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4477: COMMIT
+2026-11-18 18:45:55.699 UTC [4481] HINT:  See server log for query details.
+2026-11-18 18:45:55.699 UTC [4481] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:55.699 UTC [4481] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:56.708 UTC [4482] ERROR:  deadlock detected
+2026-11-18 18:45:56.708 UTC [4482] DETAIL:  Process 4482 waits for ShareLock on transaction 1807; blocked by process 4491.
+	Process 4491 waits for ShareLock on transaction 1808; blocked by process 4482.
+	Process 4482: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4491: COMMIT
+2026-11-18 18:45:56.708 UTC [4482] HINT:  See server log for query details.
+2026-11-18 18:45:56.708 UTC [4482] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:56.708 UTC [4482] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:56.735 UTC [4493] ERROR:  deadlock detected
+2026-11-18 18:45:56.735 UTC [4493] DETAIL:  Process 4493 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4492.
+	Process 4492 waits for ShareLock on transaction 1807; blocked by process 4491.
+	Process 4491 waits for ShareLock on transaction 1813; blocked by process 4493.
+	Process 4493: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4492: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4491: COMMIT
+2026-11-18 18:45:56.735 UTC [4493] HINT:  See server log for query details.
+2026-11-18 18:45:56.735 UTC [4493] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:57.709 UTC [4492] ERROR:  deadlock detected
+2026-11-18 18:45:57.709 UTC [4492] DETAIL:  Process 4492 waits for ShareLock on transaction 1807; blocked by process 4491.
+	Process 4491 waits for ShareLock on transaction 1814; blocked by process 4494.
+	Process 4494 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4492.
+	Process 4492: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4491: COMMIT
+	Process 4494: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:57.709 UTC [4492] HINT:  See server log for query details.
+2026-11-18 18:45:57.709 UTC [4492] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:57.709 UTC [4492] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:57.736 UTC [4491] ERROR:  deadlock detected
+2026-11-18 18:45:57.736 UTC [4491] DETAIL:  Process 4491 waits for ShareLock on transaction 1814; blocked by process 4494.
+	Process 4494 waits for ShareLock on transaction 1807; blocked by process 4491.
+	Process 4491: COMMIT
+	Process 4494: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:57.736 UTC [4491] HINT:  See server log for query details.
+2026-11-18 18:45:57.736 UTC [4491] CONTEXT:  while locking tuple (2,57) in relation "accounts_user"
+	SQL statement "SELECT 1 FROM ONLY "public"."accounts_user" x WHERE "id" OPERATOR(pg_catalog.=) $1 FOR KEY SHARE OF x"
+2026-11-18 18:45:57.736 UTC [4491] STATEMENT:  COMMIT
+2026-11-18 18:45:58.742 UTC [4495] ERROR:  deadlock detected
+2026-11-18 18:45:58.742 UTC [4495] DETAIL:  Process 4495 waits for ShareLock on transaction 1814; blocked by process 4494.
+	Process 4494 waits for ShareLock on transaction 1816; blocked by process 4495.
+	Process 4495: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4494: COMMIT
+2026-11-18 18:45:58.742 UTC [4495] HINT:  See server log for query details.
+2026-11-18 18:45:58.742 UTC [4495] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:58.742 UTC [4495] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:45:59.743 UTC [4496] ERROR:  deadlock detected
+2026-11-18 18:45:59.743 UTC [4496] DETAIL:  Process 4496 waits for ShareLock on transaction 1814; blocked by process 4494.
+	Process 4494 waits for ShareLock on transaction 1815; blocked by process 4496.
+	Process 4496: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4494: COMMIT
+2026-11-18 18:45:59.743 UTC [4496] HINT:  See server log for query details.
+2026-11-18 18:45:59.743 UTC [4496] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:45:59.743 UTC [4496] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:00.744 UTC [4497] ERROR:  deadlock detected
+2026-11-18 18:46:00.744 UTC [4497] DETAIL:  Process 4497 waits for ShareLock on transaction 1814; blocked by process 4494.
+	Process 4494 waits for ShareLock on transaction 1819; blocked by process 4497.
+	Process 4497: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4494: COMMIT
+2026-11-18 18:46:00.744 UTC [4497] HINT:  See server log for query details.
+2026-11-18 18:46:00.744 UTC [4497] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:00.744 UTC [4497] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:01.754 UTC [4507] ERROR:  deadlock detected
+2026-11-18 18:46:01.754 UTC [4507] DETAIL:  Process 4507 waits for ShareLock on transaction 1820; blocked by process 4498.
+	Process 4498 waits for ShareLock on transaction 1826; blocked by process 4509.
+	Process 4509 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4507.
+	Process 4507: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4498: COMMIT
+	Process 4509: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:01.754 UTC [4507] HINT:  See server log for query details.
+2026-11-18 18:46:01.754 UTC [4507] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:01.754 UTC [4507] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:01.780 UTC [4509] ERROR:  deadlock detected
+2026-11-18 18:46:01.780 UTC [4509] DETAIL:  Process 4509 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4508.
+	Process 4508 waits for ShareLock on transaction 1820; blocked by process 4498.
+	Process 4498 waits for ShareLock on transaction 1826; blocked by process 4509.
+	Process 4509: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4508: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4498: COMMIT
+2026-11-18 18:46:01.780 UTC [4509] HINT:  See server log for query details.
+2026-11-18 18:46:01.780 UTC [4509] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:02.755 UTC [4508] ERROR:  deadlock detected
+2026-11-18 18:46:02.755 UTC [4508] DETAIL:  Process 4508 waits for ShareLock on transaction 1820; blocked by process 4498.
+	Process 4498 waits for ShareLock on transaction 1825; blocked by process 4508.
+	Process 4508: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4498: COMMIT
+2026-11-18 18:46:02.755 UTC [4508] HINT:  See server log for query details.
+2026-11-18 18:46:02.755 UTC [4508] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:02.755 UTC [4508] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:03.756 UTC [4510] ERROR:  deadlock detected
+2026-11-18 18:46:03.756 UTC [4510] DETAIL:  Process 4510 waits for ShareLock on transaction 1820; blocked by process 4498.
+	Process 4498 waits for ShareLock on transaction 1827; blocked by process 4510.
+	Process 4510: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4498: COMMIT
+2026-11-18 18:46:03.756 UTC [4510] HINT:  See server log for query details.
+2026-11-18 18:46:03.756 UTC [4510] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:03.756 UTC [4510] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:04.756 UTC [4512] ERROR:  deadlock detected
+2026-11-18 18:46:04.756 UTC [4512] DETAIL:  Process 4512 waits for ShareLock on transaction 1820; blocked by process 4498.
+	Process 4498 waits for ShareLock on transaction 1828; blocked by process 4512.
+	Process 4512: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4498: COMMIT
+2026-11-18 18:46:04.756 UTC [4512] HINT:  See server log for query details.
+2026-11-18 18:46:04.756 UTC [4512] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:04.756 UTC [4512] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:05.766 UTC [4511] ERROR:  deadlock detected
+2026-11-18 18:46:05.766 UTC [4511] DETAIL:  Process 4511 waits for ShareLock on transaction 1830; blocked by process 4513.
+	Process 4513 waits for ShareLock on transaction 1829; blocked by process 4511.
+	Process 4511: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4513: COMMIT
+2026-11-18 18:46:05.766 UTC [4511] HINT:  See server log for query details.
+2026-11-18 18:46:05.766 UTC [4511] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:05.766 UTC [4511] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:05.791 UTC [4524] ERROR:  deadlock detected
+2026-11-18 18:46:05.791 UTC [4524] DETAIL:  Process 4524 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4523.
+	Process 4523 waits for ShareLock on transaction 1830; blocked by process 4513.
+	Process 4513 waits for ShareLock on transaction 1835; blocked by process 4524.
+	Process 4524: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4523: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4513: COMMIT
+2026-11-18 18:46:05.791 UTC [4524] HINT:  See server log for query details.
+2026-11-18 18:46:05.791 UTC [4524] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:06.767 UTC [4523] ERROR:  deadlock detected
+2026-11-18 18:46:06.767 UTC [4523] DETAIL:  Process 4523 waits for ShareLock on transaction 1830; blocked by process 4513.
+	Process 4513 waits for ShareLock on transaction 1834; blocked by process 4523.
+	Process 4523: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4513: COMMIT
+2026-11-18 18:46:06.767 UTC [4523] HINT:  See server log for query details.
+2026-11-18 18:46:06.767 UTC [4523] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:06.767 UTC [4523] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:07.777 UTC [4525] ERROR:  deadlock detected
+2026-11-18 18:46:07.777 UTC [4525] DETAIL:  Process 4525 waits for ShareLock on transaction 1837; blocked by process 4526.
+	Process 4526 waits for ShareLock on transaction 1836; blocked by process 4525.
+	Process 4525: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4526: COMMIT
+2026-11-18 18:46:07.777 UTC [4525] HINT:  See server log for query details.
+2026-11-18 18:46:07.777 UTC [4525] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:07.777 UTC [4525] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:07.804 UTC [4528] ERROR:  deadlock detected
+2026-11-18 18:46:07.804 UTC [4528] DETAIL:  Process 4528 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4527.
+	Process 4527 waits for ShareLock on transaction 1837; blocked by process 4526.
+	Process 4526 waits for ShareLock on transaction 1842; blocked by process 4528.
+	Process 4528: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4527: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4526: COMMIT
+2026-11-18 18:46:07.804 UTC [4528] HINT:  See server log for query details.
+2026-11-18 18:46:07.804 UTC [4528] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:08.778 UTC [4527] ERROR:  deadlock detected
+2026-11-18 18:46:08.778 UTC [4527] DETAIL:  Process 4527 waits for ShareLock on transaction 1837; blocked by process 4526.
+	Process 4526 waits for ShareLock on transaction 1841; blocked by process 4527.
+	Process 4527: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4526: COMMIT
+2026-11-18 18:46:08.778 UTC [4527] HINT:  See server log for query details.
+2026-11-18 18:46:08.778 UTC [4527] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:08.778 UTC [4527] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:09.787 UTC [4529] ERROR:  deadlock detected
+2026-11-18 18:46:09.787 UTC [4529] DETAIL:  Process 4529 waits for ShareLock on transaction 1844; blocked by process 4530.
+	Process 4530 waits for ShareLock on transaction 1849; blocked by process 4532.
+	Process 4532 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4529.
+	Process 4529: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4530: COMMIT
+	Process 4532: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:09.787 UTC [4529] HINT:  See server log for query details.
+2026-11-18 18:46:09.787 UTC [4529] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:09.787 UTC [4529] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:09.814 UTC [4532] ERROR:  deadlock detected
+2026-11-18 18:46:09.814 UTC [4532] DETAIL:  Process 4532 waits for AccessExclusiveLock on tuple (2,32) of relation 16456 of database 16384; blocked by process 4531.
+	Process 4531 waits for ShareLock on transaction 1844; blocked by process 4530.
+	Process 4530 waits for ShareLock on transaction 1849; blocked by process 4532.
+	Process 4532: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4531: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4530: COMMIT
+2026-11-18 18:46:09.814 UTC [4532] HINT:  See server log for query details.
+2026-11-18 18:46:09.814 UTC [4532] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:10.788 UTC [4531] ERROR:  deadlock detected
+2026-11-18 18:46:10.788 UTC [4531] DETAIL:  Process 4531 waits for ShareLock on transaction 1844; blocked by process 4530.
+	Process 4530 waits for ShareLock on transaction 1848; blocked by process 4531.
+	Process 4531: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4530: COMMIT
+2026-11-18 18:46:10.788 UTC [4531] HINT:  See server log for query details.
+2026-11-18 18:46:10.788 UTC [4531] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:10.788 UTC [4531] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:11.789 UTC [4541] ERROR:  deadlock detected
+2026-11-18 18:46:11.789 UTC [4541] DETAIL:  Process 4541 waits for ShareLock on transaction 1844; blocked by process 4530.
+	Process 4530 waits for ShareLock on transaction 1850; blocked by process 4541.
+	Process 4541: SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+	Process 4530: COMMIT
+2026-11-18 18:46:11.789 UTC [4541] HINT:  See server log for query details.
+2026-11-18 18:46:11.789 UTC [4541] CONTEXT:  while locking tuple (2,32) in relation "accounts_user"
+2026-11-18 18:46:11.789 UTC [4541] STATEMENT:  SELECT "accounts_user"."id", "accounts_user"."password", "accounts_user"."last_login", "accounts_user"."is_superuser", "accounts_user"."first_name", "accounts_user"."last_name", "accounts_user"."is_staff", "accounts_user"."is_active", "accounts_user"."date_joined", "accounts_user"."email", "accounts_user"."full_name", "accounts_user"."user_type", "accounts_user"."hostel_block", "accounts_user"."hostel_room", "accounts_user"."role", "accounts_user"."department_id" FROM "accounts_user" WHERE "accounts_user"."id" = 101 ORDER BY "accounts_user"."id" ASC LIMIT 1 FOR UPDATE
+2026-11-18 18:46:54.194 UTC [62] LOG:  checkpoint starting: time
+2026-11-18 18:47:10.093 UTC [62] LOG:  checkpoint complete: wrote 162 buffers (1.0%); 0 WAL file(s) added, 0 removed, 0 recycled; write=15.880 s, sync=0.013 s, total=15.900 s; sync files=60, longest=0.002 s, average=0.001 s; distance=1212 kB, estimate=2256 kB; lsn=0/1D930F0, redo lsn=0/1D93060

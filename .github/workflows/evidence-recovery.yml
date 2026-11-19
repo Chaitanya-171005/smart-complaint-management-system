@@ -79,6 +79,12 @@ jobs:
         run: python -m pip install -r requirements.txt -r requirements-dev.txt 'psycopg[binary]==3.3.8'
       - name: Full PostgreSQL regression, explicit integrations and coverage
         run: sh scripts/ci_checks.sh build/evidence/b10-q05-postgresql
+      - name: PostgreSQL assignment lock and authorization regression
+        run: |
+          set -o pipefail
+          python -m pytest integration_checks/allocation_concurrency_pg.py --no-cov -q \
+            --junitxml=build/evidence/b10-q05-postgresql/allocation-concurrency.xml \
+            | tee build/evidence/b10-q05-postgresql/allocation-concurrency.txt
       - name: Retain PostgreSQL recovery component evidence
         if: always()
         uses: actions/upload-artifact@v4

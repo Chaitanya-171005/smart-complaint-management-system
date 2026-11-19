@@ -1,0 +1,35 @@
+two_head_outcomes ['committed', '40P01']
+F....
+=================================== FAILURES ===================================
+_ test_two_heads_same_staff_keep_all_notification_foreign_keys_without_deadlock _
+
+user_factory = <function user_factory.<locals>.create_user at 0x104658510>
+department = <Department: Synthetic Department 25168f98ae11>
+complaint_factory = <function complaint_factory.<locals>.create_complaint at 0x10491ce00>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10457a190>
+
+    def test_two_heads_same_staff_keep_all_notification_foreign_keys_without_deadlock(user_factory,department,complaint_factory,monkeypatch):
+        heads=[user_factory(role='HEAD',department=department) for _ in range(2)]
+        staff=user_factory(role='STAFF',department=department)
+        complaints=[complaint_factory(department=department) for _ in heads]
+        barrier=Barrier(2);original=QuerySet.first;head_ids={h.pk for h in heads}
+        def synchronized_first(qs):
+            obj=original(qs)
+            if qs.model is User and qs.query.select_for_update and obj and obj.pk in head_ids:
+                barrier.wait(timeout=10)
+            return obj
+        monkeypatch.setattr(QuerySet,'first',synchronized_first)
+        with ThreadPoolExecutor(max_workers=2) as pool:
+            futures=[pool.submit(worker_call,h,staff,c) for h,c in zip(heads,complaints)]
+            outcomes=[f.result(timeout=20) for f in futures]
+        print('two_head_outcomes',outcomes)
+>       assert outcomes==['committed','committed']
+E       AssertionError: assert ['committed', '40P01'] == ['committed', 'committed']
+E         
+E         At index 1 diff: '40P01' != 'committed'
+E         Use -v to get more diff
+
+integration_checks/allocation_concurrency_pg.py:47: AssertionError
+=========================== short test summary info ============================
+FAILED integration_checks/allocation_concurrency_pg.py::test_two_heads_same_staff_keep_all_notification_foreign_keys_without_deadlock
+1 failed, 4 passed in 5.49s
