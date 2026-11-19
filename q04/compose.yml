@@ -35,6 +35,8 @@ services:
       # Local Q04 candidate only: exercise concurrency rather than one sync worker.
       # This is a recorded resource change, not a production sizing decision.
       GUNICORN_CMD_ARGS: "--workers 4 --threads 1"
+      # Bounded connection reuse for this WSGI measurement setup only.
+      DJANGO_DB_CONN_MAX_AGE: "60"
       COMPLAINT_INTAKE_ENABLED: "False"
       ANONYMOUS_INTAKE_ENABLED: "False"
     volumes:
