@@ -1,0 +1,11 @@
+Merge made by the 'ort' strategy.
+ accounts/admin_views.py                            |  14 +-
+ accounts/reference_services.py                     |  18 ++
+ accounts/templates/accounts/admin_departments.html |   1 +
+ accounts/templates/accounts/admin_locations.html   |   1 +
+ accounts/test_deactivation_concurrency.py          | 180 ++++++++++++++++++
+ accounts/test_deactivation_guards.py               | 202 +++++++++++++++++++++
+ docs/REFERENCE_DATA.md                             |   7 +-
+ 7 files changed, 419 insertions(+), 4 deletions(-)
+ create mode 100644 accounts/test_deactivation_concurrency.py
+ create mode 100644 accounts/test_deactivation_guards.py
