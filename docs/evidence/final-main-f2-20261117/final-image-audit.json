@@ -1,0 +1,93 @@
+{
+  "source_sha": "a479551c61beb2e2f6e04b93b167084bb7397dcc",
+  "image_id": "sha256:d1aab0f1abab4bd151e4a79832a0c5541fdbe097dad7251a6f9403da8936663d",
+  "project": "q04ed58fc793084",
+  "url": "http://127.0.0.1:55057",
+  "core_source_hashes_match_main": {
+    "complaints/forms.py": "18aa0bafd8773c90d689147ed26f6d653dda8806b7aa030d91aac04b0ce85444",
+    "complaints/anonymous.py": "7da8538ce6b1361216224a997b8a86c8dfba9526a9766afbfffab4f7401a2ed8",
+    "complaints/privacy_middleware.py": "dfdfd3f7f69662b5e43a5a49c4439601cf416e896f21a363e9815c0350163577",
+    "complaints/tracking.py": "96bc932f1360c952f879ae373d7182a3702e77e20fd43e855628680b16df092e",
+    "complaints/feedback_views.py": "39d13baf5dbec7818a47e9465ba67a6d75a71d2304fb5b4f21af7125efd887a6",
+    "complaints/evidence.py": "4f36e46b65eff9917344e24fd8f15cbcd0645606bfca727eca1be4b241c15c30",
+    "complaints/evidence_recovery.py": "3b1d917496dd8659068590046756474105cca6f2e1fe968ac3c077cc28216b54",
+    "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+    "routing/escalation.py": "2d612cbf5783c88296134bac4bbe99a52cfbb18e4b9c54fe1fb25017e07dc82a",
+    "workflow/reference_feedback.py": "9cecb6a730df43aa69c9155e54789493519ddd6ea51978efcfa8dc5c59170d0c",
+    "workflow/email_delivery.py": "4344e772fe681adf16a9d86b0ba877cdd34eb73713f239f67ba74811904d0650",
+    "scms/settings.py": "26548d93557e9daab383a5937c876f5f39fde67b51658c2c3eb4368156bdf2de"
+  },
+  "runtime": {
+    "django": "6.1.3",
+    "release_gates": {
+      "COMPLAINT_INTAKE_ENABLED": false,
+      "ANONYMOUS_INTAKE_ENABLED": false,
+      "ANONYMOUS_TRACKING_ENABLED": false,
+      "ANONYMOUS_FEEDBACK_ENABLED": false,
+      "ANONYMOUS_PRIVACY_READY": false,
+      "ANONYMOUS_TRANSPORT_VERIFIED": false,
+      "ANONYMOUS_TRACKING_LIMITER_READY": false
+    },
+    "complaints": 650,
+    "unassigned_targets": 550
+  },
+  "observations": [
+    {
+      "check": "head_queue",
+      "http_status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "rows": 25
+    },
+    {
+      "check": "head_queue_page2",
+      "http_status": 200,
+      "expected_status": 200,
+      "passed": true,
+      "rows": 25
+    },
+    {
+      "check": "complainant_queue_refused",
+      "http_status": 403,
+      "expected_status": 403,
+      "passed": true
+    },
+    {
+      "check": "owner_detail",
+      "http_status": 200,
+      "expected_status": 200,
+      "passed": true
+    },
+    {
+      "check": "other_owner_detail_refused",
+      "http_status": 404,
+      "expected_status": 404,
+      "passed": true
+    },
+    {
+      "check": "intake_gate",
+      "http_status": 503,
+      "expected_status": 503,
+      "passed": true
+    },
+    {
+      "check": "anonymous_gate",
+      "http_status": 503,
+      "expected_status": 503,
+      "passed": true
+    },
+    {
+      "check": "tracking_gate",
+      "http_status": 503,
+      "expected_status": 503,
+      "passed": true
+    },
+    {
+      "check": "feedback_gate",
+      "http_status": 503,
+      "expected_status": 503,
+      "passed": true
+    }
+  ],
+  "scope": "Read-only final-image authorization/pagination/gate smoke. Functional acceptance/rollback/upload tests are separate. No 50-user or official performance test executed."
+}

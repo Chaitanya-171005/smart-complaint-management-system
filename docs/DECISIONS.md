@@ -9,6 +9,13 @@ conservative 5,000,000-byte default and supports 5,242,880 by configuration.
 Tests cover both candidates without claiming either is agreed. F2/F4 must
 record the decision here before closing #14; see B09.md.
 
+**2026-11-18 local-test proposal — Atul (`atul-suresh`).** Use exactly
+5,000,000 bytes (decimal 5 MB) for the isolated local test setup. Atul explicitly
+identified this as his proposed interpretation, pending team confirmation,
+and instructed testing to stop if it conflicts with an approved requirement.
+This matches the existing provisional default; it is not an SRS-mandated byte
+value, a recorded team agreement, or final exact-limit acceptance for #14.
+
 ## D01 - Campus configuration and emergency channels
 
 **Status: provisional, pending campus confirmation.** B17's initial routing/SLA

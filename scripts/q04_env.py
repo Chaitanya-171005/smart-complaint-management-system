@@ -73,7 +73,9 @@ def http(port,path,cookie=None):
     with response: return response.status,response.read().decode('utf-8','replace')
 
 def release_gates(data):
-    code="import json; from django.conf import settings; print(json.dumps({'intake': bool(settings.COMPLAINT_INTAKE_ENABLED and settings.COMPLAINT_EMERGENCY_NOTICE), 'anonymous': bool(settings.ANONYMOUS_INTAKE_ENABLED and settings.ANONYMOUS_PRIVACY_READY and settings.ANONYMOUS_TRANSPORT_VERIFIED)}))"
+    # Read the application's configured release guards without probing Redis or
+    # modifying gates. Unknown guards on older images stay unknown, not disabled.
+    code="import json; from django.conf import settings; from complaints import checks; tracking=getattr(checks,'tracking_release_ready',None); feedback=getattr(checks,'feedback_release_ready',None); print(json.dumps({'intake': bool(settings.COMPLAINT_INTAKE_ENABLED and settings.COMPLAINT_EMERGENCY_NOTICE), 'anonymous': bool(settings.ANONYMOUS_INTAKE_ENABLED and settings.ANONYMOUS_PRIVACY_READY and settings.ANONYMOUS_TRANSPORT_VERIFIED), 'tracking': bool(tracking()) if callable(tracking) else None, 'feedback': bool(feedback()) if callable(feedback) else None}))"
     result=compose(data,'exec','-T','app','python','manage.py','shell','-c',code,text=True,capture_output=True)
     return json.loads(result.stdout.splitlines()[-1])
 
@@ -98,13 +100,13 @@ def check(data):
     gates=release_gates(data)
     actors=json.loads((STATE/'actors.json').read_text())
     head=actors['HEAD'][0]['session_cookie']; complainant=actors['COMPLAINANT'][0]['session_cookie']
-    checks=[('queue', '/routing/queue/',head),('queue page 2','/routing/queue/?page=2',head),('authenticated intake','/complaints/new/',complainant),('anonymous intake','/anonymous/new/',None),('tracking','/anonymous/track/',None),('reporting','/reports/',None),('acknowledgement (no receipt)','/complaints/SCMS-2099-000001/submitted/',complainant)]
+    checks=[('queue', '/routing/queue/',head),('queue page 2','/routing/queue/?page=2',head),('authenticated intake','/complaints/new/',complainant),('anonymous intake','/anonymous/new/',None),('tracking','/anonymous/track/',None),('feedback','/anonymous/feedback/',None),('reporting','/reports/',None),('acknowledgement (no receipt)','/complaints/SCMS-2099-000001/submitted/',complainant)]
     queue_body=''
     for name,path,cookie in checks:
         status,body=http(data['port'],path,cookie)
         if name=='queue' and status==200: queue_body=body
-        gated=(name=='authenticated intake' and not gates['intake']) or (name=='anonymous intake' and (not gates['anonymous'] or not gates['intake']))
-        label='READY' if status==200 else 'RELEASE_GATED' if status==503 and gated else 'ROUTE_UNAVAILABLE' if status==404 and name in ('tracking','reporting') else 'NOT_VERIFIED' if status==404 and name.startswith('acknowledgement') else 'FAILED'
+        gated=(name=='authenticated intake' and not gates['intake']) or (name=='anonymous intake' and (not gates['anonymous'] or not gates['intake'])) or (name in ('tracking','feedback') and gates.get(name) is False)
+        label='READY' if status==200 else 'RELEASE_GATED' if status==503 and gated else 'ROUTE_UNAVAILABLE' if status==404 and name in ('tracking','feedback','reporting') else 'NOT_VERIFIED' if status==404 and name.startswith('acknowledgement') else 'FAILED'
         extra=f", rows={body.count('<article>')}" if name.startswith('queue') and status==200 else ''
         print(f'{name}: {label} (HTTP {status}{extra})')
     assignment='NOT_VERIFIED' if '/assign/' in queue_body else 'FAILED'
