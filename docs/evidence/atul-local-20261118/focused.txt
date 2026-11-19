@@ -1,0 +1,915 @@
+...................................................................EEEEE [ 72%]
+EEE.............EE....EEE..                                              [100%]
+==================================== ERRORS ====================================
+___________ ERROR at setup of test_bad_response_is_never_a_fast_pass ___________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c754d70>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____ ERROR at setup of test_no_match_is_not_a_successful_tracking_benchmark ____
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c739950>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_login_redirect_is_not_followed_or_counted_as_success __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c73a850>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_login_redirect_cannot_be_declared_an_accepted_action __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c6f6c40>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____________ ERROR at setup of test_pagination_failure_is_reported _____________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c6f63f0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+____________ ERROR at setup of test_valid_detail_has_measured_time _____________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c61d490>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+__ ERROR at setup of test_form_tokens_and_csrf_are_obtained_for_each_new_post __
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c81c8d0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_reused_intake_token_never_benchmarks_an_idempotent_replay _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c81d040>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_____ ERROR at setup of test_real_worker_pool_samples_and_excludes_warmup ______
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c6e7750>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+__________ ERROR at setup of test_response_secrets_are_not_in_result ___________
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c8b6850>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_optional_source_address_uses_real_socket_without_forwarding_headers _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c735e50>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+___ ERROR at setup of test_invalid_source_address_is_refused_before_network ____
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c7375c0>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+_ ERROR at setup of test_tracking_can_budget_nine_measured_attempts_plus_warmup _
+
+    @pytest.fixture
+    def server():
+        state = {"forms": 0, "posts": [], "login_hits": 0, "sources": []}
+        class Handler(BaseHTTPRequestHandler):
+            def log_message(self, *args):
+                pass
+            def send(self, status, content=b"", headers=None):
+                self.send_response(status)
+                for key, value in (headers or {}).items(): self.send_header(key, value)
+                self.end_headers()
+                self.wfile.write(content)
+            def do_GET(self):
+                state["sources"].append((self.client_address[0],self.headers.get("X-Real-IP")))
+                if self.path in ('/form/', '/fixed-form/'):
+                    state['forms'] += 1
+                    token = str(state['forms']) if self.path == '/form/' else 'fixed-operation'
+                    self.send(200, ('<input name="csrfmiddlewaretoken" value="private-csrf">'
+                                   f'<input name="request_token" value="{token}">').encode(),
+                              {'Set-Cookie': 'csrftoken=private-csrf; Path=/'})
+                elif self.path == '/login/':
+                    state['login_hits'] += 1
+                    self.send(200, b'Please sign in')
+                elif self.path == '/redirect/': self.send(302, headers={'Location':'/login/'})
+                elif self.path == '/error/': self.send(503, b'Secret private server exception')
+                elif self.path == '/empty/': self.send(200, b'No matching complaint was found.')
+                elif self.path == '/page/': self.send(200, b'<h1>Queue</h1>'+b'<article>complaint</article>'*26)
+                else:
+                    time.sleep(.002)
+                    self.send(200, b'<h1>Valid complaint detail</h1>')
+            def do_POST(self):
+                data = parse_qs(self.rfile.read(int(self.headers['Content-Length'])).decode())
+                state['posts'].append(data)
+                assert data['csrfmiddlewaretoken'] == ['private-csrf']
+                assert 'csrftoken=private-csrf' in self.headers['Cookie']
+                self.send(200, b'Your complaint was submitted')
+>       httpd = ThreadingHTTPServer(('127.0.0.1', 0), Handler)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+test_q04_load.py:48: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:457: in __init__
+    self.server_bind()
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/http/server.py:148: in server_bind
+    socketserver.TCPServer.server_bind(self)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <http.server.ThreadingHTTPServer object at 0x10c5baa50>
+
+    def server_bind(self):
+        """Called by constructor to bind the socket.
+    
+        May be overridden.
+    
+        """
+        if self.allow_reuse_address and hasattr(socket, "SO_REUSEADDR"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        # Since Linux 6.12.9, SO_REUSEPORT is not allowed
+        # on other address families than AF_INET/AF_INET6.
+        if (
+            self.allow_reuse_port and hasattr(socket, "SO_REUSEPORT")
+            and self.address_family in (socket.AF_INET, socket.AF_INET6)
+        ):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
+>       self.socket.bind(self.server_address)
+E       PermissionError: [Errno 1] Operation not permitted
+
+/usr/local/Cellar/python@3.14/3.14.8_2/Frameworks/Python.framework/Versions/3.14/lib/python3.14/socketserver.py:478: PermissionError
+=========================== short test summary info ============================
+ERROR test_q04_load.py::test_bad_response_is_never_a_fast_pass - PermissionEr...
+ERROR test_q04_load.py::test_no_match_is_not_a_successful_tracking_benchmark
+ERROR test_q04_load.py::test_login_redirect_is_not_followed_or_counted_as_success
+ERROR test_q04_load.py::test_login_redirect_cannot_be_declared_an_accepted_action
+ERROR test_q04_load.py::test_pagination_failure_is_reported - PermissionError...
+ERROR test_q04_load.py::test_valid_detail_has_measured_time - PermissionError...
+ERROR test_q04_load.py::test_form_tokens_and_csrf_are_obtained_for_each_new_post
+ERROR test_q04_load.py::test_reused_intake_token_never_benchmarks_an_idempotent_replay
+ERROR test_q04_load.py::test_real_worker_pool_samples_and_excludes_warmup - P...
+ERROR test_q04_load.py::test_response_secrets_are_not_in_result - PermissionE...
+ERROR test_q04_load.py::test_optional_source_address_uses_real_socket_without_forwarding_headers
+ERROR test_q04_load.py::test_invalid_source_address_is_refused_before_network
+ERROR test_q04_load.py::test_tracking_can_budget_nine_measured_attempts_plus_warmup
+86 passed, 13 errors in 9.84s

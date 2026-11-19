@@ -1,8 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Anonymous complaint accepted - SCMS</title></head>
-<body>
-  <h1>Anonymous complaint accepted</h1>
+{% extends "ui/base.html" %}
+{% block title %}Anonymous complaint accepted - SCMS{% endblock %}
+{% block content %}
+<h1 class="success-panel">Anonymous complaint accepted</h1>
   <p>Your complaint identifier is <strong>{{ complaint_id }}</strong>.</p>
   {% if reference %}
   <h2>Save your private tracking reference now</h2>
@@ -14,5 +13,4 @@
   {% endif %}
   <p>A complaint identifier alone does not grant access to the complaint or its evidence.</p>
   <p><a href="{% url 'complaints:track_reference' %}">Check status using your saved private reference</a></p>
-</body>
-</html>
+{% endblock %}

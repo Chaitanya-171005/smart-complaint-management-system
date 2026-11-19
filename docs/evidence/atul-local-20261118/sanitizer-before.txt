@@ -1,0 +1,52 @@
+.........FF..                                                            [100%]
+=================================== FAILURES ===================================
+___________ test_sanitizer_covers_symlink_spellings_and_nested_paths ___________
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_sanitizer_covers_symlink_0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10ab417f0>
+
+    def test_sanitizer_covers_symlink_spellings_and_nested_paths(tmp_path, monkeypatch):
+        home = tmp_path / "home"
+        repo = home / "repo"
+        venv = repo / ".venv"
+        venv.mkdir(parents=True)
+        alias = tmp_path / "linked-home"
+        alias.symlink_to(home, target_is_directory=True)
+        monkeypatch.setattr(run_tests, "ROOT", alias / "repo")
+        monkeypatch.setattr(run_tests.sys, "prefix", str(alias / "repo/.venv"))
+        monkeypatch.setattr(run_tests.Path, "home", classmethod(lambda cls: alias))
+        output = "\n".join(str(p) for p in (
+            repo / "test.py", alias / "repo/test.py",
+            venv / "bin/python", alias / "repo/.venv/bin/python",
+            home / "private.txt", alias / "private.txt"))
+>       assert run_tests.sanitize(output).splitlines() == [
+            "<repo>/test.py", "<repo>/test.py", "<venv>/bin/python",
+            "<venv>/bin/python", "<home>/private.txt", "<home>/private.txt"]
+E       AssertionError: assert ['/private/va.../private.txt'] == ['<repo>/test.../private.txt']
+E         
+E         At index 0 diff: '/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_sanitizer_covers_symlink_0<home>/test.py' != '<repo>/test.py'
+E         Use -v to get more diff
+
+test_run_tests.py:91: AssertionError
+____________ test_real_subprocess_with_symlinked_interpreter_prefix ____________
+
+tmp_path = PosixPath('/private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_real_subprocess_with_syml0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x10aab1e60>
+
+    def test_real_subprocess_with_symlinked_interpreter_prefix(tmp_path, monkeypatch):
+        alias = tmp_path / "interpreter-prefix"
+        alias.symlink_to(Path(sys.prefix), target_is_directory=True)
+        monkeypatch.setattr(run_tests.sys, "prefix", str(alias))
+        code, output = run_tests.run([sys.executable, "-c", f"print({str(alias)!r})"])
+        assert code == 0
+>       assert output == "<venv>\n"
+E       AssertionError: assert '/private/var...eter-prefix\n' == '<venv>\n'
+E         
+E         - <venv>
+E         + /private/var/folders/p7/bvsb9m6d6jx5h4kvrg46v7wm0000gn/T/pytest-of-mac/pytest-0/test_real_subprocess_with_syml0/interpreter-prefix
+
+test_run_tests.py:102: AssertionError
+=========================== short test summary info ============================
+FAILED test_run_tests.py::test_sanitizer_covers_symlink_spellings_and_nested_paths
+FAILED test_run_tests.py::test_real_subprocess_with_symlinked_interpreter_prefix
+2 failed, 11 passed in 0.59s

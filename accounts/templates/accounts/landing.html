@@ -1,37 +1,67 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ role_label }} - SCMS</title>
-</head>
-<body>
-{% load notification_tags %}{% notification_header %}
-  <header>
-    <p>Signed in as {{ user.full_name }} ({{ role_label }})</p>
-    <form method="post" action="{% url 'accounts:logout' %}">
-      {% csrf_token %}
-      <button type="submit">Log out</button>
-    </form>
-  </header>
-  <h1>{{ role_label }} home</h1>
-  {% if user.role == "COMPLAINANT" or user.role == "HEAD" %}<p><a href="{% url 'workflow:dashboard' %}">Complaint dashboard</a></p>{% endif %}
-  {% if user.role == "COMPLAINANT" %}
-  <p><a href="{% url 'complaints:submit' %}">Submit a complaint</a></p>
-  <p><a href="{% url 'workflow:complaint_list' %}">My complaints</a></p>
-  {% endif %}
-  {% if user.role == "ADMIN" %}
-  <nav>
-    <ul>
-      <li><a href="{% url 'accounts:admin_users' %}">Users and roles</a></li>
-      <li><a href="{% url 'accounts:admin_departments' %}">Departments</a></li>
-      <li><a href="{% url 'accounts:admin_locations' %}">Locations</a></li>
-      <li><a href="{% url 'routing:configuration' %}">Routing, SLA and escalation</a></li>
-      <li><a href="{% url 'accounts:admin_audit' %}">Configuration audit log</a></li>
-      <li><a href="{% url 'accounts:admin_report' %}">Campus report and CSV</a></li>
-    </ul>
-  </nav>
-  {% endif %}
-  <p>Your SCMS functions will appear here as they are built.</p>
-</body>
-</html>
+{% extends "ui/base.html" %}
+{% block title %}{{ role_label }} - SCMS{% endblock %}
+{% block content %}
+<p class="eyebrow">{{ role_label }} workspace</p>
+<h1>Welcome, {{ user.full_name }}</h1>
+<p class="intro">Manage campus concerns and keep track of the next step.</p>
+{% if show_intake_form %}
+<section aria-labelledby="intake-heading">
+<h2 id="intake-heading">Submit a complaint</h2>
+{% include 'complaints/_intake_panel.html' %}
+</section>
+{% endif %}
+<div class="cards">
+{% if user.role == 'COMPLAINANT' %}<section class="card">
+<h2>Raise a concern</h2>
+<p>Describe the issue and attach supporting evidence.</p>
+<a href="{% url 'complaints:submit' %}">Submit complaint →</a>
+</section>
+<section class="card">
+<h2>My complaints</h2>
+<p>View status, evidence and history, or respond to a resolution.</p>
+<a href="{% url 'workflow:complaint_list' %}">View complaints →</a>
+</section>
+<section class="card">
+<h2>Complaint dashboard</h2>
+<p>Review your current complaint snapshot by status and category.</p>
+<a href="{% url 'workflow:dashboard' %}">Open dashboard →</a>
+</section>{% endif %}
+{% if user.role == 'STAFF' or user.role == 'HEAD' %}<section class="card">
+<h2>{% if user.role == 'HEAD' %}Department queue{% else %}Assigned complaints{% endif %}</h2>
+<p>{% if user.role == 'HEAD' %}Review department concerns and assign staff from the queue.{% else %}Open an assigned complaint to update work status, record progress or submit a resolution.{% endif %}</p>
+<a href="{% url 'routing:queue' %}">Open queue →</a>
+</section>{% endif %}
+{% if user.role == 'HEAD' %}<section class="card">
+<h2>Department reports</h2>
+<p>Review current status and category counts and export your department snapshot.</p>
+<a href="{% url 'workflow:dashboard' %}">View reports →</a>
+</section>{% endif %}
+{% if user.role == 'ADMIN' %}<section class="card">
+<h2>People & campus</h2>
+<p>Maintain users, roles, departments and campus locations.</p>
+<a href="{% url 'accounts:admin_users' %}">Manage users →</a>
+<a href="{% url 'accounts:admin_departments' %}">Departments →</a>
+<a href="{% url 'accounts:admin_locations' %}">Locations →</a>
+</section>
+<section class="card">
+<h2>Service configuration</h2>
+<p>Manage routing, service targets and escalation configuration.</p>
+<a href="{% url 'routing:configuration' %}">Routing & SLA →</a>
+</section>
+<section class="card">
+<h2>Campus report</h2>
+<p>Review complaint volumes, open and overdue counts and resolution times, and download the matching CSV.</p>
+<a href="{% url 'accounts:admin_report' %}">Campus report and CSV →</a>
+</section>
+<section class="card">
+<h2>Configuration audit</h2>
+<p>Review recorded configuration changes.</p>
+<a href="{% url 'accounts:admin_audit' %}">View audit log →</a>
+</section>{% endif %}
+<section class="card">
+<h2>Notifications</h2>
+<p>Review updates and mark notices as read.</p>
+<a href="{% url 'workflow:notifications' %}">View notifications →</a>
+</section>
+</div>
+{% endblock %}

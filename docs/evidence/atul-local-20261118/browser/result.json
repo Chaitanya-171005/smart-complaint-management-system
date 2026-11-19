@@ -1,0 +1,42 @@
+{
+  "stage": "browser",
+  "source_revision": "7d12ea429349f1c70bc8d3d5d2fff7ac0b0eb620",
+  "working_tree_status": "",
+  "command": [
+    "<venv>/bin/python",
+    "-m",
+    "pytest",
+    "integration_checks/intake_browser.py",
+    "integration_checks/reference_feedback_browser.py",
+    "--no-cov",
+    "-q",
+    "--junitxml=<repo>/build/evidence/atul-20261118/runtime/browser/junit.xml"
+  ],
+  "cwd": "<browser-repo>",
+  "environment_overrides": {
+    "PATH": "<venv>/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:<home>/.codex/tmp/arg0-macos/codex-arg0QVeIng:<home>/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:<home>/.unity/bin:<home>/.duckdb/cli/latest:<home>/.docker/bin:<home>/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:<home>/.docker/bin",
+    "DJANGO_SECRET_KEY": "synthetic-branch-integration-test-only",
+    "DJANGO_SETTINGS_MODULE": "scms.settings",
+    "DJANGO_DB_ENGINE": "sqlite",
+    "DJANGO_DB_PATH": "<repo>/build/evidence/atul-20261118/runtime/browser/disposable.sqlite3",
+    "PRIVATE_EVIDENCE_ROOT": "<repo>/build/evidence/atul-20261118/runtime/browser/private-evidence",
+    "DJANGO_DEBUG": "False",
+    "DJANGO_MAIL_BACKEND": "console",
+    "DJANGO_SMTP_USE_TLS": "True",
+    "DJANGO_SMTP_USE_SSL": "False",
+    "COMPLAINT_INTAKE_ENABLED": "False",
+    "ANONYMOUS_INTAKE_ENABLED": "False",
+    "ANONYMOUS_FEEDBACK_ENABLED": "False",
+    "ANONYMOUS_TRACKING_ENABLED": "False",
+    "ANONYMOUS_PRIVACY_READY": "False",
+    "ANONYMOUS_TRANSPORT_VERIFIED": "False",
+    "ANONYMOUS_TRACKING_LIMITER_READY": "False",
+    "SCMS_CI_DATABASE_ISOLATED": "1",
+    "SCMS_CI_REQUIRE_F4": "1",
+    "SCMS_CI_PYTHON": "<venv>/bin/python",
+    "SCMS_BROWSER_EVIDENCE_DIR": "<repo>/build/evidence/atul-20261118/runtime/browser"
+  },
+  "started_utc": "2026-11-18T14:03:00Z",
+  "exit_code": 0,
+  "elapsed_seconds": 42.205
+}

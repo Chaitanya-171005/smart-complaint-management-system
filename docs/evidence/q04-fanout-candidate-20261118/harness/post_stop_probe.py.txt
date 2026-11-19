@@ -1,0 +1,28 @@
+import json,subprocess
+from pathlib import Path
+root=Path.cwd();state=root/'build/private-q04-state/environments/candidate-20261118'
+data=json.loads((state/'settings.json').read_text());heads=json.loads((state/'actors.json').read_text())['HEAD']
+folder=root/'build/evidence/q04-batching/queue-assignment-20261119'
+samples=[json.loads(x) for x in (folder/'samples.jsonl').read_text().splitlines()]
+expected={r['worker']*11+r['iteration'] for r in samples if r['scenario']=='action' and not r['error']}
+targets=[]
+for i,head in enumerate(heads):
+ for j,op in enumerate(head['operations']['action']):targets.append({'index':i*11+j,'ref':op['path'].split('/')[2],'head':head['account_key']+'@q04.invalid','assignee':int(op['payload']['assignee'])})
+code='''
+import json,sys
+from complaints.models import Complaint
+from workflow.models import ComplaintHistory,NotificationEvent,Notification,EmailDelivery
+spec=json.load(sys.stdin);correct=assigned=histories=events=notices=jobs=0
+for row in spec['targets']:
+ c=Complaint.objects.get(complaint_id=row['ref']); hs=ComplaintHistory.objects.filter(complaint_ref=c.complaint_id,event_type='ALLOCATED',actor_kind='HEAD')
+ event=NotificationEvent.objects.filter(history__in=hs);ns=Notification.objects.filter(event__in=event);es=EmailDelivery.objects.filter(notice__in=ns)
+ should=row['index'] in spec['expected']; valid=c.status=='ASSIGNED'
+ if should:
+  h=hs.get();valid=valid and c.assignee_id==row['assignee'] and h.assignee_id==row['assignee'] and h.actor.email==row['head'] and event.count()==1 and ns.count()==52 and es.count()==52
+ else:valid=valid and c.assignee_id is None and not hs.exists() and not event.exists()
+ correct+=bool(valid);assigned+=c.assignee_id is not None;histories+=hs.count();events+=event.count();notices+=ns.count();jobs+=es.count()
+print('POST_STOP_JSON:'+json.dumps({'correct_targets':correct,'targets':len(spec['targets']),'assigned':assigned,'expected_assigned':len(spec['expected']),'history':histories,'events':events,'notices':notices,'email_jobs':jobs,'valid':correct==len(spec['targets'])}))
+'''
+r=subprocess.run(['docker','exec','-i',data['project']+'-app-1','python','manage.py','shell','-c',code],input=json.dumps({'targets':targets,'expected':sorted(expected)}),capture_output=True,text=True,check=True)
+result=json.loads(next(x.removeprefix('POST_STOP_JSON:') for x in r.stdout.splitlines() if x.startswith('POST_STOP_JSON:')))
+(folder/'post-stop-db.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result))

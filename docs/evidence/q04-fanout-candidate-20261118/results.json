@@ -1,0 +1,81 @@
+{
+  "source_commit": "3ace587ca046080f30fa2a554362048237bcb100",
+  "focused": {
+    "passed": 414,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "regression_before": {
+    "failed": 2,
+    "passed": 0
+  },
+  "single_action_statement_counts": {
+    "heads_3": {
+      "before_total": 20,
+      "after_total": 13,
+      "before_notification_inserts": 5,
+      "before_email_inserts": 5,
+      "after_notification_inserts": 1,
+      "after_email_inserts": 1
+    },
+    "heads_50": {
+      "before_total": 114,
+      "after_total": 13,
+      "before_notification_inserts": 52,
+      "before_email_inserts": 52,
+      "after_notification_inserts": 1,
+      "after_email_inserts": 1
+    }
+  },
+  "new_load_run": true,
+  "docker_candidate_built": true,
+  "blocker": null,
+  "Q04_pass": false,
+  "latest_load_result": {
+    "source": "a434eaa47f6e96f001c5d188f544cae137b1029d",
+    "status": "LOCAL_SCENARIO_PASS",
+    "image": "sha256:6069cff926a5d048bf85a3cde7b893c3f379b3412fc7301aad75e8173f2765a6",
+    "started_at_utc": "2026-11-19T05:04:55.644915+00:00",
+    "finished_at_utc": "2026-11-19T05:05:27.553378+00:00",
+    "measured_queue_samples": 500,
+    "measured_action_samples": 500,
+    "queue_p95_ms": 471.59727300095255,
+    "assignment_p95_ms": 620.157540000946,
+    "request_errors": 0,
+    "correct_assignment_graphs": 550
+  },
+  "lock_correction": {
+    "source": "bbec7401b87ad28bf90bc97a15a9ee965a5de7e7",
+    "focused_passed": 142,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "explicit_pg_cases": 8,
+    "new_load_result": false
+  },
+  "shared_reference_candidate": {
+    "focused_passes": 159,
+    "expanded_pg_security_config_passes": 26,
+    "overlap": true,
+    "pg_cases": 13,
+    "connection_max_age_seconds": 60,
+    "connection_health_checks": true,
+    "new_load_result": true
+  },
+  "runtime_source": "a434eaa47f6e96f001c5d188f544cae137b1029d",
+  "local_queue_assignment_pass": true,
+  "current_ci": {
+    "sqlite_passed": 2035,
+    "postgresql_passed": 2035,
+    "additional_postgresql_cases": 13,
+    "browser_passed": 14,
+    "redis_tls_passed": 9,
+    "coverage_gates": "PASS",
+    "run_ids": [
+      44454131707,
+      44454131714,
+      44454131711
+    ]
+  }
+}

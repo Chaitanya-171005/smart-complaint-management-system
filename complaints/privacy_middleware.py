@@ -163,5 +163,8 @@ class AnonymousPrivacyMiddleware(MiddlewareMixin):
                 else "no-referrer"
             )
             response["X-Robots-Tag"] = "noindex, nofollow, noarchive"
-            response["Content-Security-Policy"] = "default-src 'none'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
+            # Private pages use only inline repository CSS. Keep scripts and
+            # subresource connections blocked, including same-origin asset
+            # requests that could otherwise carry ambient identity cookies.
+            response["Content-Security-Policy"] = "default-src 'none'; script-src 'none'; style-src 'unsafe-inline'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'"
         return response

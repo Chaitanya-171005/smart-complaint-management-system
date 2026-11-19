@@ -1,0 +1,26 @@
+{
+  "case": "test_intake_required_native_validation[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "native_required": {
+      "focus": "id_category",
+      "invalid": [
+        "",
+        "id_category",
+        "id_location",
+        "id_title",
+        "id_description"
+      ]
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

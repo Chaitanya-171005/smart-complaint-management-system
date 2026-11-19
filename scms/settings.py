@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "complaints.privacy_middleware.AnonymousPrivacyMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "scms.static_middleware.PublicStaticMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -103,7 +104,7 @@ def database_config(env, base_dir):
         password = env.get("DJANGO_DB_PASSWORD")
         if not password:
             raise ImproperlyConfigured("DJANGO_DB_PASSWORD is required for PostgreSQL.")
-        return {
+        config = {
             "ENGINE": "django.db.backends.postgresql",
             "NAME": env.get("DJANGO_DB_NAME", ""),
             "USER": env.get("DJANGO_DB_USER", ""),
@@ -111,6 +112,15 @@ def database_config(env, base_dir):
             "HOST": env.get("DJANGO_DB_HOST", ""),
             "PORT": env.get("DJANGO_DB_PORT", "5432"),
         }
+        if "DJANGO_DB_CONN_MAX_AGE" in env:
+            try:
+                age = int(env["DJANGO_DB_CONN_MAX_AGE"])
+            except (TypeError, ValueError):
+                raise ImproperlyConfigured("DJANGO_DB_CONN_MAX_AGE must be an integer from 0 to 300.") from None
+            if not 0 <= age <= 300:
+                raise ImproperlyConfigured("DJANGO_DB_CONN_MAX_AGE must be an integer from 0 to 300.")
+            config.update(CONN_MAX_AGE=age, CONN_HEALTH_CHECKS=age > 0)
+        return config
     raise ImproperlyConfigured(f"Unknown DJANGO_DB_ENGINE: {engine!r}.")
 
 
@@ -149,6 +159,11 @@ COMPLAINT_AUTO_CLOSE_DAYS = os.environ.get("COMPLAINT_AUTO_CLOSE_DAYS", "7")
 
 STATIC_URL = "static/"
 STATIC_ROOT = Path(os.environ.get("DJANGO_STATIC_ROOT", BASE_DIR / "staticfiles"))
+# Serve only collected public assets. Private anonymous pages remain inline and
+# script-free, and private evidence is never a static or media URL alias.
+WHITENOISE_AUTOREFRESH = False
+WHITENOISE_USE_FINDERS = False
+WHITENOISE_ALLOW_ALL_ORIGINS = False
 
 
 # Email

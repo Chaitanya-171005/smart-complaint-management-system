@@ -12,6 +12,7 @@ from django.db import IntegrityError, transaction
 from django.db.models.functions import Lower
 
 from .config_audit import record_change
+from .configuration_lock import lock_configuration
 from .models import ConfigAuditEvent, Department, Location
 from .permissions import can_manage_configuration, require_permission
 
@@ -29,6 +30,7 @@ def admin_action(fn):
     def wrapper(actor, *args, **kwargs):
         require_permission(can_manage_configuration, actor)
         with transaction.atomic():
+            lock_configuration()
             return fn(actor, *args, **kwargs)
 
     return wrapper
@@ -121,6 +123,17 @@ def set_department_active(actor, department, active):
     department = Department.objects.select_for_update().get(pk=department.pk)
     if department.active == bool(active):
         return department
+    if not active:
+        # Lazy import: routing imports accounts. F3 owns what "in use" means (an active routing
+        # rule, or the escalation policy's default department), so fallback routing cannot be
+        # left without a department.
+        from routing.services import department_in_use
+
+        if department_in_use(department):
+            raise ValidationError(
+                "This department is the default for escalation or has active routing rules. "
+                "Choose another default department or deactivate those rules first."
+            )
     old = _department_values(department)
     department.active = bool(active)
     department.save(update_fields=["active"])
@@ -197,6 +210,13 @@ def set_location_active(actor, location, active):
     location = Location.objects.select_for_update().get(pk=location.pk)
     if location.active == bool(active):
         return location
+    if not active:
+        from routing.services import location_in_use
+
+        if location_in_use(location.code):
+            raise ValidationError(
+                "This location has active routing rules. Deactivate or change those rules first."
+            )
     old = _location_values(location)
     location.active = bool(active)
     location.save(update_fields=["active"])

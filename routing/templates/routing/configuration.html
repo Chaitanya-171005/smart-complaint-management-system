@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Routing and SLA configuration - SCMS</title>
-</head>
-<body>
-  <header>
+{% extends "ui/base.html" %}
+{% block title %}Routing and SLA configuration - SCMS{% endblock %}
+{% block content %}
+<header>
     <p>Signed in as {{ user.full_name }} (Administrator)</p>
     <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   </header>
@@ -73,5 +68,4 @@
     <h2>Recent configuration audit</h2>
     <ul>{% for event in audit_events %}<li>{{ event.created_at }} — {{ event.actor_identifier|default:"System" }} — {{ event.action }} {{ event.entity_type }} #{{ event.entity_id }}</li>{% empty %}<li>No administrator changes yet.</li>{% endfor %}</ul>
   </section>
-</body>
-</html>
+{% endblock %}

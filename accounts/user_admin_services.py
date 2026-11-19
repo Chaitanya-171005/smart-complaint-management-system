@@ -15,6 +15,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 
 from .config_audit import record_change
+from .configuration_lock import lock_configuration
 from .models import ConfigAuditEvent, Department, SecurityEvent, User
 from .permissions import can_manage_configuration, require_permission
 from .security_log import record_event
@@ -88,6 +89,7 @@ def set_role_and_membership(actor, target, *, role, department=None):
     department_id = _department_id(department)
     try:
         with transaction.atomic():
+            lock_configuration()
             # Lock both rows in a fixed order so two simultaneous changes cannot interleave.
             locked = {
                 u.pk: u

@@ -1,10 +1,8 @@
-<!doctype html>
-<html lang="en">
-<head><meta charset="utf-8"><title>Complaint dashboard — SCMS</title></head>
-<body>
-{% load notification_tags %}{% notification_header %}
+{% extends "ui/base.html" %}
+{% block title %}Complaint dashboard — SCMS{% endblock %}
+{% block content %}
 <h1>{% if is_head %}Department{% else %}My complaints{% endif %} dashboard</h1>
-<p>Current permitted records snapshot. Date-range calculations use provisional D03 rules.</p>
+<p>Current complaint snapshot for records you can access. Filter by status or category. Date-range calculations use provisional D03 rules.</p>
 <form method="get">
 <label for="status">Status</label><select id="status" name="status">
 <option value="">All statuses</option>
@@ -24,5 +22,4 @@
 <table><thead><tr><th>Group</th><th>Label</th><th>Count</th></tr></thead><tbody>
 {% for section,label,count in rows %}<tr><td>{{ section }}</td><td>{{ label }}</td><td>{{ count }}</td></tr>{% endfor %}
 </tbody></table>
-</body>
-</html>
+{% endblock %}

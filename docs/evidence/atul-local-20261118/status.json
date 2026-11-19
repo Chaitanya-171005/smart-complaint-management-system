@@ -1,0 +1,17 @@
+{
+  "tested_code_sha": "7d12ea429349f1c70bc8d3d5d2fff7ac0b0eb620",
+  "inspected_main_sha": "a479551c61beb2e2f6e04b93b167084bb7397dcc",
+  "sanitizer": "FIXED_PUBLISHED_TESTED",
+  "pr101": "UPDATED_AWAITING_PEER_REVIEW_AND_REVIEWED_MERGE",
+  "main_merged_by_this_work": false,
+  "d02": {
+    "bytes": 5000000,
+    "scope": "Atul proposed local setup; team confirmation pending"
+  },
+  "queue_assignment_q04": "MEASURED_LOCAL_LATENCY_TARGETS_FAILED",
+  "other_q04": "PENDING",
+  "local_recovery": "PASS_COMPONENT_AND_IMAGE_PERSISTENCE",
+  "final_main_recovery_acceptance": "PENDING_AGREED_DELIVERY_BUILD_AND_OWNER_SIGNOFF",
+  "q06": "AUTOMATED_REGRESSION_PASS_GENUINE_FIRST_TIME_ACCEPTANCE_PENDING",
+  "all_atul_responsibilities_verified_complete": false
+}

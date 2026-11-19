@@ -1,0 +1,20 @@
+  <aside aria-labelledby="emergency-heading">
+    <h2 id="emergency-heading">For emergencies</h2>
+    <p>{{ emergency_notice|linebreaksbr }}</p>
+  </aside>
+  <form method="post" enctype="multipart/form-data" action="{% url 'complaints:submit' %}">
+    {% csrf_token %}
+    <input type="hidden" name="request_token" value="{{ request_token }}">
+    {% if form.errors %}<p role="alert">Please review the messages below before trying again.</p>{% endif %}
+    {{ form.as_p }}
+    <p><label for="id_evidence">Evidence (optional)</label><br>
+      <input id="id_evidence" name="evidence" type="file" multiple accept=".jpg,.jpeg,.png,.pdf" aria-describedby="evidence-help{% if evidence_errors %} evidence-errors{% endif %}"{% if evidence_errors %} aria-invalid="true"{% endif %}>
+      {% if evidence_errors %}<span id="evidence-errors" role="alert">{% for error in evidence_errors %}{{ error }}{% if not forloop.last %}<br>{% endif %}{% endfor %}</span>{% endif %}
+      <br><span id="evidence-help">Attach up to three JPEG, PNG or PDF files. Select the same files again when retrying.</span>
+    </p>
+    <p>Keep this form if the response is interrupted. Retry the same request with the same details and files.</p>
+    <button type="submit"{% if form.configuration_unavailable or not request_token %} disabled{% endif %}>Submit complaint</button>
+  </form>
+  {% if not form.is_bound or not request_token %}
+  <p><a href="{% url 'complaints:submit' %}">Start a new form</a></p>
+  {% endif %}

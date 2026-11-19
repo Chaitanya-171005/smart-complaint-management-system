@@ -1,0 +1,40 @@
+........................................................................ [ 48%]
+.................FF..................................................... [ 96%]
+.....                                                                    [100%]
+=================================== FAILURES ===================================
+________________ test_public_shell[complaints:anonymous_submit] ________________
+
+client = <django.test.client.Client object at 0x110a85b30>
+name = 'complaints:anonymous_submit'
+
+    @pytest.mark.parametrize('name', ['accounts:login', 'accounts:register', 'accounts:register_done', 'complaints:anonymous_submit', 'complaints:track_reference'])
+    def test_public_shell(client, name):
+        response = client.get(reverse(name))
+        assert response.status_code in (200, 503)
+        html = response.content.decode()
+>       assert 'ui/scms.css' in html and 'id="main"' in html
+E       assert ('ui/scms.css' in '\n<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-widt...CMS · Campus services <span>For emergencies, use your campus emergency contacts.</span>\n</footer>\n</body>\n</html>\n')
+
+accounts/test_ui_phase1.py:57: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    django.request:log.py:283 Service Unavailable: /anonymous/new/
+________________ test_public_shell[complaints:track_reference] _________________
+
+client = <django.test.client.Client object at 0x110a840f0>
+name = 'complaints:track_reference'
+
+    @pytest.mark.parametrize('name', ['accounts:login', 'accounts:register', 'accounts:register_done', 'complaints:anonymous_submit', 'complaints:track_reference'])
+    def test_public_shell(client, name):
+        response = client.get(reverse(name))
+        assert response.status_code in (200, 503)
+        html = response.content.decode()
+>       assert 'ui/scms.css' in html and 'id="main"' in html
+E       assert ('ui/scms.css' in '\n<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-widt...CMS · Campus services <span>For emergencies, use your campus emergency contacts.</span>\n</footer>\n</body>\n</html>\n')
+
+accounts/test_ui_phase1.py:57: AssertionError
+------------------------------ Captured log call -------------------------------
+ERROR    django.request:log.py:283 Service Unavailable: /anonymous/track/
+=========================== short test summary info ============================
+FAILED accounts/test_ui_phase1.py::test_public_shell[complaints:anonymous_submit]
+FAILED accounts/test_ui_phase1.py::test_public_shell[complaints:track_reference]
+2 failed, 147 passed in 14.98s

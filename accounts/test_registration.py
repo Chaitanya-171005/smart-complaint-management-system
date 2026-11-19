@@ -1,4 +1,5 @@
 import logging
+import re
 from unittest import mock
 
 import pytest
@@ -69,7 +70,11 @@ def test_duplicate_email_gets_same_response_and_no_second_account(client):
     assert User.objects.get().full_name == "Asha Rao"  # original untouched
     page1 = client.get(first.url).content
     page2 = client.get(second.url).content
-    assert page1 == page2
+    # The generic page now contains a CSRF-protected sign-in form. Masked CSRF
+    # nonces vary per render independently of new/duplicate account state.
+    def without_nonce(page):
+        return re.sub(rb'(name="csrfmiddlewaretoken" value=")[^"]+(")', rb'\1<TOKEN>\2', page)
+    assert without_nonce(page1) == without_nonce(page2)
 
 
 @pytest.mark.django_db

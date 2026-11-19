@@ -1,12 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Users - SCMS</title>
-</head>
-<body>
-  <p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
+{% extends "ui/base.html" %}
+{% block title %}Users - SCMS{% endblock %}
+{% block content %}
+<p><a href="{% url 'accounts:landing_admin' %}">Administrator home</a></p>
   <h1>Users, roles and departments</h1>
   <p>Role and department changes apply on the user's next request. You cannot change your own role.</p>
   <table>
@@ -21,5 +16,4 @@
     </tr>
     {% endfor %}
   </table>
-</body>
-</html>
+{% endblock %}

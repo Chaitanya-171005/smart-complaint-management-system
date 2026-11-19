@@ -1,0 +1,21 @@
+{
+  "source": "44a12d0216ae6edc359f36394cc38c9ad6c87d71",
+  "server": "actual isolated Docker/Gunicorn, DEBUG=False",
+  "observed": [
+    {
+      "path": "/accounts/login/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/static/ui/scms.css",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8"
+    },
+    {
+      "path": "/static/ui/forms.js",
+      "status": 404,
+      "content_type": "text/html; charset=utf-8"
+    }
+  ]
+}

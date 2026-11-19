@@ -97,8 +97,8 @@ def test_unsupported_and_legacy_history_do_not_invent_notifications(graph):
 @pytest.mark.parametrize("fail_at", ["notice", "delivery", "later_action"])
 def test_required_failure_rolls_back_action_history_and_outbox(graph, fail_at):
     complaint, _, _ = graph
-    target = ("workflow.notifications.Notification.objects.create" if fail_at == "notice"
-              else "workflow.notifications.EmailDelivery.objects.create")
+    target = ("workflow.notifications.Notification.objects.bulk_create" if fail_at == "notice"
+              else "workflow.notifications.EmailDelivery.objects.bulk_create")
     with pytest.raises(RuntimeError):
         with transaction.atomic():
             complaint.status = "IN_PROGRESS"
@@ -153,7 +153,7 @@ def test_real_intake_commits_notices_and_replay_does_not_duplicate(intake_args):
 
 
 def test_real_intake_cannot_commit_without_required_notice(intake_args):
-    with patch("workflow.notifications.Notification.objects.create", side_effect=RuntimeError("controlled")):
+    with patch("workflow.notifications.Notification.objects.bulk_create", side_effect=RuntimeError("controlled")):
         with pytest.raises(RuntimeError):
             submit_authenticated_complaint(**intake_args)
     for model in (Complaint, ComplaintHistory, NotificationEvent, Notification, EmailDelivery):

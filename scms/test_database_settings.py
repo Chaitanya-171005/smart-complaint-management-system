@@ -44,3 +44,16 @@ def test_postgresql_requires_password(password):
 def test_unknown_database_engine():
     with pytest.raises(ImproperlyConfigured, match="Unknown DJANGO_DB_ENGINE"):
         database_config({"DJANGO_DB_ENGINE": "other"}, Path("/example"))
+
+
+@pytest.mark.parametrize('age',[0,60,300])
+def test_explicit_postgresql_connection_age_is_bounded_and_health_checked(age):
+    result=database_config({'DJANGO_DB_ENGINE':'postgresql','DJANGO_DB_PASSWORD':'synthetic-only','DJANGO_DB_CONN_MAX_AGE':str(age)},Path('/example'))
+    assert result['CONN_MAX_AGE']==age
+    assert result['CONN_HEALTH_CHECKS'] is (age>0)
+
+
+@pytest.mark.parametrize('age',['','-1','301','not-a-number','1.5'])
+def test_invalid_connection_age_refuses_startup(age):
+    with pytest.raises(ImproperlyConfigured,match='DJANGO_DB_CONN_MAX_AGE'):
+        database_config({'DJANGO_DB_ENGINE':'postgresql','DJANGO_DB_PASSWORD':'synthetic-only','DJANGO_DB_CONN_MAX_AGE':age},Path('/example'))

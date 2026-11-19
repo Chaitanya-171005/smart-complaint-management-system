@@ -1,0 +1,168 @@
+{
+  "recorded_utc": "2026-11-17T05:45:00.571350+00:00",
+  "overall_status": "MAIN_F2_VERIFIED_Q04_Q06_PENDING",
+  "main_sha": "a479551c61beb2e2f6e04b93b167084bb7397dcc",
+  "pr93": {
+    "state": "MERGED",
+    "sha": "524ef555d3fba18dd1575173e4bbcc81d51a49cd",
+    "merge_sha": "6481e5d9d7c3c1a3ea4340a01a6591a7879c8cdf",
+    "integrated_into_main_via_pr": 98
+  },
+  "pr100": {
+    "state": "OPEN",
+    "sha": "003e4ddd2a058385826f10704b7893d72890b304"
+  },
+  "review92": {
+    "state": "APPROVED",
+    "reviewed_sha": "43ff72a80eabcd79091e3c7e0f06107c004fb189",
+    "url": "https://github.com/Chaitanya-171005/smart-complaint-management-system/pull/92#pullrequestreview-5932745566"
+  },
+  "final_main_f2": {
+    "status": "FUNCTIONAL_REGRESSION_PASS",
+    "hosted_sqlite": 2001,
+    "hosted_postgresql": 2001,
+    "focused_postgresql": 621,
+    "process_recovery": 28,
+    "chromium": 14,
+    "real_redis_tls": 9,
+    "sqlite_overall_coverage": 96.88,
+    "postgresql_overall_coverage": 96.89,
+    "module_gates": "PASS",
+    "suites_overlap": true,
+    "image_smoke_passed": 9,
+    "deployed_privacy_activation_claimed": false
+  },
+  "official_q04": {
+    "status": "NOT_RUN_NEW_WINDOW_AND_FINAL_BUILD_REQUIRED",
+    "sample_count": 0,
+    "latencies_ms": null,
+    "performance_pass": false,
+    "blocked_by": [
+      "newly confirmed window and target conditions",
+      "D02 and 2 Mbps upload conditions",
+      "real permitted tracking sources and readiness",
+      "actual representative 12-month report endpoint/dataset"
+    ]
+  },
+  "genuine_q06": {
+    "status": "NOT_RUN_FIRST_TIME_TESTER_REQUIRED",
+    "participant": null,
+    "screen_count": null,
+    "assistance_events": null,
+    "unaided_pass": false
+  },
+  "presentation": {
+    "status": "REVIEW_DRAFT_MAIN_RESULTS_FILLED_Q04_Q06_PENDING",
+    "artifact_ref": "artifact_l5rj9N8RM23s0sqpH32_RVg4ibwh-3Xl"
+  },
+  "coordination": {
+    "q04": "https://github.com/Chaitanya-171005/smart-complaint-management-system/issues/20#issuecomment-6938162592",
+    "q06": "https://github.com/Chaitanya-171005/smart-complaint-management-system/issues/41#issuecomment-6938162840"
+  },
+  "q04_existing_preview": {
+    "source_checkout_sha": "b73a2567605465a871ea66da614c4a8e1360109b",
+    "image_id": "sha256:84cc403258215e16013b62e56d1c5a116aa1730d4c422d6ebdca5043723a0a3a",
+    "url": "http://127.0.0.1:55047",
+    "final_main_build_verified": false,
+    "note": "Historical preview preserved. A new final-Main preview was created separately; neither has official load results."
+  },
+  "final_main_preview": {
+    "source_sha": "a479551c61beb2e2f6e04b93b167084bb7397dcc",
+    "image_id": "sha256:d1aab0f1abab4bd151e4a79832a0c5541fdbe097dad7251a6f9403da8936663d",
+    "project": "q04ed58fc793084",
+    "url": "http://127.0.0.1:55057",
+    "core_source_hashes_match_main": {
+      "complaints/forms.py": "18aa0bafd8773c90d689147ed26f6d653dda8806b7aa030d91aac04b0ce85444",
+      "complaints/anonymous.py": "7da8538ce6b1361216224a997b8a86c8dfba9526a9766afbfffab4f7401a2ed8",
+      "complaints/privacy_middleware.py": "dfdfd3f7f69662b5e43a5a49c4439601cf416e896f21a363e9815c0350163577",
+      "complaints/tracking.py": "96bc932f1360c952f879ae373d7182a3702e77e20fd43e855628680b16df092e",
+      "complaints/feedback_views.py": "39d13baf5dbec7818a47e9465ba67a6d75a71d2304fb5b4f21af7125efd887a6",
+      "complaints/evidence.py": "4f36e46b65eff9917344e24fd8f15cbcd0645606bfca727eca1be4b241c15c30",
+      "complaints/evidence_recovery.py": "3b1d917496dd8659068590046756474105cca6f2e1fe968ac3c077cc28216b54",
+      "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+      "routing/escalation.py": "2d612cbf5783c88296134bac4bbe99a52cfbb18e4b9c54fe1fb25017e07dc82a",
+      "workflow/reference_feedback.py": "9cecb6a730df43aa69c9155e54789493519ddd6ea51978efcfa8dc5c59170d0c",
+      "workflow/email_delivery.py": "4344e772fe681adf16a9d86b0ba877cdd34eb73713f239f67ba74811904d0650",
+      "scms/settings.py": "26548d93557e9daab383a5937c876f5f39fde67b51658c2c3eb4368156bdf2de"
+    },
+    "runtime": {
+      "django": "6.1.3",
+      "release_gates": {
+        "COMPLAINT_INTAKE_ENABLED": false,
+        "ANONYMOUS_INTAKE_ENABLED": false,
+        "ANONYMOUS_TRACKING_ENABLED": false,
+        "ANONYMOUS_FEEDBACK_ENABLED": false,
+        "ANONYMOUS_PRIVACY_READY": false,
+        "ANONYMOUS_TRANSPORT_VERIFIED": false,
+        "ANONYMOUS_TRACKING_LIMITER_READY": false
+      },
+      "complaints": 650,
+      "unassigned_targets": 550
+    },
+    "observations": [
+      {
+        "check": "head_queue",
+        "http_status": 200,
+        "expected_status": 200,
+        "passed": true,
+        "rows": 25
+      },
+      {
+        "check": "head_queue_page2",
+        "http_status": 200,
+        "expected_status": 200,
+        "passed": true,
+        "rows": 25
+      },
+      {
+        "check": "complainant_queue_refused",
+        "http_status": 403,
+        "expected_status": 403,
+        "passed": true
+      },
+      {
+        "check": "owner_detail",
+        "http_status": 200,
+        "expected_status": 200,
+        "passed": true
+      },
+      {
+        "check": "other_owner_detail_refused",
+        "http_status": 404,
+        "expected_status": 404,
+        "passed": true
+      },
+      {
+        "check": "intake_gate",
+        "http_status": 503,
+        "expected_status": 503,
+        "passed": true
+      },
+      {
+        "check": "anonymous_gate",
+        "http_status": 503,
+        "expected_status": 503,
+        "passed": true
+      },
+      {
+        "check": "tracking_gate",
+        "http_status": 503,
+        "expected_status": 503,
+        "passed": true
+      },
+      {
+        "check": "feedback_gate",
+        "http_status": 503,
+        "expected_status": 503,
+        "passed": true
+      }
+    ],
+    "scope": "Read-only final-image authorization/pagination/gate smoke. Functional acceptance/rollback/upload tests are separate. No 50-user or official performance test executed."
+  },
+  "q04_diagnostic_fix": {
+    "source": "25eae4ce3c1628807227b7bf2b23fc519e749655",
+    "tests_passed": 36,
+    "before_fix_negative_control_failed": 4,
+    "application_release_gates_changed": false
+  }
+}

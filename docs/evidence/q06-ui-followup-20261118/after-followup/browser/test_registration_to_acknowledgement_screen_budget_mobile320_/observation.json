@@ -1,0 +1,45 @@
+{
+  "case": "test_registration_to_acknowledgement_screen_budget[mobile320]",
+  "viewport": 320,
+  "mobile_emulation": true,
+  "observations": {
+    "primary_screens": {
+      "definition": "Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen",
+      "sequence": [
+        {
+          "route": "/accounts/register/",
+          "title": "Register - SCMS",
+          "heading": "Create your SCMS account"
+        },
+        {
+          "route": "/accounts/register/done/",
+          "title": "Registration received - SCMS",
+          "heading": "Registration received"
+        },
+        {
+          "route": "/accounts/landing/complainant/",
+          "title": "Complainant - SCMS",
+          "heading": "Welcome, Synthetic First Registration"
+        },
+        {
+          "route": "/complaints/SCMS-2026-000002/submitted/",
+          "title": "Complaint submitted - SCMS",
+          "heading": "Your complaint was submitted"
+        }
+      ],
+      "count": 4,
+      "count_before_acknowledgement": 3,
+      "target": 4,
+      "human_unaided_assessed": false
+    },
+    "browser": {
+      "engine": "Chromium",
+      "version": "145.0.7632.6"
+    }
+  },
+  "events": {
+    "page_errors": [],
+    "console": [],
+    "failed_requests": []
+  }
+}

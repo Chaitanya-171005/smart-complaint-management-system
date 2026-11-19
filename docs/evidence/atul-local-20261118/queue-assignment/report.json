@@ -1,0 +1,621 @@
+{
+  "status": "STOPPED_UNEXPECTED_FAILURE",
+  "scope": "Local Docker/PostgreSQL queue/assignment only; other Q04 scenarios and overall acceptance pending",
+  "authorization": {
+    "owner": "atul-suresh",
+    "start": "2026-11-18T19:30:00+05:30",
+    "end": "2026-11-18T21:30:00+05:30"
+  },
+  "started_at_utc": "2026-11-18T15:09:36.984294+00:00",
+  "results": {
+    "warmup_queue": {
+      "status": "FAIL",
+      "requests": 50,
+      "failed_requests": 50,
+      "errors": {
+        "unexpected_status": 50
+      },
+      "p50_ms": 529.1382760001397,
+      "p95_ms": 978.1255170000804,
+      "maximum_ms": 1019.2715000002863,
+      "threshold_ms": 1500,
+      "samples": [
+        {
+          "status": 302,
+          "elapsed_ms": 71.3134849997914,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 0,
+          "iteration": 0,
+          "operation_wall_ms": 71.37749000003168
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 129.95062200025131,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 1,
+          "iteration": 0,
+          "operation_wall_ms": 129.99665799998184
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 51.90541399997528,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 2,
+          "iteration": 0,
+          "operation_wall_ms": 51.94634000008591
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 188.57294700001148,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 3,
+          "iteration": 0,
+          "operation_wall_ms": 188.61612499995317
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 208.58849000023838,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 4,
+          "iteration": 0,
+          "operation_wall_ms": 208.62923699996827
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 90.4350539999541,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 5,
+          "iteration": 0,
+          "operation_wall_ms": 90.47961899977963
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 328.44051300025967,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 6,
+          "iteration": 0,
+          "operation_wall_ms": 328.4796559996721
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 249.20523699984187,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 7,
+          "iteration": 0,
+          "operation_wall_ms": 249.24057500038543
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 288.7916729996505,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 8,
+          "iteration": 0,
+          "operation_wall_ms": 288.8296820001415
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 148.4120109998912,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 9,
+          "iteration": 0,
+          "operation_wall_ms": 148.45562900018194
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 167.98326000025554,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 10,
+          "iteration": 0,
+          "operation_wall_ms": 168.0176439999741
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 685.3228869999839,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 11,
+          "iteration": 0,
+          "operation_wall_ms": 685.3682700002537
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 529.1382760001397,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 12,
+          "iteration": 0,
+          "operation_wall_ms": 529.1737649999959
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 588.1344549998175,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 13,
+          "iteration": 0,
+          "operation_wall_ms": 588.1683490001706
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 227.9140020000341,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 14,
+          "iteration": 0,
+          "operation_wall_ms": 228.08712999994896
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 269.0420910003013,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 15,
+          "iteration": 0,
+          "operation_wall_ms": 269.0930040002968
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 742.7691100001539,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 16,
+          "iteration": 0,
+          "operation_wall_ms": 742.8237070002979
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 916.1563709999427,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 17,
+          "iteration": 0,
+          "operation_wall_ms": 916.1888469998303
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 407.6417829996899,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 18,
+          "iteration": 0,
+          "operation_wall_ms": 407.6750889998948
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 838.3984269999019,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 19,
+          "iteration": 0,
+          "operation_wall_ms": 838.4428770000341
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 955.194094000035,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 20,
+          "iteration": 0,
+          "operation_wall_ms": 955.228318999616
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 819.0586010000516,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 21,
+          "iteration": 0,
+          "operation_wall_ms": 819.0926329998547
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 308.2231880002837,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 22,
+          "iteration": 0,
+          "operation_wall_ms": 308.27446600005715
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 665.5821219997051,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 23,
+          "iteration": 0,
+          "operation_wall_ms": 665.6698130000223
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 781.203622999783,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 24,
+          "iteration": 0,
+          "operation_wall_ms": 781.2409119997028
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 978.1255170000804,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 25,
+          "iteration": 0,
+          "operation_wall_ms": 978.159092000169
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 723.54745299981,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 26,
+          "iteration": 0,
+          "operation_wall_ms": 723.5831160000998
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 347.4421949999851,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 27,
+          "iteration": 0,
+          "operation_wall_ms": 347.54523300034634
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 427.3062620000019,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 28,
+          "iteration": 0,
+          "operation_wall_ms": 427.3439140001756
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 608.0892810000478,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 29,
+          "iteration": 0,
+          "operation_wall_ms": 608.1225240000094
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 800.5053939996287,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 30,
+          "iteration": 0,
+          "operation_wall_ms": 800.5395569998655
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 509.3550410001626,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 31,
+          "iteration": 0,
+          "operation_wall_ms": 509.3869560000712
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 627.5386549996256,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 32,
+          "iteration": 0,
+          "operation_wall_ms": 627.5743579999471
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 1019.2715000002863,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 33,
+          "iteration": 0,
+          "operation_wall_ms": 1019.3073039999945
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 470.3465259999575,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 34,
+          "iteration": 0,
+          "operation_wall_ms": 470.37903599994024
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 998.563378000199,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 35,
+          "iteration": 0,
+          "operation_wall_ms": 998.595473000023
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 548.5422460001246,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 36,
+          "iteration": 0,
+          "operation_wall_ms": 548.5742549999486
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 451.3919769997301,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 37,
+          "iteration": 0,
+          "operation_wall_ms": 451.42619400030526
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 646.6998130003958,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 38,
+          "iteration": 0,
+          "operation_wall_ms": 646.7861480000465
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 386.88122799976554,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 39,
+          "iteration": 0,
+          "operation_wall_ms": 386.91713399975924
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 704.0522350002902,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 40,
+          "iteration": 0,
+          "operation_wall_ms": 704.0938129998722
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 489.07973799987303,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 41,
+          "iteration": 0,
+          "operation_wall_ms": 489.11175600005663
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 760.6251039997005,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 42,
+          "iteration": 0,
+          "operation_wall_ms": 760.658044000138
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 365.4665979997844,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 43,
+          "iteration": 0,
+          "operation_wall_ms": 365.52164300019285
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 936.2999119998676,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 44,
+          "iteration": 0,
+          "operation_wall_ms": 936.3360419997662
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 856.8997899997157,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 45,
+          "iteration": 0,
+          "operation_wall_ms": 856.9355259996883
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 876.3577960003204,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 46,
+          "iteration": 0,
+          "operation_wall_ms": 876.3918700001341
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 569.1898089999086,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 47,
+          "iteration": 0,
+          "operation_wall_ms": 569.2231389998597
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 896.9440739997481,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 48,
+          "iteration": 0,
+          "operation_wall_ms": 896.9767060002596
+        },
+        {
+          "status": 302,
+          "elapsed_ms": 112.33349500025724,
+          "error": "unexpected_status",
+          "scenario": "queue",
+          "phase": "warmup",
+          "worker": 49,
+          "iteration": 0,
+          "operation_wall_ms": 112.7322180000192
+        }
+      ],
+      "wall_seconds": 1.0447895990000688,
+      "throughput_operations_per_second": 47.856525417034426,
+      "concurrency": 50
+    }
+  },
+  "checks": {
+    "baseline": {
+      "targets": 550,
+      "assigned": 0,
+      "expected_assigned": 0,
+      "head_assignment_history": 0,
+      "notification_events": 0,
+      "correct_targets": 550,
+      "active_department_heads": 50,
+      "valid": true,
+      "release_gates": {
+        "COMPLAINT_INTAKE_ENABLED": false,
+        "ANONYMOUS_INTAKE_ENABLED": false,
+        "ANONYMOUS_TRACKING_ENABLED": false,
+        "ANONYMOUS_FEEDBACK_ENABLED": false,
+        "ANONYMOUS_PRIVACY_READY": false
+      },
+      "evidence_max_bytes": 5000000
+    }
+  },
+  "load_model": "50 distinct department Heads; one warmup + ten measured operations per Head per scenario; closed-loop barrier, no think time; fresh CSRF preparation traffic excluded from POST timer, included in wall throughput",
+  "local_d02": {
+    "bytes": 5000000,
+    "status": "Atul proposal for this local setup; pending team confirmation"
+  },
+  "harness_sha256": "fae246b2500e931aed1d0c79b5ec07ecc05923e385e0df8e24b22ced9252de2d",
+  "source_revision": "7d12ea429349f1c70bc8d3d5d2fff7ac0b0eb620",
+  "working_tree_status": [],
+  "project": "q0484286891847f",
+  "dataset": {
+    "complaints": 650,
+    "seed": 1811,
+    "heads": 50,
+    "action_targets": 550
+  },
+  "image": "sha256:edb272296f2efe8003a71659401a7e88f91fecd41766abeb3c80bddce597b5d9",
+  "app_resources": {
+    "command": [
+      "gunicorn",
+      "scms.wsgi:application",
+      "--bind",
+      "0.0.0.0:8000"
+    ],
+    "memory_limit": 0,
+    "nano_cpus": 0
+  },
+  "docker_resources": {
+    "cpus": 16,
+    "memory_bytes": 8320905216
+  },
+  "postgresql": [
+    "17.6 (Debian 17.6-2.pgdg13+1)",
+    "100"
+  ],
+  "source_image_hashes": {
+    "source": {
+      "complaints/submission.py": "5dd924da016c8df30af1083a3130e6fd804d9154e355b7ddaa1c3f1a60d538c8",
+      "complaints/anonymous.py": "7da8538ce6b1361216224a997b8a86c8dfba9526a9766afbfffab4f7401a2ed8",
+      "complaints/tracking.py": "96bc932f1360c952f879ae373d7182a3702e77e20fd43e855628680b16df092e",
+      "complaints/feedback_views.py": "39d13baf5dbec7818a47e9465ba67a6d75a71d2304fb5b4f21af7125efd887a6",
+      "complaints/evidence.py": "4f36e46b65eff9917344e24fd8f15cbcd0645606bfca727eca1be4b241c15c30",
+      "complaints/privacy.py": "26bc33691f75c8f5b385d2d2673dc186cf02af88ef42e0d50ad067a6ce9e90dd",
+      "complaints/checks.py": "263110ce9770638467e7a2ef818b72cfed0e82d58a45272c8e2086d4152fe597",
+      "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+      "routing/queue.py": "0d2981965d73b74f142949c8bf19d5247166200ec383cf36c9e56520d49f016e",
+      "workflow/reference_feedback.py": "9cecb6a730df43aa69c9155e54789493519ddd6ea51978efcfa8dc5c59170d0c",
+      "workflow/notifications.py": "130dd678fa4c08b0f6004d042cef7151fd58a3ab09277f3e22aaf674b04e1825",
+      "scripts/run_tests.py": "f36ac4b7981dcdf705b7fe8550404e6584a51bbb9c0250f119f01078289024de",
+      "scripts/q04_env.py": "546f7be3b30bea258319f0598f436a8a7d72713398ac5544662885339277726f"
+    },
+    "image": {
+      "complaints/submission.py": "5dd924da016c8df30af1083a3130e6fd804d9154e355b7ddaa1c3f1a60d538c8",
+      "complaints/anonymous.py": "7da8538ce6b1361216224a997b8a86c8dfba9526a9766afbfffab4f7401a2ed8",
+      "complaints/tracking.py": "96bc932f1360c952f879ae373d7182a3702e77e20fd43e855628680b16df092e",
+      "complaints/feedback_views.py": "39d13baf5dbec7818a47e9465ba67a6d75a71d2304fb5b4f21af7125efd887a6",
+      "complaints/evidence.py": "4f36e46b65eff9917344e24fd8f15cbcd0645606bfca727eca1be4b241c15c30",
+      "complaints/privacy.py": "26bc33691f75c8f5b385d2d2673dc186cf02af88ef42e0d50ad067a6ce9e90dd",
+      "complaints/checks.py": "263110ce9770638467e7a2ef818b72cfed0e82d58a45272c8e2086d4152fe597",
+      "routing/allocation.py": "b63fc2544f3cf9c7902ef1b6c602d6b895ad174dbae5934d12a7692b4c6ddae9",
+      "routing/queue.py": "0d2981965d73b74f142949c8bf19d5247166200ec383cf36c9e56520d49f016e",
+      "workflow/reference_feedback.py": "9cecb6a730df43aa69c9155e54789493519ddd6ea51978efcfa8dc5c59170d0c",
+      "workflow/notifications.py": "130dd678fa4c08b0f6004d042cef7151fd58a3ab09277f3e22aaf674b04e1825",
+      "scripts/run_tests.py": "f36ac4b7981dcdf705b7fe8550404e6584a51bbb9c0250f119f01078289024de",
+      "scripts/q04_env.py": "546f7be3b30bea258319f0598f436a8a7d72713398ac5544662885339277726f"
+    },
+    "match": true
+  },
+  "origin": "http://127.0.0.1:55067",
+  "network": "loopback HTTP, no TLS or shaping; private Docker bridge to PostgreSQL; no production/shared services",
+  "failure_category": "RuntimeError",
+  "failure": "Unexpected request failure; stopped",
+  "finished_at_utc": "2026-11-18T15:09:44.668371+00:00"
+}

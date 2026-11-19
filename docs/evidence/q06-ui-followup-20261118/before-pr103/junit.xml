@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="9" skipped="0" tests="66" time="163.967" timestamp="2026-11-18T17:29:11.756576+00:00" hostname="Macs-MacBook-Pro.local"><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_to_acknowledgement_screen_budget[desktop]" time="6.413"><failure message="AssertionError: Normal workflow visits more than four primary screens&#10;assert 6 &lt;= 4&#10; +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112baacf0&gt;
+
+    def test_registration_to_acknowledgement_screen_budget(ui):
+        u=ui;p=u.page;screens=[]
+        def snap(label):
+            screens.append({'route':urlsplit(p.url).path,'title':p.title(),'heading':p.locator('h1').inner_text()})
+            u.screenshot(str(len(screens))+'-'+label)
+        goto(u,'/accounts/register/');snap('register')
+        email='q06-first-'+uuid4().hex+'@example.test'
+        p.get_by_label('Full name').fill('Synthetic First Registration')
+        p.get_by_label('Email').fill(email)
+        p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_label('User type').select_option(index=1)
+        p.get_by_role('button',name='Register',exact=True).click()
+        expect(p.get_by_role('heading',level=1)).to_have_text('Registration received');snap('registration-received')
+        p.locator('main').get_by_role('link',name='Sign in',exact=True).click();snap('login')
+        p.get_by_label('Email').fill(email);p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_role('button',name='Sign in',exact=True).click()
+        expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/');snap('home')
+        p.locator("main a[href='/complaints/new/']").first.click();snap('intake')
+        fill_complaint(u);submit(u);snap('acknowledgement')
+        u.record('primary_screens',{'definition':'Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen',
+            'sequence':screens,'count':len(screens),'count_before_acknowledgement':len(screens)-1,'target':4,'human_unaided_assessed':False})
+&gt;       assert len(screens)&lt;=4,'Normal workflow visits more than four primary screens'
+E       AssertionError: Normal workflow visits more than four primary screens
+E       assert 6 &lt;= 4
+E        +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:142: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_to_acknowledgement_screen_budget[mobile320]" time="3.043"><failure message="AssertionError: Normal workflow visits more than four primary screens&#10;assert 6 &lt;= 4&#10; +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112a2c6e0&gt;
+
+    def test_registration_to_acknowledgement_screen_budget(ui):
+        u=ui;p=u.page;screens=[]
+        def snap(label):
+            screens.append({'route':urlsplit(p.url).path,'title':p.title(),'heading':p.locator('h1').inner_text()})
+            u.screenshot(str(len(screens))+'-'+label)
+        goto(u,'/accounts/register/');snap('register')
+        email='q06-first-'+uuid4().hex+'@example.test'
+        p.get_by_label('Full name').fill('Synthetic First Registration')
+        p.get_by_label('Email').fill(email)
+        p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_label('User type').select_option(index=1)
+        p.get_by_role('button',name='Register',exact=True).click()
+        expect(p.get_by_role('heading',level=1)).to_have_text('Registration received');snap('registration-received')
+        p.locator('main').get_by_role('link',name='Sign in',exact=True).click();snap('login')
+        p.get_by_label('Email').fill(email);p.get_by_label('Password').fill(PASSWORD)
+        p.get_by_role('button',name='Sign in',exact=True).click()
+        expect(p).to_have_url(u.site['origin']+'/accounts/landing/complainant/');snap('home')
+        p.locator("main a[href='/complaints/new/']").first.click();snap('intake')
+        fill_complaint(u);submit(u);snap('acknowledgement')
+        u.record('primary_screens',{'definition':'Every distinct full-page user-visible step on normal navigation, including receipt/home/acknowledgement; invalid retries do not add a distinct screen',
+            'sequence':screens,'count':len(screens),'count_before_acknowledgement':len(screens)-1,'target':4,'human_unaided_assessed':False})
+&gt;       assert len(screens)&lt;=4,'Normal workflow visits more than four primary screens'
+E       AssertionError: Normal workflow visits more than four primary screens
+E       assert 6 &lt;= 4
+E        +  where 6 = len([{'route': '/accounts/register/', 'title': 'Register - SCMS', 'heading': 'Create your SCMS account'}, {'route': '/acco...laints/SCMS-2026-000002/submitted/', 'title': 'Complaint submitted - SCMS', 'heading': 'Your complaint was submitted'}])
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:142: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_invalid_values_preserved_and_corrected[desktop]" time="2.472" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_invalid_values_preserved_and_corrected[mobile320]" time="2.412" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_errors_have_programmatic_descriptions[desktop]" time="1.964"><failure message="AssertionError: Invalid registration fields reference missing error description elements&#10;assert False&#10; +  where False = all(&lt;generator object test_registration_errors_have_programmatic_descriptions.&lt;locals&gt;.&lt;genexpr&gt; at 0x113dc7ed0&gt;)">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x113b01fd0&gt;
+
+    def test_registration_errors_have_programmatic_descriptions(ui):
+        u=ui;p=u.page;goto(u,'/accounts/register/')
+        p.get_by_role('button',name='Register',exact=True).click()
+        audit=label_audit(p);u.record('registration_error_semantics',audit);u.screenshot('registration-required-errors')
+&gt;       assert all(x['label'] and not x['missingDescriptions'] for x in audit),'Invalid registration fields reference missing error description elements'
+E       AssertionError: Invalid registration fields reference missing error description elements
+E       assert False
+E        +  where False = all(&lt;generator object test_registration_errors_have_programmatic_descriptions.&lt;locals&gt;.&lt;genexpr&gt; at 0x113dc7ed0&gt;)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:169: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_registration_errors_have_programmatic_descriptions[mobile320]" time="1.994"><failure message="AssertionError: Invalid registration fields reference missing error description elements&#10;assert False&#10; +  where False = all(&lt;generator object test_registration_errors_have_programmatic_descriptions.&lt;locals&gt;.&lt;genexpr&gt; at 0x113f74040&gt;)">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x113b03a10&gt;
+
+    def test_registration_errors_have_programmatic_descriptions(ui):
+        u=ui;p=u.page;goto(u,'/accounts/register/')
+        p.get_by_role('button',name='Register',exact=True).click()
+        audit=label_audit(p);u.record('registration_error_semantics',audit);u.screenshot('registration-required-errors')
+&gt;       assert all(x['label'] and not x['missingDescriptions'] for x in audit),'Invalid registration fields reference missing error description elements'
+E       AssertionError: Invalid registration fields reference missing error description elements
+E       assert False
+E        +  where False = all(&lt;generator object test_registration_errors_have_programmatic_descriptions.&lt;locals&gt;.&lt;genexpr&gt; at 0x113f74040&gt;)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:169: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_login_invalid_refusal_and_correction[desktop]" time="2.257" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_login_invalid_refusal_and_correction[mobile320]" time="2.472" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_required_native_validation[desktop]" time="3.422" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_required_native_validation[mobile320]" time="2.158" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_server_validation_preserves_values_and_resubmits[desktop]" time="2.696" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_server_validation_preserves_values_and_resubmits[mobile320]" time="2.650" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_errors_announce_or_focus_after_server_refusal[desktop]" time="2.259"><failure message="AssertionError: No automatic error announcement or focus on invalid field after full-page refusal&#10;assert (0 &gt; 0 or False)">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x113b01fd0&gt;
+
+    def test_intake_errors_announce_or_focus_after_server_refusal(ui):
+        u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Bad')
+        p.get_by_role('button',name='Submit complaint',exact=True).click()
+        state=p.evaluate('''() =&gt; ({focus:document.activeElement.id,alerts:document.querySelectorAll('[role=alert],[aria-live=assertive]').length,
+            invalidFocus:document.activeElement.getAttribute('aria-invalid')==='true'})''')
+        u.record('server_error_announcement',state);u.screenshot('server-error-announcement')
+&gt;       assert state['alerts']&gt;0 or state['invalidFocus'],'No automatic error announcement or focus on invalid field after full-page refusal'
+E       AssertionError: No automatic error announcement or focus on invalid field after full-page refusal
+E       assert (0 &gt; 0 or False)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:214: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_intake_errors_announce_or_focus_after_server_refusal[mobile320]" time="2.245"><failure message="AssertionError: No automatic error announcement or focus on invalid field after full-page refusal&#10;assert (0 &gt; 0 or False)">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x1119c1a90&gt;
+
+    def test_intake_errors_announce_or_focus_after_server_refusal(ui):
+        u=ui;p=u.page;login(u);goto(u,'/complaints/new/');fill_complaint(u,'Bad')
+        p.get_by_role('button',name='Submit complaint',exact=True).click()
+        state=p.evaluate('''() =&gt; ({focus:document.activeElement.id,alerts:document.querySelectorAll('[role=alert],[aria-live=assertive]').length,
+            invalidFocus:document.activeElement.getAttribute('aria-invalid')==='true'})''')
+        u.record('server_error_announcement',state);u.screenshot('server-error-announcement')
+&gt;       assert state['alerts']&gt;0 or state['invalidFocus'],'No automatic error announcement or focus on invalid field after full-page refusal'
+E       AssertionError: No automatic error announcement or focus on invalid field after full-page refusal
+E       assert (0 &gt; 0 or False)
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:214: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[desktop-native]" time="2.341" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[desktop-rejected]" time="2.455" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[desktop-unavailable]" time="2.344" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[mobile320-native]" time="2.330" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[mobile320-rejected]" time="2.369" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_acknowledgement_copy_and_fallback[mobile320-unavailable]" time="2.362" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_keyboard_navigation_labels_and_focus[desktop]" time="2.598" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_keyboard_navigation_labels_and_focus[mobile320]" time="2.113" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[desktop-COMPLAINANT]" time="2.395" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[desktop-STAFF]" time="2.343" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[desktop-HEAD]" time="2.363" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[desktop-ADMIN]" time="2.413" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[mobile320-COMPLAINANT]" time="2.471" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[mobile320-STAFF]" time="2.341" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[mobile320-HEAD]" time="2.340" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_role_navigation_and_refusal[mobile320-ADMIN]" time="2.404" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_permission_refusal_explains_corrective_action[desktop]" time="2.082"><failure message="AssertionError: 403 has no corrective action or recovery navigation&#10;assert None&#10; +  where None = &lt;function search at 0x10ec1bed0&gt;('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)&#10; +    where &lt;function search at 0x10ec1bed0&gt; = re.search&#10; +    and   re.IGNORECASE = re.I">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112e827b0&gt;
+
+    def test_permission_refusal_explains_corrective_action(ui):
+        u=ui;p=u.page;login(u);r=goto(u,'/routing/queue/');assert r.status==403
+        text=p.locator('body').inner_text();u.record('permission_guidance',{'text':text,'links':p.get_by_role('link').count()})
+        u.screenshot('permission-guidance')
+&gt;       assert re.search(r'contact|administrator|sign in|home|back|permission',text,re.I),'403 has no corrective action or recovery navigation'
+E       AssertionError: 403 has no corrective action or recovery navigation
+E       assert None
+E        +  where None = &lt;function search at 0x10ec1bed0&gt;('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)
+E        +    where &lt;function search at 0x10ec1bed0&gt; = re.search
+E        +    and   re.IGNORECASE = re.I
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:271: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_permission_refusal_explains_corrective_action[mobile320]" time="2.078"><failure message="AssertionError: 403 has no corrective action or recovery navigation&#10;assert None&#10; +  where None = &lt;function search at 0x10ec1bed0&gt;('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)&#10; +    where &lt;function search at 0x10ec1bed0&gt; = re.search&#10; +    and   re.IGNORECASE = re.I">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112e82660&gt;
+
+    def test_permission_refusal_explains_corrective_action(ui):
+        u=ui;p=u.page;login(u);r=goto(u,'/routing/queue/');assert r.status==403
+        text=p.locator('body').inner_text();u.record('permission_guidance',{'text':text,'links':p.get_by_role('link').count()})
+        u.screenshot('permission-guidance')
+&gt;       assert re.search(r'contact|administrator|sign in|home|back|permission',text,re.I),'403 has no corrective action or recovery navigation'
+E       AssertionError: 403 has no corrective action or recovery navigation
+E       assert None
+E        +  where None = &lt;function search at 0x10ec1bed0&gt;('contact|administrator|sign in|home|back|permission', '403 Forbidden', re.IGNORECASE)
+E        +    where &lt;function search at 0x10ec1bed0&gt; = re.search
+E        +    and   re.IGNORECASE = re.I
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:271: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_navigation_and_responsive_pages[desktop]" time="2.717" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_navigation_and_responsive_pages[mobile320]" time="2.626" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_long_labels_responsive_layout[desktop-authenticated]" time="2.099" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_long_labels_responsive_layout[desktop-anonymous]" time="1.681" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_long_labels_responsive_layout[mobile320-authenticated]" time="2.102" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_long_labels_responsive_layout[mobile320-anonymous]" time="2.218"><failure message="AssertionError: Valid maximum-length reference labels overflow the viewport&#10;assert False&#10; +  where False = fits(&lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112d3c980&gt;, {'innerWidth': 660, 'clientWidth': 320, 'scrollWidth': 660, 'visualWidth': 320, ...})">ui = &lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112d3c980&gt;, anonymous = True
+
+    @pytest.mark.parametrize('anonymous',[False,True],ids=['authenticated','anonymous'])
+    def test_long_labels_responsive_layout(ui,anonymous):
+        u=ui;p=u.page
+        if not anonymous:login(u)
+        goto(u,'/anonymous/new/' if anonymous else '/complaints/new/')
+        fill_complaint(u);p.get_by_label('Title').fill('W'*120)
+        p.get_by_label('Description').fill('x'*2000)
+        metrics=layout(p);u.record('long_labels',{'anonymous':anonymous,'layout':metrics,'category_length':50,'location_lengths':[20,10,30]})
+        u.screenshot('long-labels')
+&gt;       assert fits(u,metrics),'Valid maximum-length reference labels overflow the viewport'
+E       AssertionError: Valid maximum-length reference labels overflow the viewport
+E       assert False
+E        +  where False = fits(&lt;test_q06_browser.ui.&lt;locals&gt;.UI object at 0x112d3c980&gt;, {'innerWidth': 660, 'clientWidth': 320, 'scrollWidth': 660, 'visualWidth': 320, ...})
+
+build/evidence/q06-ui103/harness/test_q06_browser.py:294: AssertionError</failure></testcase><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_anonymous_submission_and_tracking_ui[desktop]" time="2.681" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_anonymous_submission_and_tracking_ui[mobile320]" time="2.598" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_release_gated_routes_have_safe_visible_refusals[desktop]" time="2.358" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_release_gated_routes_have_safe_visible_refusals[mobile320]" time="2.312" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_configuration_unavailable_is_explained_and_disabled[desktop]" time="2.120" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_browser" name="test_configuration_unavailable_is_explained_and_disabled[mobile320]" time="2.099" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_keyboard" name="test_keyboard_only_login_to_acknowledgement[desktop]" time="4.618" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_keyboard" name="test_keyboard_only_login_to_acknowledgement[mobile320]" time="4.060" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_work_queue_responsive_controls[desktop-HEAD]" time="2.234" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_work_queue_responsive_controls[desktop-STAFF]" time="2.117" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_work_queue_responsive_controls[mobile320-HEAD]" time="2.098" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_work_queue_responsive_controls[mobile320-STAFF]" time="2.102" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_anonymous_reference_manual_clipboard_copy[desktop]" time="2.000" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_anonymous_reference_manual_clipboard_copy[mobile320]" time="2.066" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[desktop-COMPLAINANT]" time="2.390" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[desktop-STAFF]" time="2.272" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[desktop-HEAD]" time="2.309" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[desktop-ADMIN]" time="2.506" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[mobile320-COMPLAINANT]" time="2.380" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[mobile320-STAFF]" time="2.266" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[mobile320-HEAD]" time="2.426" /><testcase classname="build.evidence.q06-ui103.harness.test_q06_work_ui" name="test_role_home_links_are_working_and_responsive[mobile320-ADMIN]" time="2.520" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[confirm-320]" time="2.386" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[confirm-1280]" time="2.298" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[reject-320]" time="2.332" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[reject-1280]" time="2.316" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[limit-320]" time="2.333" /><testcase classname="integration_checks.reference_feedback_browser" name="test_native_reference_feedback_is_private_accessible_and_persisted[limit-1280]" time="2.776" /></testsuite></testsuites>
