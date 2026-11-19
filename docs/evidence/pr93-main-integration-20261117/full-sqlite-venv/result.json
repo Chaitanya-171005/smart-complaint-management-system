@@ -1,0 +1,37 @@
+{
+  "stage": "full-sqlite-venv",
+  "source_revision": "3ac81b60bd8a5df9da1009328444bfe33d2cacab",
+  "working_tree_status": "",
+  "command": [
+    "sh",
+    "scripts/ci_checks.sh",
+    "build/evidence/full-sqlite-venv"
+  ],
+  "cwd": "<sqlite-checkout>",
+  "environment_overrides": {
+    "PATH": "<venv>/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/opt/X11/bin:/Applications/ChatGPT.app/Contents/Resources/codex-cli/codex-path:/Users/mac/.codex/tmp/arg0-macos/codex-arg0BTooDF:/Users/mac/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/override:/Users/mac/.unity/bin:/Users/mac/.duckdb/cli/latest:/Users/mac/.docker/bin:/Users/mac/.cache/codex-runtimes/codex-primary-runtime/dependencies/bin/fallback:/Applications/ChatGPT.app/Contents/Resources:/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS:/Users/mac/.docker/bin",
+    "DJANGO_SECRET_KEY": "synthetic-branch-integration-test-only",
+    "DJANGO_SETTINGS_MODULE": "scms.settings",
+    "DJANGO_DB_ENGINE": "sqlite",
+    "DJANGO_DB_PATH": "<runtime-evidence>/full-sqlite-venv/disposable.sqlite3",
+    "PRIVATE_EVIDENCE_ROOT": "<runtime-evidence>/full-sqlite-venv/private-evidence",
+    "DJANGO_DEBUG": "False",
+    "DJANGO_MAIL_BACKEND": "console",
+    "DJANGO_SMTP_USE_TLS": "True",
+    "DJANGO_SMTP_USE_SSL": "False",
+    "COMPLAINT_INTAKE_ENABLED": "False",
+    "ANONYMOUS_INTAKE_ENABLED": "False",
+    "ANONYMOUS_FEEDBACK_ENABLED": "False",
+    "ANONYMOUS_TRACKING_ENABLED": "False",
+    "ANONYMOUS_PRIVACY_READY": "False",
+    "ANONYMOUS_TRANSPORT_VERIFIED": "False",
+    "ANONYMOUS_TRACKING_LIMITER_READY": "False",
+    "SCMS_CI_DATABASE_ISOLATED": "1",
+    "SCMS_CI_REQUIRE_F4": "1",
+    "SCMS_CI_PYTHON": "<venv>/bin/python",
+    "PYTEST_ADDOPTS": "--junitxml=<runtime-evidence>/full-sqlite-venv/junit.xml"
+  },
+  "started_utc": "2026-11-17T03:58:15Z",
+  "exit_code": 0,
+  "elapsed_seconds": 390.227
+}

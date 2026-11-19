@@ -1,0 +1,25 @@
+{
+  "repository": "Chaitanya-171005/smart-complaint-management-system",
+  "branch": "codex/pr93-main-integration-20261117",
+  "pr93_input": "524ef555d3fba18dd1575173e4bbcc81d51a49cd",
+  "main_input": "b77e8b1ff05ebaea2a477c693fbdac1bfa1d5757",
+  "branch_source": "3ac81b60bd8a5df9da1009328444bfe33d2cacab",
+  "branch_tree": "6b11b2edf27ba37d73c7a5c7db80aae1d673b5a8",
+  "conflicts": [
+    ".env.docker.example"
+  ],
+  "conflict_resolution": "Preserve PR93 ANONYMOUS_FEEDBACK_ENABLED=False and COMPLAINT_MAX_REOPENS=2; append Main SMTP configuration defaults with console backend.",
+  "original_checkout": "/Users/mac/scms-codex-local",
+  "original_checkout_initial_head": "524ef555d3fba18dd1575173e4bbcc81d51a49cd",
+  "original_checkout_initial_status": "clean, branch atul-pr93; untouched by integration work",
+  "postgresql": "17.6 (Debian 17.6-2.pgdg13+1)",
+  "postgresql_scope": "Disposable loopback-only Docker container, isolated scms_integration and scms_q05_integration databases; no deployed services used.",
+  "python": "3.13.0",
+  "django": "6.1.2",
+  "browser": "Chromium 145.0.7632.6",
+  "acceptance": "BRANCH VERIFICATION ONLY; final Main acceptance requires checks after PR93 is merged.",
+  "no_deployment": true,
+  "no_official_q04": true,
+  "no_main_merge_performed": true,
+  "agents_guidance": "No AGENTS.md found in either input tree, repository subtree or applicable local parent paths. Read docs/BRANCH_PR_WORKFLOW.md, docs/TESTING.md, docs/CI_TEST_HANDOFF.md, privacy/authorization contracts and existing PR93 review evidence."
+}

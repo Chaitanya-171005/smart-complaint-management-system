@@ -1,0 +1,20 @@
+--- archived/test_smtp_recovery.py
++++ portable/test_smtp_recovery.py
+@@ -231,10 +231,13 @@
+     _, job = closed_case
+     before = business_snapshot()
+     with socket.socket() as unused:
+-        unused.bind(('127.0.0.1', 0))  # Bound but not listening: actual ECONNREFUSED.
+-        settings.MAILERS = {'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+-            'OPTIONS': {'host': '127.0.0.1', 'port': unused.getsockname()[1], 'timeout': 2}}}
+-        assert deliver_email(job.pk) == 'RETRY_WAIT'
++        unused.bind(('127.0.0.1', 0))
++        port = unused.getsockname()[1]
++    # Close the reservation before connecting. A bound but non-listening socket
++    # can time out on macOS; that correctly takes the ambiguous-delivery path.
++    settings.MAILERS = {'default': {'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
++        'OPTIONS': {'host': '127.0.0.1', 'port': port, 'timeout': 2}}}
++    assert deliver_email(job.pk) == 'RETRY_WAIT'
+     job.refresh_from_db()
+     assert job.failure_code == 'connection_unavailable'
+     with relay_server(settings) as server:

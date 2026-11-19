@@ -21,6 +21,98 @@ from workflow.models import ComplaintHistory
 pytestmark = pytest.mark.django_db
 
 
+@pytest.mark.parametrize("role,expected", [("STAFF", 200), ("HEAD", 200),
+                                          ("ADMIN", 403), ("COMPLAINANT", 403)])
+def test_anonymous_queue_role_boundary(client, user_factory, department,
+                                      complaint_factory, role, expected):
+    complaint = complaint_factory(anonymous=True, title="PRIVATE_QUEUE_TEXT")
+    client.force_login(user_factory(role=role, department=department))
+    response = client.get(reverse("routing:queue"))
+    assert response.status_code == expected
+    body = response.content.decode()
+    assert "PRIVATE_QUEUE_TEXT" not in body
+    assert complaint.reference_digest not in body
+    assert (complaint.complaint_id in body) is (expected == 200)
+
+
+def test_unsigned_queue_redirect_contains_no_complaint_data(client, complaint_factory):
+    complaint = complaint_factory(anonymous=True)
+    response = client.get(reverse("routing:queue"))
+    assert response.status_code == 302
+    assert complaint.complaint_id not in response.url
+    assert complaint.reference_digest not in response.url
+
+
+def test_cross_department_anonymous_assignment_refusal_has_unlinked_audit(
+    client, user_factory, department_factory, complaint_factory, staff_user, caplog,
+):
+    from accounts.models import SecurityEvent
+
+    complaint = complaint_factory(anonymous=True, title="PRIVATE_REFUSAL_TEXT")
+    client.force_login(user_factory(role="HEAD", department=department_factory()))
+    response = client.post(reverse("assign_complaint", args=[complaint.complaint_id]),
+                           {"assignee": staff_user.pk})
+    assert response.status_code == 404
+    event = SecurityEvent.objects.get(event_type="AUTHORIZATION_REFUSED")
+    assert event.target == "anonymous complaint"
+    assert complaint.complaint_id not in event.target + event.detail
+    output = response.content.decode() + event.target + event.detail + caplog.text
+    # Django's request warning includes the public complaint ID in the URL;
+    # the private reference and complaint text must never reach that log.
+    for secret in (complaint.reference_digest, complaint.title):
+        assert secret not in output
+    complaint.refresh_from_db()
+    assert complaint.assignee_id is None
+    assert not ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).exists()
+
+
+def test_repeated_anonymous_assignment_is_safe_and_does_not_duplicate_history(
+    client, head_user, staff_user, complaint_factory,
+):
+    complaint = complaint_factory(anonymous=True, title="PRIVATE_REPEAT_TEXT")
+    client.force_login(head_user)
+    url = reverse("assign_complaint", args=[complaint.complaint_id])
+    assert client.post(url, {"assignee": staff_user.pk}).status_code == 302
+    response = client.post(url, {"assignee": staff_user.pk})
+    assert response.status_code == 400
+    assert complaint.title not in response.content.decode()
+    assert complaint.reference_digest not in response.content.decode()
+    assert ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id).count() == 1
+
+
+@pytest.mark.django_db(transaction=True)
+@pytest.mark.parametrize("fail_notice", [False, True])
+def test_anonymous_escalation_notice_and_repeat_processing(
+    routing_configuration, complaint_factory, fail_notice, caplog,
+):
+    import json
+    from complaints.privacy import anonymous_summary
+    from routing.escalation import run_escalation
+
+    now = timezone.now()
+    complaint = complaint_factory(anonymous=True, title="PRIVATE_NOTICE_TEXT",
+                                  due_at=now - timedelta(minutes=1))
+    notices = []
+
+    def notify(record, level, department):
+        notices.append(anonymous_summary(record))
+        if fail_notice:
+            raise RuntimeError(f"{record.title} {record.reference_digest}")
+
+    first = run_escalation(now=now, notify=notify)
+    second = run_escalation(now=now, notify=notify)
+    assert (first.escalated, second.escalated) == (1, 0)
+    assert len(notices) == 1
+    assert notices[0]["complainant"] == "Anonymous"
+    assert notices[0]["escalation_level"] == 1
+    assert first.error == ("notification_failed=1" if fail_notice else "")
+    output = json.dumps(notices) + first.error + second.error + caplog.text
+    assert complaint.title not in output
+    assert complaint.reference_digest not in output
+    assert ComplaintHistory.objects.filter(complaint_ref=complaint.complaint_id,
+                                           event_type="ESCALATED").count() == 1
+
+
 def test_anonymous_queue_uses_safe_projection_without_title_or_reference(
     client, staff_user, department, complaint_factory, location_factory,
 ):

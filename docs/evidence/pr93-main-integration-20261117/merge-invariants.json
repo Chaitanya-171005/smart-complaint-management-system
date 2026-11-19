@@ -1,0 +1,52 @@
+{
+  "complaints/privacy.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": true
+  },
+  "complaints/privacy_middleware.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": false
+  },
+  "complaints/anonymous.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": true
+  },
+  "complaints/feedback_views.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": false
+  },
+  "workflow/reference_feedback.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": false
+  },
+  "complaints/evidence_recovery.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": false
+  },
+  "routing/resolver.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": true
+  },
+  "routing/allocation.py": {
+    "pr93_blob_unchanged": true,
+    "main_blob_unchanged": true
+  },
+  "HEAD_release_gates": {
+    "COMPLAINT_INTAKE_ENABLED": "os.environ.get('COMPLAINT_INTAKE_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_INTAKE_ENABLED": "os.environ.get('ANONYMOUS_INTAKE_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_PRIVACY_READY": "os.environ.get('ANONYMOUS_PRIVACY_READY', 'False') == 'True'",
+    "ANONYMOUS_TRACKING_ENABLED": "os.environ.get('ANONYMOUS_TRACKING_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_FEEDBACK_ENABLED": "os.environ.get('ANONYMOUS_FEEDBACK_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_TRACKING_LIMITER_READY": "os.environ.get('ANONYMOUS_TRACKING_LIMITER_READY', 'False') == 'True'",
+    "ANONYMOUS_TRANSPORT_VERIFIED": "os.environ.get('ANONYMOUS_TRANSPORT_VERIFIED', 'False') == 'True'"
+  },
+  "524ef555d3fba18dd1575173e4bbcc81d51a49cd_release_gates": {
+    "COMPLAINT_INTAKE_ENABLED": "os.environ.get('COMPLAINT_INTAKE_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_INTAKE_ENABLED": "os.environ.get('ANONYMOUS_INTAKE_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_PRIVACY_READY": "os.environ.get('ANONYMOUS_PRIVACY_READY', 'False') == 'True'",
+    "ANONYMOUS_TRACKING_ENABLED": "os.environ.get('ANONYMOUS_TRACKING_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_FEEDBACK_ENABLED": "os.environ.get('ANONYMOUS_FEEDBACK_ENABLED', 'False') == 'True'",
+    "ANONYMOUS_TRACKING_LIMITER_READY": "os.environ.get('ANONYMOUS_TRACKING_LIMITER_READY', 'False') == 'True'",
+    "ANONYMOUS_TRANSPORT_VERIFIED": "os.environ.get('ANONYMOUS_TRANSPORT_VERIFIED', 'False') == 'True'"
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "original_sha256": "9c8bda9c6619c8349fd973805c2c9f6b841cf62f21caf3e2978d1fb122dc9f98",
+  "adapted_sha256": "d081ad788ee741c5e56a377fe35b9f47cbafc8c28b662009dbdeeb9262779e17",
+  "reason": "macOS bound, non-listening TCP socket produced TimeoutError, not ConnectionRefusedError. Release the reservation before requesting actual ECONNREFUSED. Application timeout classification remains unchanged."
+}
